@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <Copyright>Andreas Dominik Jung</Copyright>
+    <Authors>Andreas Dominik Jung</Authors>
+    <Company>Corona Bytes</Company>
+    <Version>1.0.1</Version>
+    <Description>Transforms DevExtreme's DataSourceLoadOptions to AQL syntax</Description>
+    <PackageTags>ArangoDB DevExtreme</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageIcon>ArangoDB.png</PackageIcon>
+    <PackageIconUrl />
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Core.Arango" Version="1.0.0" />
+    <PackageReference Include="DevExtreme.AspNet.Data" Version="2.5.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="ArangoDB.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>
