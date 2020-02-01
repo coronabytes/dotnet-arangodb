@@ -5,7 +5,7 @@
 
 ## Initialize context
 - Realm prefixes all further database handles
-- JWT needs to be refreshd once a month or whatever your expiration is configred to
+- JWT needs to be refreshed once a month or whatever your expiration is configured to
 ```csharp
 var arango = new ArangoContext("Server=http://localhost:8529;Realm=myproject;User ID=root;Password=;");
 arango.RefreshJwtAuth();
@@ -27,7 +27,7 @@ await arango.EnsureIndexAsync("database", "collection", new ArangoIndex
 
 ## Create graph
 ```csharp
-await arango.CreateGraphAsync(db, new ArangoGraph
+await arango.CreateGraphAsync("database", new ArangoGraph
 {
     Name = "SomeGraph",
     EdgeDefinitions = new List<ArangoEdgeDefinition>
@@ -62,6 +62,8 @@ await arango.UpdateDocumentAsync("database", "collection", new
 
 ## Query with bind vars through string interpolation
 ```csharp
+var list = new List<int> {1, 2, 3};
+
 var result = await arango.QueryAsync<JObject>("database",
   $"FOR c IN collection FILTER c.SomeValue IN {list} RETURN c");
 ```
