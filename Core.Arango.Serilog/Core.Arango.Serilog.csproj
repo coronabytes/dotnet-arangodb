@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <Authors>Andreas Dominik Jung</Authors>
+    <Company>Corona Bytes</Company>
+    <Description>Serilog Sink for ArangoDB</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Copyright>Andreas Dominik Jung</Copyright>
+    <PackageTags>ArangoDB Serilog</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageIcon>ArangoDB.png</PackageIcon>
+    <PackageIconUrl />
+    <Version>1.0.1</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Core.Arango" Version="1.0.0" />
+    <PackageReference Include="Serilog.Sinks.PeriodicBatching" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="ArangoDB.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>
