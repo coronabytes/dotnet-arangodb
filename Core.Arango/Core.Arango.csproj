@@ -14,6 +14,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageIcon>ArangoDB.png</PackageIcon>
     <PackageIconUrl />
+    <PackageProjectUrl>https://github.com/coronabytes/ArangoDB</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
