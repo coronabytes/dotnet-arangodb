@@ -65,7 +65,6 @@ namespace Core.Arango.Serilog
             }
         }
 
-
         public class LogEventEntity
         {
             [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
