@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using DevExtreme.AspNet.Data;
 using Newtonsoft.Json.Linq;
@@ -28,7 +29,8 @@ namespace Core.Arango.DevExtreme
                 loadOption.Take = 1000;
         }
 
-        public async Task<DxLoadResult> ExecuteAsync<T>(ArangoContext arango, ArangoHandle handle, string collection) where T : new()
+        public async Task<DxLoadResult> ExecuteAsync<T>(ArangoContext arango, 
+            ArangoHandle handle, string collection, CancellationToken cancellationToken = default) where T : new()
         {
             if (!_isTransformed)
                 throw new Exception("call transform first");

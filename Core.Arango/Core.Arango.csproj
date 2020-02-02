@@ -9,7 +9,7 @@
     <PackageReleaseNotes>ArangoDB 3.6.1</PackageReleaseNotes>
     <Description>.NET driver for ArangoDB with support for database per tenant deployments</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>1.0.1</Version>
+    <Version>1.0.2</Version>
     <Copyright>Andreas Dominik Jung</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageIcon>ArangoDB.png</PackageIcon>

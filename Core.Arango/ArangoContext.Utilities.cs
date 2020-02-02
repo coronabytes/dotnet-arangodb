@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Text.Encodings.Web;
+using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
@@ -55,8 +56,9 @@ namespace Core.Arango
             return sb.ToString();
         }
 
-        private async Task<T> SendAsync<T>(HttpMethod m, string url, string body = null, 
-            string transaction = null, bool throwOnError = true, bool auth = true)
+        private async Task<T> SendAsync<T>(HttpMethod m, string url, string body = null,
+            string transaction = null, bool throwOnError = true, bool auth = true,
+            CancellationToken cancellationToken = default)
         {
             var msg = new HttpRequestMessage(m, url)
             {
@@ -76,7 +78,7 @@ namespace Core.Arango
             else
                 msg.Headers.Add(HttpRequestHeader.ContentLength.ToString(), "0");
 
-            var res = await HttpClient.SendAsync(msg);
+            var res = await HttpClient.SendAsync(msg, cancellationToken);
 
             if (!res.IsSuccessStatusCode)
                 if (throwOnError)
@@ -94,7 +96,6 @@ namespace Core.Arango
         private static string Parameterize(FormattableString query, out Dictionary<string, object> parameter)
         {
             var i = 0;
-            //var j = 0;
 
             var set = new Dictionary<object, string>();
 
