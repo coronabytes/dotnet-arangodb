@@ -2,9 +2,11 @@
 - This is a minimalistic .NET driver for ArangoDB (3.5+) with adapters to Serilog and DevExtreme
 - The key difference to any other available driver is the ability to switch databases on a per request basis, which allows for easy database per tenant deployments
 - Id, Key, From, To properties will always be translated to their respective arango form (_id, _key, _from, _to), which allows to construct updates from anonymous types
+- First parameter of any method in most cases is an ArangoHandle which has implicit conversion from string and GUID
+  - e.g. "master" and "logs" database and GUID for each tenant
 
 ## Initialize context
-- Realm prefixes all further database handles
+- Realm prefixes all further database handles (e.g. "myproject-database")
 - JWT needs to be refreshed once a month or whatever your expiration is configured to
 ```csharp
 var arango = new ArangoContext("Server=http://localhost:8529;Realm=myproject;User ID=root;Password=;");
@@ -22,6 +24,38 @@ await arango.EnsureIndexAsync("database", "collection", new ArangoIndex
 {
     Fields = new List<string> {"SomeValue"},
     Type = ArangoIndexType.Hash
+});
+```
+
+## Create view
+```csharp
+await arango.CreateViewAsync("database", new ArangoView
+{
+    Name = "SomeView",
+    Links = new Dictionary<string, ArangoLinkProperty>
+    {
+        ["collection"] = new ArangoLinkProperty
+        {
+            Fields = new Dictionary<string, ArangoLinkProperty>
+            {
+                ["SomeProperty"] = new ArangoLinkProperty
+                {
+                    Analyzers = new List<string>
+                    {
+                        "text_en"
+                    }
+                }
+            }
+        }
+    },
+    PrimarySort = new List<ArangoSort>
+    {
+        new ArangoSort
+        {
+            Field = "SomeProperty",
+            Direction = "asc"
+        }
+    }
 });
 ```
 
@@ -94,7 +128,6 @@ await arango.CommitTransactionAsync(transaction);
 ```
 
 # Serilog
-
 ```csharp
 log.MinimumLevel.Debug()
 .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
