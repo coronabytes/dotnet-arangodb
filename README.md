@@ -27,6 +27,24 @@ await arango.EnsureIndexAsync("database", "collection", new ArangoIndex
 });
 ```
 
+## Create analyzer
+```csharp
+await arango.CreateAnalyzerAsync("database", new ArangoAnalyzer
+{
+    Name = "text_de_nostem",
+    Type = "text",
+    Properties = new ArangoAnalyzerProperties
+    {
+        Locale = "de.utf-8",
+        Case = "lower",
+        Accent = false,
+        Stopwords = new List<string>(),
+        Stemming = false
+    },
+    Features = new List<string> { "position", "norm", "frequency" }
+});
+```
+
 ## Create view
 ```csharp
 await arango.CreateViewAsync("database", new ArangoView
