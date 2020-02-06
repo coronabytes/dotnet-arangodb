@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Arango", "Core.Arango\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Arango.Serilog", "Core.Arango.Serilog\Core.Arango.Serilog.csproj", "{B91A1E6C-FAF0-4632-9098-11AD2BE53221}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Arango.DevExtreme", "Core.Arango.DevExtreme\Core.Arango.DevExtreme.csproj", "{5C76AF1D-6E8C-4305-9445-CD59FDB02F79}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Arango.DevExtreme", "Core.Arango.DevExtreme\Core.Arango.DevExtreme.csproj", "{5C76AF1D-6E8C-4305-9445-CD59FDB02F79}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Arango.Tests", "Core.Arango.Tests\Core.Arango.Tests.csproj", "{F31E2F80-FFFB-43DA-9C6B-971B854D1E35}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{5C76AF1D-6E8C-4305-9445-CD59FDB02F79}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5C76AF1D-6E8C-4305-9445-CD59FDB02F79}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5C76AF1D-6E8C-4305-9445-CD59FDB02F79}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F31E2F80-FFFB-43DA-9C6B-971B854D1E35}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F31E2F80-FFFB-43DA-9C6B-971B854D1E35}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F31E2F80-FFFB-43DA-9C6B-971B854D1E35}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F31E2F80-FFFB-43DA-9C6B-971B854D1E35}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

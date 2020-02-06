@@ -174,5 +174,32 @@ namespace Core.Arango
                 foreach (var idx in indices) await DropIndexAsync(database, idx, cancellationToken);
             }
         }
+
+        public async Task<List<ArangoAnalyzer>> ListAnalyzersAsync(ArangoHandle database,
+            CancellationToken cancellationToken = default)
+        {
+            return (await SendAsync<QueryResponse<ArangoAnalyzer>>(HttpMethod.Get,
+                $"{_server}/_db/{DbName(database)}/_api/analyzer",
+                cancellationToken: cancellationToken)).Result;
+        }
+
+        public async Task CreateAnalyzerAsync(ArangoHandle database,
+            ArangoAnalyzer analyzer,
+            CancellationToken cancellationToken = default)
+        {
+            await SendAsync<QueryResponse<JObject>>(HttpMethod.Post,
+                $"{_server}/_db/{DbName(database)}/_api/analyzer",
+                JsonConvert.SerializeObject(analyzer, JsonSerializerSettings),
+                cancellationToken: cancellationToken);
+        }
+
+        public async Task DeleteAnalyzerAsync(ArangoHandle database,
+            string analyzer, bool force = false,
+            CancellationToken cancellationToken = default)
+        {
+            await SendAsync<QueryResponse<JObject>>(HttpMethod.Delete,
+                $"{_server}/_db/{DbName(database)}/_api/analyzer/{UrlEncoder.Default.Encode(analyzer)}?force={(force ? "true" : "false")}",
+                cancellationToken: cancellationToken);
+        }
     }
 }
