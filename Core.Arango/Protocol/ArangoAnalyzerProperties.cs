@@ -18,14 +18,11 @@ namespace Core.Arango.Protocol
         public string StopwordsPath { get; set; }
 
         [JsonProperty(PropertyName = "accent", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public bool Accent { get; set; }
+        public bool? Accent { get; set; }
 
         [JsonProperty(PropertyName = "stemming", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public bool Stemming { get; set; }
+        public bool? Stemming { get; set; }
 
-        /// <summary>
-        ///  text with ngram
-        /// </summary>
         [JsonProperty(PropertyName = "edgeNgram", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public ArangoEdgeNgram EdgeNgram { get; set; }
 
