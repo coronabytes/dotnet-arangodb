@@ -77,7 +77,7 @@ namespace Core.Arango.DevExtreme
 
                 return new DxLoadResult
                 {
-                    DataObj = BuildGrouping(this, res)
+                    Data = BuildGrouping(this, res)
                 };
             }
             else
@@ -88,13 +88,13 @@ namespace Core.Arango.DevExtreme
                 if (_loadOption.RequireTotalCount)
                     return new DxLoadResult
                     {
-                        DataObj = res,
+                        Data = res,
                         TotalCount = res.FullCount ?? 0
                     };
 
                 return new DxLoadResult
                 {
-                    DataObj = res
+                    Data = res
                 };
             }
         }

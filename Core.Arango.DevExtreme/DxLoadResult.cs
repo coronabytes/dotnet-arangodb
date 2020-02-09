@@ -5,19 +5,7 @@ namespace Core.Arango.DevExtreme
 {
     public class DxLoadResult
     {
-        public object Data
-        {
-            get
-            {
-                if (DataRaw != null)
-                    return JsonConvert.DeserializeObject(DataRaw);
-
-                return DataObj;
-            }
-        }
-
-        [JsonIgnore] public string DataRaw { get; set; }
-        [JsonIgnore] public object DataObj { get; set; }
+        public object Data { get; set; }
 
         [DefaultValue(-1)]
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
