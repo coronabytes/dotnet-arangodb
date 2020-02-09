@@ -16,10 +16,10 @@ namespace Core.Arango
         public async Task<bool> CreateDatabaseAsync(ArangoHandle name, CancellationToken cancellationToken = default)
         {
             var res = await SendAsync<JObject>(HttpMethod.Post,
-                $"{_server}/_db/_system/_api/database",
+                $"{Server}/_db/_system/_api/database",
                 JsonConvert.SerializeObject(new
                 {
-                    name = _realm + name
+                    name = Realm + name
                 }), throwOnError: false, cancellationToken: cancellationToken);
 
             return res != null;
@@ -28,11 +28,11 @@ namespace Core.Arango
         public async Task<List<string>> ListDatabasesAsync(CancellationToken cancellationToken = default)
         {
             var res = await SendAsync<QueryResponse<string>>(HttpMethod.Get,
-                $"{_server}/_db/_system/_api/database", cancellationToken: cancellationToken);
+                $"{Server}/_db/_system/_api/database", cancellationToken: cancellationToken);
 
             return res.Result
-                .Where(x => x.StartsWith(_realm))
-                .Select(x => x.Substring(_realm.Length))
+                .Where(x => x.StartsWith(Realm))
+                .Select(x => x.Substring(Realm.Length))
                 .ToList();
         }
 
@@ -46,7 +46,7 @@ namespace Core.Arango
         public async Task DropDatabaseAsync(ArangoHandle name, CancellationToken cancellationToken = default)
         {
             await SendAsync<JObject>(HttpMethod.Delete,
-                $"{_server}/_db/_system/_api/database/{DbName(name)}", null,
+                $"{Server}/_db/_system/_api/database/{DbName(name)}", null,
                 throwOnError: false, cancellationToken: cancellationToken);
         }
 
@@ -54,7 +54,7 @@ namespace Core.Arango
             CancellationToken cancellationToken = default)
         {
             var res = await SendAsync<JObject>(HttpMethod.Post,
-                $"{_server}/_db/{DbName(database)}/_api/index?collection={collection}",
+                $"{Server}/_db/{DbName(database)}/_api/index?collection={collection}",
                 JsonConvert.SerializeObject(request), cancellationToken: cancellationToken);
         }
 
@@ -62,7 +62,7 @@ namespace Core.Arango
             CancellationToken cancellationToken = default)
         {
             var res = await SendAsync<JObject>(HttpMethod.Post,
-                $"{_server}/_db/{DbName(database)}/_api/view",
+                $"{Server}/_db/{DbName(database)}/_api/view",
                 JsonConvert.SerializeObject(view),
                 cancellationToken: cancellationToken);
         }
@@ -71,7 +71,7 @@ namespace Core.Arango
             CancellationToken cancellationToken = default)
         {
             var res = await SendAsync<GraphResponse<JObject>>(HttpMethod.Get,
-                $"{_server}/_db/{DbName(database)}/_api/gharial", cancellationToken: cancellationToken);
+                $"{Server}/_db/{DbName(database)}/_api/gharial", cancellationToken: cancellationToken);
             return res.Graphs.Select(x => x.Value<string>("_key")).ToList();
         }
 
@@ -79,7 +79,7 @@ namespace Core.Arango
             CancellationToken cancellationToken = default)
         {
             var res = await SendAsync<JObject>(HttpMethod.Post,
-                $"{_server}/_db/{DbName(database)}/_api/gharial",
+                $"{Server}/_db/{DbName(database)}/_api/gharial",
                 JsonConvert.SerializeObject(request), cancellationToken: cancellationToken);
         }
 
@@ -87,7 +87,7 @@ namespace Core.Arango
             CancellationToken cancellationToken = default)
         {
             var res = await SendAsync<JObject>(HttpMethod.Delete,
-                $"{_server}/_db/{DbName(database)}/_api/gharial/{UrlEncoder.Default.Encode(name)}",
+                $"{Server}/_db/{DbName(database)}/_api/gharial/{UrlEncoder.Default.Encode(name)}",
                 cancellationToken: cancellationToken);
         }
 
@@ -95,19 +95,28 @@ namespace Core.Arango
             CancellationToken cancellationToken = default)
         {
             await SendAsync<JObject>(HttpMethod.Post,
-                $"{_server}/_db/{DbName(database)}/_api/collection",
-                JsonConvert.SerializeObject(new CollectionCreateRequest
+                $"{Server}/_db/{DbName(database)}/_api/collection",
+                JsonConvert.SerializeObject(new ArangoCollection
                 {
                     Name = collection,
-                    Type = (int) type
+                    Type = type
                 }, JsonSerializerSettings), cancellationToken: cancellationToken);
+        }
+
+        public async Task CreateCollectionAsync(ArangoHandle database, ArangoCollection collection,
+            CancellationToken cancellationToken = default)
+        {
+            await SendAsync<JObject>(HttpMethod.Post,
+                $"{Server}/_db/{DbName(database)}/_api/collection",
+                JsonConvert.SerializeObject(collection, JsonSerializerSettings),
+                cancellationToken: cancellationToken);
         }
 
         public async Task TruncateCollectionAsync(ArangoHandle database, string collection,
             CancellationToken cancellationToken = default)
         {
             await SendAsync<JObject>(HttpMethod.Put,
-                $"{_server}/_db/{DbName(database)}/_api/collection/{UrlEncoder.Default.Encode(collection)}/truncate",
+                $"{Server}/_db/{DbName(database)}/_api/collection/{UrlEncoder.Default.Encode(collection)}/truncate",
                 cancellationToken: cancellationToken);
         }
 
@@ -115,7 +124,7 @@ namespace Core.Arango
             CancellationToken cancellationToken = default)
         {
             var res = await SendAsync<QueryResponse<JObject>>(HttpMethod.Get,
-                $"{_server}/_db/{DbName(database)}/_api/collection?excludeSystem=true",
+                $"{Server}/_db/{DbName(database)}/_api/collection?excludeSystem=true",
                 cancellationToken: cancellationToken);
             return res.Result.Select(x => x.Value<string>("name")).ToList();
         }
@@ -127,7 +136,7 @@ namespace Core.Arango
             CancellationToken cancellationToken = default)
         {
             var res = await SendAsync<JObject>(HttpMethod.Get,
-                $"{_server}/_db/{DbName(database)}/_api/index?collection={UrlEncoder.Default.Encode(collection)}",
+                $"{Server}/_db/{DbName(database)}/_api/index?collection={UrlEncoder.Default.Encode(collection)}",
                 cancellationToken: cancellationToken);
             return res.GetValue("indexes")
                 .Where(x =>
@@ -142,12 +151,12 @@ namespace Core.Arango
             CancellationToken cancellationToken = default)
         {
             await SendAsync<JObject>(HttpMethod.Delete,
-                $"{_server}/_db/{DbName(database)}/_api/index/{index}", cancellationToken: cancellationToken);
+                $"{Server}/_db/{DbName(database)}/_api/index/{index}", cancellationToken: cancellationToken);
         }
 
         public async Task<Version> GetVersionAsync(CancellationToken cancellationToken = default)
         {
-            var res = await SendAsync<JObject>(HttpMethod.Get, $"{_server}/_db/_system/_api/version",
+            var res = await SendAsync<JObject>(HttpMethod.Get, $"{Server}/_db/_system/_api/version",
                 cancellationToken: cancellationToken);
             return Version.Parse(res.Value<string>("version"));
         }
@@ -156,7 +165,7 @@ namespace Core.Arango
             CancellationToken cancellationToken = default)
         {
             await SendAsync<JObject>(HttpMethod.Delete,
-                $"{_server}/_db/{DbName(database)}/_api/collection/{UrlEncoder.Default.Encode(collection)}",
+                $"{Server}/_db/{DbName(database)}/_api/collection/{UrlEncoder.Default.Encode(collection)}",
                 cancellationToken: cancellationToken);
         }
 
@@ -179,7 +188,7 @@ namespace Core.Arango
             CancellationToken cancellationToken = default)
         {
             return (await SendAsync<QueryResponse<ArangoAnalyzer>>(HttpMethod.Get,
-                $"{_server}/_db/{DbName(database)}/_api/analyzer",
+                $"{Server}/_db/{DbName(database)}/_api/analyzer",
                 cancellationToken: cancellationToken)).Result;
         }
 
@@ -188,7 +197,7 @@ namespace Core.Arango
             CancellationToken cancellationToken = default)
         {
             await SendAsync<QueryResponse<JObject>>(HttpMethod.Post,
-                $"{_server}/_db/{DbName(database)}/_api/analyzer",
+                $"{Server}/_db/{DbName(database)}/_api/analyzer",
                 JsonConvert.SerializeObject(analyzer, JsonSerializerSettings),
                 cancellationToken: cancellationToken);
         }
@@ -198,7 +207,7 @@ namespace Core.Arango
             CancellationToken cancellationToken = default)
         {
             await SendAsync<QueryResponse<JObject>>(HttpMethod.Delete,
-                $"{_server}/_db/{DbName(database)}/_api/analyzer/{UrlEncoder.Default.Encode(analyzer)}?force={(force ? "true" : "false")}",
+                $"{Server}/_db/{DbName(database)}/_api/analyzer/{UrlEncoder.Default.Encode(analyzer)}?force={(force ? "true" : "false")}",
                 cancellationToken: cancellationToken);
         }
     }

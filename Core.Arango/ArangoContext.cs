@@ -30,9 +30,7 @@ namespace Core.Arango
         };
 
         private readonly string _password;
-        private readonly string _realm;
 
-        private readonly string _server;
         private readonly string _user;
 
         private string _auth;
@@ -60,12 +58,17 @@ namespace Core.Arango
                 throw new ArgumentException("User invalid");
 
             //_auth = "Basic " + Convert.ToBase64String(Encoding.ASCII.GetBytes($"{user}:{password ?? ""}"));
-            _realm = realm + "-";
-            _server = server;
+            Realm = realm + "-";
+            Server = server;
             _user = user;
             _password = password;
         }
+
         public int BatchSize { get; set; } = 500;
+
+        public string Realm { get; }
+
+        public string Server { get; }
 
         public ILogger Logger { get; set; }
 
@@ -84,7 +87,7 @@ namespace Core.Arango
 
         public async Task RefreshJwtAuth(CancellationToken cancellationToken = default)
         {
-            var res = await SendAsync<JObject>(HttpMethod.Post, $"{_server}/_open/auth",
+            var res = await SendAsync<JObject>(HttpMethod.Post, $"{Server}/_open/auth",
                 JsonConvert.SerializeObject(new
                 {
                     username = _user,
@@ -125,7 +128,7 @@ namespace Core.Arango
             try
             {
                 var firstResult = await SendAsync<QueryResponse<T>>(HttpMethod.Post,
-                    $"{_server}/_db/{DbName(database)}/_api/cursor",
+                    $"{Server}/_db/{DbName(database)}/_api/cursor",
                     JsonConvert.SerializeObject(new QueryRequest
                     {
                         Query = query,
@@ -175,7 +178,7 @@ namespace Core.Arango
                 while (true)
                 {
                     var res = await SendAsync<QueryResponse<T>>(HttpMethod.Put,
-                        $"{_server}/_db/{DbName(database)}/_api/cursor/{firstResult.Id}",
+                        $"{Server}/_db/{DbName(database)}/_api/cursor/{firstResult.Id}",
                         cancellationToken: cancellationToken);
 
                     if (res.Result?.Any() == true)
@@ -205,7 +208,7 @@ namespace Core.Arango
         {
             if (bulk)
             {
-                var query = AddQueryString($"{_server}/_db/{DbName(database)}/_api/import",
+                var query = AddQueryString($"{Server}/_db/{DbName(database)}/_api/import",
                     new Dictionary<string, string>
                     {
                         {"type", "array"},
@@ -221,7 +224,7 @@ namespace Core.Arango
             else
             {
                 var query = AddQueryString(
-                    $"{_server}/_db/{DbName(database)}/_api/document/{UrlEncoder.Default.Encode(collection)}",
+                    $"{Server}/_db/{DbName(database)}/_api/document/{UrlEncoder.Default.Encode(collection)}",
                     new Dictionary<string, string>
                     {
                         {"waitForSync", waitForSync.ToString().ToLowerInvariant()},
@@ -247,7 +250,7 @@ namespace Core.Arango
             CancellationToken cancellationToken = default) where T : class
         {
             var query = AddQueryString(
-                $"{_server}/_db/{DbName(database)}/_api/document/{UrlEncoder.Default.Encode(collection)}",
+                $"{Server}/_db/{DbName(database)}/_api/document/{UrlEncoder.Default.Encode(collection)}",
                 new Dictionary<string, string>
                 {
                     {"waitForSync", waitForSync.ToString().ToLowerInvariant()},
@@ -266,7 +269,7 @@ namespace Core.Arango
             bool waitForSync = false, CancellationToken cancellationToken = default) where T : class
         {
             var query = AddQueryString(
-                $"{_server}/_db/{DbName(database)}/_api/document/{UrlEncoder.Default.Encode(collection)}",
+                $"{Server}/_db/{DbName(database)}/_api/document/{UrlEncoder.Default.Encode(collection)}",
                 new Dictionary<string, string>
                 {
                     {"waitForSync", waitForSync.ToString()}
@@ -281,7 +284,7 @@ namespace Core.Arango
             bool waitForSync = false, CancellationToken cancellationToken = default) where T : class
         {
             var query = AddQueryString(
-                $"{_server}/_db/{DbName(database)}/_api/database/document/{UrlEncoder.Default.Encode(collection)}",
+                $"{Server}/_db/{DbName(database)}/_api/database/document/{UrlEncoder.Default.Encode(collection)}",
                 new Dictionary<string, string>
                 {
                     {"waitForSync", waitForSync.ToString()}
@@ -299,7 +302,7 @@ namespace Core.Arango
             CancellationToken cancellationToken = default) where T : class
         {
             var query = AddQueryString(
-                $"{_server}/_db/{DbName(database)}/_api/document/{UrlEncoder.Default.Encode(collection)}",
+                $"{Server}/_db/{DbName(database)}/_api/document/{UrlEncoder.Default.Encode(collection)}",
                 new Dictionary<string, string>
                 {
                     {"waitForSync", waitForSync.ToString().ToLowerInvariant()},
@@ -319,7 +322,7 @@ namespace Core.Arango
             CancellationToken cancellationToken = default) where T : class
         {
             var query = AddQueryString(
-                $"{_server}/_db/{DbName(database)}/_api/document/{UrlEncoder.Default.Encode(collection)}",
+                $"{Server}/_db/{DbName(database)}/_api/document/{UrlEncoder.Default.Encode(collection)}",
                 new Dictionary<string, string>
                 {
                     {"waitForSync", waitForSync.ToString().ToLowerInvariant()},
@@ -337,7 +340,7 @@ namespace Core.Arango
             CancellationToken cancellationToken = default) where T : class
         {
             var query = AddQueryString(
-                $"{_server}/_db/{DbName(database)}/_api/document/{collection}",
+                $"{Server}/_db/{DbName(database)}/_api/document/{collection}",
                 new Dictionary<string, string>
                 {
                     {"waitForSync", waitForSync.ToString().ToLowerInvariant()}
@@ -355,7 +358,7 @@ namespace Core.Arango
             CancellationToken cancellationToken = default)
         {
             var query = AddQueryString(
-                $"{_server}/_db/{DbName(database)}/_api/document/{UrlEncoder.Default.Encode(collection)}/{UrlEncoder.Default.Encode(key)}",
+                $"{Server}/_db/{DbName(database)}/_api/document/{UrlEncoder.Default.Encode(collection)}/{UrlEncoder.Default.Encode(key)}",
                 new Dictionary<string, string>
                 {
                     {"waitForSync", waitForSync.ToString().ToLowerInvariant()},
@@ -370,7 +373,7 @@ namespace Core.Arango
             CancellationToken cancellationToken = default)
         {
             var res = await SendAsync<JObject>(HttpMethod.Post,
-                $"{_server}/_db/{DbName(database)}/_api/transaction/begin",
+                $"{Server}/_db/{DbName(database)}/_api/transaction/begin",
                 JsonConvert.SerializeObject(request, JsonSerializerSettings), cancellationToken: cancellationToken);
 
             var transaction = res.GetValue("result").Value<string>("id");
@@ -384,7 +387,7 @@ namespace Core.Arango
                 throw new ArangoException("no transaction handle");
 
             await SendAsync<JObject>(HttpMethod.Put,
-                $"{_server}/_db/{DbName(database)}/_api/transaction/{database.Transaction}",
+                $"{Server}/_db/{DbName(database)}/_api/transaction/{database.Transaction}",
                 cancellationToken: cancellationToken);
         }
 
@@ -394,7 +397,7 @@ namespace Core.Arango
                 throw new ArangoException("no transaction handle");
 
             await SendAsync<JObject>(HttpMethod.Delete,
-                $"{_server}/_db/{DbName(database)}/_api/transaction/{database.Transaction}",
+                $"{Server}/_db/{DbName(database)}/_api/transaction/{database.Transaction}",
                 cancellationToken: cancellationToken);
         }
     }

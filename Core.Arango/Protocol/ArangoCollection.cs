@@ -3,12 +3,12 @@ using Newtonsoft.Json;
 
 namespace Core.Arango.Protocol
 {
-    internal class CollectionCreateRequest
+    public class ArangoCollection
     {
         [JsonProperty(PropertyName = "name")] public string Name { get; set; }
 
         [JsonProperty(PropertyName = "type", NullValueHandling = NullValueHandling.Ignore)]
-        public int Type { get; set; }
+        public ArangoCollectionType? Type { get; set; }
 
         [JsonProperty(PropertyName = "waitForSync", NullValueHandling = NullValueHandling.Ignore)]
         public bool? WaitForSync { get; set; }
@@ -28,8 +28,11 @@ namespace Core.Arango.Protocol
         [JsonProperty(PropertyName = "numberOfShards", NullValueHandling = NullValueHandling.Ignore)]
         public int? NumberOfShards { get; set; }
 
+        [JsonProperty(PropertyName = "indexBuckets", NullValueHandling = NullValueHandling.Ignore)]
+        public int? IndexBuckets { get; set; }
+
         [JsonProperty(PropertyName = "keyOptions", NullValueHandling = NullValueHandling.Ignore)]
-        public KeyOptions KeyOptions { get; set; }
+        public ArangoKeyOptions KeyOptions { get; set; }
 
         [JsonProperty(PropertyName = "shardKeys", NullValueHandling = NullValueHandling.Ignore)]
         public List<string> ShardKeys { get; set; }
@@ -39,5 +42,11 @@ namespace Core.Arango.Protocol
 
         [JsonProperty(PropertyName = "shardingStrategy", NullValueHandling = NullValueHandling.Ignore)]
         public string ShardingStrategy { get; set; }
+
+        [JsonProperty(PropertyName = "distributeShardsLike", NullValueHandling = NullValueHandling.Ignore)]
+        public string DistributeShardsLike { get; set; }
+
+        [JsonProperty(PropertyName = "writeConcern", NullValueHandling = NullValueHandling.Ignore)]
+        public int? WriteConcern { get; set; }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Core.Arango.Protocol
 {
-    public class ArangoEdgeNgram 
+    public class ArangoEdgeNgram
     {
         [JsonProperty(PropertyName = "min", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public int? Min { get; set; }

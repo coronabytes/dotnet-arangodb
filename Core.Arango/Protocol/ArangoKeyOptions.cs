@@ -2,10 +2,13 @@
 
 namespace Core.Arango.Protocol
 {
-    public class KeyOptions
+    public class ArangoKeyOptions
     {
+        /// <summary>
+        ///     traditional, autoincrement, uuid, padded
+        /// </summary>
         [JsonProperty(PropertyName = "type", NullValueHandling = NullValueHandling.Ignore)]
-        public string Type { get; set; }
+        public ArangoKeyType? Type { get; set; }
 
         [JsonProperty(PropertyName = "allowUserKeys", NullValueHandling = NullValueHandling.Ignore)]
         public bool? AllowUserKeys { get; set; }

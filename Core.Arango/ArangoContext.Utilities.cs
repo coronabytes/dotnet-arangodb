@@ -13,12 +13,18 @@ namespace Core.Arango
 {
     public partial class ArangoContext
     {
-        private string DbName(string name)
+        /// <summary>
+        ///     Prefix database name with realm + urlencode
+        /// </summary>
+        public string DbName(string name)
         {
-            return UrlEncoder.Default.Encode(_realm + name);
+            return UrlEncoder.Default.Encode(Realm + name);
         }
 
-        private static string AddQueryString(
+        /// <summary>
+        ///     Adds query parameters to url
+        /// </summary>
+        public static string AddQueryString(
             string uri,
             IEnumerable<KeyValuePair<string, string>> queryString)
         {
@@ -56,7 +62,10 @@ namespace Core.Arango
             return sb.ToString();
         }
 
-        private async Task<T> SendAsync<T>(HttpMethod m, string url, string body = null,
+        /// <summary>
+        ///     HTTP request abstraction
+        /// </summary>
+        public async Task<T> SendAsync<T>(HttpMethod m, string url, string body = null,
             string transaction = null, bool throwOnError = true, bool auth = true,
             CancellationToken cancellationToken = default)
         {
@@ -93,7 +102,14 @@ namespace Core.Arango
             return JsonConvert.DeserializeObject<T>(content, JsonSerializerSettings);
         }
 
-        private static string Parameterize(FormattableString query, out Dictionary<string, object> parameter)
+        /// <summary>
+        ///     Replaces parameters in interpolated string with placeholders @P1, @P2, ... and produces dictionary with P1=V1,
+        ///     P2=V2, ...
+        /// </summary>
+        /// <remarks>
+        ///     identical objects (references) are mapped to the same parameter
+        /// </remarks>
+        public static string Parameterize(FormattableString query, out Dictionary<string, object> parameter)
         {
             var i = 0;
 
