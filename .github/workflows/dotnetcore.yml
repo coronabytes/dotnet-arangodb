@@ -15,7 +15,17 @@ jobs:
         dotnet-version: 3.1.101
     - name: Build with dotnet
       run: dotnet build --configuration Release
-    - name: Archive artifacts
+    - name: Archive Core.Arango
+      uses: actions/upload-artifact@v1
+      with:
+        name: Core.Arango
+        path: Core.Arango/bin/Release
+    - name: Archive Core.Arango.Serilog
+      uses: actions/upload-artifact@v1
+      with:
+        name: Core.Arango.Serilog
+        path: Core.Arango.Serilog/bin/Release  
+    - name: Archive Core.Arango.DevExtreme
       uses: actions/upload-artifact@v1
       with:
         name: Core.Arango.DevExtreme
