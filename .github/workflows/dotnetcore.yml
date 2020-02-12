@@ -12,6 +12,11 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.1.100
+        dotnet-version: 3.1.101
     - name: Build with dotnet
       run: dotnet build --configuration Release
+    - name: Archive artifacts
+      uses: actions/upload-artifact@v1
+      with:
+        name: Core.Arango.DevExtreme
+        path: Core.Arango.DevExtreme/bin/Release
