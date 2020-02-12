@@ -7,19 +7,18 @@ using Xunit;
 
 namespace Core.Arango.Tests
 {
-    public class AnalyzerTest
+    public class AnalyzerTest : TestBase
     {
         [Fact]
         public async Task Analyzers()
         {
-            var arango = new ArangoContext("Server=http://localhost:8529;Realm=unittest;User ID=root;Password=;");
-            await arango.RefreshJwtAuth();
+            await Arango.RefreshJwtAuth();
 
-            await arango.CreateDatabaseAsync("analyzers");
+            await Arango.CreateDatabaseAsync("analyzers");
 
-            var analyzers = await arango.ListAnalyzersAsync("analyzers");
+            var analyzers = await Arango.ListAnalyzersAsync("analyzers");
 
-            await arango.CreateAnalyzerAsync("analyzers", new ArangoAnalyzer
+            await Arango.CreateAnalyzerAsync("analyzers", new ArangoAnalyzer
             {
                 Name = "text_de_nostem",
                 Type = "text",
@@ -34,7 +33,7 @@ namespace Core.Arango.Tests
                 Features = new List<string> { "position", "norm", "frequency" }
             });
 
-            await arango.DeleteAnalyzerAsync("analyzers", "text_de_nostem");
+            await Arango.DeleteAnalyzerAsync("analyzers", "text_de_nostem");
         }
     }
 }
