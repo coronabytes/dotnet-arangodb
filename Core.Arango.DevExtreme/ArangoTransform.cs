@@ -41,8 +41,7 @@ namespace Core.Arango.DevExtreme
         public List<string> Groups { get; } = new List<string>();
         public List<string> Summaries { get; } = new List<string>();
 
-        public async Task<DxLoadResult> ExecuteAsync<T>(ArangoContext arango,
-            ArangoHandle handle, string collection, CancellationToken cancellationToken = default) where T : new()
+        public async Task<DxLoadResult> ExecuteAsync<T>(ArangoContext arango, ArangoHandle handle, string collection) where T : new()
         {
             if (!_isTransformed)
                 throw new Exception("call transform first");
@@ -55,9 +54,7 @@ namespace Core.Arango.DevExtreme
                 queryBuilder.AppendLine(" && " + _settings.Filter);
 
             if (HasGrouping)
-            {
                 queryBuilder.AppendLine(AggregateExpression);
-            }
             else
             {
                 Parameter.TryAdd("SKIP", Skip);
@@ -70,10 +67,11 @@ namespace Core.Arango.DevExtreme
 
             var query = queryBuilder.ToString();
 
+            
+
             if (HasGrouping)
             {
-                var res = await arango.QueryAsync<JObject>(handle, query, Parameter,
-                    cancellationToken: cancellationToken);
+                var res = await arango.QueryAsync<JObject>(handle, query, Parameter);
 
                 return new DxLoadResult
                 {
@@ -82,19 +80,37 @@ namespace Core.Arango.DevExtreme
             }
             else
             {
-                var res = await arango.QueryAsync<T>(handle, query, Parameter, fullCount: _loadOption.RequireTotalCount,
-                    cancellationToken: cancellationToken);
+                var res = await arango.QueryAsync<T>(handle, query, Parameter, fullCount: _loadOption.RequireTotalCount);
 
-                if (_loadOption.RequireTotalCount)
-                    return new DxLoadResult
-                    {
-                        Data = res,
-                        TotalCount = res.FullCount ?? 0
-                    };
+                decimal?[] summary = null;
 
+                if (_loadOption.TotalSummary?.Any() == true)
+                {
+                    var summaryQueryBuilder = new StringBuilder();
+                    summaryQueryBuilder.AppendLine($"FOR {_settings.IteratorVar} IN {collection}");
+                    summaryQueryBuilder.AppendLine("FILTER " + FilterExpression);
+
+                    if (_settings.Filter != null)
+                        summaryQueryBuilder.AppendLine(" && " + _settings.Filter);
+                    summaryQueryBuilder.AppendLine(AggregateExpression);
+
+                    // TODO: refactor
+                    Parameter.Remove("SKIP");
+                    Parameter.Remove("TAKE");
+
+                    var summaryQuery = summaryQueryBuilder.ToString();
+
+                    var summaryResult = await arango.QueryAsync<JObject>(handle, summaryQuery, Parameter);
+
+                    summary = summaryResult.SingleOrDefault()?.PropertyValues()
+                        .Select(x=>x.Value<decimal?>()).Skip(1).ToArray();
+                }
+                
                 return new DxLoadResult
                 {
-                    Data = res
+                    Data = res,
+                    Summary = summary,
+                    TotalCount = res.FullCount ?? 0
                 };
             }
         }
@@ -197,7 +213,7 @@ namespace Core.Arango.DevExtreme
             return $"{_settings.IteratorVar}.{name}";
         }
 
-        private string Aggregate()
+       private string Aggregate()
         {
             if (_loadOption.RequireTotalCount || _loadOption.TotalSummary?.Any() == true ||
                 _loadOption.Group?.Any() == true)
@@ -210,33 +226,32 @@ namespace Core.Arango.DevExtreme
 
                 if (_loadOption.Group?.Any() == true)
                 {
-                    var groups = _loadOption.Group.Where(x => x.GroupInterval != "hour" && x.GroupInterval != "minute")
-                        .Select(g =>
+                    var groups = _loadOption.Group.Where(x => x.GroupInterval != "hour" && x.GroupInterval != "minute").Select(g =>
+                    {
+                        var selectorRight = g.Selector.FirstCharOfPropertiesToUpper();
+                        var selectorLeft = g.Selector.FirstCharOfPropertiesToUpper().Replace(".","");
+
+                        if (g.GroupInterval == "year")
                         {
-                            var selectorRight = g.Selector.FirstCharOfPropertiesToUpper();
-                            var selectorLeft = g.Selector.FirstCharOfPropertiesToUpper().Replace(".", "");
+                            Groups.Add($"YEAR{selectorLeft}");
+                            return $"YEAR{selectorLeft} = DATE_YEAR({_settings.IteratorVar}.{selectorRight})";
+                        }
 
-                            if (g.GroupInterval == "year")
-                            {
-                                Groups.Add($"YEAR{selectorLeft}");
-                                return $"YEAR{selectorLeft} = DATE_YEAR({_settings.IteratorVar}.{selectorRight})";
-                            }
+                        if (g.GroupInterval == "month")
+                        {
+                            Groups.Add($"MONTH{selectorLeft}");
+                            return $"MONTH{selectorLeft} = DATE_MONTH({_settings.IteratorVar}.{selectorRight})";
+                        }
 
-                            if (g.GroupInterval == "month")
-                            {
-                                Groups.Add($"MONTH{selectorLeft}");
-                                return $"MONTH{selectorLeft} = DATE_MONTH({_settings.IteratorVar}.{selectorRight})";
-                            }
+                        if (g.GroupInterval == "day")
+                        {
+                            Groups.Add($"DAY{selectorLeft}");
+                            return $"DAY{selectorLeft} = DATE_DAY({_settings.IteratorVar}.{selectorRight})";
+                        }
 
-                            if (g.GroupInterval == "day")
-                            {
-                                Groups.Add($"DAY{selectorLeft}");
-                                return $"DAY{selectorLeft} = DATE_DAY({_settings.IteratorVar}.{selectorRight})";
-                            }
-
-                            Groups.Add(selectorLeft);
-                            return $"{selectorLeft} = {_settings.IteratorVar}.{selectorRight}";
-                        }).ToList();
+                        Groups.Add(selectorLeft);
+                        return $"{selectorLeft} = {_settings.IteratorVar}.{selectorRight}";
+                    }).ToList();
 
                     sb.AppendLine(string.Join(", ", groups));
                 }
@@ -249,30 +264,36 @@ namespace Core.Arango.DevExtreme
                 };
 
                 if (_loadOption.Group?.Any() == true && _loadOption.GroupSummary?.Any() == true)
+                {
                     aggregates.AddRange(_loadOption.GroupSummary.Select(s =>
                     {
-                        var selector = s.Selector.FirstCharOfPropertiesToUpper();
+                        var rightSelector = s.Selector.FirstCharOfPropertiesToUpper();
+                        var leftSelector = s.Selector.FirstCharOfPropertiesToUpper().Replace(".","");
                         var op = s.SummaryType.ToUpperInvariant();
 
-                        Summaries.Add($"{op}{selector}");
+                        Summaries.Add($"{op}{leftSelector}");
 
                         if (op == "SUM" || op == "AVG" || op == "MIN" || op == "MAX" || op == "COUNT")
-                            return $"{op}{selector} = {op}({_settings.IteratorVar}.{selector})";
-                        return $"{op}{selector} = SUM(0)";
+                            return $"{op}{leftSelector} = {op}({_settings.IteratorVar}.{rightSelector})";
+                        return $"{op}{leftSelector} = SUM(0)";
                     }));
+                }
                 else if (_loadOption.TotalSummary?.Any() == true)
+                {
                     aggregates.AddRange(_loadOption.TotalSummary.Select(s =>
                     {
-                        var selector = s.Selector.FirstCharOfPropertiesToUpper();
+                        var rightSelector = s.Selector.FirstCharOfPropertiesToUpper();
+                        var leftSelector = s.Selector.FirstCharOfPropertiesToUpper().Replace(".","");
                         var op = s.SummaryType.ToUpperInvariant();
 
-                        Summaries.Add($"{op}{selector}");
+                        Summaries.Add($"{op}{leftSelector}");
 
                         if (op == "SUM" || op == "AVG" || op == "MIN" || op == "MAX" || op == "COUNT")
-                            return $"{op}{selector} = {op}({_settings.IteratorVar}.{selector})";
-                        return $"{op}{selector} = SUM(0)";
+                            return $"{op}{leftSelector} = {op}({_settings.IteratorVar}.{rightSelector})";
+                        return $"{op}{leftSelector} = SUM(0)";
                     }));
-
+                }
+                
 
                 sb.AppendLine("AGGREGATE");
                 sb.AppendLine(string.Join(", ", aggregates));
@@ -288,7 +309,7 @@ namespace Core.Arango.DevExtreme
                     projection.Add(summary);
 
                 if (_loadOption.Group?.Any() == true)
-                    sb.AppendLine(SortExpression.Replace(".", "")); // TODO@AJ: Replace besser machen
+                    sb.AppendLine(SortExpression.Replace(".","")); // TODO@AJ: Replace besser machen
 
                 sb.AppendLine("RETURN {");
                 sb.AppendLine(string.Join(", ", projection));
