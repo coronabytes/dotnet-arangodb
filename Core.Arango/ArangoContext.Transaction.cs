@@ -9,6 +9,13 @@ namespace Core.Arango
 {
     public partial class ArangoContext
     {
+        public async Task<JObject> ExecuteTransactionAsync(ArangoHandle database, ArangoTransaction request,
+            CancellationToken cancellationToken = default)
+        {
+            return await SendAsync<JObject>(HttpMethod.Post,
+                $"{Server}/_db/{DbName(database)}/_api/transaction",
+                JsonConvert.SerializeObject(request, JsonSerializerSettings), cancellationToken: cancellationToken);
+        }
         public async Task<ArangoHandle> BeginTransactionAsync(ArangoHandle database, ArangoTransaction request,
             CancellationToken cancellationToken = default)
         {
