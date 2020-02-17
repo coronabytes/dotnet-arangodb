@@ -11,6 +11,9 @@ using Newtonsoft.Json.Linq;
 
 namespace Core.Arango.DevExtreme
 {
+    /// <summary>
+    ///     DevExtreme DataSourceLoadOptions to AQL
+    /// </summary>
     public class ArangoTransform
     {
         private readonly DataSourceLoadOptionsBase _loadOption;
@@ -24,9 +27,9 @@ namespace Core.Arango.DevExtreme
             HasGrouping = loadOption.Group?.Any() == true;
 
             if (loadOption.Take <= 0)
-                loadOption.Take = 20;
-            if (loadOption.Take > 1000)
-                loadOption.Take = 1000;
+                loadOption.Take = settings.DefaultTake;
+            if (loadOption.Take > settings.MaxTake)
+                loadOption.Take = settings.MaxTake;
         }
 
         public bool HasGrouping { get; }
@@ -41,12 +44,23 @@ namespace Core.Arango.DevExtreme
         public List<string> Groups { get; } = new List<string>();
         public List<string> Summaries { get; } = new List<string>();
 
-        public async Task<DxLoadResult> ExecuteAsync<T>(ArangoContext arango, ArangoHandle handle, string collection) where T : new()
+        /// <summary>
+        ///     Executes transformed query
+        /// </summary>
+        public async Task<DxLoadResult> ExecuteAsync<T>(ArangoContext arango,
+            ArangoHandle handle,
+            string collection,
+            CancellationToken cancellationToken = default)
+            where T : new()
         {
             if (!_isTransformed)
                 throw new Exception("call transform first");
 
             var queryBuilder = new StringBuilder();
+
+            if (!string.IsNullOrWhiteSpace(_settings.Preamble))
+                queryBuilder.AppendLine(_settings.Preamble);
+
             queryBuilder.AppendLine($"FOR {_settings.IteratorVar} IN {collection}");
             queryBuilder.AppendLine("FILTER " + FilterExpression);
 
@@ -54,7 +68,9 @@ namespace Core.Arango.DevExtreme
                 queryBuilder.AppendLine(" && " + _settings.Filter);
 
             if (HasGrouping)
+            {
                 queryBuilder.AppendLine(AggregateExpression);
+            }
             else
             {
                 Parameter.TryAdd("SKIP", Skip);
@@ -67,11 +83,11 @@ namespace Core.Arango.DevExtreme
 
             var query = queryBuilder.ToString();
 
-            
 
             if (HasGrouping)
             {
-                var res = await arango.QueryAsync<JObject>(handle, query, Parameter);
+                var res = await arango.QueryAsync<JObject>(handle, query, Parameter,
+                    cancellationToken: cancellationToken);
 
                 return new DxLoadResult
                 {
@@ -80,7 +96,8 @@ namespace Core.Arango.DevExtreme
             }
             else
             {
-                var res = await arango.QueryAsync<T>(handle, query, Parameter, fullCount: _loadOption.RequireTotalCount);
+                var res = await arango.QueryAsync<T>(handle, query, Parameter,
+                    fullCount: _loadOption.RequireTotalCount, cancellationToken: cancellationToken);
 
                 decimal?[] summary = null;
 
@@ -100,12 +117,13 @@ namespace Core.Arango.DevExtreme
 
                     var summaryQuery = summaryQueryBuilder.ToString();
 
-                    var summaryResult = await arango.QueryAsync<JObject>(handle, summaryQuery, Parameter);
+                    var summaryResult = await arango.QueryAsync<JObject>(handle, summaryQuery, Parameter,
+                        cancellationToken: cancellationToken);
 
                     summary = summaryResult.SingleOrDefault()?.PropertyValues()
-                        .Select(x=>x.Value<decimal?>()).Skip(1).ToArray();
+                        .Select(x => x.Value<decimal?>()).Skip(1).ToArray();
                 }
-                
+
                 return new DxLoadResult
                 {
                     Data = res,
@@ -121,35 +139,35 @@ namespace Core.Arango.DevExtreme
                 throw new Exception("already transformed");
 
             // TODO: Recursive
-            if (_loadOption.Filter?.Count > 50)
+            if (_loadOption.Filter?.Count > _settings.MaxFilter)
             {
-                error = "max filters 50 exceeded";
+                error = $"max filters {_settings.MaxFilter} exceeded";
                 return false;
             }
 
-            if (_loadOption.Sort?.Length > 5)
+            if (_loadOption.Sort?.Length > _settings.MaxSort)
             {
-                error = "max sort levels of 5 exceeded";
+                error = $"max sort levels of {_settings.MaxSort} exceeded";
                 return false;
             }
 
-            if (_loadOption.TotalSummary?.Length > 5)
+            if (_loadOption.TotalSummary?.Length > _settings.MaxSummary)
             {
-                error = "max total summaries of 5 exceeded";
+                error = $"max total summaries of {_settings.MaxSummary} exceeded";
                 return false;
             }
 
-            if (_loadOption.GroupSummary?.Length > 5)
+            if (_loadOption.GroupSummary?.Length > _settings.MaxSummary)
             {
-                error = "max group summaries of 5 exceeded";
+                error = $"max group summaries of {_settings.MaxSummary} exceeded";
                 return false;
             }
 
             if (HasGrouping)
             {
-                if (_loadOption.Group.Length > 5)
+                if (_loadOption.Group.Length > _settings.MaxGroup)
                 {
-                    error = "max grouping levels of 5 exceeded";
+                    error = $"max grouping levels of {_settings.MaxGroup} exceeded";
                     return false;
                 }
 
@@ -169,8 +187,8 @@ namespace Core.Arango.DevExtreme
                 }
 
                 if (_settings.RestrictGroups != null)
-                    if (_loadOption.Group.Any(x =>
-                        !_settings.RestrictGroups.Contains(x.Selector.FirstCharOfPropertiesToUpper())))
+                    if (_loadOption.Group.Any(x => !_settings.RestrictGroups
+                        .Contains(x.Selector.FirstCharOfPropertiesToUpper())))
                     {
                         error = "restriced group selector";
                         return false;
@@ -186,6 +204,7 @@ namespace Core.Arango.DevExtreme
             AggregateExpression = Aggregate();
 
             _isTransformed = true;
+
 
             return true;
         }
@@ -210,53 +229,55 @@ namespace Core.Arango.DevExtreme
             if (name.Equals(_settings.Key, StringComparison.InvariantCultureIgnoreCase))
                 name = "_key";
 
+            var nameLambda = _settings.PropertyTransform;
+
+            if (nameLambda != null)
+                return _settings.PropertyTransform(name, _settings);
+
             return $"{_settings.IteratorVar}.{name}";
         }
 
-       private string Aggregate()
+        private string Aggregate()
         {
             if (_loadOption.RequireTotalCount || _loadOption.TotalSummary?.Any() == true ||
                 _loadOption.Group?.Any() == true)
             {
                 var sb = new StringBuilder();
 
-                // GROUP
-
                 sb.AppendLine("COLLECT");
 
                 if (_loadOption.Group?.Any() == true)
                 {
-                    var groups = _loadOption.Group.Where(x => x.GroupInterval != "hour" && x.GroupInterval != "minute").Select(g =>
-                    {
-                        var selectorRight = g.Selector.FirstCharOfPropertiesToUpper();
-                        var selectorLeft = g.Selector.FirstCharOfPropertiesToUpper().Replace(".","");
-
-                        if (g.GroupInterval == "year")
+                    var groups = _loadOption.Group.Where(x => x.GroupInterval != "hour" && x.GroupInterval != "minute")
+                        .Select(g =>
                         {
-                            Groups.Add($"YEAR{selectorLeft}");
-                            return $"YEAR{selectorLeft} = DATE_YEAR({_settings.IteratorVar}.{selectorRight})";
-                        }
+                            var selectorRight = g.Selector.FirstCharOfPropertiesToUpper();
+                            var selectorLeft = g.Selector.FirstCharOfPropertiesToUpper().Replace(".", "");
 
-                        if (g.GroupInterval == "month")
-                        {
-                            Groups.Add($"MONTH{selectorLeft}");
-                            return $"MONTH{selectorLeft} = DATE_MONTH({_settings.IteratorVar}.{selectorRight})";
-                        }
+                            if (g.GroupInterval == "year")
+                            {
+                                Groups.Add($"YEAR{selectorLeft}");
+                                return $"YEAR{selectorLeft} = DATE_YEAR({_settings.IteratorVar}.{selectorRight})";
+                            }
 
-                        if (g.GroupInterval == "day")
-                        {
-                            Groups.Add($"DAY{selectorLeft}");
-                            return $"DAY{selectorLeft} = DATE_DAY({_settings.IteratorVar}.{selectorRight})";
-                        }
+                            if (g.GroupInterval == "month")
+                            {
+                                Groups.Add($"MONTH{selectorLeft}");
+                                return $"MONTH{selectorLeft} = DATE_MONTH({_settings.IteratorVar}.{selectorRight})";
+                            }
 
-                        Groups.Add(selectorLeft);
-                        return $"{selectorLeft} = {_settings.IteratorVar}.{selectorRight}";
-                    }).ToList();
+                            if (g.GroupInterval == "day")
+                            {
+                                Groups.Add($"DAY{selectorLeft}");
+                                return $"DAY{selectorLeft} = DATE_DAY({_settings.IteratorVar}.{selectorRight})";
+                            }
+
+                            Groups.Add(selectorLeft);
+                            return $"{selectorLeft} = {_settings.IteratorVar}.{selectorRight}";
+                        }).ToList();
 
                     sb.AppendLine(string.Join(", ", groups));
                 }
-
-                // AGGREGATE
 
                 var aggregates = new List<string>
                 {
@@ -264,11 +285,10 @@ namespace Core.Arango.DevExtreme
                 };
 
                 if (_loadOption.Group?.Any() == true && _loadOption.GroupSummary?.Any() == true)
-                {
                     aggregates.AddRange(_loadOption.GroupSummary.Select(s =>
                     {
                         var rightSelector = s.Selector.FirstCharOfPropertiesToUpper();
-                        var leftSelector = s.Selector.FirstCharOfPropertiesToUpper().Replace(".","");
+                        var leftSelector = s.Selector.FirstCharOfPropertiesToUpper().Replace(".", "");
                         var op = s.SummaryType.ToUpperInvariant();
 
                         Summaries.Add($"{op}{leftSelector}");
@@ -277,13 +297,11 @@ namespace Core.Arango.DevExtreme
                             return $"{op}{leftSelector} = {op}({_settings.IteratorVar}.{rightSelector})";
                         return $"{op}{leftSelector} = SUM(0)";
                     }));
-                }
                 else if (_loadOption.TotalSummary?.Any() == true)
-                {
                     aggregates.AddRange(_loadOption.TotalSummary.Select(s =>
                     {
                         var rightSelector = s.Selector.FirstCharOfPropertiesToUpper();
-                        var leftSelector = s.Selector.FirstCharOfPropertiesToUpper().Replace(".","");
+                        var leftSelector = s.Selector.FirstCharOfPropertiesToUpper().Replace(".", "");
                         var op = s.SummaryType.ToUpperInvariant();
 
                         Summaries.Add($"{op}{leftSelector}");
@@ -292,13 +310,10 @@ namespace Core.Arango.DevExtreme
                             return $"{op}{leftSelector} = {op}({_settings.IteratorVar}.{rightSelector})";
                         return $"{op}{leftSelector} = SUM(0)";
                     }));
-                }
-                
+
 
                 sb.AppendLine("AGGREGATE");
                 sb.AppendLine(string.Join(", ", aggregates));
-
-                // PROJECT TotalCount, Group Keys, Summaries
 
                 var projection = new List<string> {"TotalCount"};
 
@@ -309,7 +324,7 @@ namespace Core.Arango.DevExtreme
                     projection.Add(summary);
 
                 if (_loadOption.Group?.Any() == true)
-                    sb.AppendLine(SortExpression.Replace(".","")); // TODO@AJ: Replace besser machen
+                    sb.AppendLine(SortExpression.Replace(".", "")); // Refactor
 
                 sb.AppendLine("RETURN {");
                 sb.AppendLine(string.Join(", ", projection));
@@ -331,15 +346,15 @@ namespace Core.Arango.DevExtreme
                     .Where(x => x.GroupInterval != "hour" && x.GroupInterval != "minute").ToList();
 
                 return "SORT " + string.Join(", ",
-                           groups.Select(x =>
-                           {
-                               var prop = x.Selector.FirstCharOfPropertiesToUpper();
+                    groups.Select(x =>
+                    {
+                        var prop = x.Selector.FirstCharOfPropertiesToUpper();
 
-                               if (!string.IsNullOrWhiteSpace(x.GroupInterval))
-                                   prop = x.GroupInterval.ToUpperInvariant() + prop;
+                        if (!string.IsNullOrWhiteSpace(x.GroupInterval))
+                            prop = x.GroupInterval.ToUpperInvariant() + prop;
 
-                               return $"{prop} {(x.Desc ? "DESC" : "ASC")}";
-                           }));
+                        return $"{prop} {(x.Desc ? "DESC" : "ASC")}";
+                    }));
             }
 
             if (_loadOption.Sort != null)
@@ -349,11 +364,11 @@ namespace Core.Arango.DevExtreme
 
 
             return "SORT " + string.Join(", ",
-                       sortingInfos.Select(x =>
-                       {
-                           var prop = PropertyName(x.Selector.FirstCharOfPropertiesToUpper());
-                           return $"{prop} {(x.Desc ? "DESC" : "ASC")}";
-                       }));
+                sortingInfos.Select(x =>
+                {
+                    var prop = PropertyName(x.Selector.FirstCharOfPropertiesToUpper());
+                    return $"{prop} {(x.Desc ? "DESC" : "ASC")}";
+                }));
         }
 
         private string GetMatchingFilter(IList dxFilter)
@@ -373,6 +388,7 @@ namespace Core.Arango.DevExtreme
                 else
                     dxFilter[1] = JToken.FromObject("=");
             }
+
 
             var op = dxFilter[1];
 
@@ -440,8 +456,6 @@ namespace Core.Arango.DevExtreme
             var value = dxFilter[2]?.ToString();
             var property = PropertyName(dxFilter[0].ToString().FirstCharOfPropertiesToUpper());
 
-            // UUID comps
-
             if (value == "null" || value == "" || value == null)
             {
                 value = CreateParameter(null);
@@ -494,14 +508,15 @@ namespace Core.Arango.DevExtreme
             var collapsedFilter = GetRootFilter(_loadOption.Filter);
             return GetMatchingFilter(collapsedFilter);
         }
-        
-        public List<ArangoGroup> BuildGrouping(ArangoTransform aq, List<JObject> list,
-            Func<string, bool> restrict = null, ArangoGroup parent = null, int level = 0)
+
+
+        public List<DxGroupResult> BuildGrouping(ArangoTransform aq, List<JObject> list,
+            Func<string, bool> restrict = null, DxGroupResult parent = null, int level = 0)
         {
             if (level >= aq.Groups.Count)
                 return null;
 
-            var res = new List<ArangoGroup>();
+            var res = new List<DxGroupResult>();
 
             var key = aq.Groups[level];
 
@@ -509,20 +524,20 @@ namespace Core.Arango.DevExtreme
 
             foreach (var item in items)
             {
-                var a = new ArangoGroup
+                var a = new DxGroupResult
                 {
-                    key = item.Key
+                    Key = item.Key
                 };
 
                 var sublist = item.ToList();
-                a.items = BuildGrouping(aq, sublist, restrict, a, level + 1);
+                a.Items = BuildGrouping(aq, sublist, restrict, a, level + 1);
 
-                if (a.items == null)
+                if (a.Items == null)
                 {
                     var row = sublist.Single();
-                    a.count = row.Value<int>("TotalCount");
+                    a.Count = row.Value<int>("TotalCount");
 
-                    a.summary = aq.Summaries.Select(x =>
+                    a.Summary = aq.Summaries.Select(x =>
                     {
                         try
                         {
@@ -538,20 +553,20 @@ namespace Core.Arango.DevExtreme
                 }
                 else
                 {
-                    a.count = null;
+                    a.Count = null;
 
-                    a.summary = aq.Summaries.Select((x, idx) =>
+                    a.Summary = aq.Summaries.Select((x, idx) =>
                     {
                         try
                         {
                             if (x.StartsWith("SUM") || x.StartsWith("COUNT"))
-                                return a.items.Sum(y => y.summary[idx] ?? 0m);
+                                return a.Items.Sum(y => y.Summary[idx] ?? 0m);
                             if (x.StartsWith("MAX"))
-                                return a.items.Max(y => y.summary[idx] ?? 0m);
+                                return a.Items.Max(y => y.Summary[idx] ?? 0m);
                             if (x.StartsWith("MIN"))
-                                return a.items.Min(y => y.summary[idx] ?? 0m);
+                                return a.Items.Min(y => y.Summary[idx] ?? 0m);
                             if (x.StartsWith("AVG"))
-                                return a.items.Average(y => y.summary[idx] ?? 0m); // TODO: Weight?
+                                return a.Items.Average(y => y.Summary[idx] ?? 0m); // TODO: Weight?
 
                             return 0m;
                         }
@@ -566,15 +581,6 @@ namespace Core.Arango.DevExtreme
             }
 
             return res;
-        }
-
-        public class ArangoGroup
-        {
-            public string key { get; set; }
-            public string displayName { get; set; }
-            public List<ArangoGroup> items { get; set; }
-            public int? count { get; set; }
-            public decimal?[] summary { get; set; }
         }
     }
 }

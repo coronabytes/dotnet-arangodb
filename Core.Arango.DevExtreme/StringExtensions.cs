@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace Core.Arango.DevExtreme
 {
-    internal static class StringExtensions
+    public static class StringExtensions
     {
         public static string FirstCharToUpper(this string input)
         {
@@ -14,8 +14,11 @@ namespace Core.Arango.DevExtreme
                 case "": throw new ArgumentException($"{nameof(input)} cannot be empty", nameof(input));
                 default: return input.First().ToString().ToUpper() + input.Substring(1);
             }
-        }  
-        
+        }
+
+        /// <summary>
+        ///     foo.bar.something -> Foo.Bar.Something
+        /// </summary>
         public static string FirstCharOfPropertiesToUpper(this string input)
         {
             switch (input)
@@ -24,15 +27,14 @@ namespace Core.Arango.DevExtreme
                 case "": throw new ArgumentException($"{nameof(input)} cannot be empty", nameof(input));
                 default:
                 {
-                    string expression = @"[\.]{1}([a-z])";
-                    char[] charArray = input.ToCharArray();
-                    foreach (Match match in Regex.Matches(input, expression,RegexOptions.Singleline))
-                    {
+                    var expression = @"[\.]{1}([a-z])";
+                    var charArray = input.ToCharArray();
+                    foreach (Match match in Regex.Matches(input, expression, RegexOptions.Singleline))
                         charArray[match.Groups[1].Index] = char.ToUpper(charArray[match.Groups[1].Index]);
-                    }
-                    string output = FirstCharToUpper(new string(charArray));
+                    var output = FirstCharToUpper(new string(charArray));
                     return output;
-                };
+                }
+                    ;
             }
         }
     }
