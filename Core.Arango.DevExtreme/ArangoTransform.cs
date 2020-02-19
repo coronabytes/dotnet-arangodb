@@ -381,6 +381,12 @@ namespace Core.Arango.DevExtreme
 
             if (dxFilter.Count == 2)
             {
+                if (dxFilter[0] is JValue v && v.Value is string s && s == "!" && dxFilter[1] is JArray)
+                {
+                    var r = GetMatchingFilter((JArray) dxFilter[1]);
+                    return $"!({r})";
+                }
+
                 dxFilter.Add(dxFilter[1]);
 
                 if (dxFilter[0] is JArray)
@@ -388,8 +394,7 @@ namespace Core.Arango.DevExtreme
                 else
                     dxFilter[1] = JToken.FromObject("=");
             }
-
-
+            
             var op = dxFilter[1];
 
             string opString;
@@ -405,6 +410,7 @@ namespace Core.Arango.DevExtreme
                     logical = true;
                     break;
                 case "=":
+                case "==":
                     opString = "==";
                     break;
                 case "<>":

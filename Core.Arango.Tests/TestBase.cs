@@ -1,3 +1,5 @@
+using Xunit.Abstractions;
+
 namespace Core.Arango.Tests
 {
     public abstract class TestBase
