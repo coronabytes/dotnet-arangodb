@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Reflection.Metadata;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
 using Xunit;
@@ -30,7 +28,7 @@ namespace Core.Arango.Tests
                     Stopwords = new List<string>(),
                     Stemming = false
                 },
-                Features = new List<string> { "position", "norm", "frequency" }
+                Features = new List<string> {"position", "norm", "frequency"}
             });
 
             await Arango.DeleteAnalyzerAsync("analyzers", "text_de_nostem");

@@ -1,13 +1,11 @@
-using System.Threading.Tasks;
-using Core.Arango.DevExtreme;
-using Xunit;
 using DevExtreme.AspNet.Data;
 using Newtonsoft.Json.Linq;
+using Xunit;
 using Xunit.Abstractions;
 
-namespace Core.Arango.Tests
+namespace Core.Arango.DevExtreme.Tests
 {
-    public class TransformTest : TestBase
+    public class TransformTest
     {
         private readonly ITestOutputHelper _output;
 
@@ -17,7 +15,7 @@ namespace Core.Arango.Tests
         }
 
         [Fact]
-        public async Task Transform()
+        public void NegateExpression()
         {
             var at = new ArangoTransform(new DataSourceLoadOptionsBase
             {

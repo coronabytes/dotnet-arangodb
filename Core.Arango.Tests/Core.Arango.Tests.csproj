@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Core.Arango.DevExtreme\Core.Arango.DevExtreme.csproj" />
+    <ProjectReference Include="..\Core.Arango\Core.Arango.csproj" />
   </ItemGroup>
 
 </Project>
