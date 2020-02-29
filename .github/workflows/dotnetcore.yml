@@ -30,3 +30,8 @@ jobs:
       with:
         name: Core.Arango.DevExtreme
         path: Core.Arango.DevExtreme/bin/Release
+    - name: Archive Core.Arango.DataProtection
+      uses: actions/upload-artifact@v1
+      with:
+        name: Core.Arango.DataProtection
+        path: Core.Arango.DataProtection/bin/Release  
