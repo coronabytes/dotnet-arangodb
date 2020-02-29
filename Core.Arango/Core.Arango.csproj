@@ -5,11 +5,11 @@
     <Company>Corona Bytes</Company>
     <Authors>Andreas Dominik Jung</Authors>
     <PackageId>Core.Arango</PackageId>
-    <PackageTags>ArangoDB Driver</PackageTags>
-    <PackageReleaseNotes>ArangoDB 3.6.1</PackageReleaseNotes>
+    <PackageTags>arangodb driver</PackageTags>
+    <PackageReleaseNotes></PackageReleaseNotes>
     <Description>.NET driver for ArangoDB with support for database per tenant deployments</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Version>1.0.5</Version>
+    <Version>1.0.6</Version>
     <Copyright>Andreas Dominik Jung</Copyright>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageIcon>ArangoDB.png</PackageIcon>

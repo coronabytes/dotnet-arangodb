@@ -7,11 +7,11 @@
     <Description>Serilog Sink for ArangoDB</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <Copyright>Andreas Dominik Jung</Copyright>
-    <PackageTags>ArangoDB Serilog</PackageTags>
+    <PackageTags>arangodb serilog</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageIcon>ArangoDB.png</PackageIcon>
     <PackageIconUrl />
-    <Version>1.0.5</Version>
+    <Version>1.0.6</Version>
     <PackageProjectUrl>https://github.com/coronabytes/ArangoDB</PackageProjectUrl>
   </PropertyGroup>
 

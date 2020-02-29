@@ -1,25 +1,21 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <Copyright>Andreas Dominik Jung</Copyright>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Andreas Dominik Jung</Authors>
     <Company>Corona Bytes</Company>
-    <Version>1.0.8</Version>
-    <Description>Transforms DevExtreme's DataSourceLoadOptions to AQL syntax</Description>
-    <PackageTags>arangodb devextreme</PackageTags>
+    <Description>Persistence provider for AspNetCore DataProtection keys in ArangoDB</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageIcon>ArangoDB.png</PackageIcon>
     <PackageIconUrl />
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageProjectUrl>https://github.com/coronabytes/ArangoDB</PackageProjectUrl>
-    <AssemblyVersion>1.0.2.0</AssemblyVersion>
-    <FileVersion>1.0.2.0</FileVersion>
+    <PackageTags>aspnetcore dataprotection arangodb</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Core.Arango" Version="1.0.5" />
-    <PackageReference Include="DevExtreme.AspNet.Data" Version="2.5.1" />
+    <PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="3.1.2" />
   </ItemGroup>
 
   <ItemGroup>
