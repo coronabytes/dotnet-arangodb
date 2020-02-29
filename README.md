@@ -148,15 +148,52 @@ await arango.CommitTransactionAsync(transaction);
 ```
 
 # Serilog
+- Collection is only created on initial database creation for now
+- If you want to use an existing database create the collection manually
 ```csharp
-log.MinimumLevel.Debug()
-.MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-.MinimumLevel.Override("Microsoft.Hosting.Lifetime", LogEventLevel.Information)
-.Enrich.FromLogContext()
-.WriteTo.Sink(new ArangoSerilogSink(arango), LogEventLevel.Information);
+webBuilder.UseSerilog((c, log) =>
+{
+    var arango = c.Configuration.GetConnectionString("Arango");
+
+    log.MinimumLevel.Debug()
+        .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+        .MinimumLevel.Override("Microsoft.Hosting.Lifetime", LogEventLevel.Information)
+        .Enrich.FromLogContext()
+        .WriteTo.Sink(new ArangoSerilogSink(new ArangoContext(arango), 
+            database: "logs", 
+            collection: "logs", 
+            batchPostingLimit: 50, 
+            TimeSpan.FromSeconds(2)), 
+            restrictedToMinimumLevel: LogEventLevel.Information);
+
+    // This is unreliable...
+    if (Environment.UserInteractive)
+        log.WriteTo.Console(theme: AnsiConsoleTheme.Code);
+});
+```
+
+# DataProtection
+- Collection is only created on initial database creation for now
+- If you want to use an existing database create the collection manually
+```csharp
+public void ConfigureServices(IServiceCollection services)
+{
+    services.AddSingleton(new ArangoContext(Configuration.GetConnectionString("Arango")));
+
+    var dataProtection = services.AddDataProtection()
+        .SetApplicationName("App")
+        .SetDefaultKeyLifetime(TimeSpan.FromDays(30));
+    dataProtection.PersistKeysToArangoDB(database: "dataprotection", collection: "keys");
+}
 ```
 
 # DevExtreme Query
+- Translates DevExtreme queries to AQL with filtering, sorting, grouping and summaries on a 'best effort basis'
+- Parameters are escaped with bindvars
+- Property names are not - may include security filter later
+- Developer retains full control over the projection - full document by default
+- Check safety limits in settings if your query fails
+- Support for ArangoSearch is coming soon
 ```csharp
 
 private static readonly ArangoTransformSettings Transform = new ArangoTransformSettings
