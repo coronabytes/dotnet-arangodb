@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Common;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net.Http;
 using System.Text.Encodings.Web;
@@ -30,21 +31,21 @@ namespace Core.Arango
         };
 
         private readonly string _password;
-
         private readonly string _user;
-
         private string _auth;
+        private DateTime _authValidUntil = DateTime.MinValue;
 
         public ArangoContext(string cs)
         {
             var builder = new DbConnectionStringBuilder {ConnectionString = cs};
             builder.TryGetValue("Server", out var s);
             builder.TryGetValue("Realm", out var r);
-            builder.TryGetValue("User ID", out var u);
+            builder.TryGetValue("User ID", out var uid);
+            builder.TryGetValue("User", out var u);
             builder.TryGetValue("Password", out var p);
 
             var server = s as string;
-            var user = u as string;
+            var user = u as string ?? uid as string;
             var password = p as string;
             var realm = r as string;
 
@@ -72,17 +73,11 @@ namespace Core.Arango
 
         public ILogger Logger { get; set; }
 
-        public async Task RefreshJwtAuth(CancellationToken cancellationToken = default)
+        
+        [Obsolete("no longer needed")]
+        public Task RefreshJwtAuth(CancellationToken cancellationToken = default)
         {
-            var res = await SendAsync<JObject>(HttpMethod.Post, $"{Server}/_open/auth",
-                JsonConvert.SerializeObject(new
-                {
-                    username = _user,
-                    password = _password ?? string.Empty
-                }, JsonSerializerSettings), auth: false, cancellationToken: cancellationToken);
-
-            var jwt = res.Value<string>("jwt");
-            _auth = $"Bearer {jwt}";
+            return Task.CompletedTask;
         }
     }
 }

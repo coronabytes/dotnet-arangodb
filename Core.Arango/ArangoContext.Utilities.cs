@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -8,6 +9,7 @@ using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Core.Arango
 {
@@ -69,6 +71,21 @@ namespace Core.Arango
             string transaction = null, bool throwOnError = true, bool auth = true,
             CancellationToken cancellationToken = default)
         {
+            if (auth && (_auth == null || _authValidUntil < DateTime.UtcNow.AddMinutes(-10)))
+            {
+                var authResponse = await SendAsync<JObject>(HttpMethod.Post, $"{Server}/_open/auth",
+                    JsonConvert.SerializeObject(new
+                    {
+                        username = _user,
+                        password = _password ?? string.Empty
+                    }, JsonSerializerSettings), auth: false, cancellationToken: cancellationToken);
+
+                var jwt = authResponse.Value<string>("jwt");
+                var token = new JwtSecurityToken(jwt.Replace("=", ""));
+                _auth = $"Bearer {jwt}";
+                _authValidUntil = token.ValidTo;
+            }
+
             var msg = new HttpRequestMessage(m, url)
             {
                 Version = HttpVersion.Version11
