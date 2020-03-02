@@ -31,8 +31,6 @@ namespace Core.Arango.Serilog
 
             try
             {
-                _arango.RefreshJwtAuth().Wait();
-
                 if (!arango.ExistDatabaseAsync(_database).Result)
                 {
                     _arango.CreateDatabaseAsync(_database).Wait();

@@ -33,8 +33,6 @@ namespace Core.Arango.DataProtection
                 using var scope = _services.CreateScope();
                 var context = scope.ServiceProvider.GetRequiredService<ArangoContext>();
 
-                context.RefreshJwtAuth().Wait();
-
                 if (!context.ExistDatabaseAsync(_database).Result)
                 {
                     context.CreateDatabaseAsync(_database).Wait();
