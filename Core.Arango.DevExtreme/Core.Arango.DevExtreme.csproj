@@ -5,7 +5,7 @@
     <Copyright>Andreas Dominik Jung</Copyright>
     <Authors>Andreas Dominik Jung</Authors>
     <Company>Corona Bytes</Company>
-    <Version>1.0.8</Version>
+    <Version>1.0.9</Version>
     <Description>Transforms DevExtreme's DataSourceLoadOptions to AQL syntax</Description>
     <PackageTags>arangodb devextreme</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>

@@ -104,6 +104,10 @@ namespace Core.Arango.DevExtreme
                 if (_loadOption.TotalSummary?.Any() == true)
                 {
                     var summaryQueryBuilder = new StringBuilder();
+
+                    if (!string.IsNullOrWhiteSpace(_settings.Preamble))
+                        summaryQueryBuilder.AppendLine(_settings.Preamble);
+
                     summaryQueryBuilder.AppendLine($"FOR {_settings.IteratorVar} IN {collection}");
                     summaryQueryBuilder.AppendLine("FILTER " + FilterExpression);
 

@@ -8,8 +8,6 @@ namespace Core.Arango.Tests
         [Fact]
         public async Task Collection()
         {
-            await Arango.RefreshJwtAuth();
-
             /*await Arango.CreateDatabaseAsync("update");
 
             await Arango.CreateCollectionAsync("update", "collection", ArangoCollectionType.Document);

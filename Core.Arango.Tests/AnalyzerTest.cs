@@ -10,8 +10,6 @@ namespace Core.Arango.Tests
         [Fact]
         public async Task Analyzers()
         {
-            await Arango.RefreshJwtAuth();
-
             await Arango.CreateDatabaseAsync("analyzers");
 
             var analyzers = await Arango.ListAnalyzersAsync("analyzers");
