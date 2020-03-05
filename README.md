@@ -9,10 +9,8 @@
 
 ## Initialize context
 - Realm prefixes all further database handles (e.g. "myproject-database")
-- JWT needs to be refreshed once a month or whatever your expiration is configured to
 ```csharp
-var arango = new ArangoContext("Server=http://localhost:8529;Realm=myproject;User ID=root;Password=;");
-arango.RefreshJwtAuth();
+var arango = new ArangoContext("Server=http://localhost:8529;Realm=myproject;User=root;Password=;");
 ```
 
 ## Create collection
