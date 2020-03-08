@@ -9,14 +9,14 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: ArangoDB
+      run: docker run -d --rm -e ARANGO_ROOT_PASSWORD=integrationtest -p 8529:8529 arangodb:3.6.1
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.1.101
+        dotnet-version: 3.1.102
     - name: Build with dotnet
       run: dotnet build --configuration Release
-    - name: ArangoDB
-      run: docker run -e ARANGO_ROOT_PASSWORD=integrationtest -p 8529:8529 arangodb:3.6.1
     - name: Archive Core.Arango
       uses: actions/upload-artifact@v1
       with:
