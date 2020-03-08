@@ -6,12 +6,6 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-    #container:
-    #  image: arangodb:3.6.1      
-    #  ports: 
-    #    - 8529:8529
-    #  env:
-    #    ARANGO_ROOT_PASSWORD: integrationtest
 
     steps:
     - uses: actions/checkout@v2
@@ -22,7 +16,7 @@ jobs:
     - name: Build with dotnet
       run: dotnet build --configuration Release
     - name: ArangoDB
-      run: docker run -e ARANGO_ROOT_PASSWORT=integrationtest -p 8529:8529 arangodb:3.6.1
+      run: docker run -e ARANGO_ROOT_PASSWORD=integrationtest -p 8529:8529 arangodb:3.6.1
     - name: Archive Core.Arango
       uses: actions/upload-artifact@v1
       with:
