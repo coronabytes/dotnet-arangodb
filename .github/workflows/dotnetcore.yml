@@ -21,6 +21,8 @@ jobs:
         dotnet-version: 3.1.101
     - name: Build with dotnet
       run: dotnet build --configuration Release
+    - name: ArangoDB
+      run: docker run -e ARANGO_ROOT_PASSWORT=integrationtest -p 8529:8529 arangodb:3.6.1
     - name: Archive Core.Arango
       uses: actions/upload-artifact@v1
       with:
