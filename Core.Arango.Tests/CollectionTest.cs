@@ -9,7 +9,7 @@ namespace Core.Arango.Tests
         [Fact]
         public async Task Collection()
         {
-            await Arango.CreateDatabaseAsync("collections");
+            Assert.True(await Arango.CreateDatabaseAsync("collections"));
 
             await Arango.CreateCollectionAsync("collections", new ArangoCollection
             {

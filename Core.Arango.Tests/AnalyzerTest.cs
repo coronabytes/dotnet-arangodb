@@ -10,7 +10,7 @@ namespace Core.Arango.Tests
         [Fact]
         public async Task Analyzers()
         {
-            await Arango.CreateDatabaseAsync("analyzers");
+            Assert.True(await Arango.CreateDatabaseAsync("analyzers"));
 
             var analyzers = await Arango.ListAnalyzersAsync("analyzers");
 
