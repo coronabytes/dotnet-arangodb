@@ -6,12 +6,12 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-    container:
-      image: arangodb:3.6.1      
-      ports: 
-        - 8529:8529
-      env:
-        ARANGO_ROOT_PASSWORD: integrationtest  
+    #container:
+    #  image: arangodb:3.6.1      
+    #  ports: 
+    #    - 8529:8529
+    #  env:
+    #    ARANGO_ROOT_PASSWORD: integrationtest
 
     steps:
     - uses: actions/checkout@v2
