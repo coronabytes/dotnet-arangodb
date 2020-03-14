@@ -3,6 +3,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using Core.Arango.Linq.Internal;
+using Newtonsoft.Json;
 
 namespace Core.Arango.Linq
 {
@@ -21,7 +22,7 @@ namespace Core.Arango.Linq
 
         public IQueryable CreateQuery(Expression expression)
         {
-            Type elementType = expression.Type.GetElementType();
+            Type elementType = TypeSystem.GetElementType(expression.Type);
             try
             {
                 return               
@@ -48,7 +49,7 @@ namespace Core.Arango.Linq
         {
             var isEnumerable = (typeof(TResult).Name == "IEnumerable`1");
 
-            var types = expression.Type.GenericTypeArguments;
+            var elementType = TypeSystem.GetElementType(expression.Type);
 
             var writer = new AqlCodeWriter(expression);
 
@@ -58,6 +59,8 @@ namespace Core.Arango.Linq
 
             //_arango.QueryAsync<JObject>()
 
+            if (isEnumerable)
+                return (TResult)JsonConvert.DeserializeObject("[]", elementType.MakeArrayType());
             return default;
         }
     }
