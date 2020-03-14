@@ -13,11 +13,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Arango.Tests", "Core.A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Arango.DataProtection", "Core.Arango.DataProtection\Core.Arango.DataProtection.csproj", "{C70932F4-E6B2-4ABA-87F4-12595D82E1A5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Arango.DevExtreme.Tests", "Core.Arango.DevExtreme.Tests\Core.Arango.DevExtreme.Tests.csproj", "{2383D16C-D2FB-4B7F-9F47-EDFE475D06C8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Arango.DevExtreme.Tests", "Core.Arango.DevExtreme.Tests\Core.Arango.DevExtreme.Tests.csproj", "{2383D16C-D2FB-4B7F-9F47-EDFE475D06C8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{02F6B955-241B-4B72-99CB-B8CEB5107195}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Adapters", "Adapters", "{11394A49-A8EF-47B8-9430-1AB60AFD5B02}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Arango.Linq", "Core.Arango.Linq\Core.Arango.Linq.csproj", "{A9ECCC9A-9E2C-43AF-BEE5-104E6D798D07}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Arango.Linq.Tests", "Core.Arango.Linq.Tests\Core.Arango.Linq.Tests.csproj", "{795C024E-C730-48AD-8E7F-FE008D3D1055}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,6 +53,14 @@ Global
 		{2383D16C-D2FB-4B7F-9F47-EDFE475D06C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2383D16C-D2FB-4B7F-9F47-EDFE475D06C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2383D16C-D2FB-4B7F-9F47-EDFE475D06C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9ECCC9A-9E2C-43AF-BEE5-104E6D798D07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9ECCC9A-9E2C-43AF-BEE5-104E6D798D07}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9ECCC9A-9E2C-43AF-BEE5-104E6D798D07}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9ECCC9A-9E2C-43AF-BEE5-104E6D798D07}.Release|Any CPU.Build.0 = Release|Any CPU
+		{795C024E-C730-48AD-8E7F-FE008D3D1055}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{795C024E-C730-48AD-8E7F-FE008D3D1055}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{795C024E-C730-48AD-8E7F-FE008D3D1055}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{795C024E-C730-48AD-8E7F-FE008D3D1055}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -59,6 +71,7 @@ Global
 		{F31E2F80-FFFB-43DA-9C6B-971B854D1E35} = {02F6B955-241B-4B72-99CB-B8CEB5107195}
 		{C70932F4-E6B2-4ABA-87F4-12595D82E1A5} = {11394A49-A8EF-47B8-9430-1AB60AFD5B02}
 		{2383D16C-D2FB-4B7F-9F47-EDFE475D06C8} = {02F6B955-241B-4B72-99CB-B8CEB5107195}
+		{795C024E-C730-48AD-8E7F-FE008D3D1055} = {02F6B955-241B-4B72-99CB-B8CEB5107195}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D52A3509-0AEE-4464-81B6-E4E4AA95E7ED}
