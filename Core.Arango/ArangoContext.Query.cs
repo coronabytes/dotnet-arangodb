@@ -125,5 +125,42 @@ namespace Core.Arango
                 throw;
             }
         }
+
+        
+        public async Task<object> QueryAsync(Type type, bool isEnumerable, ArangoHandle database, string query,
+            IDictionary<string, object> bindVars, bool? cache = null, bool? fullCount = null,
+            CancellationToken cancellationToken = default)
+        {
+            query = query.Trim();
+
+            var responseType = typeof(QueryResponse<>);
+            var constructedResponseType = responseType.MakeGenericType(type);
+
+            var res = await SendAsync(constructedResponseType, HttpMethod.Post,
+                $"{Server}/_db/{DbName(database)}/_api/cursor",
+                JsonConvert.SerializeObject(new QueryRequest
+                {
+                    Query = query,
+                    BindVars = bindVars,
+                    BatchSize = BatchSize,
+                    Cache = cache,
+                    Options = new QueryRequestOptions
+                    {
+                        FullCount = fullCount
+                    }
+                }, JsonSerializerSettings), cancellationToken: cancellationToken);
+
+            var listResult = constructedResponseType.GetProperty("Result").GetValue(res);
+
+            if (isEnumerable)
+                return listResult;
+
+            var count = (int)listResult.GetType().GetProperty("Count").GetValue(listResult);
+
+            if (count == 0)
+                return Activator.CreateInstance(type);
+
+            return listResult.GetType().GetProperty("Item").GetValue(listResult, new object[] {0});
+        }
     }
 }

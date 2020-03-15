@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
+using Core.Arango.Tests.Core;
 using Xunit;
 
 namespace Core.Arango.Tests
@@ -10,11 +11,9 @@ namespace Core.Arango.Tests
         [Fact]
         public async Task Analyzers()
         {
-            Assert.True(await Arango.CreateDatabaseAsync("analyzers"));
+            var analyzers = await Arango.ListAnalyzersAsync("test");
 
-            var analyzers = await Arango.ListAnalyzersAsync("analyzers");
-
-            await Arango.CreateAnalyzerAsync("analyzers", new ArangoAnalyzer
+            await Arango.CreateAnalyzerAsync("test", new ArangoAnalyzer
             {
                 Name = "text_de_nostem",
                 Type = "text",
@@ -29,7 +28,7 @@ namespace Core.Arango.Tests
                 Features = new List<string> {"position", "norm", "frequency"}
             });
 
-            await Arango.DeleteAnalyzerAsync("analyzers", "text_de_nostem");
+            await Arango.DeleteAnalyzerAsync("test", "text_de_nostem");
         }
     }
 }

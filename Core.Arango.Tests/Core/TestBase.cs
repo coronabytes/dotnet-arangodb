@@ -2,16 +2,16 @@ using System;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Core.Arango.Tests
+namespace Core.Arango.Tests.Core
 {
     public abstract class TestBase : IAsyncLifetime
     {
         protected readonly ArangoContext Arango =
             new ArangoContext($"Server=http://localhost:8529;Realm=CI-{Guid.NewGuid():D};User=root;Password=;");
 
-        public Task InitializeAsync()
+        public async Task InitializeAsync()
         {
-            return Task.CompletedTask;
+            await Arango.CreateDatabaseAsync("test");
         }
 
         public async Task DisposeAsync()

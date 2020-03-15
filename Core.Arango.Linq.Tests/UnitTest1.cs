@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Core.Arango.Protocol;
 using Xunit;
 
 namespace Core.Arango.Linq.Tests
@@ -28,9 +29,16 @@ namespace Core.Arango.Linq.Tests
             var test = Arango.AsQueryable<Project>("test").Where( x=>x.Name == "A").Select(x => x.Name).ToList();
         }
 
-        public Task InitializeAsync()
+        /*[Fact]
+        public async Task Test3()
         {
-            return Task.CompletedTask;
+            var test = await Arango.AsQueryable<Project>("test").Where( x=>x.Name == "A").Select(x => x.Name).ToListAsync();
+        }*/
+
+        public async Task InitializeAsync()
+        {
+            await Arango.CreateDatabaseAsync("test");
+            await Arango.CreateCollectionAsync("test", nameof(Project), ArangoCollectionType.Document);
         }
 
         public async Task DisposeAsync()

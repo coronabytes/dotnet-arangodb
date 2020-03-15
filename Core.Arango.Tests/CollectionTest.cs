@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
+using Core.Arango.Tests.Core;
 using Xunit;
 
 namespace Core.Arango.Tests
@@ -9,9 +10,7 @@ namespace Core.Arango.Tests
         [Fact]
         public async Task Collection()
         {
-            Assert.True(await Arango.CreateDatabaseAsync("collections"));
-
-            await Arango.CreateCollectionAsync("collections", new ArangoCollection
+            await Arango.CreateCollectionAsync("test", new ArangoCollection
             {
                 Name = "test",
                 Type = ArangoCollectionType.Document,
@@ -22,7 +21,7 @@ namespace Core.Arango.Tests
                 }
             });
 
-            await Arango.CreateDocumentAsync("collections", "test", new
+            await Arango.CreateDocumentAsync("test", "test", new
             {
                 Name = "test"
             });

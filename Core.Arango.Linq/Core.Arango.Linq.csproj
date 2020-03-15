@@ -2,10 +2,27 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
+    <Authors>Andreas Dominik Jung</Authors>
+    <Company>Corona Bytes</Company>
+    <Description>LINQ to AQL for Core.Arango</Description>
+    <Copyright>Andreas Dominik Jung</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/coronabytes/ArangoDB</PackageProjectUrl>
+    <PackageIcon>ArangoDB.png</PackageIcon>
+    <PackageIconUrl />
+    <PackageTags>arangodb linq aql</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Core.Arango" Version="1.0.7" />
+    <None Include="ArangoDB.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Core.Arango\Core.Arango.csproj" />
   </ItemGroup>
 
 </Project>
