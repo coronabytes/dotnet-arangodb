@@ -364,15 +364,20 @@ namespace Core.Arango.DevExtreme
             if (_loadOption.Sort != null)
                 sortingInfos.AddRange(_loadOption.Sort.Where(x => x.Selector != null).ToList());
             else
-                return string.Empty;
+                return _settings.StableSort ? $"SORT {_settings.IteratorVar}._key" : string.Empty;
 
 
-            return "SORT " + string.Join(", ",
+            var sort = "SORT " + string.Join(", ",
                 sortingInfos.Select(x =>
                 {
                     var prop = PropertyName(x.Selector.FirstCharOfPropertiesToUpper());
                     return $"{prop} {(x.Desc ? "DESC" : "ASC")}";
                 }));
+
+            if (_settings.StableSort && !sort.Contains("_key"))
+                sort = sort + $"{_settings.IteratorVar}._key";
+
+            return sort;
         }
 
         private string GetMatchingFilter(IList dxFilter)

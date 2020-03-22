@@ -72,5 +72,10 @@ namespace Core.Arango.DevExtreme
         ///     Transform property names to expressions - array lookups etc
         /// </summary>
         public Func<string, ArangoTransformSettings, string> PropertyTransform { get; set; }
+
+        /// <summary>
+        /// When true (default) always sort by _key last
+        /// </summary>
+        public bool StableSort { get; set; } = true;
     }
 }

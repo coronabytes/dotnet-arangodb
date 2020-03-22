@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
@@ -10,6 +11,7 @@ namespace Core.Arango.Linq.Tests
     {
         public Guid Key { get; set; }
         public string Name { get; set; }
+        public int Value { get; set; }
     }
 
     public class UnitTest1 : IAsyncLifetime
@@ -33,6 +35,19 @@ namespace Core.Arango.Linq.Tests
         public async Task Test3()
         {
             var test = await Arango.AsQueryable<Project>("test").Where( x=>x.Name == "A").Select(x => x.Name).ToListAsync();
+        }*/
+
+        /*[Fact]
+        public void Test4()
+        {
+            var list = new List<int> {1, 2, 3};
+            var test = Arango.AsQueryable<Project>("test").Where( x=>list.Contains(x.Value)).ToList();
+        }*/
+
+        /*[Fact]
+        public void Test5()
+        {
+            var test = Arango.AsQueryable<Project>("test").Where( x=> x.Value == 1 || x.Value == 2).ToList();
         }*/
 
         public async Task InitializeAsync()
