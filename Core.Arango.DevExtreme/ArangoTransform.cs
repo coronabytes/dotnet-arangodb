@@ -375,7 +375,7 @@ namespace Core.Arango.DevExtreme
                 }));
 
             if (_settings.StableSort && !sort.Contains("_key"))
-                sort = sort + $"{_settings.IteratorVar}._key";
+                sort += $", {_settings.IteratorVar}._key";
 
             return sort;
         }
