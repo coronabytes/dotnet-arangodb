@@ -41,6 +41,24 @@ namespace Core.Arango.DevExtreme.Tests
         }
 
         [Fact]
+        public void NullTypeTest()
+        {
+            var at = new ArangoTransform(new DataSourceLoadOptionsBase
+            {
+                Take = 20,
+                Filter = JArray.Parse(@"[""parentKey"",""="",null]")
+            }, new ArangoTransformSettings());
+
+            at.Transform(out var error);
+            var parameter = at.Parameter
+                .Select(x => $"{x.Key}: {x.Value} [{x.Value?.GetType()}]")
+                .ToList();
+
+            _output.WriteLine(at.FilterExpression);
+            _output.WriteLine(JsonConvert.SerializeObject(parameter, Formatting.Indented));
+        }
+
+        [Fact]
         public void StringTypeTest()
         {
             var at = new ArangoTransform(new DataSourceLoadOptionsBase

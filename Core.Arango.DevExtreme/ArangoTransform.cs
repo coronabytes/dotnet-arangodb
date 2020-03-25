@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -490,7 +489,11 @@ namespace Core.Arango.DevExtreme
             var property = PropertyName(dxFilter[0].ToString().FirstCharOfPropertiesToUpper());
             string value = null;
 
-            if (rawValue is JValue jv)
+            if (rawValue == null)
+            {
+                value = CreateParameter(null);
+            }
+            else if (rawValue is JValue jv)
             {
                 var type = jv.Type;
 
@@ -515,12 +518,15 @@ namespace Core.Arango.DevExtreme
                             value = CreateParameter(valueCase);
                             break;
                     }
-                } else
+                }
+                else
+                {
                     value = CreateParameter(jv.Value);
+                }
             }
             else
             {
-                var type = rawValue?.GetType();
+                var type = rawValue.GetType();
                 throw new NotImplementedException($"Value of type {type}");
             }
 
