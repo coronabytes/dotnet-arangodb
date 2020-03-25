@@ -40,6 +40,7 @@ namespace Core.Arango.DevExtreme.Tests
             _output.WriteLine(at.FilterExpression);
         }
 
+        // JArray.Parse differs from AspNetCore
         [Fact]
         public void NullTypeTest()
         {
@@ -65,6 +66,26 @@ namespace Core.Arango.DevExtreme.Tests
             {
                 Take = 20,
                 Filter = JArray.Parse(@"[[""name"",""contains"",""bad""],[""name"",""contains"",""""]]")
+            }, new ArangoTransformSettings());
+
+            at.Transform(out var error);
+            var parameter = at.Parameter
+                .Select(x => $"{x.Key}: {x.Value} [{x.Value?.GetType()}]")
+                .ToList();
+
+            _output.WriteLine(at.FilterExpression);
+            _output.WriteLine(JsonConvert.SerializeObject(parameter, Formatting.Indented));
+        }
+
+        
+        // JArray.Parse differs from AspNetCore
+        [Fact]
+        public void String2TypeTest()
+        {
+            var at = new ArangoTransform(new DataSourceLoadOptionsBase
+            {
+                Take = 20,
+                Filter = JArray.Parse(@"[""data.invoiceNumber"",""contains"",""123""]")
             }, new ArangoTransformSettings());
 
             at.Transform(out var error);

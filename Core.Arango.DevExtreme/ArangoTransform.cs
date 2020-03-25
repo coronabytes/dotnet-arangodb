@@ -487,11 +487,31 @@ namespace Core.Arango.DevExtreme
             var rawValue = dxFilter[2];
 
             var property = PropertyName(dxFilter[0].ToString().FirstCharOfPropertiesToUpper());
-            string value = null;
+            string boundParam;
 
             if (rawValue == null)
             {
-                value = CreateParameter(null);
+                boundParam = CreateParameter(null);
+            }
+            else if (rawValue is string s)
+            {
+                var propertyCase = _loadOption.StringToLower ?? true ? $"LOWER({property})" : property;
+                var valueCase = _loadOption.StringToLower ?? true ? s.ToLowerInvariant() : s;
+
+                switch (opString)
+                {
+                    case "CONTAINS":
+                        return $@"{propertyCase} LIKE {CreateParameter($"%{valueCase}%")}";
+                    case "NOTCONTAINS":
+                        return $@"{propertyCase} NOT LIKE {CreateParameter($"%{valueCase}%")}";
+                    case "STARTSWITH":
+                        return $@"{propertyCase} LIKE {CreateParameter($"{valueCase}%")}";
+                    case "ENDSWITH":
+                        return $@"{propertyCase} LIKE {CreateParameter($"%{valueCase}")}'";
+                    default:
+                        boundParam = CreateParameter(valueCase);
+                        break;
+                }
             }
             else if (rawValue is JValue jv)
             {
@@ -515,13 +535,13 @@ namespace Core.Arango.DevExtreme
                         case "ENDSWITH":
                             return $@"{propertyCase} LIKE {CreateParameter($"%{valueCase}")}'";
                         default:
-                            value = CreateParameter(valueCase);
+                            boundParam = CreateParameter(valueCase);
                             break;
                     }
                 }
                 else
                 {
-                    value = CreateParameter(jv.Value);
+                    boundParam = CreateParameter(jv.Value);
                 }
             }
             else
@@ -530,7 +550,7 @@ namespace Core.Arango.DevExtreme
                 throw new NotImplementedException($"Value of type {type}");
             }
 
-            return $"{property} {opString} {value}";
+            return $"{property} {opString} {boundParam}";
         }
 
         private string Filter()
