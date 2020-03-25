@@ -489,40 +489,39 @@ namespace Core.Arango.DevExtreme
             var property = PropertyName(dxFilter[0].ToString().FirstCharOfPropertiesToUpper());
             string boundParam;
 
-            if (rawValue == null)
+            switch (rawValue)
             {
-                boundParam = CreateParameter(null);
-            }
-            else if (rawValue is string s)
-            {
-                var propertyCase = _loadOption.StringToLower ?? true ? $"LOWER({property})" : property;
-                var valueCase = _loadOption.StringToLower ?? true ? s.ToLowerInvariant() : s;
-
-                switch (opString)
+                case null:
+                    boundParam = CreateParameter(null);
+                    break;
+                case bool b:
+                    boundParam = CreateParameter(b);
+                    break;
+                case int i:
+                    boundParam = CreateParameter(i);
+                    break;
+                case long l:
+                    boundParam = CreateParameter(l);
+                    break;
+                case decimal m:
+                    boundParam = CreateParameter(m);
+                    break;
+                case float f:
+                    boundParam = CreateParameter(f);
+                    break;
+                case double d:
+                    boundParam = CreateParameter(d);
+                    break;
+                case Guid guid:
+                    boundParam = CreateParameter(guid);
+                    break;
+                case DateTime datetime:
+                    boundParam = CreateParameter(datetime);
+                    break;
+                case string s:
                 {
-                    case "CONTAINS":
-                        return $@"{propertyCase} LIKE {CreateParameter($"%{valueCase}%")}";
-                    case "NOTCONTAINS":
-                        return $@"{propertyCase} NOT LIKE {CreateParameter($"%{valueCase}%")}";
-                    case "STARTSWITH":
-                        return $@"{propertyCase} LIKE {CreateParameter($"{valueCase}%")}";
-                    case "ENDSWITH":
-                        return $@"{propertyCase} LIKE {CreateParameter($"%{valueCase}")}'";
-                    default:
-                        boundParam = CreateParameter(valueCase);
-                        break;
-                }
-            }
-            else if (rawValue is JValue jv)
-            {
-                var type = jv.Type;
-
-                if (type == JTokenType.String /*|| typeHint == TypeHint.String*/)
-                {
-                    var v = jv.Value as string ?? string.Empty; //?? jv.Value.ToString();
-
                     var propertyCase = _loadOption.StringToLower ?? true ? $"LOWER({property})" : property;
-                    var valueCase = _loadOption.StringToLower ?? true ? v.ToLowerInvariant() : v;
+                    var valueCase = _loadOption.StringToLower ?? true ? s.ToLowerInvariant() : s;
 
                     switch (opString)
                     {
@@ -538,16 +537,47 @@ namespace Core.Arango.DevExtreme
                             boundParam = CreateParameter(valueCase);
                             break;
                     }
+
+                    break;
                 }
-                else
+                case JValue jv:
                 {
-                    boundParam = CreateParameter(jv.Value);
+                    var type = jv.Type;
+
+                    if (type == JTokenType.String /*|| typeHint == TypeHint.String*/)
+                    {
+                        var v = jv.Value as string ?? string.Empty; //?? jv.Value.ToString();
+
+                        var propertyCase = _loadOption.StringToLower ?? true ? $"LOWER({property})" : property;
+                        var valueCase = _loadOption.StringToLower ?? true ? v.ToLowerInvariant() : v;
+
+                        switch (opString)
+                        {
+                            case "CONTAINS":
+                                return $@"{propertyCase} LIKE {CreateParameter($"%{valueCase}%")}";
+                            case "NOTCONTAINS":
+                                return $@"{propertyCase} NOT LIKE {CreateParameter($"%{valueCase}%")}";
+                            case "STARTSWITH":
+                                return $@"{propertyCase} LIKE {CreateParameter($"{valueCase}%")}";
+                            case "ENDSWITH":
+                                return $@"{propertyCase} LIKE {CreateParameter($"%{valueCase}")}'";
+                            default:
+                                boundParam = CreateParameter(valueCase);
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        boundParam = CreateParameter(jv.Value);
+                    }
+
+                    break;
                 }
-            }
-            else
-            {
-                var type = rawValue.GetType();
-                throw new NotImplementedException($"Value of type {type}");
+                default:
+                {
+                    var type = rawValue.GetType();
+                    throw new NotImplementedException($"Value of type {type}");
+                }
             }
 
             return $"{property} {opString} {boundParam}";
