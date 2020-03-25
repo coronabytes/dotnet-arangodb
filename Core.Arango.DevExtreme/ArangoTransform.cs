@@ -11,6 +11,13 @@ using Newtonsoft.Json.Linq;
 
 namespace Core.Arango.DevExtreme
 {
+    internal enum TypeHint
+    {
+        Unsure,
+        String,
+        DateOrNumber
+    }
+
     /// <summary>
     ///     DevExtreme DataSourceLoadOptions to AQL
     /// </summary>
@@ -403,11 +410,13 @@ namespace Core.Arango.DevExtreme
                 else
                     dxFilter[1] = JToken.FromObject("=");
             }
-            
+
             var op = dxFilter[1];
 
             string opString;
             var logical = false;
+            var typeHint = TypeHint.Unsure;
+
             switch (op.ToString())
             {
                 case "and":
@@ -427,27 +436,35 @@ namespace Core.Arango.DevExtreme
                     break;
                 case ">=":
                     opString = ">=";
+                    typeHint = TypeHint.DateOrNumber;
                     break;
                 case "<=":
                     opString = "<=";
+                    typeHint = TypeHint.DateOrNumber;
                     break;
                 case "<":
                     opString = "<";
+                    typeHint = TypeHint.DateOrNumber;
                     break;
                 case ">":
                     opString = ">";
+                    typeHint = TypeHint.DateOrNumber;
                     break;
                 case "contains":
                     opString = "CONTAINS";
+                    typeHint = TypeHint.String;
                     break;
                 case "notcontains":
                     opString = "NOTCONTAINS";
+                    typeHint = TypeHint.String;
                     break;
                 case "startswith":
                     opString = "STARTWITH";
+                    typeHint = TypeHint.String;
                     break;
                 case "endswith":
                     opString = "ENDSWITH";
+                    typeHint = TypeHint.String;
                     break;
                 default:
                     throw new NotImplementedException("Operation Type not implemented: " + op);
@@ -468,52 +485,44 @@ namespace Core.Arango.DevExtreme
                 return $"({logicalResult})";
             }
 
-            var value = dxFilter[2]?.ToString();
+            var rawValue = dxFilter[2];
+
             var property = PropertyName(dxFilter[0].ToString().FirstCharOfPropertiesToUpper());
+            string value = null;
 
-            if (value == "null" || value == "" || value == null)
+            if (rawValue is JValue jv)
             {
-                value = CreateParameter(null);
-            }
-            else if (Guid.TryParse(value, out var pGuid))
-            {
-                value = CreateParameter(pGuid == Guid.Empty ? null : pGuid.ToString("D"));
-            }
-            else if (decimal.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out var pDecimal))
-            {
-                value = CreateParameter(pDecimal);
-            }
-            else if (DateTime.TryParse(value, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind,
-                out var pDate))
-            {
-                value = CreateParameter(pDate);
-            }
-            else if (bool.TryParse(value, out var booleanValue))
-            {
-                value = CreateParameter(booleanValue);
-            }
+                var type = jv.Type;
 
+                if (type == JTokenType.String /*|| typeHint == TypeHint.String*/)
+                {
+                    var v = jv.Value as string ?? string.Empty; //?? jv.Value.ToString();
+
+                    var propertyCase = _loadOption.StringToLower ?? true ? $"LOWER({property})" : property;
+                    var valueCase = _loadOption.StringToLower ?? true ? v.ToLowerInvariant() : v;
+
+                    switch (opString)
+                    {
+                        case "CONTAINS":
+                            return $@"{propertyCase} LIKE {CreateParameter($"%{valueCase}%")}";
+                        case "NOTCONTAINS":
+                            return $@"{propertyCase} NOT LIKE {CreateParameter($"%{valueCase}%")}";
+                        case "STARTSWITH":
+                            return $@"{propertyCase} LIKE {CreateParameter($"{valueCase}%")}";
+                        case "ENDSWITH":
+                            return $@"{propertyCase} LIKE {CreateParameter($"%{valueCase}")}'";
+                        default:
+                            value = CreateParameter(valueCase);
+                            break;
+                    }
+                } else
+                    value = CreateParameter(jv.Value);
+            }
             else
             {
-                var propertyCase = _loadOption.StringToLower ?? true ? $"LOWER({property})" : property;
-                var valueyCase = _loadOption.StringToLower ?? true ? value.ToLowerInvariant() : value;
-
-                switch (opString)
-                {
-                    case "CONTAINS":
-                        return $@"{propertyCase} LIKE {CreateParameter($"%{valueyCase}%")}";
-                    case "NOTCONTAINS":
-                        return $@"{propertyCase} NOT LIKE {CreateParameter($"%{valueyCase}%")}";
-                    case "STARTSWITH":
-                        return $@"{propertyCase} LIKE {CreateParameter($"{valueyCase}%")}";
-                    case "ENDSWITH":
-                        return $@"{propertyCase} LIKE {CreateParameter($"%{valueyCase}")}'";
-                    default:
-                        value = CreateParameter(valueyCase);
-                        break;
-                }
+                var type = rawValue?.GetType();
+                throw new NotImplementedException($"Value of type {type}");
             }
-
 
             return $"{property} {opString} {value}";
         }

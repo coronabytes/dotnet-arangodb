@@ -187,6 +187,8 @@ public void ConfigureServices(IServiceCollection services)
 
 # DevExtreme Query
 - Translates DevExtreme queries to AQL with filtering, sorting, grouping and summaries on a 'best effort basis'
+- DataSourceLoadOptions need to be parsed by Newtonsoft Json and not System.Text.Json
+  - services.AddControllers().AddNewtonsoftJson();
 - Parameters are escaped with bindvars
 - Property names are not - may include security filter later
 - Developer retains full control over the projection - full document by default
