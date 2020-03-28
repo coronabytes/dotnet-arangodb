@@ -138,7 +138,7 @@ namespace Core.Arango.DevExtreme
                 {
                     Data = res,
                     Summary = summary,
-                    TotalCount = res.FullCount ?? 0
+                    TotalCount = res.FullCount ?? -1
                 };
             }
         }
@@ -458,7 +458,7 @@ namespace Core.Arango.DevExtreme
                     typeHint = TypeHint.String;
                     break;
                 case "startswith":
-                    opString = "STARTWITH";
+                    opString = "STARTSWITH";
                     typeHint = TypeHint.String;
                     break;
                 case "endswith":

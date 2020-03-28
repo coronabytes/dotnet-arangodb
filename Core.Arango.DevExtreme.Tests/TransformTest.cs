@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using DevExtreme.AspNet.Data;
@@ -86,6 +87,27 @@ namespace Core.Arango.DevExtreme.Tests
             {
                 Take = 20,
                 Filter = JArray.Parse(@"[""data.invoiceNumber"",""contains"",""123""]")
+            }, new ArangoTransformSettings());
+
+            at.Transform(out var error);
+            var parameter = at.Parameter
+                .Select(x => $"{x.Key}: {x.Value} [{x.Value?.GetType()}]")
+                .ToList();
+
+            _output.WriteLine(at.FilterExpression);
+            _output.WriteLine(JsonConvert.SerializeObject(parameter, Formatting.Indented));
+        }
+
+        [Fact]
+        public void StringNumberTypeTest()
+        {
+            var at = new ArangoTransform(new DataSourceLoadOptionsBase
+            {
+                Take = 20,
+                Filter = new List<string>
+                {
+                    "data.invoiceNumber", "startswith", "1234"
+                }
             }, new ArangoTransformSettings());
 
             at.Transform(out var error);
