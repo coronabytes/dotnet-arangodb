@@ -465,6 +465,9 @@ namespace Core.Arango.DevExtreme
                     opString = "ENDSWITH";
                     typeHint = TypeHint.String;
                     break;
+                case "in":
+                    opString = "IN";
+                    break;
                 default:
                     throw new NotImplementedException("Operation Type not implemented: " + op);
             }
@@ -579,6 +582,9 @@ namespace Core.Arango.DevExtreme
                     throw new NotImplementedException($"Value of type {type}");
                 }
             }
+
+            if (opString == "IN")
+                return $"{boundParam} IN {property}";
 
             return $"{property} {opString} {boundParam}";
         }

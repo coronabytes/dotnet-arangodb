@@ -41,6 +41,21 @@ namespace Core.Arango.DevExtreme.Tests
             _output.WriteLine(at.FilterExpression);
         }
 
+        [Fact]
+        public void InArrayTest()
+        {
+            var at = new ArangoTransform(new DataSourceLoadOptionsBase
+            {
+                Take = 20,
+                RequireTotalCount = false,
+                Filter = JArray.Parse(@"[[""categoryKeys"",""in"",""d9d48fe3-03dc-e611-80dd-0050568a3ed2""],""or"",[""categoryKeys"",""in"",""ad22d4ec-03dc-e611-80dd-0050568a3ed2""]]")
+            }, new ArangoTransformSettings());
+
+            at.Transform(out var error);
+
+            _output.WriteLine(at.FilterExpression);
+        }
+
         // JArray.Parse differs from AspNetCore
         [Fact]
         public void NullTypeTest()
