@@ -565,7 +565,7 @@ namespace Core.Arango.DevExtreme
                             case "ENDSWITH":
                                 return $@"{propertyCase} LIKE {CreateParameter($"%{valueCase}")}'";
                             default:
-                                boundParam = CreateParameter(valueCase);
+                                boundParam = CreateParameter(v);
                                 break;
                         }
                     }
