@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Core.Arango
 {
@@ -161,6 +163,60 @@ namespace Core.Arango
                 return Activator.CreateInstance(type);
 
             return listResult.GetType().GetProperty("Item").GetValue(listResult, new object[] {0});
+        }
+
+        /// <summary>
+        ///  Note: this API is currently not supported on cluster coordinators.
+        /// </summary>
+        public async IAsyncEnumerable<List<JObject>> ExportAsync(ArangoHandle database, 
+            string collection, bool? flush = null, int? flushWait = null, int? batchSize = null, int? ttl = null,
+            [EnumeratorCancellation] CancellationToken cancellationToken = default)
+        {
+            var parameter = new Dictionary<string, string>
+            {
+                ["collection"] = collection
+            };
+
+            var query = AddQueryString(
+                $"{Server}/_db/{DbName(database)}/_api/export", parameter);
+
+            var firstResult = await SendAsync<QueryResponse<JObject>>(HttpMethod.Post,
+                query,
+                JsonConvert.SerializeObject(new ExportRequest
+                {
+                    Flush = flush,
+                    FlushWait = flushWait,
+                    BatchSize = batchSize,
+                    Ttl = ttl
+                }, JsonSerializerSettings), cancellationToken: cancellationToken);
+
+            yield return firstResult.Result;
+
+            if (firstResult.HasMore)
+            {
+                while (true)
+                {
+                    var res = await SendAsync<QueryResponse<JObject>>(HttpMethod.Put,
+                        $"{Server}/_db/{DbName(database)}/_api/cursor/{firstResult.Id}",
+                        cancellationToken: cancellationToken);
+
+                    yield return res.Result;
+
+                    if (!res.HasMore)
+                        break;
+                }
+
+                try
+                {
+                    await SendAsync<JObject>(HttpMethod.Delete,
+                        $"{Server}/_db/{DbName(database)}/_api/cursor/{firstResult.Id}",
+                        cancellationToken: cancellationToken);
+                }
+                catch
+                {
+                    //
+                }
+            }
         }
     }
 }
