@@ -12,6 +12,19 @@ namespace Core.Arango
 {
     public partial class ArangoContext
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="database"></param>
+        /// <param name="collection"></param>
+        /// <param name="docs"></param>
+        /// <param name="waitForSync"></param>
+        /// <param name="silent"></param>
+        /// <param name="overwrite">In bulk mode truncates collection!</param>
+        /// <param name="bulk">Optimized insert</param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public async Task CreateDocumentsAsync<T>(ArangoHandle database, string collection, IEnumerable<T> docs,
             bool waitForSync = false,
             bool silent = true,
