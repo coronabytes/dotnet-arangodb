@@ -14,6 +14,11 @@ namespace Core.Arango.DevExtreme
         public HashSet<string> RestrictGroups = null;
 
         /// <summary>
+        ///  Lookup display value for grouping key
+        /// </summary>
+        public Dictionary<string, string> GroupLookups = null;
+
+        /// <summary>
         ///     FOR {IteratorVar} IN {Collection}
         /// </summary>
         public string IteratorVar { get; set; } = "x";

@@ -330,6 +330,20 @@ namespace Core.Arango.DevExtreme
                 foreach (var group in Groups)
                     projection.Add(group);
 
+                if (_settings.GroupLookups?.Any() == true)
+                {
+                    foreach (var glookup in _settings.GroupLookups)
+                    {
+                        var g = Groups.SingleOrDefault(x =>
+                            x.Equals(glookup.Key, StringComparison.InvariantCultureIgnoreCase));
+
+                        if (g != null)
+                        {
+                            projection.Add($"{g}_DV: {glookup.Value}");
+                        }
+                    }
+                }
+
                 foreach (var summary in Summaries)
                     projection.Add(summary);
 
@@ -614,6 +628,9 @@ namespace Core.Arango.DevExtreme
                 {
                     Key = item.Key
                 };
+
+                if (_settings.GroupLookups?.ContainsKey(key) == true)
+                    a.Display = item.FirstOrDefault()?.Value<string>($"{key}_DV");
 
                 var sublist = item.ToList();
                 a.Items = BuildGrouping(aq, sublist, restrict, a, level + 1);

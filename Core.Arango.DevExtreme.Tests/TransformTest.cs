@@ -42,6 +42,68 @@ namespace Core.Arango.DevExtreme.Tests
         }
 
         [Fact]
+        public void GroupLookups()
+        {
+            var at = new ArangoTransform(new DataSourceLoadOptionsBase
+            {
+                Sort = new []
+                {
+                    new SortingInfo
+                    {
+                        Selector = "start",
+                        Desc = true
+                    }
+                },
+                Group = new []
+                {
+                    new GroupingInfo
+                    {
+                        Selector = "projectKey",
+                        Desc = false,
+                        IsExpanded = false
+                    }
+                },
+                TotalSummary = new []
+                {
+                    new SummaryInfo
+                    {
+                        Selector = "duration",
+                        SummaryType = "sum"
+                    },
+                    new SummaryInfo
+                    {
+                        Selector = "revenue",
+                        SummaryType = "sum"
+                    }
+                },
+                GroupSummary = new []
+                {
+                    new SummaryInfo
+                    {
+                        Selector = "duration",
+                        SummaryType = "sum"
+                    },
+                    new SummaryInfo
+                    {
+                        Selector = "revenue",
+                        SummaryType = "sum"
+                    }
+                }
+            }, new ArangoTransformSettings
+            {
+                GroupLookups = new Dictionary<string, string>
+                {
+                    ["ProjectKey"] = "DOCUMENT(AProject, ProjectKey).Name",
+                    ["UserKey"] = "DOCUMENT(AUser, UserKey).Name"
+                }
+            });
+
+            at.Transform(out var error);
+
+            _output.WriteLine(at.AggregateExpression);
+        }
+
+        [Fact]
         public void InArrayTest()
         {
             var at = new ArangoTransform(new DataSourceLoadOptionsBase
