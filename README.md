@@ -190,10 +190,15 @@ public void ConfigureServices(IServiceCollection services)
 - DataSourceLoadOptions need to be parsed by Newtonsoft Json and not System.Text.Json
   - services.AddControllers().AddNewtonsoftJson();
 - Parameters are escaped with bindvars
-- Property names are not - may include security filter later
+- Property names 
+  - need to match ^[A-Za-z_][A-Za-z0-9\\.]*$
+  - need to be within 128 characters
+  - can be customized with ValidPropertyName() and PropertyTransform()
 - Developer retains full control over the projection - full document by default
 - Check safety limits in settings if your query fails
 - Support for ArangoSearch is coming soon
+  - Not so soon...
+- Groupings by foreign key can be enriched with displayValue using GroupLookups()
 ```csharp
 
 private static readonly ArangoTransformSettings Transform = new ArangoTransformSettings
@@ -201,7 +206,15 @@ private static readonly ArangoTransformSettings Transform = new ArangoTransformS
     IteratorVar = "x",
     Key = "key",
     Filter = "x.Active == true",
-    RestrictGroups = new HashSet<string>() // No Grouping allowed
+    RestrictGroups = new HashSet<string>
+	{
+		"ProjectKey", "UserKey"
+	}, // null allows all groupings (not recommended) / empty hashset disables grouping
+	GroupLookups = new Dictionary<string, string>
+	{
+		["ProjectKey"] = "DOCUMENT(AProject, ProjectKey).Name",
+		["UserKey"] = "DOCUMENT(AUser, UserKey).Name"
+	}
 };
 
 [HttpGet("dx-query")]

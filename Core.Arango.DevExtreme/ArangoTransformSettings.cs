@@ -90,13 +90,16 @@ namespace Core.Arango.DevExtreme
         /// <summary>
         ///     Validates property names
         /// </summary>
-        public Func<string, string> CleanProperty { get; set; } = s =>
+        public Func<string, string> ValidPropertyName { get; set; } = s =>
         {
-            if (string.IsNullOrWhiteSpace(s) || s.Length > 128)
-                return "ERROR";
+            if (string.IsNullOrWhiteSpace(s) )
+                throw new Exception("empty propertyName");
+            
+            if (s.Length > 128)
+                throw new Exception("propertyName > 128");
 
             if (!ValidPropertyRegex.IsMatch(s))
-                return "ERROR";
+                throw new Exception("propertyName \"" + s + "\" does not match ^[A-Za-z_][A-Za-z0-9\\._]*$");
 
             return s;
         };
