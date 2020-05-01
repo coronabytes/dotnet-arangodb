@@ -1,14 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Common;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Net.Http;
-using System.Text.Encodings.Web;
-using System.Threading;
-using System.Threading.Tasks;
-using Core.Arango.Protocol;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -58,7 +51,6 @@ namespace Core.Arango
             if (string.IsNullOrWhiteSpace(user))
                 throw new ArgumentException("User invalid");
 
-            //_auth = "Basic " + Convert.ToBase64String(Encoding.ASCII.GetBytes($"{user}:{password ?? ""}"));
             Realm = realm + "-";
             Server = server;
             _user = user;
@@ -71,13 +63,9 @@ namespace Core.Arango
 
         public string Server { get; }
 
-        public ILogger Logger { get; set; }
-
-        
-        [Obsolete("no longer needed")]
-        public Task RefreshJwtAuth(CancellationToken cancellationToken = default)
-        {
-            return Task.CompletedTask;
-        }
+        /// <summary>
+        /// Callback for query stats
+        /// </summary>
+        public Action<string, IDictionary<string, object>, JToken> QueryProfile { get; set; }
     }
 }

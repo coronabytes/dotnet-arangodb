@@ -63,7 +63,7 @@ namespace Core.Arango.Linq.Tests
                 foreach (var db in await Arango.ListDatabasesAsync())
                     await Arango.DropDatabaseAsync(db);
             }
-            catch (Exception e)
+            catch
             {
                 //
             }

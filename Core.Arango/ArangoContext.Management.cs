@@ -91,7 +91,7 @@ namespace Core.Arango
         {
             var views = await ListViewsAsync(database, cancellationToken);
 
-            foreach (var view in views) 
+            foreach (var view in views)
                 await DropViewAsync(database, view, cancellationToken);
         }
 

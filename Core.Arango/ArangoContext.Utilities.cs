@@ -108,7 +108,7 @@ namespace Core.Arango
 
             if (!res.IsSuccessStatusCode)
                 if (throwOnError)
-                    throw new ArgumentException(await res.Content.ReadAsStringAsync());
+                    throw new ArangoException(await res.Content.ReadAsStringAsync());
                 else return default;
 
             var content = await res.Content.ReadAsStringAsync();

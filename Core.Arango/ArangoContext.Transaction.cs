@@ -16,6 +16,7 @@ namespace Core.Arango
                 $"{Server}/_db/{DbName(database)}/_api/transaction",
                 JsonConvert.SerializeObject(request, JsonSerializerSettings), cancellationToken: cancellationToken);
         }
+
         public async Task<ArangoHandle> BeginTransactionAsync(ArangoHandle database, ArangoTransaction request,
             CancellationToken cancellationToken = default)
         {

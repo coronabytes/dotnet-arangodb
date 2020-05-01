@@ -14,6 +14,8 @@ using static System.Linq.Expressions.GotoExpressionKind;
 using static Core.Arango.Linq.Internal.CSharpMultilineBlockTypes;
 using static Core.Arango.Linq.Internal.CSharpBlockMetadata;
 
+#nullable enable
+
 namespace Core.Arango.Linq.Internal
 {
     internal class AqlCodeWriter : WriterBase

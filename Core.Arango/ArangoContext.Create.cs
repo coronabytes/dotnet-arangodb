@@ -13,7 +13,6 @@ namespace Core.Arango
     public partial class ArangoContext
     {
         /// <summary>
-        /// 
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="database"></param>

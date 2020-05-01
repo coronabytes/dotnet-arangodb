@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace Core.Arango.DevExtreme
 {
@@ -79,8 +80,24 @@ namespace Core.Arango.DevExtreme
         public Func<string, ArangoTransformSettings, string> PropertyTransform { get; set; }
 
         /// <summary>
-        /// When true (default) always sort by _key last
+        /// When true (default) always sort by _key last if not already present
         /// </summary>
         public bool StableSort { get; set; } = true;
+
+        private static readonly Regex ValidPropertyRegex = new Regex("^[A-Za-z_][A-Za-z0-9\\.]*$", RegexOptions.Compiled, TimeSpan.FromMilliseconds(100));
+
+        /// <summary>
+        ///  Validates property names
+        /// </summary>
+        public Func<string, string> CleanProperty { get; set; } = s =>
+        {
+            if (string.IsNullOrWhiteSpace(s) || s.Length > 128)
+                return "ERROR";
+
+            if (!ValidPropertyRegex.IsMatch(s))
+                return "ERROR";
+
+            return s;
+        };
     }
 }

@@ -7,6 +7,8 @@ using System.Reflection;
 using Core.Arango.Linq.Internal.Util.Extensions;
 using static Core.Arango.Linq.Internal.FormatterNames;
 
+#nullable enable
+
 namespace Core.Arango.Linq.Internal.Util {
     internal static class Functions {
         public static (bool isLiteral, string repr) TryRenderLiteral(object? o, string language) {
@@ -138,6 +140,7 @@ namespace Core.Arango.Linq.Internal.Util {
             if (IEnumerableExtensions.Any(fields)) { return tuple.GetType().GetFields().Select(x => x.GetValue(tuple)).ToArray(); }
             return tuple.GetType().GetProperties().Select(x => x.GetValue(tuple)).ToArray();
         }
+
 
         public static bool TryTupleValues(object tuple, [NotNullWhen(true)] out object[]? values) {
             var isTupleType = tuple.GetType().IsTupleType();

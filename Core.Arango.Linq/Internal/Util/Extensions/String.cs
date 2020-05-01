@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using static Core.Arango.Linq.Internal.FormatterNames;
 
+#nullable enable
+
 namespace Core.Arango.Linq.Internal.Util.Extensions
 {
     internal static class StringExtensions

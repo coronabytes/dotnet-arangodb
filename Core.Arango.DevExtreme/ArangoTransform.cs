@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -261,8 +262,10 @@ namespace Core.Arango.DevExtreme
                     var groups = _loadOption.Group.Where(x => x.GroupInterval != "hour" && x.GroupInterval != "minute")
                         .Select(g =>
                         {
-                            var selectorRight = g.Selector.FirstCharOfPropertiesToUpper();
-                            var selectorLeft = g.Selector.FirstCharOfPropertiesToUpper().Replace(".", "");
+                            var selector = _settings.CleanProperty(g.Selector).FirstCharOfPropertiesToUpper();
+
+                            var selectorRight = selector;
+                            var selectorLeft = selector.Replace(".", "");
 
                             if (g.GroupInterval == "year")
                             {
@@ -297,8 +300,10 @@ namespace Core.Arango.DevExtreme
                 if (_loadOption.Group?.Any() == true && _loadOption.GroupSummary?.Any() == true)
                     aggregates.AddRange(_loadOption.GroupSummary.Select(s =>
                     {
-                        var rightSelector = s.Selector.FirstCharOfPropertiesToUpper();
-                        var leftSelector = s.Selector.FirstCharOfPropertiesToUpper().Replace(".", "");
+                        var selector = _settings.CleanProperty(s.Selector).FirstCharOfPropertiesToUpper();
+
+                        var rightSelector = selector;
+                        var leftSelector = selector.Replace(".", "");
                         var op = s.SummaryType.ToUpperInvariant();
 
                         Summaries.Add($"{op}{leftSelector}");
@@ -310,8 +315,9 @@ namespace Core.Arango.DevExtreme
                 else if (_loadOption.TotalSummary?.Any() == true)
                     aggregates.AddRange(_loadOption.TotalSummary.Select(s =>
                     {
-                        var rightSelector = s.Selector.FirstCharOfPropertiesToUpper();
-                        var leftSelector = s.Selector.FirstCharOfPropertiesToUpper().Replace(".", "");
+                        var selector = _settings.CleanProperty(s.Selector).FirstCharOfPropertiesToUpper();
+                        var rightSelector = selector;
+                        var leftSelector = selector.Replace(".", "");
                         var op = s.SummaryType.ToUpperInvariant();
 
                         Summaries.Add($"{op}{leftSelector}");
@@ -372,7 +378,7 @@ namespace Core.Arango.DevExtreme
                 return "SORT " + string.Join(", ",
                     groups.Select(x =>
                     {
-                        var prop = x.Selector.FirstCharOfPropertiesToUpper();
+                        var prop = _settings.CleanProperty(x.Selector).FirstCharOfPropertiesToUpper();
 
                         if (!string.IsNullOrWhiteSpace(x.GroupInterval))
                             prop = x.GroupInterval.ToUpperInvariant() + prop;
@@ -390,7 +396,7 @@ namespace Core.Arango.DevExtreme
             var sort = "SORT " + string.Join(", ",
                 sortingInfos.Select(x =>
                 {
-                    var prop = PropertyName(x.Selector.FirstCharOfPropertiesToUpper());
+                    var prop = PropertyName(_settings.CleanProperty(x.Selector).FirstCharOfPropertiesToUpper());
                     return $"{prop} {(x.Desc ? "DESC" : "ASC")}";
                 }));
 
@@ -428,7 +434,6 @@ namespace Core.Arango.DevExtreme
 
             string opString;
             var logical = false;
-            var typeHint = TypeHint.Unsure;
 
             switch (op.ToString())
             {
@@ -449,35 +454,27 @@ namespace Core.Arango.DevExtreme
                     break;
                 case ">=":
                     opString = ">=";
-                    typeHint = TypeHint.DateOrNumber;
                     break;
                 case "<=":
                     opString = "<=";
-                    typeHint = TypeHint.DateOrNumber;
                     break;
                 case "<":
                     opString = "<";
-                    typeHint = TypeHint.DateOrNumber;
                     break;
                 case ">":
                     opString = ">";
-                    typeHint = TypeHint.DateOrNumber;
                     break;
                 case "contains":
                     opString = "CONTAINS";
-                    typeHint = TypeHint.String;
                     break;
                 case "notcontains":
                     opString = "NOTCONTAINS";
-                    typeHint = TypeHint.String;
                     break;
                 case "startswith":
                     opString = "STARTSWITH";
-                    typeHint = TypeHint.String;
                     break;
                 case "endswith":
                     opString = "ENDSWITH";
-                    typeHint = TypeHint.String;
                     break;
                 case "in":
                     opString = "IN";
@@ -503,7 +500,7 @@ namespace Core.Arango.DevExtreme
 
             var rawValue = dxFilter[2];
 
-            var property = PropertyName(dxFilter[0].ToString().FirstCharOfPropertiesToUpper());
+            var property = PropertyName(_settings.CleanProperty(dxFilter[0].ToString()).FirstCharOfPropertiesToUpper());
             string boundParam;
 
             switch (rawValue)

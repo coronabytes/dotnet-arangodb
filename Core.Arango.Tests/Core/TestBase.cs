@@ -21,7 +21,7 @@ namespace Core.Arango.Tests.Core
                 foreach (var db in await Arango.ListDatabasesAsync())
                     await Arango.DropDatabaseAsync(db);
             }
-            catch (Exception e)
+            catch
             {
                 //
             }

@@ -2,6 +2,8 @@
 using System.Reflection;
 using static System.Linq.Expressions.Expression;
 
+#nullable enable
+
 namespace Core.Arango.Linq.Internal.Util.Extensions
 {
     internal static class ExpressionExtensions

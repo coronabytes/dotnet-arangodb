@@ -1,6 +1,8 @@
 ﻿using System.Linq;
 using System.Reflection;
 
+#nullable enable
+
 namespace Core.Arango.Linq.Internal.Util.Extensions
 {
     internal static class MethodInfoExtensions

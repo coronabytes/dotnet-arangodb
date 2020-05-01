@@ -6,7 +6,6 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -72,9 +71,9 @@ namespace Core.Arango
 
                 final.AddRange(firstResult.Result);
 
-                if (Logger != null)
-                {
-                    var stats = firstResult.Extra.GetValue("stats");
+                QueryProfile?.Invoke(query, bindVars, firstResult.Extra.GetValue("stats"));
+
+                /*var stats = firstResult.Extra.GetValue("stats");
 
                     var scannedFull = stats.Value<long>("scannedFull");
                     var scannedIndex = stats.Value<long>("scannedIndex");
@@ -92,11 +91,7 @@ namespace Core.Arango
                         executionTime,
                         writesExecuted,
                         scannedFull,
-                        scannedIndex);
-
-                    if (executionTime > 100.0 && writesExecuted == 0)
-                        Logger?.LogWarning($"Slow Query detected {executionTime:N3}ms");
-                }
+                        scannedIndex);*/
 
                 if (fullCount.HasValue && fullCount.Value)
                     final.FullCount = firstResult.Extra.GetValue("stats").Value<int>("fullCount");
@@ -120,15 +115,16 @@ namespace Core.Arango
 
                 return final;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                Logger?.LogError("QueryAsync\n{Query}\nVars\n{BindVars}",
-                    query, string.Join('\n', bindVars.Select(x => x.Key + " " + JsonConvert.SerializeObject(x.Value))));
+                QueryProfile?.Invoke(query, bindVars, null);
                 throw;
             }
         }
 
-        
+        /// <summary>
+        ///  For Linq Provider
+        /// </summary>
         public async Task<object> QueryAsync(Type type, bool isEnumerable, ArangoHandle database, string query,
             IDictionary<string, object> bindVars, bool? cache = null, bool? fullCount = null,
             CancellationToken cancellationToken = default)
@@ -157,7 +153,7 @@ namespace Core.Arango
             if (isEnumerable)
                 return listResult;
 
-            var count = (int)listResult.GetType().GetProperty("Count").GetValue(listResult);
+            var count = (int) listResult.GetType().GetProperty("Count").GetValue(listResult);
 
             if (count == 0)
                 return Activator.CreateInstance(type);
@@ -166,9 +162,9 @@ namespace Core.Arango
         }
 
         /// <summary>
-        ///  Note: this API is currently not supported on cluster coordinators.
+        ///     Note: this API is currently not supported on cluster coordinators.
         /// </summary>
-        public async IAsyncEnumerable<List<JObject>> ExportAsync(ArangoHandle database, 
+        public async IAsyncEnumerable<List<JObject>> ExportAsync(ArangoHandle database,
             string collection, bool? flush = null, int? flushWait = null, int? batchSize = null, int? ttl = null,
             [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
