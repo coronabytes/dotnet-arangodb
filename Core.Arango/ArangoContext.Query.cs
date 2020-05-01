@@ -115,7 +115,7 @@ namespace Core.Arango
 
                 return final;
             }
-            catch (Exception ex)
+            catch
             {
                 QueryProfile?.Invoke(query, bindVars, null);
                 throw;

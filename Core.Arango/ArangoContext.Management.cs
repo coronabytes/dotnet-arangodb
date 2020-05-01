@@ -53,7 +53,7 @@ namespace Core.Arango
         public async Task EnsureIndexAsync(ArangoHandle database, string collection, ArangoIndex request,
             CancellationToken cancellationToken = default)
         {
-            var res = await SendAsync<JObject>(HttpMethod.Post,
+            await SendAsync<JObject>(HttpMethod.Post,
                 $"{Server}/_db/{DbName(database)}/_api/index?collection={collection}",
                 JsonConvert.SerializeObject(request), cancellationToken: cancellationToken);
         }
@@ -61,7 +61,7 @@ namespace Core.Arango
         public async Task CreateViewAsync(ArangoHandle database, ArangoView view,
             CancellationToken cancellationToken = default)
         {
-            var res = await SendAsync<JObject>(HttpMethod.Post,
+            await SendAsync<JObject>(HttpMethod.Post,
                 $"{Server}/_db/{DbName(database)}/_api/view",
                 JsonConvert.SerializeObject(view),
                 cancellationToken: cancellationToken);
@@ -106,7 +106,7 @@ namespace Core.Arango
         public async Task CreateGraphAsync(ArangoHandle database, ArangoGraph request,
             CancellationToken cancellationToken = default)
         {
-            var res = await SendAsync<JObject>(HttpMethod.Post,
+            await SendAsync<JObject>(HttpMethod.Post,
                 $"{Server}/_db/{DbName(database)}/_api/gharial",
                 JsonConvert.SerializeObject(request), cancellationToken: cancellationToken);
         }
@@ -114,7 +114,7 @@ namespace Core.Arango
         public async Task DropGraphAsync(ArangoHandle database, string name,
             CancellationToken cancellationToken = default)
         {
-            var res = await SendAsync<JObject>(HttpMethod.Delete,
+            await SendAsync<JObject>(HttpMethod.Delete,
                 $"{Server}/_db/{DbName(database)}/_api/gharial/{UrlEncoder.Default.Encode(name)}",
                 cancellationToken: cancellationToken);
         }
