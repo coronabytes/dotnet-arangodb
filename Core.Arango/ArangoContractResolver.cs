@@ -19,14 +19,14 @@ namespace Core.Arango
                 property.ShouldSerialize = i => false;
             }
 
-            if (property.PropertyName == "Key")
-                property.PropertyName = "_key";
-            else if (property.PropertyName == "Id")
-                property.PropertyName = "_id";
-            else if (property.PropertyName == "From")
-                property.PropertyName = "_from";
-            else if (property.PropertyName == "To")
-                property.PropertyName = "_to";
+            property.PropertyName = property.PropertyName switch
+            {
+                "Key" => "_key",
+                "Id" => "_id",
+                "From" => "_from",
+                "To" => "_to",
+                _ => property.PropertyName
+            };
 
             return property;
         }

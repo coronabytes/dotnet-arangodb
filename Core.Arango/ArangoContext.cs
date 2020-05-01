@@ -64,7 +64,7 @@ namespace Core.Arango
         public string Server { get; }
 
         /// <summary>
-        /// Callback for query stats
+        ///     Callback for query stats
         /// </summary>
         public Action<string, IDictionary<string, object>, JToken> QueryProfile { get; set; }
     }

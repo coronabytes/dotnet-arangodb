@@ -4,17 +4,15 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading;
-using System.Threading.Tasks;
 using Core.Arango.Linq.Internal;
-using Newtonsoft.Json;
 
 namespace Core.Arango.Linq
 {
     public class ArangoProvider : IQueryProvider
     {
         private readonly ArangoContext _arango;
-        private readonly ArangoHandle _handle;
         private readonly string _collection;
+        private readonly ArangoHandle _handle;
 
         public ArangoProvider(ArangoContext arango, ArangoHandle handle, string collection)
         {
@@ -25,12 +23,12 @@ namespace Core.Arango.Linq
 
         public IQueryable CreateQuery(Expression expression)
         {
-            Type elementType = TypeSystem.GetElementType(expression.Type);
+            var elementType = TypeSystem.GetElementType(expression.Type);
             try
             {
-                return               
-                    (IQueryable)Activator.CreateInstance(typeof(ArangoQueryableContext<>).
-                        MakeGenericType(elementType), new object[] { this, expression });
+                return
+                    (IQueryable) Activator.CreateInstance(typeof(ArangoQueryableContext<>).MakeGenericType(elementType),
+                        this, expression);
             }
             catch (TargetInvocationException e)
             {
@@ -51,7 +49,7 @@ namespace Core.Arango.Linq
         public TResult Execute<TResult>(Expression expression)
         {
             var type = typeof(TResult);
-            var isEnumerable = (typeof(TResult).Name == "IEnumerable`1");
+            var isEnumerable = typeof(TResult).Name == "IEnumerable`1";
 
             var elementType = TypeSystem.GetElementType(expression.Type);
 
@@ -63,7 +61,7 @@ namespace Core.Arango.Linq
             var res = _arango.QueryAsync(elementType, isEnumerable, _handle, query, bindVars).Result;
             var resType = res.GetType();
 
-            return (TResult)res;
+            return (TResult) res;
         }
 
         public async IAsyncEnumerator<TResult> ExecuteAsync<TResult>(Expression expression, CancellationToken cancel)
@@ -75,7 +73,8 @@ namespace Core.Arango.Linq
             var query = writer.ToString();
             var bindVars = writer.BindVars;
 
-            yield return (TResult)await _arango.QueryAsync(elementType, true, _handle, query, bindVars, cancellationToken: cancel);
+            yield return (TResult) await _arango.QueryAsync(elementType, true, _handle, query, bindVars,
+                cancellationToken: cancel);
         }
     }
 }

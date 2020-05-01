@@ -18,7 +18,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Core.Arango" Version="1.0.9" />
+    <PackageReference Include="Core.Arango" Version="1.1.0" />
     <PackageReference Include="DevExtreme.AspNet.Data" Version="2.6.1" />
   </ItemGroup>
 

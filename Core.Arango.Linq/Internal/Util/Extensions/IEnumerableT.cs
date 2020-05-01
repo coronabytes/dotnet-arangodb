@@ -12,7 +12,7 @@ namespace Core.Arango.Linq.Internal.Util.Extensions
         public static bool None<T>(this IEnumerable<T> src, Func<T, bool>? predicate = null)
         {
             if (predicate != null) return !src.Any(predicate);
-            return !IEnumerableExtensions.Any(src);
+            return !src.Any();
         }
 
         public static IEnumerable<T> ForEach<T>(this IEnumerable<T> src, Action<T> action)
@@ -53,7 +53,11 @@ namespace Core.Arango.Linq.Internal.Util.Extensions
             return string.Join(delimiter, source.Select(selector));
         }
 
-        public static IEnumerable<(TFirst, TSecond)> Zip<TFirst, TSecond>(this IEnumerable<TFirst> first, IEnumerable<TSecond> second) => first.Zip(second, (x, y) => (x, y));
+        public static IEnumerable<(TFirst, TSecond)> Zip<TFirst, TSecond>(this IEnumerable<TFirst> first,
+            IEnumerable<TSecond> second)
+        {
+            return first.Zip(second, (x, y) => (x, y));
+        }
 
         public static IEnumerable<T> Ordered<T>(this IEnumerable<T> src)
         {

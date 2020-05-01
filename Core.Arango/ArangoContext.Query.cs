@@ -123,7 +123,7 @@ namespace Core.Arango
         }
 
         /// <summary>
-        ///  For Linq Provider
+        ///     For Linq Provider
         /// </summary>
         public async Task<object> QueryAsync(Type type, bool isEnumerable, ArangoHandle database, string query,
             IDictionary<string, object> bindVars, bool? cache = null, bool? fullCount = null,

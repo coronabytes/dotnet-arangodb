@@ -9,15 +9,18 @@ namespace Core.Arango.DevExtreme
     /// </summary>
     public class ArangoTransformSettings
     {
+        private static readonly Regex ValidPropertyRegex = new Regex("^[A-Za-z_][A-Za-z0-9\\.]*$",
+            RegexOptions.Compiled, TimeSpan.FromMilliseconds(100));
+
+        /// <summary>
+        ///     Lookup display value for grouping key
+        /// </summary>
+        public Dictionary<string, string> GroupLookups = null;
+
         /// <summary>
         ///     only allow these property names to be grouped
         /// </summary>
         public HashSet<string> RestrictGroups = null;
-
-        /// <summary>
-        ///  Lookup display value for grouping key
-        /// </summary>
-        public Dictionary<string, string> GroupLookups = null;
 
         /// <summary>
         ///     FOR {IteratorVar} IN {Collection}
@@ -80,14 +83,12 @@ namespace Core.Arango.DevExtreme
         public Func<string, ArangoTransformSettings, string> PropertyTransform { get; set; }
 
         /// <summary>
-        /// When true (default) always sort by _key last if not already present
+        ///     When true (default) always sort by _key last if not already present
         /// </summary>
         public bool StableSort { get; set; } = true;
 
-        private static readonly Regex ValidPropertyRegex = new Regex("^[A-Za-z_][A-Za-z0-9\\.]*$", RegexOptions.Compiled, TimeSpan.FromMilliseconds(100));
-
         /// <summary>
-        ///  Validates property names
+        ///     Validates property names
         /// </summary>
         public Func<string, string> CleanProperty { get; set; } = s =>
         {

@@ -21,6 +21,14 @@ namespace Core.Arango.Linq
             Expression = expression;
         }
 
+        public IAsyncEnumerator<T> GetAsyncEnumerator(CancellationToken cancellationToken = new CancellationToken())
+        {
+            if (Provider is ArangoProvider p)
+                return p.ExecuteAsync<T>(Expression, cancellationToken);
+
+            throw new InvalidOperationException();
+        }
+
 
         public IEnumerator<T> GetEnumerator()
         {
@@ -36,13 +44,5 @@ namespace Core.Arango.Linq
 
         public Expression Expression { get; }
         public IQueryProvider Provider { get; }
-
-        public IAsyncEnumerator<T> GetAsyncEnumerator(CancellationToken cancellationToken = new CancellationToken())
-        {
-            if (Provider is ArangoProvider p)
-                return p.ExecuteAsync<T>(Expression, cancellationToken);
-
-            throw new InvalidOperationException();
-        }
     }
 }

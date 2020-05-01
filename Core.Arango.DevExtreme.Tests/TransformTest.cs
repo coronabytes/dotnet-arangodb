@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using DevExtreme.AspNet.Data;
 using Newtonsoft.Json;
@@ -11,34 +10,48 @@ namespace Core.Arango.DevExtreme.Tests
 {
     public class TransformTest
     {
-        private readonly ITestOutputHelper _output;
-
         public TransformTest(ITestOutputHelper output)
         {
             _output = output;
         }
 
+        private readonly ITestOutputHelper _output;
+
         [Fact]
-        public void NegateExpression()
+        public void BoolTypeTest()
         {
             var at = new ArangoTransform(new DataSourceLoadOptionsBase
             {
                 Take = 20,
-                RequireTotalCount = true,
-                Sort = new []
-                {
-                    new SortingInfo
-                    {
-                        Selector = "start",
-                        Desc = true
-                    }
-                },
-                Filter = JArray.Parse(@"[[], ""and"", [""!"", [""scope"", ""=="", ""plan""]]]")
+                Filter = JArray.Parse(@"[[""name"",""=="",true],[""name"",""<>"", false]]")
             }, new ArangoTransformSettings());
 
             at.Transform(out var error);
+            var parameter = at.Parameter
+                .Select(x => $"{x.Key}: {x.Value} [{x.Value?.GetType()}]")
+                .ToList();
 
             _output.WriteLine(at.FilterExpression);
+            _output.WriteLine(JsonConvert.SerializeObject(parameter, Formatting.Indented));
+        }
+
+        [Fact]
+        public void DateTimeTest()
+        {
+            var at = new ArangoTransform(new DataSourceLoadOptionsBase
+            {
+                Take = 20,
+                Filter = JArray.Parse(
+                    @"[[],""and"",[[""start"","">="",""2020-03-10T23:00:00.000Z""],""and"",[""start"",""<"",""2020-03-11T23:00:00.000Z""]]]")
+            }, new ArangoTransformSettings());
+
+            at.Transform(out var error);
+            var parameter = at.Parameter
+                .Select(x => $"{x.Key}: {x.Value} [{x.Value?.GetType()}]")
+                .ToList();
+
+            _output.WriteLine(at.FilterExpression);
+            _output.WriteLine(JsonConvert.SerializeObject(parameter, Formatting.Indented));
         }
 
         [Fact]
@@ -46,7 +59,7 @@ namespace Core.Arango.DevExtreme.Tests
         {
             var at = new ArangoTransform(new DataSourceLoadOptionsBase
             {
-                Sort = new []
+                Sort = new[]
                 {
                     new SortingInfo
                     {
@@ -54,7 +67,7 @@ namespace Core.Arango.DevExtreme.Tests
                         Desc = true
                     }
                 },
-                Group = new []
+                Group = new[]
                 {
                     new GroupingInfo
                     {
@@ -63,7 +76,7 @@ namespace Core.Arango.DevExtreme.Tests
                         IsExpanded = false
                     }
                 },
-                TotalSummary = new []
+                TotalSummary = new[]
                 {
                     new SummaryInfo
                     {
@@ -76,7 +89,7 @@ namespace Core.Arango.DevExtreme.Tests
                         SummaryType = "sum"
                     }
                 },
-                GroupSummary = new []
+                GroupSummary = new[]
                 {
                     new SummaryInfo
                     {
@@ -110,7 +123,31 @@ namespace Core.Arango.DevExtreme.Tests
             {
                 Take = 20,
                 RequireTotalCount = false,
-                Filter = JArray.Parse(@"[[""categoryKeys"",""in"",""d9d48fe3-03dc-e611-80dd-0050568a3ed2""],""or"",[""categoryKeys"",""in"",""ad22d4ec-03dc-e611-80dd-0050568a3ed2""]]")
+                Filter = JArray.Parse(
+                    @"[[""categoryKeys"",""in"",""d9d48fe3-03dc-e611-80dd-0050568a3ed2""],""or"",[""categoryKeys"",""in"",""ad22d4ec-03dc-e611-80dd-0050568a3ed2""]]")
+            }, new ArangoTransformSettings());
+
+            at.Transform(out var error);
+
+            _output.WriteLine(at.FilterExpression);
+        }
+
+        [Fact]
+        public void NegateExpression()
+        {
+            var at = new ArangoTransform(new DataSourceLoadOptionsBase
+            {
+                Take = 20,
+                RequireTotalCount = true,
+                Sort = new[]
+                {
+                    new SortingInfo
+                    {
+                        Selector = "start",
+                        Desc = true
+                    }
+                },
+                Filter = JArray.Parse(@"[[], ""and"", [""!"", [""scope"", ""=="", ""plan""]]]")
             }, new ArangoTransformSettings());
 
             at.Transform(out var error);
@@ -137,13 +174,14 @@ namespace Core.Arango.DevExtreme.Tests
             _output.WriteLine(JsonConvert.SerializeObject(parameter, Formatting.Indented));
         }
 
+
         [Fact]
-        public void StringTypeTest()
+        public void NumberTypeTest()
         {
             var at = new ArangoTransform(new DataSourceLoadOptionsBase
             {
                 Take = 20,
-                Filter = JArray.Parse(@"[[""name"",""contains"",""bad""],[""name"",""contains"",""""]]")
+                Filter = JArray.Parse(@"[[""duration"","">"",8],""and"",[""duration"","">"",8.5]]")
             }, new ArangoTransformSettings());
 
             at.Transform(out var error);
@@ -155,7 +193,7 @@ namespace Core.Arango.DevExtreme.Tests
             _output.WriteLine(JsonConvert.SerializeObject(parameter, Formatting.Indented));
         }
 
-        
+
         // JArray.Parse differs from AspNetCore
         [Fact]
         public void String2TypeTest()
@@ -197,49 +235,12 @@ namespace Core.Arango.DevExtreme.Tests
         }
 
         [Fact]
-        public void BoolTypeTest()
+        public void StringTypeTest()
         {
             var at = new ArangoTransform(new DataSourceLoadOptionsBase
             {
                 Take = 20,
-                Filter = JArray.Parse(@"[[""name"",""=="",true],[""name"",""<>"", false]]")
-            }, new ArangoTransformSettings());
-
-            at.Transform(out var error);
-            var parameter = at.Parameter
-                .Select(x => $"{x.Key}: {x.Value} [{x.Value?.GetType()}]")
-                .ToList();
-
-            _output.WriteLine(at.FilterExpression);
-            _output.WriteLine(JsonConvert.SerializeObject(parameter, Formatting.Indented));
-        }
-
-        [Fact]
-        public void DateTimeTest()
-        {
-            var at = new ArangoTransform(new DataSourceLoadOptionsBase
-            {
-                Take = 20,
-                Filter = JArray.Parse(@"[[],""and"",[[""start"","">="",""2020-03-10T23:00:00.000Z""],""and"",[""start"",""<"",""2020-03-11T23:00:00.000Z""]]]")
-            }, new ArangoTransformSettings());
-
-            at.Transform(out var error);
-            var parameter = at.Parameter
-                .Select(x => $"{x.Key}: {x.Value} [{x.Value?.GetType()}]")
-                .ToList();
-
-            _output.WriteLine(at.FilterExpression);
-            _output.WriteLine(JsonConvert.SerializeObject(parameter, Formatting.Indented));
-        }
-
-
-        [Fact]
-        public void NumberTypeTest()
-        {
-            var at = new ArangoTransform(new DataSourceLoadOptionsBase
-            {
-                Take = 20,
-                Filter = JArray.Parse(@"[[""duration"","">"",8],""and"",[""duration"","">"",8.5]]")
+                Filter = JArray.Parse(@"[[""name"",""contains"",""bad""],[""name"",""contains"",""""]]")
             }, new ArangoTransformSettings());
 
             at.Transform(out var error);

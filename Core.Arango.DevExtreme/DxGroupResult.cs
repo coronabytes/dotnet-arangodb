@@ -7,7 +7,7 @@ namespace Core.Arango.DevExtreme
     {
         [JsonProperty("key")] public string Key { get; set; }
 
-        [JsonProperty("display", NullValueHandling = NullValueHandling.Ignore)] 
+        [JsonProperty("display", NullValueHandling = NullValueHandling.Ignore)]
         public string Display { get; set; }
 
         [JsonProperty("items")] public List<DxGroupResult> Items { get; set; }

@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
@@ -18,18 +17,6 @@ namespace Core.Arango.Linq.Tests
     {
         protected readonly ArangoContext Arango =
             new ArangoContext($"Server=http://localhost:8529;Realm=CI-{Guid.NewGuid():D};User=root;Password=;");
-
-        [Fact]
-        public void Test1()
-        {
-            var test = Arango.AsQueryable<Project>("test").SingleOrDefault(x => x.Name == "A");
-        }
-
-        [Fact]
-        public void Test2()
-        {
-            var test = Arango.AsQueryable<Project>("test").Where( x=>x.Name == "A").Select(x => x.Name).ToList();
-        }
 
         /*[Fact]
         public async Task Test3()
@@ -67,6 +54,18 @@ namespace Core.Arango.Linq.Tests
             {
                 //
             }
+        }
+
+        [Fact]
+        public void Test1()
+        {
+            var test = Arango.AsQueryable<Project>("test").SingleOrDefault(x => x.Name == "A");
+        }
+
+        [Fact]
+        public void Test2()
+        {
+            var test = Arango.AsQueryable<Project>("test").Where(x => x.Name == "A").Select(x => x.Name).ToList();
         }
     }
 }

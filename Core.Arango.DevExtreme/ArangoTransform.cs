@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -337,18 +336,13 @@ namespace Core.Arango.DevExtreme
                     projection.Add(group);
 
                 if (_settings.GroupLookups?.Any() == true)
-                {
                     foreach (var glookup in _settings.GroupLookups)
                     {
                         var g = Groups.SingleOrDefault(x =>
                             x.Equals(glookup.Key, StringComparison.InvariantCultureIgnoreCase));
 
-                        if (g != null)
-                        {
-                            projection.Add($"{g}_DV: {glookup.Value}");
-                        }
+                        if (g != null) projection.Add($"{g}_DV: {glookup.Value}");
                     }
-                }
 
                 foreach (var summary in Summaries)
                     projection.Add(summary);
@@ -396,7 +390,8 @@ namespace Core.Arango.DevExtreme
             var sort = "SORT " + string.Join(", ",
                 sortingInfos.Select(x =>
                 {
-                    var prop = PropertyName(_settings.CleanProperty(x.Selector).FirstCharOfPropertiesToUpper());
+                    var prop = PropertyName(_settings.CleanProperty(x.Selector)
+                        .FirstCharOfPropertiesToUpper());
                     return $"{prop} {(x.Desc ? "DESC" : "ASC")}";
                 }));
 

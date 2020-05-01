@@ -7,12 +7,12 @@ namespace Core.Arango.Linq.Internal.Util.Extensions
     {
         public static bool HasMultipleLines(this BlockExpression expr)
         {
-            return IEnumerableExtensions.Any(expr.Variables) || expr.Expressions.Count > 1;
+            return expr.Variables.Any() || expr.Expressions.Count > 1;
         }
 
         public static bool HasVariablesRecursive(this BlockExpression expr)
         {
-            return IEnumerableExtensions.Any(expr.Variables) ||
+            return expr.Variables.Any() ||
                    expr.Expressions.OfType<BlockExpression>().Any(x => x.HasVariablesRecursive());
         }
     }

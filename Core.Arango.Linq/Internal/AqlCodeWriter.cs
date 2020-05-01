@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Dynamic;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 using Core.Arango.Linq.Internal.Util.Extensions;
@@ -20,8 +19,6 @@ namespace Core.Arango.Linq.Internal
 {
     internal class AqlCodeWriter : WriterBase
     {
-        public Dictionary<string, object> BindVars = new Dictionary<string, object>();
-
         private static readonly Dictionary<ExpressionType, string> simpleBinaryOperators =
             new Dictionary<ExpressionType, string>
             {
@@ -62,6 +59,8 @@ namespace Core.Arango.Linq.Internal
                 [SubtractAssign] = "-=",
                 [SubtractAssignChecked] = "-="
             };
+
+        public Dictionary<string, object> BindVars = new Dictionary<string, object>();
 
         public AqlCodeWriter(object o) : base(o, FormatterNames.CSharp)
         {
@@ -264,7 +263,6 @@ namespace Core.Arango.Linq.Internal
         }
 
 
-
         protected override void WriteParameterDeclarationImpl(ParameterExpression prm)
         {
             Collection = prm.Type.Name;
@@ -430,7 +428,7 @@ namespace Core.Arango.Linq.Internal
                 Write("\nFILTER ");
                 WriteNodes(arguments);
             }
-                
+
             else if (name.Equals("orderby", StringComparison.InvariantCultureIgnoreCase))
             {
                 Write("\nSORT ");
@@ -445,7 +443,7 @@ namespace Core.Arango.Linq.Internal
                 Write(" ASC");
             }
 
-                
+
             else if (name.Equals("orderbydescending", StringComparison.InvariantCultureIgnoreCase))
             {
                 Write("\nSORT ");
@@ -459,7 +457,7 @@ namespace Core.Arango.Linq.Internal
                 WriteNodes(arguments);
                 Write(" DESC");
             }
-                
+
             else if (name.Equals("select", StringComparison.InvariantCultureIgnoreCase))
             {
                 Write("\nRETURN ");
@@ -477,16 +475,14 @@ namespace Core.Arango.Linq.Internal
                 Write("\nFILTER ");
                 WriteNodes(arguments);
                 Write("\nRETURN " + Iterator);
-                
             }
-                
+
             else
             {
                 Write($".{name}(");
                 WriteNodes(arguments);
                 Write(")");
             }
-
         }
 
         protected override void WriteBinding(MemberBinding binding)
