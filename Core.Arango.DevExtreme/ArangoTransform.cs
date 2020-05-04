@@ -148,75 +148,82 @@ namespace Core.Arango.DevExtreme
             if (_isTransformed)
                 throw new Exception("already transformed");
 
-            // TODO: Recursive
-            if (_loadOption.Filter?.Count > _settings.MaxFilter)
+            try
             {
-                error = $"max filters {_settings.MaxFilter} exceeded";
-                return false;
-            }
-
-            if (_loadOption.Sort?.Length > _settings.MaxSort)
-            {
-                error = $"max sort levels of {_settings.MaxSort} exceeded";
-                return false;
-            }
-
-            if (_loadOption.TotalSummary?.Length > _settings.MaxSummary)
-            {
-                error = $"max total summaries of {_settings.MaxSummary} exceeded";
-                return false;
-            }
-
-            if (_loadOption.GroupSummary?.Length > _settings.MaxSummary)
-            {
-                error = $"max group summaries of {_settings.MaxSummary} exceeded";
-                return false;
-            }
-
-            if (HasGrouping)
-            {
-                if (_loadOption.Group.Length > _settings.MaxGroup)
+                // TODO: Recursive
+                if (_loadOption.Filter?.Count > _settings.MaxFilter)
                 {
-                    error = $"max grouping levels of {_settings.MaxGroup} exceeded";
+                    error = $"max filters {_settings.MaxFilter} exceeded";
                     return false;
                 }
 
-                if (_loadOption.Group.Any(x => string.IsNullOrWhiteSpace(x.Selector)))
+                if (_loadOption.Sort?.Length > _settings.MaxSort)
                 {
-                    error = "null group selector";
+                    error = $"max sort levels of {_settings.MaxSort} exceeded";
                     return false;
                 }
 
-                if (_loadOption.Group.Any(x => x.GroupInterval != null
-                                               && x.GroupInterval != "year"
-                                               && x.GroupInterval != "month"
-                                               && x.GroupInterval != "day"))
+                if (_loadOption.TotalSummary?.Length > _settings.MaxSummary)
                 {
-                    error = "invalid group interval";
+                    error = $"max total summaries of {_settings.MaxSummary} exceeded";
                     return false;
                 }
 
-                if (_settings.RestrictGroups != null)
-                    if (_loadOption.Group.Any(x => !_settings.RestrictGroups
-                        .Contains(x.Selector.FirstCharOfPropertiesToUpper())))
+                if (_loadOption.GroupSummary?.Length > _settings.MaxSummary)
+                {
+                    error = $"max group summaries of {_settings.MaxSummary} exceeded";
+                    return false;
+                }
+
+                if (HasGrouping)
+                {
+                    if (_loadOption.Group.Length > _settings.MaxGroup)
                     {
-                        error = "restriced group selector";
+                        error = $"max grouping levels of {_settings.MaxGroup} exceeded";
                         return false;
                     }
+
+                    if (_loadOption.Group.Any(x => string.IsNullOrWhiteSpace(x.Selector)))
+                    {
+                        error = "null group selector";
+                        return false;
+                    }
+
+                    if (_loadOption.Group.Any(x => x.GroupInterval != null
+                                                   && x.GroupInterval != "year"
+                                                   && x.GroupInterval != "month"
+                                                   && x.GroupInterval != "day"))
+                    {
+                        error = "invalid group interval";
+                        return false;
+                    }
+
+                    if (_settings.RestrictGroups != null)
+                        if (_loadOption.Group.Any(x => !_settings.RestrictGroups
+                            .Contains(x.Selector.FirstCharOfPropertiesToUpper())))
+                        {
+                            error = "restriced group selector";
+                            return false;
+                        }
+                }
+
+                error = null;
+
+                FilterExpression = Filter();
+                SortExpression = Sort();
+                Skip = _loadOption.Skip;
+                Take = _loadOption.Take;
+                AggregateExpression = Aggregate();
+
+                _isTransformed = true;
+
+                return true;
             }
-
-            error = null;
-
-            FilterExpression = Filter();
-            SortExpression = Sort();
-            Skip = _loadOption.Skip;
-            Take = _loadOption.Take;
-            AggregateExpression = Aggregate();
-
-            _isTransformed = true;
-
-
-            return true;
+            catch (Exception e)
+            {
+                error = e.Message;
+                return false;
+            }
         }
 
         private static IList GetRootFilter(IList loadOptionsFilter)
@@ -261,8 +268,10 @@ namespace Core.Arango.DevExtreme
                     var groups = _loadOption.Group.Where(x => x.GroupInterval != "hour" && x.GroupInterval != "minute")
                         .Select(g =>
                         {
-                            var selectorRight = g.Selector.FirstCharOfPropertiesToUpper();
-                            var selectorLeft = g.Selector.FirstCharOfPropertiesToUpper().Replace(".", "");
+                            var selector = _settings.ValidPropertyName(g.Selector).FirstCharOfPropertiesToUpper();
+
+                            var selectorRight = selector;
+                            var selectorLeft = selector.Replace(".", "");
 
                             if (g.GroupInterval == "year")
                             {
@@ -297,8 +306,10 @@ namespace Core.Arango.DevExtreme
                 if (_loadOption.Group?.Any() == true && _loadOption.GroupSummary?.Any() == true)
                     aggregates.AddRange(_loadOption.GroupSummary.Select(s =>
                     {
-                        var rightSelector = s.Selector.FirstCharOfPropertiesToUpper();
-                        var leftSelector = s.Selector.FirstCharOfPropertiesToUpper().Replace(".", "");
+                        var selector = _settings.ValidPropertyName(s.Selector).FirstCharOfPropertiesToUpper();
+
+                        var rightSelector = selector;
+                        var leftSelector = selector.Replace(".", "");
                         var op = s.SummaryType.ToUpperInvariant();
 
                         Summaries.Add($"{op}{leftSelector}");
@@ -310,8 +321,9 @@ namespace Core.Arango.DevExtreme
                 else if (_loadOption.TotalSummary?.Any() == true)
                     aggregates.AddRange(_loadOption.TotalSummary.Select(s =>
                     {
-                        var rightSelector = s.Selector.FirstCharOfPropertiesToUpper();
-                        var leftSelector = s.Selector.FirstCharOfPropertiesToUpper().Replace(".", "");
+                        var selector = _settings.ValidPropertyName(s.Selector).FirstCharOfPropertiesToUpper();
+                        var rightSelector = selector;
+                        var leftSelector = selector.Replace(".", "");
                         var op = s.SummaryType.ToUpperInvariant();
 
                         Summaries.Add($"{op}{leftSelector}");
@@ -329,6 +341,15 @@ namespace Core.Arango.DevExtreme
 
                 foreach (var group in Groups)
                     projection.Add(group);
+
+                if (_settings.GroupLookups?.Any() == true)
+                    foreach (var glookup in _settings.GroupLookups)
+                    {
+                        var g = Groups.SingleOrDefault(x =>
+                            x.Equals(glookup.Key, StringComparison.InvariantCultureIgnoreCase));
+
+                        if (g != null) projection.Add($"{g}_DV: {glookup.Value}");
+                    }
 
                 foreach (var summary in Summaries)
                     projection.Add(summary);
@@ -358,7 +379,7 @@ namespace Core.Arango.DevExtreme
                 return "SORT " + string.Join(", ",
                     groups.Select(x =>
                     {
-                        var prop = x.Selector.FirstCharOfPropertiesToUpper();
+                        var prop = _settings.ValidPropertyName(x.Selector).FirstCharOfPropertiesToUpper();
 
                         if (!string.IsNullOrWhiteSpace(x.GroupInterval))
                             prop = x.GroupInterval.ToUpperInvariant() + prop;
@@ -376,7 +397,8 @@ namespace Core.Arango.DevExtreme
             var sort = "SORT " + string.Join(", ",
                 sortingInfos.Select(x =>
                 {
-                    var prop = PropertyName(x.Selector.FirstCharOfPropertiesToUpper());
+                    var prop = PropertyName(_settings.ValidPropertyName(x.Selector)
+                        .FirstCharOfPropertiesToUpper());
                     return $"{prop} {(x.Desc ? "DESC" : "ASC")}";
                 }));
 
@@ -414,7 +436,6 @@ namespace Core.Arango.DevExtreme
 
             string opString;
             var logical = false;
-            var typeHint = TypeHint.Unsure;
 
             switch (op.ToString())
             {
@@ -435,35 +456,27 @@ namespace Core.Arango.DevExtreme
                     break;
                 case ">=":
                     opString = ">=";
-                    typeHint = TypeHint.DateOrNumber;
                     break;
                 case "<=":
                     opString = "<=";
-                    typeHint = TypeHint.DateOrNumber;
                     break;
                 case "<":
                     opString = "<";
-                    typeHint = TypeHint.DateOrNumber;
                     break;
                 case ">":
                     opString = ">";
-                    typeHint = TypeHint.DateOrNumber;
                     break;
                 case "contains":
                     opString = "CONTAINS";
-                    typeHint = TypeHint.String;
                     break;
                 case "notcontains":
                     opString = "NOTCONTAINS";
-                    typeHint = TypeHint.String;
                     break;
                 case "startswith":
                     opString = "STARTSWITH";
-                    typeHint = TypeHint.String;
                     break;
                 case "endswith":
                     opString = "ENDSWITH";
-                    typeHint = TypeHint.String;
                     break;
                 case "in":
                     opString = "IN";
@@ -489,7 +502,7 @@ namespace Core.Arango.DevExtreme
 
             var rawValue = dxFilter[2];
 
-            var property = PropertyName(dxFilter[0].ToString().FirstCharOfPropertiesToUpper());
+            var property = PropertyName(_settings.ValidPropertyName(dxFilter[0].ToString()).FirstCharOfPropertiesToUpper());
             string boundParam;
 
             switch (rawValue)
@@ -614,6 +627,9 @@ namespace Core.Arango.DevExtreme
                 {
                     Key = item.Key
                 };
+
+                if (_settings.GroupLookups?.ContainsKey(key) == true)
+                    a.Display = item.FirstOrDefault()?.Value<string>($"{key}_DV");
 
                 var sublist = item.ToList();
                 a.Items = BuildGrouping(aq, sublist, restrict, a, level + 1);

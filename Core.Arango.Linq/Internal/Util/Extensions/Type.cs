@@ -7,6 +7,8 @@ using System.Runtime.CompilerServices;
 using static Core.Arango.Linq.Internal.FormatterNames;
 using static System.Linq.Enumerable;
 
+#nullable enable
+
 namespace Core.Arango.Linq.Internal.Util.Extensions
 {
     internal static class TypeExtensions

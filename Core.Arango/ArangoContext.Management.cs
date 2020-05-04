@@ -53,7 +53,7 @@ namespace Core.Arango
         public async Task EnsureIndexAsync(ArangoHandle database, string collection, ArangoIndex request,
             CancellationToken cancellationToken = default)
         {
-            var res = await SendAsync<JObject>(HttpMethod.Post,
+            await SendAsync<JObject>(HttpMethod.Post,
                 $"{Server}/_db/{DbName(database)}/_api/index?collection={collection}",
                 JsonConvert.SerializeObject(request), cancellationToken: cancellationToken);
         }
@@ -61,10 +61,38 @@ namespace Core.Arango
         public async Task CreateViewAsync(ArangoHandle database, ArangoView view,
             CancellationToken cancellationToken = default)
         {
-            var res = await SendAsync<JObject>(HttpMethod.Post,
+            await SendAsync<JObject>(HttpMethod.Post,
                 $"{Server}/_db/{DbName(database)}/_api/view",
                 JsonConvert.SerializeObject(view),
                 cancellationToken: cancellationToken);
+        }
+
+
+        public async Task<List<string>> ListViewsAsync(ArangoHandle database,
+            CancellationToken cancellationToken = default)
+        {
+            var res = await SendAsync<JObject>(HttpMethod.Get,
+                $"{Server}/_db/{DbName(database)}/_api/view",
+                cancellationToken: cancellationToken);
+            return res.GetValue("result")
+                .Select(x => x.Value<string>("name")).ToList();
+        }
+
+        public async Task DropViewAsync(ArangoHandle database,
+            string name,
+            CancellationToken cancellationToken = default)
+        {
+            await SendAsync<JObject>(HttpMethod.Delete,
+                $"{Server}/_db/{DbName(database)}/_api/view/{UrlEncoder.Default.Encode(name)}",
+                cancellationToken: cancellationToken);
+        }
+
+        public async Task DropViewsAsync(ArangoHandle database, CancellationToken cancellationToken = default)
+        {
+            var views = await ListViewsAsync(database, cancellationToken);
+
+            foreach (var view in views)
+                await DropViewAsync(database, view, cancellationToken);
         }
 
         public async Task<List<string>> ListGraphAsync(ArangoHandle database,
@@ -78,7 +106,7 @@ namespace Core.Arango
         public async Task CreateGraphAsync(ArangoHandle database, ArangoGraph request,
             CancellationToken cancellationToken = default)
         {
-            var res = await SendAsync<JObject>(HttpMethod.Post,
+            await SendAsync<JObject>(HttpMethod.Post,
                 $"{Server}/_db/{DbName(database)}/_api/gharial",
                 JsonConvert.SerializeObject(request), cancellationToken: cancellationToken);
         }
@@ -86,7 +114,7 @@ namespace Core.Arango
         public async Task DropGraphAsync(ArangoHandle database, string name,
             CancellationToken cancellationToken = default)
         {
-            var res = await SendAsync<JObject>(HttpMethod.Delete,
+            await SendAsync<JObject>(HttpMethod.Delete,
                 $"{Server}/_db/{DbName(database)}/_api/gharial/{UrlEncoder.Default.Encode(name)}",
                 cancellationToken: cancellationToken);
         }
@@ -172,7 +200,7 @@ namespace Core.Arango
         /// <summary>
         ///     Drops all user created indices over all collections in database
         /// </summary>
-        public async Task DropIndices(ArangoHandle database, CancellationToken cancellationToken = default)
+        public async Task DropIndicesAsync(ArangoHandle database, CancellationToken cancellationToken = default)
         {
             var collections = await ListCollectionsAsync(database, cancellationToken);
 

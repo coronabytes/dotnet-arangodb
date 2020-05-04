@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -21,9 +20,7 @@ namespace Core.Arango.Linq
         {
             var list = new List<TSource>();
             await foreach (var element in source.AsAsyncEnumerable().WithCancellation(cancellationToken))
-            {
                 list.Add(element);
-            }
 
             return list;
         }
@@ -31,10 +28,7 @@ namespace Core.Arango.Linq
         public static IAsyncEnumerable<TSource> AsAsyncEnumerable<TSource>(
             [NotNull] this IQueryable<TSource> source)
         {
-            if (source is IAsyncEnumerable<TSource> asyncEnumerable)
-            {
-                return asyncEnumerable;
-            }
+            if (source is IAsyncEnumerable<TSource> asyncEnumerable) return asyncEnumerable;
 
             throw new InvalidOperationException();
         }

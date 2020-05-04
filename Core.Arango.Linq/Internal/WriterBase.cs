@@ -7,6 +7,8 @@ using System.Text;
 using Core.Arango.Linq.Internal.Util.Extensions;
 using static System.Linq.Expressions.ExpressionType;
 
+#nullable enable
+
 namespace Core.Arango.Linq.Internal {
     internal abstract class WriterBase {
         private static readonly HashSet<ExpressionType> binaryExpressionTypes = new[] {
@@ -53,9 +55,9 @@ namespace Core.Arango.Linq.Internal {
             pathSpans = this.pathSpans;
         }
 
-        public string Collection { get; protected set; }
-        public string Iterator { get; protected set; }
-        public Type SelectType { get; protected set; }
+        public string? Collection { get; protected set; }
+        public string? Iterator { get; protected set; }
+        public Type? SelectType { get; protected set; }
 
         /// <summary>Determines how to render literals and types</summary>
         protected string language { get; }

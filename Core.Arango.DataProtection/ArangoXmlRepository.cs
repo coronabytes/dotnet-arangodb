@@ -11,17 +11,15 @@ namespace Core.Arango.DataProtection
 {
     internal class ArangoXmlRepository : IXmlRepository
     {
-        private readonly IServiceProvider _services;
-        private readonly string _database;
         private readonly string _collection;
+        private readonly string _database;
         private readonly ILogger _logger;
-        public ArangoXmlRepository(IServiceProvider services, ILoggerFactory loggerFactory, 
+        private readonly IServiceProvider _services;
+
+        public ArangoXmlRepository(IServiceProvider services, ILoggerFactory loggerFactory,
             string database, string collection)
         {
-            if (loggerFactory == null)
-            {
-                throw new ArgumentNullException(nameof(loggerFactory));
-            }
+            if (loggerFactory == null) throw new ArgumentNullException(nameof(loggerFactory));
 
             _logger = loggerFactory.CreateLogger<ArangoXmlRepository>();
             _services = services ?? throw new ArgumentNullException(nameof(services));

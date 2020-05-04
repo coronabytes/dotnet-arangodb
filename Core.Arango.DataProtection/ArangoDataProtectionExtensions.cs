@@ -9,7 +9,7 @@ namespace Core.Arango.DataProtection
 {
     public static class ArangoDataProtectionExtensions
     {
-        public static IDataProtectionBuilder PersistKeysToArangoDB(this IDataProtectionBuilder builder, 
+        public static IDataProtectionBuilder PersistKeysToArangoDB(this IDataProtectionBuilder builder,
             string database = "dataprotection", string collection = "keys")
         {
             builder.Services.AddSingleton<IConfigureOptions<KeyManagementOptions>>(services =>

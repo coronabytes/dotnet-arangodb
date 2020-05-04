@@ -11,12 +11,12 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageIcon>ArangoDB.png</PackageIcon>
     <PackageIconUrl />
-    <Version>1.0.6</Version>
+    <Version>1.1.0</Version>
     <PackageProjectUrl>https://github.com/coronabytes/ArangoDB</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Core.Arango" Version="1.0.7" />
+    <PackageReference Include="Core.Arango" Version="1.1.0" />
     <PackageReference Include="Serilog.Sinks.PeriodicBatching" Version="2.3.0" />
   </ItemGroup>
 
