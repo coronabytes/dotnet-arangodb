@@ -84,6 +84,10 @@ namespace Core.Arango.DevExtreme
 
                 queryBuilder.AppendLine(SortExpression);
                 queryBuilder.AppendLine("LIMIT @SKIP, @TAKE");
+
+                if (!string.IsNullOrWhiteSpace(_settings.PreProjection))
+                    queryBuilder.AppendLine(_settings.PreProjection);
+
                 queryBuilder.AppendLine($"RETURN {_settings.Projection ?? _settings.IteratorVar}");
             }
 

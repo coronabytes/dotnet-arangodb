@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
@@ -24,12 +25,12 @@ namespace Core.Arango.Linq.Tests
             var test = await Arango.AsQueryable<Project>("test").Where( x=>x.Name == "A").Select(x => x.Name).ToListAsync();
         }*/
 
-        [Fact]
+        /*[Fact]
         public void Test4()
         {
             var list = new List<int> { 1, 2, 3 };
             var test = Arango.AsQueryable<Project>("test").Where(x => list.Contains(x.Value)).ToList();
-        }
+        }*/
 
         /*[Fact]
         public void Test5()
