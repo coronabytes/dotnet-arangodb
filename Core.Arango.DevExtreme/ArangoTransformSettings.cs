@@ -43,7 +43,12 @@ namespace Core.Arango.DevExtreme
         public string Filter { get; set; }
 
         /// <summary>
-        ///     Custom return clause - no bindvars through string interpolation
+        ///     Code just before RETURN - IGNORED ON GROUP - no bindvars through string interpolation
+        /// </summary>
+        public string PreProjection { get; set; }
+
+        /// <summary>
+        ///     Code after RETURN - IGNORED ON GROUP - no bindvars through string interpolation
         /// </summary>
         public string Projection { get; set; }
 

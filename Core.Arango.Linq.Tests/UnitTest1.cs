@@ -40,12 +40,12 @@ namespace Core.Arango.Linq.Tests
             var test = Arango.AsQueryable<Project>("test").Where(x => x.Name == "A").Select(x => x.Name).ToList();
         }
 
-        [Fact]
+        /*[Fact]
         public void Test4()
         {
             var list = new List<int> { 1, 2, 3 };
             var test = Arango.AsQueryable<Project>("test").Where(x => list.Contains(x.Value)).ToList();
-        }
+        }*/
 
         /*[Fact]
         public void Test5()
