@@ -477,6 +477,17 @@ namespace Core.Arango.Linq.Internal
                 Write("\nRETURN " + Iterator);
             }
 
+            else if (name.Equals("contains", StringComparison.InvariantCultureIgnoreCase))
+            {
+                /* todo: hier stimmt die Reihenfolge nicht mehr. Nach dem Filter muss bereits das x.Value (zum Zeitpunkt dieses Aufrufs die arguments) kommen,
+                 danach erst das @list (welches zu diesem Zeitpunkt bereits geschrieben wurde)
+                 */
+                Write("\nIN ");
+                WriteNodes(arguments);
+                Write("\nRETURN " + Iterator);
+            }
+
+
             else
             {
                 Write($".{name}(");
