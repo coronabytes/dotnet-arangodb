@@ -21,31 +21,37 @@ namespace Core.Arango.Linq.Tests
 
         /// <summary>
         /// Überprüft die Funktionalität eines SingleOrDefault-Querys mit Einschränkung des Projektnamens
+        /// expected query: FOR x IN Project FILTER x.Name == "A" return x
         /// </summary>
         [Fact]
         public async void Test1()
         {
             var test = Arango.AsQueryable<Project>("test").SingleOrDefault(x => x.Name == "A");
+            Assert.True(test.Name == "A");
         }
 
+        /// <summary>
+        /// expected query: FOR x IN Project FILTER x.Name == "A" return x.Name
+        /// </summary>
         [Fact]
         public void Test2()
         {
             var test = Arango.AsQueryable<Project>("test").Where(x => x.Name == "A").Select(x => x.Name).ToList();
+            foreach (var t in test)
+            {
+                Assert.True(t  == "A");
+            }
         }
 
+        /// <summary>
+        /// expected query: FOR x IN Project FILTER x.Value IN @list RETURN x
+        /// </summary>
         [Fact]
-        public async Task Test3()
-        {
-            var test = Arango.AsQueryable<Project>("test").Where(x => x.Name == "A").Select(x => x.Name).ToList();
-        }
-
-        /*[Fact]
-        public void Test4()
+        public void Test3()
         {
             var list = new List<int> { 1, 2, 3 };
             var test = Arango.AsQueryable<Project>("test").Where(x => list.Contains(x.Value)).ToList();
-        }*/
+        }
 
         /*[Fact]
         public void Test5()
