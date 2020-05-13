@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
@@ -18,11 +19,26 @@ namespace Core.Arango.Linq.Tests
         protected readonly ArangoContext Arango =
             new ArangoContext($"Server=http://localhost:8529;Realm=CI-{Guid.NewGuid():D};User=root;Password=;");
 
-        /*[Fact]
+        /// <summary>
+        /// Überprüft die Funktionalität eines SingleOrDefault-Querys mit Einschränkung des Projektnamens
+        /// </summary>
+        [Fact]
+        public async void Test1()
+        {
+            var test = Arango.AsQueryable<Project>("test").SingleOrDefault(x => x.Name == "A");
+        }
+
+        [Fact]
+        public void Test2()
+        {
+            var test = Arango.AsQueryable<Project>("test").Where(x => x.Name == "A").Select(x => x.Name).ToList();
+        }
+
+        [Fact]
         public async Task Test3()
         {
-            var test = await Arango.AsQueryable<Project>("test").Where( x=>x.Name == "A").Select(x => x.Name).ToListAsync();
-        }*/
+            var test = Arango.AsQueryable<Project>("test").Where(x => x.Name == "A").Select(x => x.Name).ToList();
+        }
 
         [Fact]
         public void Test4()
@@ -37,12 +53,26 @@ namespace Core.Arango.Linq.Tests
             var test = Arango.AsQueryable<Project>("test").Where( x=> x.Value == 1 || x.Value == 2).ToList();
         }*/
 
+        /// <summary>
+        /// Initialisiert eine Datenbank und eine Collection für die Tests
+        /// </summary>
+        /// <returns></returns>
         public async Task InitializeAsync()
         {
             await Arango.CreateDatabaseAsync("test");
             await Arango.CreateCollectionAsync("test", nameof(Project), ArangoCollectionType.Document);
+            await Arango.CreateDocumentAsync("test", nameof(Project), new Project
+            {
+                Key = Guid.NewGuid(),
+                Name = "A",
+                Value = 1
+            });
         }
 
+        /// <summary>
+        /// Löscht die angelegten Datenbanken
+        /// </summary>
+        /// <returns></returns>
         public async Task DisposeAsync()
         {
             try
@@ -54,18 +84,6 @@ namespace Core.Arango.Linq.Tests
             {
                 //
             }
-        }
-
-        [Fact]
-        public void Test1()
-        {
-            var test = Arango.AsQueryable<Project>("test").SingleOrDefault(x => x.Name == "A");
-        }
-
-        [Fact]
-        public void Test2()
-        {
-            var test = Arango.AsQueryable<Project>("test").Where(x => x.Name == "A").Select(x => x.Name).ToList();
         }
     }
 }

@@ -78,6 +78,8 @@ namespace Core.Arango.Linq.Internal {
             //sb.Append(new string(' ', indentationLevel * 4));
         }
 
+        /// <summary> Appends to stringified expression to the current query-string </summary>
+        /// <param name="s">Umgewandelte Expression</param>
         protected void Write(string s)
         {
             sb.Append(s);
@@ -336,6 +338,10 @@ namespace Core.Arango.Linq.Internal {
             //sb.TrimEnd(trimEOL);
         }
 
+        /// <summary>
+        /// Wandelt die erstellte Query in einen String um und ergänzt den Standardbeginn einer Anfrage.
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return $"FOR {Iterator} IN {Collection}{sb}";
