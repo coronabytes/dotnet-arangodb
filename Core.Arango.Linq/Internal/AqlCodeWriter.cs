@@ -418,6 +418,12 @@ namespace Core.Arango.Linq.Internal
 
             if (o is null) // static non-extension method -- write the type name
                 Write(expr.Method.ReflectedType.FriendlyName(language));
+            else if (expr.Method.Name.Equals("contains", StringComparison.InvariantCultureIgnoreCase))
+            {
+                WriteNodes(arguments);
+                Write("\nIN ");
+                WriteNode(path, o);
+            }
             else // instance method, or extension method
                 WriteNode(path, o);
 
@@ -479,11 +485,6 @@ namespace Core.Arango.Linq.Internal
 
             else if (name.Equals("contains", StringComparison.InvariantCultureIgnoreCase))
             {
-                /* todo: hier stimmt die Reihenfolge nicht mehr. Nach dem Filter muss bereits das x.Value (zum Zeitpunkt dieses Aufrufs die arguments) kommen,
-                 danach erst das @list (welches zu diesem Zeitpunkt bereits geschrieben wurde)
-                 */
-                Write("\nIN ");
-                WriteNodes(arguments);
                 Write("\nRETURN " + Iterator);
             }
 
