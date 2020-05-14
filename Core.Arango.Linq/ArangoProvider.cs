@@ -54,8 +54,10 @@ namespace Core.Arango.Linq
             var elementType = TypeSystem.GetElementType(expression.Type);
 
             var writer = new AqlCodeWriter(expression);
+            writer.Collection = _collection;
 
             var query = writer.ToString();
+            //todo: strings sollten zum Schutz vor SQL-Injection in Parameter umgewandelt werden
             var bindVars = writer.BindVars;
 
             var res = _arango.QueryAsync(elementType, isEnumerable, _handle, query, bindVars).Result;

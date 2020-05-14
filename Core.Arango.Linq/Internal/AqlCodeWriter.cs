@@ -265,7 +265,7 @@ namespace Core.Arango.Linq.Internal
 
         protected override void WriteParameterDeclarationImpl(ParameterExpression prm)
         {
-            Collection = prm.Type.Name;
+            if(string.IsNullOrEmpty(Collection)) Collection = prm.Type.Name;
             Iterator = prm.Name;
 
             // TODO: Removed
@@ -418,6 +418,7 @@ namespace Core.Arango.Linq.Internal
 
             if (o is null) // static non-extension method -- write the type name
                 Write(expr.Method.ReflectedType.FriendlyName(language));
+            // im Falle eines Contains muss die Reihenfolge von LINQ und AQL getauscht werden
             else if (expr.Method.Name.Equals("contains", StringComparison.InvariantCultureIgnoreCase))
             {
                 WriteNodes(arguments);
@@ -485,7 +486,7 @@ namespace Core.Arango.Linq.Internal
 
             else if (name.Equals("contains", StringComparison.InvariantCultureIgnoreCase))
             {
-                Write("\nRETURN " + Iterator);
+
             }
 
 

@@ -14,17 +14,24 @@ namespace Core.Arango.Linq.Tests
         public int Value { get; set; }
     }
 
+    // todo: Als Assertion das Query verwenden
     public class UnitTest1 : IAsyncLifetime
     {
         protected readonly ArangoContext Arango =
             new ArangoContext($"Server=http://localhost:8529;Realm=CI-{Guid.NewGuid():D};User=root;Password=;");
+
+        [Fact]
+        public async void TestToList()
+        {
+            var test = Arango.AsQueryable<Project>("test").ToList();
+        }
 
         /// <summary>
         /// Überprüft die Funktionalität eines SingleOrDefault-Querys mit Einschränkung des Projektnamens
         /// expected query: FOR x IN Project FILTER x.Name == "A" return x
         /// </summary>
         [Fact]
-        public async void Test1()
+        public async void TestSingleOrDefault()
         {
             var test = Arango.AsQueryable<Project>("test").SingleOrDefault(x => x.Name == "A");
             Assert.True(test.Name == "A");
@@ -34,7 +41,7 @@ namespace Core.Arango.Linq.Tests
         /// expected query: FOR x IN Project FILTER x.Name == "A" return x.Name
         /// </summary>
         [Fact]
-        public void Test2()
+        public void TestWhereSelect()
         {
             var test = Arango.AsQueryable<Project>("test").Where(x => x.Name == "A").Select(x => x.Name).ToList();
             foreach (var t in test)
@@ -47,7 +54,7 @@ namespace Core.Arango.Linq.Tests
         /// expected query: FOR x IN Project FILTER x.Value IN @list RETURN x
         /// </summary>
         [Fact]
-        public void Test3()
+        public void TestListContains()
         {
             var list = new List<int> { 1, 2, 3 };
             var test = Arango.AsQueryable<Project>("test").Where(x => list.Contains(x.Value)).ToList();
@@ -57,11 +64,36 @@ namespace Core.Arango.Linq.Tests
             }
         }
 
-        /*[Fact]
-        public void Test5()
+        /// <summary>
+        /// expected query: FOR x IN Project FILTER x.Value == 1 || x.Value == 2 RETURN x
+        /// </summary>
+        [Fact]
+        public async void TestOr()
         {
-            var test = Arango.AsQueryable<Project>("test").Where( x=> x.Value == 1 || x.Value == 2).ToList();
-        }*/
+            await Arango.CreateDocumentAsync("test", nameof(Project), new Project
+            {
+                Key = Guid.NewGuid(),
+                Name = "B",
+                Value = 2
+            });
+            await Arango.CreateDocumentAsync("test", nameof(Project), new Project
+            {
+                Key = Guid.NewGuid(),
+                Name = "C",
+                Value = 3
+            });
+            var test = Arango.AsQueryable<Project>("test").Where(x => x.Value == 1 || x.Value == 2).ToList();
+        }
+
+        /// <summary>
+        /// expected query: FOR x IN Project FILTER x.Name LIKE "A%" RETURN x
+        /// </summary>
+        [Fact]
+        public void TestStringBeginsWith()
+        {
+            var list = new List<int> { 1, 2, 3 };
+            var test = Arango.AsQueryable<Project>("test").Where(x => x.Name.StartsWith("A")).ToList();
+        }
 
         /// <summary>
         /// Initialisiert eine Datenbank und eine Collection für die Tests

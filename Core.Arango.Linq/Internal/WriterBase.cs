@@ -55,7 +55,7 @@ namespace Core.Arango.Linq.Internal {
             pathSpans = this.pathSpans;
         }
 
-        public string? Collection { get; protected set; }
+        public string? Collection { get; set; }
         public string? Iterator { get; protected set; }
         public Type? SelectType { get; protected set; }
 
@@ -344,7 +344,10 @@ namespace Core.Arango.Linq.Internal {
         /// <returns></returns>
         public override string ToString()
         {
-            return $"FOR {Iterator} IN {Collection}{sb}";
+            if (string.IsNullOrEmpty(Iterator)) Iterator = "x";
+            var test = $"FOR {Iterator} IN {Collection}{sb}";
+            if (!test.Contains("RETURN", StringComparison.InvariantCultureIgnoreCase)) test += $"\nRETURN {Iterator}";
+            return test;
         }
 
         // .NET 3.5 expression types
