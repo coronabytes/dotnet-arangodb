@@ -51,6 +51,10 @@ namespace Core.Arango.Linq.Tests
         {
             var list = new List<int> { 1, 2, 3 };
             var test = Arango.AsQueryable<Project>("test").Where(x => list.Contains(x.Value)).ToList();
+            foreach (var t in test)
+            {
+                Assert.Contains(t.Value, list);
+            }
         }
 
         /*[Fact]
