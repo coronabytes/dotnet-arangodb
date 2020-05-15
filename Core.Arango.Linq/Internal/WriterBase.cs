@@ -152,6 +152,10 @@ namespace Core.Arango.Linq.Internal {
             WriteNode(pathSegment, o, false, blockMetadata);
         }
 
+        /// <summary>
+        /// Stellt den Typ des Ausdrucks fest und stößt die entsprechende Schreiboperation an
+        /// </summary>
+        /// <param name="expr">Expression aus einem Expression-Tree</param>
         private void WriteExpression(Expression expr) {
             switch (expr.NodeType) {
 
@@ -346,6 +350,7 @@ namespace Core.Arango.Linq.Internal {
         {
             if (string.IsNullOrEmpty(Iterator)) Iterator = "x";
             var test = $"FOR {Iterator} IN {Collection}{sb}";
+            // todo: das fliegt spätestens bei Sub-Queries auf die Fresse, reicht für jetzt aber aus
             if (!test.Contains("RETURN", StringComparison.InvariantCultureIgnoreCase)) test += $"\nRETURN {Iterator}";
             return test;
         }

@@ -51,7 +51,7 @@ namespace Core.Arango.DevExtreme
         public List<string> Summaries { get; } = new List<string>();
 
         /// <summary>
-        ///     Executes transformed query
+        ///     Executes transformed query asynchronous
         /// </summary>
         public async Task<DxLoadResult> ExecuteAsync<T>(ArangoContext arango,
             ArangoHandle handle,

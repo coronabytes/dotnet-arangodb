@@ -46,6 +46,12 @@ namespace Core.Arango.Linq
             return default;
         }
 
+        /// <summary>
+        /// Wird beim Ausführen der Query (z.B. durch .ToList()) aufgerufen. Wandelt den ExpressionTree in ein Arango-Query um, bindet Variablen und feuert es dann gegen die Datenbank ab.
+        /// </summary>
+        /// <typeparam name="TResult">Typ des angefragten Objekts</typeparam>
+        /// <param name="expression">Expression-Tree, der sich aus dem LINQ-Query ergibt</param>
+        /// <returns>Ergebnis der DB-Abfrage</returns>
         public TResult Execute<TResult>(Expression expression)
         {
             var type = typeof(TResult);

@@ -19,6 +19,7 @@ namespace Core.Arango.Linq.Internal
 {
     internal class AqlCodeWriter : WriterBase
     {
+        // Dictionary mit binären Operatoren
         private static readonly Dictionary<ExpressionType, string> simpleBinaryOperators =
             new Dictionary<ExpressionType, string>
             {
@@ -71,6 +72,13 @@ namespace Core.Arango.Linq.Internal
         {
         }
 
+        /// <summary>
+        /// Schreibt einen Index-Zugriff
+        /// </summary>
+        /// <param name="instancePath"></param>
+        /// <param name="instance">die Exoression</param>
+        /// <param name="argBasePath"></param>
+        /// <param name="keys"></param>
         private void WriteIndexerAccess(string instancePath, Expression instance, string argBasePath,
             params Expression[] keys)
         {
@@ -80,12 +88,27 @@ namespace Core.Arango.Linq.Internal
             Write("]");
         }
 
+        /// <summary>
+        /// Stößt das Schreiben eines Index-Zugriffs an.
+        /// </summary>
+        /// <param name="instancePath"></param>
+        /// <param name="instance">die Expression</param>
+        /// <param name="argBasePath"></param>
+        /// <param name="keys"></param>
         private void WriteIndexerAccess(string instancePath, Expression instance, string argBasePath,
             IEnumerable<Expression> keys)
         {
             WriteIndexerAccess(instancePath, instance, argBasePath, keys.ToArray());
         }
 
+        /// <summary>
+        /// Überprüft den Typ eines binären Operators und stößt die entsprechenden Schreib-Operationen an
+        /// </summary>
+        /// <param name="nodeType">Nodetyp der Expression</param>
+        /// <param name="leftPath"></param>
+        /// <param name="left">linker Teil des binären Ausdrucks</param>
+        /// <param name="rightPath"></param>
+        /// <param name="right">rechter Teil des binären Ausdrucks</param>
         private void WriteBinary(ExpressionType nodeType, string leftPath, Expression left, string rightPath,
             Expression right)
         {
@@ -126,11 +149,23 @@ namespace Core.Arango.Linq.Internal
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Stoößt das Schreiben eines binären Ausdrucks an
+        /// </summary>
+        /// <param name="expr">die Expression</param>
         protected override void WriteBinary(BinaryExpression expr)
         {
             WriteBinary(expr.NodeType, "Left", expr.Left, "Right", expr.Right);
         }
 
+        /// <summary>
+        /// Überprüft den Typ eines unären Operators und stößt die entsprechenden Schreib-Operationen an
+        /// </summary>
+        /// <param name="nodeType">Typ des Ausdrucks</param>
+        /// <param name="operandPath"></param>
+        /// <param name="operand">Operand</param>
+        /// <param name="type"></param>
+        /// <param name="expressionTypename">Name des Ausdrucks</param>
         private void WriteUnary(ExpressionType nodeType, string operandPath, Expression operand, Type type,
             string expressionTypename)
         {
@@ -226,11 +261,19 @@ namespace Core.Arango.Linq.Internal
             }
         }
 
+        /// <summary>
+        /// Stößt das Schreiben eines unären Ausdrucks an
+        /// </summary>
+        /// <param name="expr"></param>
         protected override void WriteUnary(UnaryExpression expr)
         {
             WriteUnary(expr.NodeType, "Operand", expr.Operand, expr.Type, expr.GetType().Name);
         }
 
+        /// <summary>
+        /// Schreibt einen Lambda-Ausdruck
+        /// </summary>
+        /// <param name="expr">die Expression</param>
         protected override void WriteLambda(LambdaExpression expr)
         {
             //Write("(");
@@ -263,6 +306,10 @@ namespace Core.Arango.Linq.Internal
         }
 
 
+        /// <summary>
+        /// Schreibt eine Parameter-Deklaration
+        /// </summary>
+        /// <param name="prm">der Parameter-Ausdruck</param>
         protected override void WriteParameterDeclarationImpl(ParameterExpression prm)
         {
             if(string.IsNullOrEmpty(Collection)) Collection = prm.Type.Name;
@@ -273,16 +320,28 @@ namespace Core.Arango.Linq.Internal
             //Write($"{prm.Type.FriendlyName(language)} {prm.Name}");
         }
 
+        /// <summary>
+        /// Schreibt einen Parameter
+        /// </summary>
+        /// <param name="expr">der Parameter-Ausdruck</param>
         protected override void WriteParameter(ParameterExpression expr)
         {
             Write(expr.Name);
         }
 
+        /// <summary>
+        /// Schreibt eine Konstante
+        /// </summary>
+        /// <param name="expr">der Konstanten-Ausdruck</param>
         protected override void WriteConstant(ConstantExpression expr)
         {
             Write(RenderLiteral(expr.Value, language));
         }
 
+        /// <summary>
+        /// Schreibt einen Member-Zugriff
+        /// </summary>
+        /// <param name="expr">die Member-Expression</param>
         protected override void WriteMemberAccess(MemberExpression expr)
         {
             switch (expr.Expression)
@@ -309,6 +368,12 @@ namespace Core.Arango.Linq.Internal
             }
         }
 
+        /// <summary>
+        /// Schreibt ein neues Objekt
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="argsPath"></param>
+        /// <param name="args"></param>
         private void WriteNew(Type type, string argsPath, IList<Expression> args)
         {
             //Write("new ");
@@ -318,6 +383,10 @@ namespace Core.Arango.Linq.Internal
             Write("}");
         }
 
+        /// <summary>
+        /// Schreibt ein neues Objekt inklusive Initialisierung von Werten
+        /// </summary>
+        /// <param name="expr">die Expression</param>
         protected override void WriteNew(NewExpression expr)
         {
             SelectType = expr.Type;
@@ -349,6 +418,10 @@ namespace Core.Arango.Linq.Internal
             WriteNew(expr.Type, "Arguments", expr.Arguments);
         }
 
+        /// <summary>
+        /// Schreibt einen Aufruf
+        /// </summary>
+        /// <param name="expr">die Expression des Methoden-Aufrufs</param>
         protected override void WriteCall(MethodCallExpression expr)
         {
             if (expr.Method.In(stringConcats))
@@ -485,9 +558,7 @@ namespace Core.Arango.Linq.Internal
             }
 
             else if (name.Equals("contains", StringComparison.InvariantCultureIgnoreCase))
-            {
-
-            }
+            {}
 
 
             else
@@ -498,6 +569,10 @@ namespace Core.Arango.Linq.Internal
             }
         }
 
+        /// <summary>
+        /// Schreibt eine Zuweisung
+        /// </summary>
+        /// <param name="binding">der Zuweisungs-Ausdruck</param>
         protected override void WriteBinding(MemberBinding binding)
         {
             Write(binding.Member.Name);
@@ -535,6 +610,10 @@ namespace Core.Arango.Linq.Internal
             Write("}");
         }
 
+        /// <summary>
+        /// Schreibt eine Member-Initialisierung
+        /// </summary>
+        /// <param name="expr">die expression</param>
         protected override void WriteMemberInit(MemberInitExpression expr)
         {
             WriteNode("NewExpression", expr.NewExpression);
@@ -549,6 +628,10 @@ namespace Core.Arango.Linq.Internal
             }
         }
 
+        /// <summary>
+        /// Schreibt eine Listen-Initialisierung
+        /// </summary>
+        /// <param name="expr">der Ausdruck</param>
         protected override void WriteListInit(ListInitExpression expr)
         {
             WriteNode("NewExpression", expr.NewExpression);
@@ -560,6 +643,10 @@ namespace Core.Arango.Linq.Internal
             Write("}");
         }
 
+        /// <summary>
+        /// Schreibt die Initialisierung eines Elements
+        /// </summary>
+        /// <param name="elementInit"></param>
         protected override void WriteElementInit(ElementInit elementInit)
         {
             var args = elementInit.Arguments;
@@ -581,6 +668,10 @@ namespace Core.Arango.Linq.Internal
             }
         }
 
+        /// <summary>
+        /// Schreibt die Erstellung eines neuen Arrays
+        /// </summary>
+        /// <param name="expr"></param>
         protected override void WriteNewArray(NewArrayExpression expr)
         {
             switch (expr.NodeType)
@@ -643,6 +734,11 @@ namespace Core.Arango.Linq.Internal
             return true;
         }
 
+        /// <summary>
+        /// Schreibt einen konditionalen Ausdruck
+        /// </summary>
+        /// <param name="expr">die Expression</param>
+        /// <param name="metadata"></param>
         protected override void WriteConditional(ConditionalExpression expr, object? metadata)
         {
             if (expr.Type != typeof(void))
@@ -684,6 +780,10 @@ namespace Core.Arango.Linq.Internal
             }
         }
 
+        /// <summary>
+        /// Schreibt ein default
+        /// </summary>
+        /// <param name="expr">die Expression</param>
         protected override void WriteDefault(DefaultExpression expr)
         {
             Write($"default({expr.Type.FriendlyName(language)})");
@@ -704,6 +804,10 @@ namespace Core.Arango.Linq.Internal
             }
         }
 
+        /// <summary>
+        /// Schreibt einen Aufruf
+        /// </summary>
+        /// <param name="expr">die Expression</param>
         protected override void WriteInvocation(InvocationExpression expr)
         {
             if (expr.Expression is LambdaExpression) Write("(");
@@ -714,6 +818,10 @@ namespace Core.Arango.Linq.Internal
             Write(")");
         }
 
+        /// <summary>
+        /// Stößt das Schreiben eines Index-Zugriffs auf
+        /// </summary>
+        /// <param name="expr"></param>
         protected override void WriteIndex(IndexExpression expr)
         {
             WriteIndexerAccess("Object", expr.Object, "Arguments", expr.Arguments);
@@ -805,6 +913,10 @@ namespace Core.Arango.Linq.Internal
             }
         }
 
+        /// <summary>
+        /// Schreibt das Ende eines Statements
+        /// </summary>
+        /// <param name="expr">die Expression</param>
         private void WriteStatementEnd(Expression expr)
         {
             switch (expr)
@@ -822,6 +934,10 @@ namespace Core.Arango.Linq.Internal
             Write(";");
         }
 
+        /// <summary>
+        /// Schreibt einen Switch-Case
+        /// </summary>
+        /// <param name="switchCase"></param>
         protected override void WriteSwitchCase(SwitchCase switchCase)
         {
             switchCase.TestValues.ForEach((testValue, index) =>
@@ -869,6 +985,10 @@ namespace Core.Arango.Linq.Internal
             Write("}");
         }
 
+        /// <summary>
+        /// Schreibt ein catch
+        /// </summary>
+        /// <param name="catchBlock">die Anweisungen im Catch-Block</param>
         protected override void WriteCatchBlock(CatchBlock catchBlock)
         {
             Write("catch ");
@@ -897,6 +1017,10 @@ namespace Core.Arango.Linq.Internal
             Write("}");
         }
 
+        /// <summary>
+        /// Schreibt ein try
+        /// </summary>
+        /// <param name="expr">die Anweisungen im try-Block</param>
         protected override void WriteTry(TryExpression expr)
         {
             Write("try {");
@@ -940,6 +1064,10 @@ namespace Core.Arango.Linq.Internal
             Write(":");
         }
 
+        /// <summary>
+        /// Schreibt ein goto-Statement
+        /// </summary>
+        /// <param name="expr">der Ausdruck</param>
         protected override void WriteGoto(GotoExpression expr)
         {
             var gotoKeyword = expr.Kind switch
@@ -969,6 +1097,10 @@ namespace Core.Arango.Linq.Internal
             Write(labelTarget.Name);
         }
 
+        /// <summary>
+        /// Schreibt eine Endlos-Schleife
+        /// </summary>
+        /// <param name="expr">der Ausdruck innerhalb der Schleife</param>
         protected override void WriteLoop(LoopExpression expr)
         {
             Write("while (true) {");
