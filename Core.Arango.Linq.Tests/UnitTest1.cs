@@ -85,6 +85,7 @@ namespace Core.Arango.Linq.Tests
             var test = Arango.AsQueryable<Project>("test").Where(x => x.Value == 1 || x.Value == 2).ToList();
         }
 
+        /*
         /// <summary>
         /// expected query: FOR x IN Project FILTER x.Name LIKE "A%" RETURN x
         /// </summary>
@@ -93,7 +94,7 @@ namespace Core.Arango.Linq.Tests
         {
             var list = new List<int> { 1, 2, 3 };
             var test = Arango.AsQueryable<Project>("test").Where(x => x.Name.StartsWith("A")).ToList();
-        }
+        }*/
 
         /// <summary>
         /// Initialisiert eine Datenbank und eine Collection für die Tests
