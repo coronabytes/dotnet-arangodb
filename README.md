@@ -146,8 +146,6 @@ await arango.CommitTransactionAsync(transaction);
 ```
 
 # Serilog
-- Collection is only created on initial database creation for now
-- If you want to use an existing database create the collection manually
 ```csharp
 webBuilder.UseSerilog((c, log) =>
 {
@@ -171,8 +169,6 @@ webBuilder.UseSerilog((c, log) =>
 ```
 
 # DataProtection
-- Collection is only created on initial database creation for now
-- If you want to use an existing database create the collection manually
 ```csharp
 public void ConfigureServices(IServiceCollection services)
 {

@@ -12,12 +12,13 @@ namespace Core.Arango.DataProtection
     internal class ArangoXmlRepository : IXmlRepository
     {
         private readonly string _collection;
+        private readonly ArangoContext _context;
         private readonly string _database;
         private readonly ILogger _logger;
         private readonly IServiceProvider _services;
 
         public ArangoXmlRepository(IServiceProvider services, ILoggerFactory loggerFactory,
-            string database, string collection)
+            string database, string collection, ArangoContext context)
         {
             if (loggerFactory == null) throw new ArgumentNullException(nameof(loggerFactory));
 
@@ -25,17 +26,17 @@ namespace Core.Arango.DataProtection
             _services = services ?? throw new ArgumentNullException(nameof(services));
             _database = database;
             _collection = collection;
+            _context = context ?? services.GetRequiredService<ArangoContext>();
 
             try
             {
-                using var scope = _services.CreateScope();
-                var context = scope.ServiceProvider.GetRequiredService<ArangoContext>();
+                if (!_context.ExistDatabaseAsync(_database).Result)
+                    _context.CreateDatabaseAsync(_database).Wait();
 
-                if (!context.ExistDatabaseAsync(_database).Result)
-                {
-                    context.CreateDatabaseAsync(_database).Wait();
-                    context.CreateCollectionAsync(_database, _collection, ArangoCollectionType.Document).Wait();
-                }
+                var collections = _context.ListCollectionsAsync(_database).Result;
+
+                if (!collections.Contains(collection))
+                    _context.CreateCollectionAsync(_database, _collection, ArangoCollectionType.Document).Wait();
             }
             catch (Exception e)
             {
@@ -47,12 +48,9 @@ namespace Core.Arango.DataProtection
         /// <inheritdoc />
         public virtual IReadOnlyCollection<XElement> GetAllElements()
         {
-            using var scope = _services.CreateScope();
-
-            var context = scope.ServiceProvider.GetRequiredService<ArangoContext>();
             var logger = _logger;
 
-            return context.FindAsync<DataProtectionEntity>(_database, _collection, $"true").Result
+            return _context.FindAsync<DataProtectionEntity>(_database, _collection, $"true").Result
                 .Select(key => TryParseKeyXml(key.Xml, logger))
                 .ToList().AsReadOnly();
         }
@@ -60,16 +58,13 @@ namespace Core.Arango.DataProtection
         /// <inheritdoc />
         public void StoreElement(XElement element, string friendlyName)
         {
-            using var scope = _services.CreateScope();
-
-            var context = scope.ServiceProvider.GetRequiredService<ArangoContext>();
             var newKey = new DataProtectionEntity
             {
                 FriendlyName = friendlyName,
                 Xml = element.ToString(SaveOptions.DisableFormatting)
             };
 
-            context.CreateDocumentAsync(_database, _collection, newKey).Wait();
+            _context.CreateDocumentAsync(_database, _collection, newKey).Wait();
         }
 
         private static XElement TryParseKeyXml(string xml, ILogger logger)
