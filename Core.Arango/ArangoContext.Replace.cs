@@ -10,7 +10,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Core.Arango
 {
-    public partial class ArangoContext
+    public partial class ArangoContext : IArangoContext
     {
         public async Task<List<ArangoUpdateResult<TR>>> ReplaceDocumentsAsync<T, TR>(ArangoHandle database,
             string collection, IEnumerable<T> docs,
