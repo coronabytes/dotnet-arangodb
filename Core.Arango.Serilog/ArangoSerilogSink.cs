@@ -31,11 +31,13 @@ namespace Core.Arango.Serilog
 
             try
             {
-                if (!arango.ExistDatabaseAsync(_database).Result)
-                {
+                if (!_arango.ExistDatabaseAsync(_database).Result)
                     _arango.CreateDatabaseAsync(_database).Wait();
+
+                var collections = _arango.ListCollectionsAsync(_database).Result;
+
+                if (!collections.Contains(collection))
                     _arango.CreateCollectionAsync(_database, _collection, ArangoCollectionType.Document).Wait();
-                }
             }
             catch (Exception)
             {
