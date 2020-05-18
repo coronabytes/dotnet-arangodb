@@ -116,7 +116,10 @@ namespace Core.Arango.Linq.Internal
             {
                 WriteNode(leftPath, left);
                 Write($" {@operator} ");
+                var writeQuotationMarks = right.Type == typeof(string);
+                if (writeQuotationMarks) Write("\"");
                 WriteNode(rightPath, right);
+                if (writeQuotationMarks) Write("\"");
                 return;
             }
 
@@ -335,7 +338,12 @@ namespace Core.Arango.Linq.Internal
         /// <param name="expr">der Konstanten-Ausdruck</param>
         protected override void WriteConstant(ConstantExpression expr)
         {
-            Write(RenderLiteral(expr.Value, language));
+            var literal = RenderLiteral(expr.Value, language);
+            if (literal.Length > 0)
+            {
+                Write(literal);
+            }
+            // Write(RenderLiteral(expr.Value, language));
         }
 
         /// <summary>
@@ -559,6 +567,13 @@ namespace Core.Arango.Linq.Internal
 
             else if (name.Equals("contains", StringComparison.InvariantCultureIgnoreCase))
             {}
+
+            else if (name.Equals("startswith", StringComparison.InvariantCultureIgnoreCase))
+            {
+                Write("\nLIKE \"");
+                WriteNodes(arguments);
+                Write("%\"");
+            }
 
 
             else

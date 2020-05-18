@@ -83,6 +83,10 @@ namespace Core.Arango.Linq.Tests
                 Value = 3
             });
             var test = Arango.AsQueryable<Project>("test").Where(x => x.Value == 1 || x.Value == 2).ToList();
+            foreach (var t in test)
+            {
+                Assert.True(t.Value == 1 || t.Value == 2);
+            }
         }
 
         /// <summary>
@@ -91,8 +95,11 @@ namespace Core.Arango.Linq.Tests
         [Fact]
         public void TestStringBeginsWith()
         {
-            var list = new List<int> { 1, 2, 3 };
             var test = Arango.AsQueryable<Project>("test").Where(x => x.Name.StartsWith("A")).ToList();
+            foreach (var t in test)
+            {
+                Assert.StartsWith("A", t.Name);
+            }
         }
 
         /// <summary>

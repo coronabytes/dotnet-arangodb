@@ -47,7 +47,8 @@ namespace Core.Arango.Linq.Internal.Util
             else if (o is string s)
             {
                 if (language.In(CSharp, VisualBasic))
-                    ret = s.ToVerbatimString(language);
+                    // ret = s.ToVerbatimString(language); todo: mit Andi abkklären
+                    ret = s;
                 else if (!s.HasSpecialCharacters()) ret = $"\"{s}\"";
             }
             else if (o is Enum e)
