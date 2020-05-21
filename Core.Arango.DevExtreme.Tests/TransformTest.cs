@@ -133,6 +133,28 @@ namespace Core.Arango.DevExtreme.Tests
         }
 
         [Fact]
+        public void InArrayTest2()
+        {
+            var at = new ArangoTransform(new DataSourceLoadOptionsBase
+            {
+                Take = 20,
+                RequireTotalCount = false,
+                Filter = JArray.Parse(
+                    @"[[""categoryKeys"",""in"",""d9d48fe3-03dc-e611-80dd-0050568a3ed2""],""or"",[""categoryKeys"",""in"",""ad22d4ec-03dc-e611-80dd-0050568a3ed2""]]")
+            }, new ArangoTransformSettings
+            {
+                ExtractFilters = new Dictionary<string, string>
+                {
+                    ["CategoryKeys"] = "Test"
+                }
+            });
+
+            at.Transform(out var error);
+
+            _output.WriteLine(at.FilterExpression);
+        }
+
+        [Fact]
         public void NegateExpression()
         {
             var at = new ArangoTransform(new DataSourceLoadOptionsBase

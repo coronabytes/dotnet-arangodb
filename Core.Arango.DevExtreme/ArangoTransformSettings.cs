@@ -108,5 +108,7 @@ namespace Core.Arango.DevExtreme
 
             return s;
         };
+
+        public Dictionary<string, string> ExtractFilters { get; set; } = new Dictionary<string, string>();
     }
 }

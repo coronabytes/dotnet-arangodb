@@ -44,6 +44,9 @@ namespace Core.Arango.DevExtreme
         public string SortExpression { get; private set; }
         public string AggregateExpression { get; private set; }
 
+        
+        public Dictionary<string, List<string>> ExtractedFilters { get; private set; } = new Dictionary<string, List<string>>();
+
         public int Skip { get; private set; }
         public int Take { get; private set; }
 
@@ -206,7 +209,7 @@ namespace Core.Arango.DevExtreme
                         if (_loadOption.Group.Any(x => !_settings.RestrictGroups
                             .Contains(x.Selector.FirstCharOfPropertiesToUpper())))
                         {
-                            error = "restriced group selector";
+                            error = "restricted group selector";
                             return false;
                         }
                 }
@@ -506,8 +509,11 @@ namespace Core.Arango.DevExtreme
 
             var rawValue = dxFilter[2];
 
-            var property = PropertyName(_settings.ValidPropertyName(dxFilter[0].ToString()).FirstCharOfPropertiesToUpper());
-            string boundParam;
+            var realPropertyName = _settings.ValidPropertyName(dxFilter[0].ToString()).FirstCharOfPropertiesToUpper();
+            var property = PropertyName(realPropertyName);
+            string boundParam = null;
+
+            string returnValue = "";
 
             switch (rawValue)
             {
@@ -546,13 +552,17 @@ namespace Core.Arango.DevExtreme
                     switch (opString)
                     {
                         case "CONTAINS":
-                            return $@"{propertyCase} LIKE {CreateParameter($"%{valueCase}%")}";
+                            returnValue = $@"{propertyCase} LIKE {CreateParameter($"%{valueCase}%")}";
+                            break;
                         case "NOTCONTAINS":
-                            return $@"{propertyCase} NOT LIKE {CreateParameter($"%{valueCase}%")}";
+                            returnValue = $@"{propertyCase} NOT LIKE {CreateParameter($"%{valueCase}%")}";
+                            break;
                         case "STARTSWITH":
-                            return $@"{propertyCase} LIKE {CreateParameter($"{valueCase}%")}";
+                            returnValue = $@"{propertyCase} LIKE {CreateParameter($"{valueCase}%")}";
+                            break;
                         case "ENDSWITH":
-                            return $@"{propertyCase} LIKE {CreateParameter($"%{valueCase}")}'";
+                            returnValue = $@"{propertyCase} LIKE {CreateParameter($"%{valueCase}")}'";
+                            break;
                         default:
                             boundParam = CreateParameter(s);
                             break;
@@ -574,13 +584,17 @@ namespace Core.Arango.DevExtreme
                         switch (opString)
                         {
                             case "CONTAINS":
-                                return $@"{propertyCase} LIKE {CreateParameter($"%{valueCase}%")}";
+                                returnValue = $@"{propertyCase} LIKE {CreateParameter($"%{valueCase}%")}";
+                                break;
                             case "NOTCONTAINS":
-                                return $@"{propertyCase} NOT LIKE {CreateParameter($"%{valueCase}%")}";
+                                returnValue = $@"{propertyCase} NOT LIKE {CreateParameter($"%{valueCase}%")}";
+                                break;
                             case "STARTSWITH":
-                                return $@"{propertyCase} LIKE {CreateParameter($"{valueCase}%")}";
+                                returnValue = $@"{propertyCase} LIKE {CreateParameter($"{valueCase}%")}";
+                                break;
                             case "ENDSWITH":
-                                return $@"{propertyCase} LIKE {CreateParameter($"%{valueCase}")}'";
+                                returnValue = $@"{propertyCase} LIKE {CreateParameter($"%{valueCase}")}'";
+                                break;
                             default:
                                 boundParam = CreateParameter(v);
                                 break;
@@ -600,10 +614,29 @@ namespace Core.Arango.DevExtreme
                 }
             }
 
-            if (opString == "IN")
-                return $"{boundParam} IN {property}";
 
-            return $"{property} {opString} {boundParam}";
+            if (string.IsNullOrWhiteSpace(returnValue))
+            {
+                if (opString == "IN")
+                    returnValue = $"{boundParam} IN {property}";
+                else
+                    returnValue = $"{property} {opString} {boundParam}";
+            }
+
+            if (_settings.ExtractFilters.TryGetValue(realPropertyName, out var extract))
+            {
+                if (!ExtractedFilters.TryGetValue(extract, out var exFilters))
+                {
+                    exFilters = new List<string>();
+                    ExtractedFilters[extract] = exFilters;
+                }
+
+                exFilters.Add(returnValue);
+
+                returnValue = "true";
+            }
+
+            return returnValue;
         }
 
         private string Filter()
