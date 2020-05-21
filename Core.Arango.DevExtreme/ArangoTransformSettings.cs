@@ -4,6 +4,13 @@ using System.Text.RegularExpressions;
 
 namespace Core.Arango.DevExtreme
 {
+    public class ArangoFilterTransform
+    {
+        public string IteratorVar { get; set; }
+        public string Collection { get; set; }
+        public string Property { get; set; }
+    }
+
     /// <summary>
     ///     Shared Arango transform configuration
     /// </summary>
@@ -109,6 +116,6 @@ namespace Core.Arango.DevExtreme
             return s;
         };
 
-        public Dictionary<string, string> ExtractFilters { get; set; } = new Dictionary<string, string>();
+        public Dictionary<string, ArangoFilterTransform> ExtractFilters { get; set; } = new Dictionary<string, ArangoFilterTransform>();
     }
 }

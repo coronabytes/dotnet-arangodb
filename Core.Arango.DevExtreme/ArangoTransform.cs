@@ -248,7 +248,7 @@ namespace Core.Arango.DevExtreme
             return $"@{p}";
         }
 
-        private string PropertyName(string name)
+        private string PropertyName(string name, string iteratorVar = null)
         {
             if (name.Equals(_settings.Key, StringComparison.InvariantCultureIgnoreCase))
                 name = "_key";
@@ -258,7 +258,7 @@ namespace Core.Arango.DevExtreme
             if (nameLambda != null)
                 return _settings.PropertyTransform(name, _settings);
 
-            return $"{_settings.IteratorVar}.{name}";
+            return $"{iteratorVar ?? _settings.IteratorVar}.{name}";
         }
 
         private string Aggregate()
@@ -510,7 +510,15 @@ namespace Core.Arango.DevExtreme
             var rawValue = dxFilter[2];
 
             var realPropertyName = _settings.ValidPropertyName(dxFilter[0].ToString()).FirstCharOfPropertiesToUpper();
-            var property = PropertyName(realPropertyName);
+            
+            string property;
+
+            if (_settings.ExtractFilters.TryGetValue(realPropertyName, out var extract1))
+                property = PropertyName(extract1.Property, extract1.IteratorVar);
+            else
+                property = PropertyName(realPropertyName);
+
+
             string boundParam = null;
 
             string returnValue = "";
@@ -625,10 +633,10 @@ namespace Core.Arango.DevExtreme
 
             if (_settings.ExtractFilters.TryGetValue(realPropertyName, out var extract))
             {
-                if (!ExtractedFilters.TryGetValue(extract, out var exFilters))
+                if (!ExtractedFilters.TryGetValue(extract.Collection, out var exFilters))
                 {
                     exFilters = new List<string>();
-                    ExtractedFilters[extract] = exFilters;
+                    ExtractedFilters[extract.Collection] = exFilters;
                 }
 
                 exFilters.Add(returnValue);

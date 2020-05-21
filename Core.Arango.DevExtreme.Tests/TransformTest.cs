@@ -143,9 +143,14 @@ namespace Core.Arango.DevExtreme.Tests
                     @"[[""categoryKeys"",""in"",""d9d48fe3-03dc-e611-80dd-0050568a3ed2""],""or"",[""categoryKeys"",""in"",""ad22d4ec-03dc-e611-80dd-0050568a3ed2""]]")
             }, new ArangoTransformSettings
             {
-                ExtractFilters = new Dictionary<string, string>
+                ExtractFilters = new Dictionary<string, ArangoFilterTransform>
                 {
-                    ["CategoryKeys"] = "Test"
+                    ["CategoryKeys"] = new ArangoFilterTransform
+                    {
+                        IteratorVar = "z",
+                        Collection = "Project",
+                        Property = "CategoryKeys"
+                    }
                 }
             });
 
