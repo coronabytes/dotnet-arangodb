@@ -5,7 +5,7 @@
     <Copyright>Andreas Dominik Jung</Copyright>
     <Authors>Andreas Dominik Jung</Authors>
     <Company>Corona Bytes</Company>
-    <Version>1.1.3</Version>
+    <Version>1.1.4</Version>
     <Description>Transforms DevExtreme's DataSourceLoadOptions to AQL syntax</Description>
     <PackageTags>arangodb devextreme</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -13,8 +13,8 @@
     <PackageIconUrl />
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageProjectUrl>https://github.com/coronabytes/ArangoDB</PackageProjectUrl>
-    <AssemblyVersion>1.1.3.0</AssemblyVersion>
-    <FileVersion>1.1.3.0</FileVersion>
+    <AssemblyVersion>1.1.4.0</AssemblyVersion>
+    <FileVersion>1.1.4.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

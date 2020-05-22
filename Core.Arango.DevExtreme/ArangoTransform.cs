@@ -45,7 +45,8 @@ namespace Core.Arango.DevExtreme
         public string AggregateExpression { get; private set; }
 
         
-        public Dictionary<string, List<string>> ExtractedFilters { get; private set; } = new Dictionary<string, List<string>>();
+        public Dictionary<string, string> ExtractedFilters { get; } = new Dictionary<string, string>();
+        private List<(string, string, string)> _extractedFilters = new List<(string, string, string)>();
 
         public int Skip { get; private set; }
         public int Take { get; private set; }
@@ -217,6 +218,18 @@ namespace Core.Arango.DevExtreme
                 error = null;
 
                 FilterExpression = Filter();
+
+
+                // TODO: Not?
+                foreach (var a in _extractedFilters.GroupBy(x=> x.Item1))
+                {
+                    var subfilters = a.GroupBy(y => y.Item2)
+                        .Select(y =>  "(" + string.Join(" || ", y.Select(z => z.Item3)) + ")");
+
+                    ExtractedFilters[a.Key] = "(" + string.Join(" && ", subfilters)  + ")";
+                }
+
+
                 SortExpression = Sort();
                 Skip = _loadOption.Skip;
                 Take = _loadOption.Take;
@@ -633,13 +646,7 @@ namespace Core.Arango.DevExtreme
 
             if (_settings.ExtractFilters.TryGetValue(realPropertyName, out var extract))
             {
-                if (!ExtractedFilters.TryGetValue(extract.Collection, out var exFilters))
-                {
-                    exFilters = new List<string>();
-                    ExtractedFilters[extract.Collection] = exFilters;
-                }
-
-                exFilters.Add(returnValue);
+               _extractedFilters.Add((extract.Collection, realPropertyName, returnValue));
 
                 returnValue = "true";
             }
@@ -650,7 +657,8 @@ namespace Core.Arango.DevExtreme
         private string Filter()
         {
             var collapsedFilter = GetRootFilter(_loadOption.Filter);
-            return GetMatchingFilter(collapsedFilter);
+            var filter = GetMatchingFilter(collapsedFilter);
+            return filter;
         }
 
 
