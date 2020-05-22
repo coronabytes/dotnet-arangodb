@@ -1,6 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using DevExtreme.AspNet.Data;
+using DevExtreme.AspNet.Data.Helpers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Xunit;
@@ -16,6 +19,13 @@ namespace Core.Arango.DevExtreme.Tests
         }
 
         private readonly ITestOutputHelper _output;
+
+        private DataSourceLoadOptionsBase DxLoad(Func<string, string> valueSource)
+        {
+            var loadOptions = new DataSourceLoadOptionsBase();
+            DataSourceLoadOptionsParser.Parse(loadOptions, valueSource);
+            return loadOptions;
+        }
 
         [Fact]
         public void BoolTypeTest()
@@ -176,6 +186,60 @@ namespace Core.Arango.DevExtreme.Tests
                 },
                 Filter = JArray.Parse(@"[[], ""and"", [""!"", [""scope"", ""=="", ""plan""]]]")
             }, new ArangoTransformSettings());
+
+            at.Transform(out var error);
+
+            _output.WriteLine(at.FilterExpression);
+        }
+
+        [Fact]
+        public void NegateExpression2()
+        {
+            var loadOptions = DxLoad(key =>
+            {
+                if (key == "filter")
+                    return WebUtility.UrlDecode(
+                        @"%5B%22!%22,%5B%5B%22type%22,%22=%22,null%5D,%22or%22,%5B%22type%22,%22=%22,1%5D%5D%5D");
+                return null;
+            });
+
+            var at = new ArangoTransform(loadOptions, new ArangoTransformSettings());
+
+            at.Transform(out var error);
+
+            _output.WriteLine(at.FilterExpression);
+        }
+
+        [Fact]
+        public void NegateExpression3()
+        {
+            var loadOptions = DxLoad(key =>
+            {
+                var r = key switch
+                {
+                    "take" => "100",
+                    "requireTotalCount" => "true",
+                    "sort" => "%5B%7B%22selector%22:%22start%22,%22desc%22:true%7D%5D",
+                    "filter" => "%5B%5B%5D,%22and%22,%5B%22!%22,%5B%5B%22userKey%22,%22=%22,%2255770a6d-4dd7-42cf-9db5-aaff00d106d7%22%5D,%22or%22,%5B%22userKey%22,%22=%22,%2240ecb6b1-26cd-44e0-88df-a9457f4ade9c%22%5D%5D%5D%5D",
+                    "totalSummary" => "%5B%7B%22selector%22:%22duration%22,%22summaryType%22:%22sum%22%7D,%7B%22selector%22:%22revenue%22,%22summaryType%22:%22sum%22%7D%5D",
+                    _ => null
+                };
+
+                return key != null ? WebUtility.UrlDecode(r) : null;
+            });
+
+            var at = new ArangoTransform(loadOptions, new ArangoTransformSettings
+            {
+                ExtractFilters = new Dictionary<string, ArangoFilterTransform>
+                {
+                    ["UserKey"] = new ArangoFilterTransform
+                    {
+                        IteratorVar = "z",
+                        Collection = "AUser",
+                        Property = "_key"
+                    }
+                }
+            });
 
             at.Transform(out var error);
 

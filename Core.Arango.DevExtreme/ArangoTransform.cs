@@ -24,6 +24,10 @@ namespace Core.Arango.DevExtreme
     {
         private readonly DataSourceLoadOptionsBase _loadOption;
         private readonly ArangoTransformSettings _settings;
+
+        private readonly List<(string, string, bool, string)> _extractedFilters =
+            new List<(string, string, bool, string)>();
+
         private bool _isTransformed;
 
         public ArangoTransform(DataSourceLoadOptionsBase loadOption, ArangoTransformSettings settings)
@@ -44,9 +48,8 @@ namespace Core.Arango.DevExtreme
         public string SortExpression { get; private set; }
         public string AggregateExpression { get; private set; }
 
-        
+
         public Dictionary<string, string> ExtractedFilters { get; } = new Dictionary<string, string>();
-        private List<(string, string, string)> _extractedFilters = new List<(string, string, string)>();
 
         public int Skip { get; private set; }
         public int Take { get; private set; }
@@ -220,13 +223,16 @@ namespace Core.Arango.DevExtreme
                 FilterExpression = Filter();
 
 
-                // TODO: Not?
-                foreach (var a in _extractedFilters.GroupBy(x=> x.Item1))
+
+                foreach (var a in _extractedFilters.GroupBy(x => x.Item1))
                 {
                     var subfilters = a.GroupBy(y => y.Item2)
-                        .Select(y =>  "(" + string.Join(" || ", y.Select(z => z.Item3)) + ")");
+                        .Select(y =>
+                            // TODO: Split by not ? or ist this just impossible
+                            (y.Any(w => w.Item3) ? "!" : "")
+                            + "(" + string.Join(" || ", y.Select(z => z.Item4)) + ")");
 
-                    ExtractedFilters[a.Key] = "(" + string.Join(" && ", subfilters)  + ")";
+                    ExtractedFilters[a.Key] = "(" + string.Join(" && ", subfilters) + ")";
                 }
 
 
@@ -428,7 +434,7 @@ namespace Core.Arango.DevExtreme
             return sort;
         }
 
-        private string GetMatchingFilter(IList dxFilter)
+        private string GetMatchingFilter(IList dxFilter, bool not = false)
         {
             if (dxFilter == null)
                 return "true";
@@ -438,9 +444,10 @@ namespace Core.Arango.DevExtreme
 
             if (dxFilter.Count == 2)
             {
-                if (dxFilter[0] is JValue v && v.Value is string s && s == "!" && dxFilter[1] is JArray)
+                if ((dxFilter[0] is JValue v && v.Value is string s && s == "!"
+                     || dxFilter[0] is string s2 && s2 == "!") && dxFilter[1] is JArray)
                 {
-                    var r = GetMatchingFilter((JArray) dxFilter[1]);
+                    var r = GetMatchingFilter((JArray) dxFilter[1], true);
                     return $"!({r})";
                 }
 
@@ -512,7 +519,7 @@ namespace Core.Arango.DevExtreme
                 for (var i = 0; i < dxFilter.Count; i++)
                     if (i % 2 == 0)
                     {
-                        logicalResult += GetMatchingFilter((JArray) dxFilter[i]);
+                        logicalResult += GetMatchingFilter((JArray) dxFilter[i], not);
                         if (i + 1 != dxFilter.Count) logicalResult += $" {opString} ";
                     }
 
@@ -523,7 +530,7 @@ namespace Core.Arango.DevExtreme
             var rawValue = dxFilter[2];
 
             var realPropertyName = _settings.ValidPropertyName(dxFilter[0].ToString()).FirstCharOfPropertiesToUpper();
-            
+
             string property;
 
             if (_settings.ExtractFilters.TryGetValue(realPropertyName, out var extract1))
@@ -534,7 +541,7 @@ namespace Core.Arango.DevExtreme
 
             string boundParam = null;
 
-            string returnValue = "";
+            var returnValue = "";
 
             switch (rawValue)
             {
@@ -646,9 +653,9 @@ namespace Core.Arango.DevExtreme
 
             if (_settings.ExtractFilters.TryGetValue(realPropertyName, out var extract))
             {
-               _extractedFilters.Add((extract.Collection, realPropertyName, returnValue));
+                _extractedFilters.Add((extract.Collection, realPropertyName, not, returnValue));
 
-                returnValue = "true";
+                returnValue = not ? "false" : "true";
             }
 
             return returnValue;
