@@ -277,6 +277,9 @@ namespace Core.Arango.DevExtreme
             if (nameLambda != null)
                 return _settings.PropertyTransform(name, _settings);
 
+            if (iteratorVar == string.Empty)
+                return name;
+
             return $"{iteratorVar ?? _settings.IteratorVar}.{name}";
         }
 
