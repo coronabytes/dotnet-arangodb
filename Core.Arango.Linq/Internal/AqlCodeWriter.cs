@@ -116,10 +116,35 @@ namespace Core.Arango.Linq.Internal
             {
                 WriteNode(leftPath, left);
                 Write($" {@operator} ");
-                var writeQuotationMarks = right.Type == typeof(string);
-                if (writeQuotationMarks) Write("\"");
-                WriteNode(rightPath, right);
-                if (writeQuotationMarks) Write("\"");
+                //var writeQuotationMarks = right.Type == typeof(string);
+                //if (writeQuotationMarks) Write("\"");
+                //WriteNode(rightPath, right);
+                //if (writeQuotationMarks) Write("\"");
+                // falls es sich um einen string als rechte Seite des binären Ausdrucks handelt, wird er in eine BindVar umgewandelt, um SQL-Injection vorzubeugen.
+                if (right.Type == typeof(string))
+                {
+                    // var paramter = right.Member.Name.Replace("$VB$Local_", "");
+                    var parameter = "p";
+                    var value = right.ExtractValue();
+
+                    if (!BindVars.ContainsKey(parameter))
+                    {
+                        BindVars.Add(parameter, value);
+
+                    }
+                    else
+                    {
+                        // todo
+                    }
+
+                    Write("@" + parameter);
+                }
+                else
+                {
+                    WriteNode(rightPath, right);
+                }
+
+
                 return;
             }
 
@@ -347,7 +372,7 @@ namespace Core.Arango.Linq.Internal
         }
 
         /// <summary>
-        /// Schreibt einen Member-Zugriff
+        /// Schreibt einen Member-Zugriff und fügt die Variable den BindVars hinzu
         /// </summary>
         /// <param name="expr">die Member-Expression</param>
         protected override void WriteMemberAccess(MemberExpression expr)
