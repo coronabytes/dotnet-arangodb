@@ -14,7 +14,6 @@ namespace Core.Arango.Linq.Tests
         public int Value { get; set; }
     }
 
-    // todo: Als Assertion das Query verwenden
     public class UnitTest1 : IAsyncLifetime
     {
         protected readonly ArangoContext Arango =
@@ -70,18 +69,6 @@ namespace Core.Arango.Linq.Tests
         [Fact]
         public async void TestOr()
         {
-            await Arango.CreateDocumentAsync("test", nameof(Project), new Project
-            {
-                Key = Guid.NewGuid(),
-                Name = "B",
-                Value = 2
-            });
-            await Arango.CreateDocumentAsync("test", nameof(Project), new Project
-            {
-                Key = Guid.NewGuid(),
-                Name = "C",
-                Value = 3
-            });
             var test = Arango.AsQueryable<Project>("test").Where(x => x.Value == 1 || x.Value == 2).ToList();
             foreach (var t in test)
             {
@@ -99,7 +86,18 @@ namespace Core.Arango.Linq.Tests
             foreach (var t in test)
             {
                 Assert.StartsWith("A", t.Name);
+                Assert.True(test.Count > 0);
             }
+        }
+
+        /// <summary>
+        /// expected query: FOR x IN Project FILTER x.Name == @p || x.Name == @pUnique RETURN x.Name
+        /// </summary>
+        [Fact]
+        public async void TestInjection()
+        {
+            var test = Arango.AsQueryable<Project>("test").Where(x => x.Name == "A" || x.Name == "B \" RETURN 42").Select(x => x.Name).ToList();
+            Assert.True(test.Count == 1);
         }
 
         /// <summary>
@@ -110,11 +108,24 @@ namespace Core.Arango.Linq.Tests
         {
             await Arango.CreateDatabaseAsync("test");
             await Arango.CreateCollectionAsync("test", nameof(Project), ArangoCollectionType.Document);
+
             await Arango.CreateDocumentAsync("test", nameof(Project), new Project
             {
                 Key = Guid.NewGuid(),
                 Name = "A",
                 Value = 1
+            });
+            await Arango.CreateDocumentAsync("test", nameof(Project), new Project
+            {
+                Key = Guid.NewGuid(),
+                Name = "B",
+                Value = 2
+            });
+            await Arango.CreateDocumentAsync("test", nameof(Project), new Project
+            {
+                Key = Guid.NewGuid(),
+                Name = "C",
+                Value = 3
             });
         }
 

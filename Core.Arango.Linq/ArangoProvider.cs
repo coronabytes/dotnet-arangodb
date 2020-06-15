@@ -59,8 +59,10 @@ namespace Core.Arango.Linq
 
             var elementType = TypeSystem.GetElementType(expression.Type);
 
-            var writer = new AqlCodeWriter(expression);
-            writer.Collection = _collection;
+            var writer = new AqlCodeWriter(expression)
+            {
+                Collection = _collection
+            };
 
             var query = writer.ToString();
             var bindVars = writer.BindVars;

@@ -116,28 +116,12 @@ namespace Core.Arango.Linq.Internal
             {
                 WriteNode(leftPath, left);
                 Write($" {@operator} ");
-                //var writeQuotationMarks = right.Type == typeof(string);
-                //if (writeQuotationMarks) Write("\"");
-                //WriteNode(rightPath, right);
-                //if (writeQuotationMarks) Write("\"");
+
                 // falls es sich um einen string als rechte Seite des binären Ausdrucks handelt, wird er in eine BindVar umgewandelt, um SQL-Injection vorzubeugen.
                 if (right.Type == typeof(string))
                 {
-                    // var paramter = right.Member.Name.Replace("$VB$Local_", "");
-                    var parameter = "p";
                     var value = right.ExtractValue();
-
-                    if (!BindVars.ContainsKey(parameter))
-                    {
-                        BindVars.Add(parameter, value);
-
-                    }
-                    else
-                    {
-                        // todo
-                    }
-
-                    Write("@" + parameter);
+                    AddAndWriteBindVar(value);
                 }
                 else
                 {
@@ -595,9 +579,16 @@ namespace Core.Arango.Linq.Internal
 
             else if (name.Equals("startswith", StringComparison.InvariantCultureIgnoreCase))
             {
-                Write("\nLIKE \"");
-                WriteNodes(arguments);
-                Write("%\"");
+                Write("\nLIKE ");
+                
+                // parse the enumerable to a easy-to-access list
+                var argument = arguments.ToList();
+
+                // Since argument here can only contain one entry, [0] can be used and stringified. The " then needs to be replaced as this will be done via the bind parameters.
+                var literal = argument[0].x.ToString().Replace("\"", "");
+
+                // Since we use "startswith", a "%" needs to be added to the end of the string.
+                AddAndWriteBindVar(string.Concat(literal, "%"));
             }
 
 
@@ -1256,6 +1247,28 @@ namespace Core.Arango.Linq.Internal
         {
             VerifyCount(args, 1);
             WriteUnary(binder.Operation, "Arguments[0]", args[0], binder.ReturnType, binder.GetType().Name);
+        }
+
+        /// <summary>
+        /// Adds a bind variable and writes the according parameter
+        /// </summary>
+        /// <param name="bindValue">Value the parameter is bound to</param>
+        private void AddAndWriteBindVar(object bindValue)
+        {
+            var parameter = "p";
+
+            if (!BindVars.ContainsKey(parameter))
+            {
+                BindVars.Add(parameter, bindValue);
+            }
+            else
+            {
+                var unique = Guid.NewGuid().ToString().Replace("-", "");
+                parameter += unique;
+                BindVars.Add(parameter, bindValue);
+            }
+
+            Write("@" + parameter);
         }
     }
 }
