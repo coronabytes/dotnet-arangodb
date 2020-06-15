@@ -1263,6 +1263,7 @@ namespace Core.Arango.Linq.Internal
             }
             else
             {
+                //generate a unique GUID and get rid of the "-" so that it can be added to the name of the parameter
                 var unique = Guid.NewGuid().ToString().Replace("-", "");
                 parameter += unique;
                 BindVars.Add(parameter, bindValue);
