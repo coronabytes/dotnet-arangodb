@@ -10,13 +10,13 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     
-    - name: ArangoDB 3.6.3
-      run: docker run -d --rm -e ARANGO_ROOT_PASSWORD= -p 8529:8529 arangodb:3.6.3
+    - name: ArangoDB 3.6.4
+      run: docker run -d --rm -e ARANGO_ROOT_PASSWORD= -p 8529:8529 arangodb:3.6.4
     
     - name: Setup
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.1.201
+        dotnet-version: 3.1.301
     
     - name: Build
       run: dotnet build --configuration Release
@@ -43,4 +43,9 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: Core.Arango.DataProtection
-        path: Core.Arango.DataProtection/bin/Release  
+        path: Core.Arango.DataProtection/bin/Release
+    - name: Archive Core.Arango.Linq
+      uses: actions/upload-artifact@v1
+      with:
+        name: Core.Arango.Linq
+        path: Core.Arango.Linq/bin/Release  
