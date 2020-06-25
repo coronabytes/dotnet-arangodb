@@ -101,6 +101,27 @@ namespace Core.Arango.Linq.Tests
         }
 
         /// <summary>
+        /// Überprüft die Funktionalität eines SingleOrDefault-Querys mit Einschränkung der Guid
+        /// expected query: FOR x IN Project FILTER x.Key == @testGuid return x
+        /// </summary>
+        [Fact]
+        public async void TestSingleOrDefaultGuid()
+        {
+            var testGuid = Guid.NewGuid();
+
+            await Arango.CreateDocumentAsync("test", nameof(Project), new Project
+            {
+                Key = testGuid,
+                Name = "TestSingleOrDefault",
+                Value = 2
+            });
+
+            var test = Arango.AsQueryable<Project>("test").SingleOrDefault(x => x.Key == testGuid);
+
+            Assert.True(test.Key == testGuid);
+        }
+        
+        /// <summary>
         /// Initialisiert eine Datenbank und eine Collection für die Tests
         /// </summary>
         /// <returns></returns>

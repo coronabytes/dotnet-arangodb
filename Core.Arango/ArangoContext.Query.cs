@@ -134,19 +134,21 @@ namespace Core.Arango
             var responseType = typeof(QueryResponse<>);
             var constructedResponseType = responseType.MakeGenericType(type);
 
-            var res = await SendAsync(constructedResponseType, HttpMethod.Post,
-                $"{Server}/_db/{DbName(database)}/_api/cursor",
-                JsonConvert.SerializeObject(new QueryRequest
+            var body = JsonConvert.SerializeObject(new QueryRequest
+            {
+                Query = query,
+                BindVars = bindVars,
+                BatchSize = BatchSize,
+                Cache = cache,
+                Options = new QueryRequestOptions
                 {
-                    Query = query,
-                    BindVars = bindVars,
-                    BatchSize = BatchSize,
-                    Cache = cache,
-                    Options = new QueryRequestOptions
-                    {
-                        FullCount = fullCount
-                    }
-                }, JsonSerializerSettings), cancellationToken: cancellationToken);
+                    FullCount = fullCount
+                }
+            }, JsonSerializerSettings);
+
+            var res = await SendAsync(constructedResponseType, HttpMethod.Post,
+                $"{Server}/_db/{DbName(database)}/_api/cursor", body
+                , cancellationToken: cancellationToken);
 
             var listResult = constructedResponseType.GetProperty("Result").GetValue(res);
 

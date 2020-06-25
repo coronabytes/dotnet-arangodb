@@ -117,7 +117,7 @@ namespace Core.Arango.Linq.Internal
                 WriteNode(leftPath, left);
                 Write($" {@operator} ");
 
-                // falls es sich um einen string als rechte Seite des binären Ausdrucks handelt, wird er in eine BindVar umgewandelt, um SQL-Injection vorzubeugen.
+                // falls es sich um einen string als rechte Seite des binären Ausdrucks handelt, wird er in eine BindVar umgewandelt, um SQL-Injection vorzubeugen. todo: muss auch für die linke Seite gelten
                 if (right.Type == typeof(string))
                 {
                     var value = right.ExtractValue();
@@ -380,6 +380,12 @@ namespace Core.Arango.Linq.Internal
                     return;
                 default:
                     WriteNode("Expression", expr.Expression);
+                    var memberName = expr.Member.Name;
+                    if (memberName == "Key" || memberName == "key")
+                    {
+                        Write("._key");
+                        return;
+                    }
                     Write($".{expr.Member.Name}");
                     return;
             }
