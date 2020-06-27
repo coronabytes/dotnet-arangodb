@@ -186,6 +186,9 @@ namespace Core.Arango
 
             var args = query.GetArguments().Select(x =>
             {
+                if (x == null)
+                    x = "null";
+
                 if (set.TryGetValue(x, out var p))
                     return (object) p;
 

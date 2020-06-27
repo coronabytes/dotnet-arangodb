@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
@@ -9,9 +10,28 @@ namespace Core.Arango.Tests
     public class QueryTest : TestBase
     {
         [Fact]
+        public async Task NullParameter()
+        {
+            await Arango.CreateCollectionAsync("test", "test", ArangoCollectionType.Document);
+            await Arango.CreateDocumentsAsync("test", "test", new List<Entity>
+            {
+                new Entity {Value = 1},
+                new Entity {Value = 2},
+                new Entity {Value = 3}
+            });
+
+            Guid? nullParam = null;
+
+            var res = await Arango.SingleOrDefaultAsync<Entity>("test", "test",
+                $"x.Value == {nullParam}");
+
+            var res2 = await Arango.SingleOrDefaultAsync<Entity>("test", "test",
+                $"x.Value == {null}");
+        }
+
+        [Fact]
         public async Task QueryIntegerContains()
         {
-            await Arango.CreateDatabaseAsync("test");
             await Arango.CreateCollectionAsync("test", "test", ArangoCollectionType.Document);
             await Arango.CreateDocumentsAsync("test", "test", new List<Entity>
             {

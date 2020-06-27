@@ -18,6 +18,8 @@
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <RepositoryUrl>https://github.com/coronabytes/ArangoDB.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
   <ItemGroup>
@@ -27,7 +29,7 @@
 
   <ItemGroup>
     <PackageReference Include="Core.Arango" Version="1.1.0" />
-    <PackageReference Include="DevExtreme.AspNet.Data" Version="2.6.1" />
+    <PackageReference Include="DevExtreme.AspNet.Data" Version="2.6.2" />
   </ItemGroup>
 
   <ItemGroup>
