@@ -25,6 +25,9 @@ jobs:
       id: vars
       run: echo "::set-output name=VERSION::<Version>${GITHUB_REF#refs/tags/}<\\/Version>"
       
+    - name: Debug
+      run: printf ${{ steps.vars.outputs.VERSION }}
+      
     - name: Apply Version
       uses: jacobtomlinson/gha-find-replace@master
       with:
