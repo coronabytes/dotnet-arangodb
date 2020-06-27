@@ -33,7 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Core.Arango" Version="1.1.0" />
+    <PackageReference Include="Core.Arango" Version="1.1.2" />
   </ItemGroup>
 
 </Project>

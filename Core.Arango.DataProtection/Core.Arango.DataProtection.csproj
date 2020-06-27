@@ -11,12 +11,14 @@
     <PackageIconUrl />
     <PackageProjectUrl>https://github.com/coronabytes/ArangoDB</PackageProjectUrl>
     <PackageTags>aspnetcore dataprotection arangodb</PackageTags>
-    <Version>1.1.1</Version>
+    <Version>1.1.2</Version>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <RepositoryUrl>https://github.com/coronabytes/ArangoDB.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
+    <AssemblyVersion>1.1.2.0</AssemblyVersion>
+    <FileVersion>1.1.2.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -25,7 +27,7 @@
 
 
   <ItemGroup>
-    <PackageReference Include="Core.Arango" Version="1.1.0" />
+    <PackageReference Include="Core.Arango" Version="1.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="3.1.5" />
   </ItemGroup>
 

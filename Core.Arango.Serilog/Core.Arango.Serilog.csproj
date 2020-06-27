@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
@@ -11,7 +11,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageIcon>ArangoDB.png</PackageIcon>
     <PackageIconUrl />
-    <Version>1.1.1</Version>
+    <Version>1.1.2</Version>
     <PackageProjectUrl>https://github.com/coronabytes/ArangoDB</PackageProjectUrl>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <IncludeSymbols>true</IncludeSymbols>
@@ -26,7 +26,7 @@
 
 
   <ItemGroup>
-    <PackageReference Include="Core.Arango" Version="1.1.0" />
+    <PackageReference Include="Core.Arango" Version="1.1.2" />
     <PackageReference Include="Serilog.Sinks.PeriodicBatching" Version="2.3.0" />
   </ItemGroup>
 
