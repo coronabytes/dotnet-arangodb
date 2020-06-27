@@ -23,17 +23,14 @@ jobs:
         
     - name: Build Version
       id: vars
-      run: |
-        printf "${GITHUB_REF#refs/*/}"
-        printf ${GITHUB_REF/refs\/tags\//}"
-        echo "::set-output name=version::<Version>${GITHUB_REF#refs/*/}<\/Version>"
+      run: echo ::set-output name=version::<Version>${GITHUB_REF/refs\/tags\//}<\\/Version>
     
-    #- name: Apply Version
-    #  uses: jacobtomlinson/gha-find-replace@master
-     # with:
-     #   find: "<Version>.*<\\/Version>"
-      #  replace: ${{ steps.vars.outputs.version }}
-       # include: ".*\\.csproj"
+    - name: Apply Version
+      uses: jacobtomlinson/gha-find-replace@master
+      with:
+        find: "<Version>.*<\\/Version>"
+        replace: ${{ steps.vars.outputs.version }}
+        include: ".*\\.csproj"
     
     - name: Build
       run: dotnet build --configuration Release
