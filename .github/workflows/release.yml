@@ -20,19 +20,12 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.301
-        
-    - name: Build Version
-      id: vars
-      run: echo "::set-output name=VERSION::<Version>${GITHUB_REF#refs/tags/}</Version>"
       
-    - name: Debug
-      run: printf "${{ steps.vars.outputs.VERSION }}"
-      
-    - name: Apply Version
+    - name: Version
       uses: jacobtomlinson/gha-find-replace@master
       with:
         find: "<Version>.*<\\/Version>"
-        replace: "${{ steps.vars.outputs.VERSION }}"
+        replace: "<Version>${GITHUB_REF#refs/tags/}</Version>"
         include: ".*\\.csproj"
     
     - name: Build
@@ -40,3 +33,9 @@ jobs:
       
     - name: Test
       run: dotnet test --configuration Release
+
+    - name: Pack
+      run: dotnet pack --configuration Release
+      
+    - name: Publish
+      run: dotnet nuget push **/*.nupkg --api-key ${{ secrets.NUGET_TOKEN }} --source https://api.nuget.org/v3/index.json
