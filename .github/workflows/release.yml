@@ -23,7 +23,7 @@ jobs:
         
     - name: Build Version
       id: vars
-      run: echo ::set-output name=VERSION::<Version>${GITHUB_REF#refs/tags/}<\\/Version>
+      run: echo "::set-output name=VERSION::<Version>${GITHUB_REF#refs/tags/}<\\/Version>"
       
     - name: Apply Version
       uses: jacobtomlinson/gha-find-replace@master
