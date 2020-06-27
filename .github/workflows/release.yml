@@ -23,16 +23,16 @@ jobs:
         
     - name: Build Version
       id: vars
-      run: echo "::set-output name=VERSION::<Version>${GITHUB_REF#refs/tags/}<\\/Version>"
+      run: echo "::set-output name=VERSION::<Version>${GITHUB_REF#refs/tags/}</Version>"
       
     - name: Debug
-      run: printf ${{ steps.vars.outputs.VERSION }}
+      run: printf "${{ steps.vars.outputs.VERSION }}"
       
     - name: Apply Version
       uses: jacobtomlinson/gha-find-replace@master
       with:
         find: "<Version>.*<\\/Version>"
-        replace: ${{ steps.vars.outputs.VERSION }}
+        replace: "${{ steps.vars.outputs.VERSION }}"
         include: ".*\\.csproj"
     
     - name: Build
