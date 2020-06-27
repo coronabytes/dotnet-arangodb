@@ -183,11 +183,17 @@ namespace Core.Arango
             var i = 0;
 
             var set = new Dictionary<object, string>();
+            var nullParam = string.Empty;
 
             var args = query.GetArguments().Select(x =>
             {
                 if (x == null)
-                    x = "null";
+                {
+                    if (string.IsNullOrEmpty(nullParam))
+                        nullParam = $"@P{++i}";
+
+                    return nullParam;
+                }
 
                 if (set.TryGetValue(x, out var p))
                     return (object) p;
@@ -201,7 +207,12 @@ namespace Core.Arango
 
             var queryExp = string.Format(query.Format, args);
 
-            parameter = set.ToDictionary(x => x.Value.Substring(1), x => x.Key);
+            var res = set.ToDictionary(x => x.Value.Substring(1), x => x.Key);
+
+            if (!string.IsNullOrEmpty(nullParam))
+                res.Add(nullParam.Substring(1), null);
+
+            parameter = res;
 
             return queryExp;
         }
