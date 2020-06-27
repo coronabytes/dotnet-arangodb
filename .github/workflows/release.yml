@@ -24,9 +24,9 @@ jobs:
     - name: Version
       uses: jacobtomlinson/gha-find-replace@master
       with:
-        find: "<Version>*</Version>"
+        find: "<Version>.*</Version>"
         replace: "<Version>${GITHUB_REF#refs/*/}</Version>"
-        include: "*.csproj"
+        include: ".*\.csroj"
     
     - name: Build
       run: dotnet build --configuration Release
