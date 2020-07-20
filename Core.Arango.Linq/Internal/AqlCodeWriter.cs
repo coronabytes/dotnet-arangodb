@@ -375,12 +375,23 @@ namespace Core.Arango.Linq.Internal
                     Write("@" + paramter);
                     return;
                 case null:
-                    // static member
-                    Write($"{expr.Member.DeclaringType.FriendlyName(language)}.{expr.Member.Name}");
+                    var className = expr.Member.DeclaringType;
+
+                    var param = expr.Member.Name;
+                    var val = expr.ExtractValue();
+                    if (!BindVars.ContainsKey(param))
+                        BindVars.Add(param, val);
+
+                    Write("@" + param);
                     return;
+
+                    // static member
+                    //Write($"{expr.Member.DeclaringType.FriendlyName(language)}.{expr.Member.Name}");
+                    //return;
                 default:
                     WriteNode("Expression", expr.Expression);
                     var memberName = expr.Member.Name;
+                    // todo: ersetzen mit caseignore (memberName.equals.....)
                     if (memberName == "Key" || memberName == "key")
                     {
                         Write("._key");
@@ -595,6 +606,14 @@ namespace Core.Arango.Linq.Internal
 
                 // Since we use "startswith", a "%" needs to be added to the end of the string.
                 AddAndWriteBindVar(string.Concat(literal, "%"));
+            }
+
+            else if (name.Equals("take", StringComparison.InvariantCultureIgnoreCase))
+            {
+                var argument = arguments.First();
+
+                var value = int.Parse(argument.x.ToString());
+                Write($"\nLIMIT {value}");
             }
 
 

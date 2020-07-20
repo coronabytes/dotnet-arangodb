@@ -12,6 +12,8 @@ namespace Core.Arango.Linq.Tests
         public Guid Key { get; set; }
         public string Name { get; set; }
         public int Value { get; set; }
+
+        public DateTime StartDate { get; set; }
     }
 
     public class UnitTest1 : IAsyncLifetime
@@ -23,6 +25,7 @@ namespace Core.Arango.Linq.Tests
         public async void TestToList()
         {
             var test = Arango.AsQueryable<Project>("test").ToList();
+            Assert.True(test.Count > 0);
         }
 
         /// <summary>
@@ -45,7 +48,7 @@ namespace Core.Arango.Linq.Tests
             var test = Arango.AsQueryable<Project>("test").Where(x => x.Name == "A").Select(x => x.Name).ToList();
             foreach (var t in test)
             {
-                Assert.True(t  == "A");
+                Assert.True(t == "A");
             }
         }
 
@@ -120,7 +123,68 @@ namespace Core.Arango.Linq.Tests
 
             Assert.True(test.Key == testGuid);
         }
-        
+
+        /// <summary>
+        /// Checks whether the OrderBy is correctly applied.
+        /// Expected query: FOR x IN Project SORT x.Value RETURN x
+        /// </summary>
+        [Fact]
+        public void TestOrderBy()
+        {
+            var test = Arango.AsQueryable<Project>("test").OrderBy(x => x.Value).ToList();
+
+            Assert.True(test[0].Value == 1);
+        }
+
+        /// <summary>
+        /// Checks if Take is correctly applied
+        /// Expected query: FOR x IN Project LIMIT 2 RETURN x
+        /// </summary>
+        [Fact]
+        public void TestTake()
+        {
+            var test = Arango.AsQueryable<Project>("test").Take(2).ToList();
+
+            Assert.True(test.Count == 2);
+        }
+
+
+        public static class AQL
+        {
+            public static double DateDiff(DateTime a, DateTime b, string format)
+            {
+                return 0;
+            }
+        }
+        //todo: AQL.DateDiff(x.StartDate, x.StartDate, "h") > 0).ToList();
+
+        [Fact]
+        public void TestDateTimeNow()
+        {
+            var test = Arango.AsQueryable<Project>("test").Where(x =>  x.StartDate <= DateTime.UtcNow).Select(x => x.StartDate).ToList();
+
+            Assert.True(test.Count == 2);
+            foreach (var t in test)
+            {
+                Assert.True(t <= DateTime.UtcNow);
+            }
+        }
+
+        // todo
+        [Fact]
+        public async Task TestToListAsync()
+        {
+            var test = await Arango.AsQueryable<Project>("test").ToListAsync();
+            Assert.True(test.Count == 3);
+        }
+
+        // todo
+        //[Fact]
+        //public async void TestSingleOrDefaultAsync()
+        //{
+        //    var test = await Arango.AsQueryable<Project>("test").Single
+        //}
+
         /// <summary>
         /// Initialisiert eine Datenbank und eine Collection für die Tests
         /// </summary>
@@ -134,19 +198,22 @@ namespace Core.Arango.Linq.Tests
             {
                 Key = Guid.NewGuid(),
                 Name = "A",
-                Value = 1
+                Value = 1,
+                StartDate = new DateTime(2020, 04, 03).ToUniversalTime()
             });
             await Arango.CreateDocumentAsync("test", nameof(Project), new Project
             {
                 Key = Guid.NewGuid(),
                 Name = "B",
-                Value = 2
+                Value = 2,
+                StartDate = DateTime.Now.AddDays(-1).ToUniversalTime()
             });
             await Arango.CreateDocumentAsync("test", nameof(Project), new Project
             {
                 Key = Guid.NewGuid(),
                 Name = "C",
-                Value = 3
+                Value = 3,
+                StartDate = new DateTime(2021, 1, 5).ToUniversalTime()
             });
         }
 

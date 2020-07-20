@@ -54,7 +54,7 @@ namespace Core.Arango.Linq
         /// <returns>Ergebnis der DB-Abfrage</returns>
         public TResult Execute<TResult>(Expression expression)
         {
-            var type = typeof(TResult);
+            // var type = typeof(TResult);
             var isEnumerable = typeof(TResult).Name == "IEnumerable`1";
 
             var elementType = TypeSystem.GetElementType(expression.Type);
@@ -68,22 +68,38 @@ namespace Core.Arango.Linq
             var bindVars = writer.BindVars;
 
             var res = _arango.QueryAsync(elementType, isEnumerable, _handle, query, bindVars).Result;
-            var resType = res.GetType();
+            // var resType = res.GetType();
 
             return (TResult) res;
         }
 
         public async IAsyncEnumerator<TResult> ExecuteAsync<TResult>(Expression expression, CancellationToken cancel)
         {
+            var isEnumerable = true;// typeof(TResult).Name == "IEnumerable`1";
+
             var elementType = TypeSystem.GetElementType(expression.Type);
 
-            var writer = new AqlCodeWriter(expression);
+            var writer = new AqlCodeWriter(expression)
+            {
+                Collection = _collection
+            };
 
             var query = writer.ToString();
             var bindVars = writer.BindVars;
 
-            yield return (TResult) await _arango.QueryAsync(elementType, true, _handle, query, bindVars,
-                cancellationToken: cancel);
+            var res = await _arango.QueryAsync(elementType, isEnumerable, _handle, query, bindVars,
+                cancellationToken: cancel); //geändert: isEnumerable anstatt true
+
+            var list = res as List<TResult>;
+
+            foreach (var item in list)
+            {
+                yield return (TResult) item;
+            }
+
+            // yield return (TResult) res;
+            /*await _arango.QueryAsync(elementType, true, _handle, query, bindVars,
+                cancellationToken: cancel);*/
         }
     }
 }
