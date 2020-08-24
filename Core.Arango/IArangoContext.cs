@@ -10,6 +10,15 @@ namespace Core.Arango
 {
     public interface IArangoContext
     {
+        int BatchSize { get; set; }
+        string Realm { get; }
+        string Server { get; }
+
+        /// <summary>
+        ///     Callback for query stats
+        /// </summary>
+        Action<string, IDictionary<string, object>, JToken> QueryProfile { get; set; }
+
         Task<List<ArangoUpdateResult<TR>>> ReplaceDocumentsAsync<T, TR>(ArangoHandle database,
             string collection, IEnumerable<T> docs,
             bool? waitForSync = null,
@@ -186,15 +195,6 @@ namespace Core.Arango
         Task DeleteAnalyzerAsync(ArangoHandle database,
             string analyzer, bool force = false,
             CancellationToken cancellationToken = default);
-
-        int BatchSize { get; set; }
-        string Realm { get; }
-        string Server { get; }
-
-        /// <summary>
-        ///     Callback for query stats
-        /// </summary>
-        Action<string, IDictionary<string, object>, JToken> QueryProfile { get; set; }
 
         /// <summary>
         ///     AQL filter expression with x as iterator

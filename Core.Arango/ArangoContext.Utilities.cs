@@ -24,47 +24,6 @@ namespace Core.Arango
         }
 
         /// <summary>
-        ///     Adds query parameters to url
-        /// </summary>
-        public static string AddQueryString(
-            string uri,
-            IEnumerable<KeyValuePair<string, string>> queryString)
-        {
-            if (uri == null)
-                throw new ArgumentNullException(nameof(uri));
-
-            if (queryString == null)
-                throw new ArgumentNullException(nameof(queryString));
-
-            var anchorIndex = uri.IndexOf('#');
-            var uriToBeAppended = uri;
-            var anchorText = "";
-
-            if (anchorIndex != -1)
-            {
-                anchorText = uri.Substring(anchorIndex);
-                uriToBeAppended = uri.Substring(0, anchorIndex);
-            }
-
-            var queryIndex = uriToBeAppended.IndexOf('?');
-            var hasQuery = queryIndex != -1;
-
-            var sb = new StringBuilder();
-            sb.Append(uriToBeAppended);
-            foreach (var parameter in queryString)
-            {
-                sb.Append(hasQuery ? '&' : '?');
-                sb.Append(UrlEncoder.Default.Encode(parameter.Key));
-                sb.Append('=');
-                sb.Append(UrlEncoder.Default.Encode(parameter.Value));
-                hasQuery = true;
-            }
-
-            sb.Append(anchorText);
-            return sb.ToString();
-        }
-
-        /// <summary>
         ///     HTTP request abstraction
         /// </summary>
         public async Task<T> SendAsync<T>(HttpMethod m, string url, string body = null,
@@ -169,6 +128,47 @@ namespace Core.Arango
                 return default;
 
             return JsonConvert.DeserializeObject(content, type, JsonSerializerSettings);
+        }
+
+        /// <summary>
+        ///     Adds query parameters to url
+        /// </summary>
+        public static string AddQueryString(
+            string uri,
+            IEnumerable<KeyValuePair<string, string>> queryString)
+        {
+            if (uri == null)
+                throw new ArgumentNullException(nameof(uri));
+
+            if (queryString == null)
+                throw new ArgumentNullException(nameof(queryString));
+
+            var anchorIndex = uri.IndexOf('#');
+            var uriToBeAppended = uri;
+            var anchorText = "";
+
+            if (anchorIndex != -1)
+            {
+                anchorText = uri.Substring(anchorIndex);
+                uriToBeAppended = uri.Substring(0, anchorIndex);
+            }
+
+            var queryIndex = uriToBeAppended.IndexOf('?');
+            var hasQuery = queryIndex != -1;
+
+            var sb = new StringBuilder();
+            sb.Append(uriToBeAppended);
+            foreach (var parameter in queryString)
+            {
+                sb.Append(hasQuery ? '&' : '?');
+                sb.Append(UrlEncoder.Default.Encode(parameter.Key));
+                sb.Append('=');
+                sb.Append(UrlEncoder.Default.Encode(parameter.Value));
+                hasQuery = true;
+            }
+
+            sb.Append(anchorText);
+            return sb.ToString();
         }
 
         /// <summary>

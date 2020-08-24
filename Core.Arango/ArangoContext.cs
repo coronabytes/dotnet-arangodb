@@ -30,6 +30,8 @@ namespace Core.Arango
 
         public ArangoContext(string cs)
         {
+            Users = new ArangoUserModule(this);
+
             var builder = new DbConnectionStringBuilder {ConnectionString = cs};
             builder.TryGetValue("Server", out var s);
             builder.TryGetValue("Realm", out var r);
@@ -56,6 +58,8 @@ namespace Core.Arango
             _user = user;
             _password = password;
         }
+
+        public ArangoUserModule Users { get; }
 
         public int BatchSize { get; set; } = 500;
 
