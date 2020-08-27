@@ -20,6 +20,9 @@ namespace Core.Arango
         /// </summary>
         public string DbName(string name)
         {
+            if (name == "_system")
+                return "_system";
+
             return UrlEncoder.Default.Encode(Realm + name);
         }
 

@@ -1,20 +1,27 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Schema;
 
 namespace Core.Arango.Protocol
 {
-    public class ArangoCollection
+    public class ArangoCollectionUpdate
     {
-        [JsonProperty(PropertyName = "name")] public string Name { get; set; }
-
-        [JsonProperty(PropertyName = "type", NullValueHandling = NullValueHandling.Ignore)]
-        public ArangoCollectionType? Type { get; set; }
-
         [JsonProperty(PropertyName = "waitForSync", NullValueHandling = NullValueHandling.Ignore)]
         public bool? WaitForSync { get; set; }
 
         [JsonProperty(PropertyName = "journalSize", NullValueHandling = NullValueHandling.Ignore)]
         public long? JournalSize { get; set; }
+
+        [JsonProperty(PropertyName = "schema", NullValueHandling = NullValueHandling.Ignore)]
+        public JSchema Schema { get; set; }
+    }
+
+    public class ArangoCollection : ArangoCollectionUpdate
+    {
+        [JsonProperty(PropertyName = "name")] public string Name { get; set; }
+
+        [JsonProperty(PropertyName = "type", NullValueHandling = NullValueHandling.Ignore)]
+        public ArangoCollectionType? Type { get; set; }
 
         [JsonProperty(PropertyName = "doCompact", NullValueHandling = NullValueHandling.Ignore)]
         public bool? DoCompact { get; set; }

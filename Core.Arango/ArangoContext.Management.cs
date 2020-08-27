@@ -67,7 +67,6 @@ namespace Core.Arango
                 cancellationToken: cancellationToken);
         }
 
-
         public async Task<List<string>> ListViewsAsync(ArangoHandle database,
             CancellationToken cancellationToken = default)
         {
@@ -95,66 +94,53 @@ namespace Core.Arango
                 await DropViewAsync(database, view, cancellationToken);
         }
 
+        [Obsolete("use ArangoContext.Graph.ListAsync")]
         public async Task<List<string>> ListGraphAsync(ArangoHandle database,
             CancellationToken cancellationToken = default)
         {
-            var res = await SendAsync<GraphResponse<JObject>>(HttpMethod.Get,
-                $"{Server}/_db/{DbName(database)}/_api/gharial", cancellationToken: cancellationToken);
-            return res.Graphs.Select(x => x.Value<string>("_key")).ToList();
+            return await Graph.ListAsync(database, cancellationToken);
         }
 
+        [Obsolete("use ArangoContext.Graph.CreateAsync")]
         public async Task CreateGraphAsync(ArangoHandle database, ArangoGraph request,
             CancellationToken cancellationToken = default)
         {
-            await SendAsync<JObject>(HttpMethod.Post,
-                $"{Server}/_db/{DbName(database)}/_api/gharial",
-                JsonConvert.SerializeObject(request), cancellationToken: cancellationToken);
+            await Graph.CreateAsync(database, request, cancellationToken);
         }
 
+        [Obsolete("use ArangoContext.Graph.DropAsync")]
         public async Task DropGraphAsync(ArangoHandle database, string name,
             CancellationToken cancellationToken = default)
         {
-            await SendAsync<JObject>(HttpMethod.Delete,
-                $"{Server}/_db/{DbName(database)}/_api/gharial/{UrlEncoder.Default.Encode(name)}",
-                cancellationToken: cancellationToken);
+            await Graph.DropAsync(database, name, cancellationToken);
         }
 
+        [Obsolete("use ArangoContext.Collection.CreateAsync")]
         public async Task CreateCollectionAsync(ArangoHandle database, string collection, ArangoCollectionType type,
             CancellationToken cancellationToken = default)
         {
-            await SendAsync<JObject>(HttpMethod.Post,
-                $"{Server}/_db/{DbName(database)}/_api/collection",
-                JsonConvert.SerializeObject(new ArangoCollection
-                {
-                    Name = collection,
-                    Type = type
-                }, JsonSerializerSettings), cancellationToken: cancellationToken);
+            await Collection.CreateAsync(database, collection, type, cancellationToken);
         }
 
+        [Obsolete("use ArangoContext.Collection.CreateAsync")]
         public async Task CreateCollectionAsync(ArangoHandle database, ArangoCollection collection,
             CancellationToken cancellationToken = default)
         {
-            await SendAsync<JObject>(HttpMethod.Post,
-                $"{Server}/_db/{DbName(database)}/_api/collection",
-                JsonConvert.SerializeObject(collection, JsonSerializerSettings),
-                cancellationToken: cancellationToken);
+            await Collection.CreateAsync(database, collection, cancellationToken);
         }
 
+        [Obsolete("use ArangoContext.Collection.TruncateAsync")]
         public async Task TruncateCollectionAsync(ArangoHandle database, string collection,
             CancellationToken cancellationToken = default)
         {
-            await SendAsync<JObject>(HttpMethod.Put,
-                $"{Server}/_db/{DbName(database)}/_api/collection/{UrlEncoder.Default.Encode(collection)}/truncate",
-                cancellationToken: cancellationToken);
+            await Collection.TruncateAsync(database, collection, cancellationToken);
         }
 
+        [Obsolete("use ArangoContext.Collection.ListAsync")]
         public async Task<List<string>> ListCollectionsAsync(ArangoHandle database,
             CancellationToken cancellationToken = default)
         {
-            var res = await SendAsync<QueryResponse<JObject>>(HttpMethod.Get,
-                $"{Server}/_db/{DbName(database)}/_api/collection?excludeSystem=true",
-                cancellationToken: cancellationToken);
-            return res.Result.Select(x => x.Value<string>("name")).ToList();
+            return await Collection.ListAsync(database, cancellationToken);
         }
 
         /// <summary>
@@ -202,7 +188,7 @@ namespace Core.Arango
         /// </summary>
         public async Task DropIndicesAsync(ArangoHandle database, CancellationToken cancellationToken = default)
         {
-            var collections = await ListCollectionsAsync(database, cancellationToken);
+            var collections = await Collection.ListAsync(database, cancellationToken);
 
             foreach (var col in collections)
             {

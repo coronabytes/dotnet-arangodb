@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Core.Arango.Modules;
 using Core.Arango.Protocol;
 using Newtonsoft.Json.Linq;
 
@@ -18,6 +19,10 @@ namespace Core.Arango
         ///     Callback for query stats
         /// </summary>
         Action<string, IDictionary<string, object>, JToken> QueryProfile { get; set; }
+        IArangoUserModule User { get; }
+        IArangoCollectionModule Collection { get; }
+        IArangoGraphModule Graph { get; }
+        IArangoTransactionModule Transaction { get; }
 
         Task<List<ArangoUpdateResult<TR>>> ReplaceDocumentsAsync<T, TR>(ArangoHandle database,
             string collection, IEnumerable<T> docs,

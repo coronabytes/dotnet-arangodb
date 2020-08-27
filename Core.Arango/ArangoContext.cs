@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Net.Http;
+using System.Runtime.CompilerServices;
+using System.Text.Encodings.Web;
+using Core.Arango.Modules;
+using Core.Arango.Modules.Internal;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -14,7 +18,7 @@ namespace Core.Arango
     {
         private static readonly HttpClient HttpClient = new HttpClient();
 
-        private static readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings
+        internal static readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings
         {
             ContractResolver = new ArangoContractResolver(),
             ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
@@ -30,7 +34,10 @@ namespace Core.Arango
 
         public ArangoContext(string cs)
         {
-            Users = new ArangoUserModule(this);
+            User = new ArangoUserModule(this);
+            Collection = new ArangoCollectionModule(this);
+            Graph = new ArangoGraphModule(this);
+            Transaction = new ArangoTransactionModule(this);
 
             var builder = new DbConnectionStringBuilder {ConnectionString = cs};
             builder.TryGetValue("Server", out var s);
@@ -59,12 +66,16 @@ namespace Core.Arango
             _password = password;
         }
 
-        public ArangoUserModule Users { get; }
+        
+
+        public IArangoUserModule User { get; }
+        public IArangoCollectionModule Collection { get; }
+        public IArangoGraphModule Graph { get; }
+        public IArangoTransactionModule Transaction { get; }
 
         public int BatchSize { get; set; } = 500;
 
         public string Realm { get; }
-
         public string Server { get; }
 
         /// <summary>

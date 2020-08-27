@@ -7,13 +7,13 @@ using Core.Arango.Protocol;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Core.Arango
+namespace Core.Arango.Modules.Internal
 {
-    public class ArangoUserModule
+    internal class ArangoUserModule : IArangoUserModule
     {
-        private readonly ArangoContext _context;
+        private readonly IArangoContext _context;
 
-        internal ArangoUserModule(ArangoContext context)
+        internal ArangoUserModule(IArangoContext context)
         {
             _context = context;
         }
