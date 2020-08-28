@@ -29,7 +29,7 @@
 
   <ItemGroup>
     <PackageReference Include="Core.Arango" Version="1.3.2" />
-    <PackageReference Include="DevExtreme.AspNet.Data" Version="2.6.2" />
+    <PackageReference Include="DevExtreme.AspNet.Data" Version="2.7.0" />
   </ItemGroup>
 
   <ItemGroup>

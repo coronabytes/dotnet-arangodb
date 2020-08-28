@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Net.Http;
-using System.Runtime.CompilerServices;
-using System.Text.Encodings.Web;
 using Core.Arango.Modules;
 using Core.Arango.Modules.Internal;
 using Newtonsoft.Json;
@@ -14,7 +12,7 @@ namespace Core.Arango
     /// <summary>
     ///     Thread-Safe ArangoDB Context
     /// </summary>
-    public partial class ArangoContext
+    public partial class ArangoContext : IArangoContext
     {
         private static readonly HttpClient HttpClient = new HttpClient();
 
@@ -38,6 +36,7 @@ namespace Core.Arango
             Collection = new ArangoCollectionModule(this);
             Graph = new ArangoGraphModule(this);
             Transaction = new ArangoTransactionModule(this);
+            Document = new ArangoDocumentModule(this);
 
             var builder = new DbConnectionStringBuilder {ConnectionString = cs};
             builder.TryGetValue("Server", out var s);
@@ -66,12 +65,12 @@ namespace Core.Arango
             _password = password;
         }
 
-        
 
         public IArangoUserModule User { get; }
         public IArangoCollectionModule Collection { get; }
         public IArangoGraphModule Graph { get; }
         public IArangoTransactionModule Transaction { get; }
+        public IArangoDocumentModule Document { get; }
 
         public int BatchSize { get; set; } = 500;
 

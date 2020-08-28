@@ -94,54 +94,7 @@ namespace Core.Arango
                 await DropViewAsync(database, view, cancellationToken);
         }
 
-        [Obsolete("use ArangoContext.Graph.ListAsync")]
-        public async Task<List<string>> ListGraphAsync(ArangoHandle database,
-            CancellationToken cancellationToken = default)
-        {
-            return await Graph.ListAsync(database, cancellationToken);
-        }
-
-        [Obsolete("use ArangoContext.Graph.CreateAsync")]
-        public async Task CreateGraphAsync(ArangoHandle database, ArangoGraph request,
-            CancellationToken cancellationToken = default)
-        {
-            await Graph.CreateAsync(database, request, cancellationToken);
-        }
-
-        [Obsolete("use ArangoContext.Graph.DropAsync")]
-        public async Task DropGraphAsync(ArangoHandle database, string name,
-            CancellationToken cancellationToken = default)
-        {
-            await Graph.DropAsync(database, name, cancellationToken);
-        }
-
-        [Obsolete("use ArangoContext.Collection.CreateAsync")]
-        public async Task CreateCollectionAsync(ArangoHandle database, string collection, ArangoCollectionType type,
-            CancellationToken cancellationToken = default)
-        {
-            await Collection.CreateAsync(database, collection, type, cancellationToken);
-        }
-
-        [Obsolete("use ArangoContext.Collection.CreateAsync")]
-        public async Task CreateCollectionAsync(ArangoHandle database, ArangoCollection collection,
-            CancellationToken cancellationToken = default)
-        {
-            await Collection.CreateAsync(database, collection, cancellationToken);
-        }
-
-        [Obsolete("use ArangoContext.Collection.TruncateAsync")]
-        public async Task TruncateCollectionAsync(ArangoHandle database, string collection,
-            CancellationToken cancellationToken = default)
-        {
-            await Collection.TruncateAsync(database, collection, cancellationToken);
-        }
-
-        [Obsolete("use ArangoContext.Collection.ListAsync")]
-        public async Task<List<string>> ListCollectionsAsync(ArangoHandle database,
-            CancellationToken cancellationToken = default)
-        {
-            return await Collection.ListAsync(database, cancellationToken);
-        }
+        
 
         /// <summary>
         ///     Ignores primary and edge indices
