@@ -20,7 +20,7 @@ namespace Core.Arango.Modules
         /// <summary>
         ///     Note: this API is currently not supported on cluster coordinators.
         /// </summary>
-        IAsyncEnumerable<List<JObject>> ExportAsync(ArangoHandle database, string collection, bool? flush = null, int? flushWait = null, int? batchSize = null, int? ttl = null, [EnumeratorCancellation] CancellationToken cancellationToken = default);
+        IAsyncEnumerable<List<JObject>> ExportAsync(ArangoHandle database, string collection, bool? flush = null, int? flushWait = null, int? batchSize = null, int? ttl = null, CancellationToken cancellationToken = default);
         Task ImportAsync<T>(ArangoHandle database, string collection, IEnumerable<T> docs, bool complete = true, CancellationToken cancellationToken = default) where T : class;
         Task<List<ArangoUpdateResult<TR>>> ReplaceMultipleAsync<T, TR>(ArangoHandle database, string collection, IEnumerable<T> docs, bool? waitForSync = null, bool? returnOld = null, bool? returnNew = null, CancellationToken cancellationToken = default) where T : class;
         Task<List<ArangoUpdateResult<JObject>>> ReplaceMultipleAsync<T>(ArangoHandle database, string collection, IEnumerable<T> docs, bool? waitForSync = null, bool? returnOld = null, bool? returnNew = null, CancellationToken cancellationToken = default) where T : class;
