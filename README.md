@@ -1,7 +1,7 @@
-![.NET Core](https://github.com/coronabytes/ArangoDB/workflows/.NET%20Core/badge.svg)
+![.NET Core](https://github.com/coronabytes/dotnet-arangodb/workflows/.NET%20Core/badge.svg)
 
 # Disclaimer
-- This is a minimalistic .NET driver for ArangoDB (3.5+) with adapters to Serilog and DevExtreme
+- This is a minimalistic .NET driver for ArangoDB (3.5+)
 - The key difference to any other available driver is the ability to switch databases on a per request basis, which allows for easy database per tenant deployments
 - Id, Key, From, To properties will always be translated to their respective arango form (_id, _key, _from, _to), which allows to construct updates from anonymous types
 - First parameter of any method in most cases is an ArangoHandle which has implicit conversion from string and GUID
@@ -15,12 +15,12 @@ var arango = new ArangoContext("Server=http://localhost:8529;Realm=myproject;Use
 
 ## Create collection
 ```csharp
-await arango.CreateCollectionAsync("database", "collection", ArangoCollectionType.Document);
+await arango.Collection.CreateAsync("database", "collection", ArangoCollectionType.Document);
 ```
 
 ## Create index
 ```csharp
-await arango.EnsureIndexAsync("database", "collection", new ArangoIndex
+await arango.Index.CreateAsync("database", "collection", new ArangoIndex
 {
     Fields = new List<string> {"SomeValue"},
     Type = ArangoIndexType.Hash
@@ -29,7 +29,7 @@ await arango.EnsureIndexAsync("database", "collection", new ArangoIndex
 
 ## Create analyzer
 ```csharp
-await arango.CreateAnalyzerAsync("database", new ArangoAnalyzer
+await arango.Analyzer.CreateAsync("database", new ArangoAnalyzer
 {
     Name = "text_de_nostem",
     Type = "text",
@@ -47,7 +47,7 @@ await arango.CreateAnalyzerAsync("database", new ArangoAnalyzer
 
 ## Create view
 ```csharp
-await arango.CreateViewAsync("database", new ArangoView
+await arango.View.CreateAsync("database", new ArangoView
 {
     Name = "SomeView",
     Links = new Dictionary<string, ArangoLinkProperty>
@@ -79,7 +79,7 @@ await arango.CreateViewAsync("database", new ArangoView
 
 ## Create graph
 ```csharp
-await arango.CreateGraphAsync("database", new ArangoGraph
+await arango.Graph.CreateAsync("database", new ArangoGraph
 {
     Name = "SomeGraph",
     EdgeDefinitions = new List<ArangoEdgeDefinition>
@@ -96,7 +96,7 @@ await arango.CreateGraphAsync("database", new ArangoGraph
 
 ## Create document
 ```csharp
-await arango.CreateDocumentAsync("database", "collection", new
+await arango.Document.CreateAsync("database", "collection", new
 {
     Key = Guid.NewGuid(),
     SomeValue = 1
@@ -105,7 +105,7 @@ await arango.CreateDocumentAsync("database", "collection", new
 
 ## Update document
 ```csharp
-await arango.UpdateDocumentAsync("database", "collection", new
+await arango.Document.UpdateAsync("database", "collection", new
 {
     Key = Guid.Parse("some-guid"),
     SomeValue = 2
@@ -116,13 +116,13 @@ await arango.UpdateDocumentAsync("database", "collection", new
 ```csharp
 var list = new List<int> {1, 2, 3};
 
-var result = await arango.QueryAsync<JObject>("database",
+var result = await arango.Query.ExecuteAsync<JObject>("database",
   $"FOR c IN collection FILTER c.SomeValue IN {list} RETURN c");
 ```
 
 ## Stream transactions
 ```csharp
-var transaction = await arango.BeginTransactionAsync("database", new ArangoTransaction
+var transaction = await arango.Transaction.BeginAsync("database", new ArangoTransaction
 {
     Collections = new ArangoTransactionScope
     {
@@ -130,17 +130,17 @@ var transaction = await arango.BeginTransactionAsync("database", new ArangoTrans
     }
 });
 
-await arango.CreateDocumentAsync(transaction, "collection", new
+await arango.Document.CreateAsync(transaction, "collection", new
 {
     Key = Guid.NewGuid(),
     SomeValue = 1
 });
 
-await arango.CreateDocumentAsync(transaction, "collection", new
+await arango.Document.CreateAsync(transaction, "collection", new
 {
     Key = Guid.NewGuid(),
     SomeValue = 2
 });
 
-await arango.CommitTransactionAsync(transaction);
+await arango.Transaction.CommitAsync(transaction);
 ```

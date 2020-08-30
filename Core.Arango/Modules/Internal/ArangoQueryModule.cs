@@ -22,7 +22,7 @@ namespace Core.Arango.Modules.Internal
         {
             var filterExp = Parameterize(filter, out var parameter);
 
-            return await QueryAsync<T>(database,
+            return await ExecuteAsync<T>(database,
                 $"FOR x IN {collection} FILTER {filterExp} LIMIT {limit} RETURN {projection ?? "x"}",
                 parameter, cancellationToken: cancellationToken);
         }
@@ -37,16 +37,16 @@ namespace Core.Arango.Modules.Internal
             return results.SingleOrDefault();
         }
 
-        public async Task<ArangoList<T>> QueryAsync<T>(ArangoHandle database, FormattableString query,
+        public async Task<ArangoList<T>> ExecuteAsync<T>(ArangoHandle database, FormattableString query,
             bool? cache = null, CancellationToken cancellationToken = default)
             where T : new()
         {
             var queryExp = Parameterize(query, out var parameter);
 
-            return await QueryAsync<T>(database, queryExp, parameter, cache, cancellationToken: cancellationToken);
+            return await ExecuteAsync<T>(database, queryExp, parameter, cache, cancellationToken: cancellationToken);
         }
 
-        public async Task<ArangoList<T>> QueryAsync<T>(ArangoHandle database, string query,
+        public async Task<ArangoList<T>> ExecuteAsync<T>(ArangoHandle database, string query,
             IDictionary<string, object> bindVars, bool? cache = null, bool? fullCount = null,
             CancellationToken cancellationToken = default)
             where T : new()
@@ -103,7 +103,7 @@ namespace Core.Arango.Modules.Internal
             }
         }
 
-        public async Task<object> QueryAsync(Type type, bool isEnumerable, ArangoHandle database, string query,
+        public async Task<object> ExecuteAsync(Type type, bool isEnumerable, ArangoHandle database, string query,
             IDictionary<string, object> bindVars, bool? cache = null, bool? fullCount = null,
             CancellationToken cancellationToken = default)
         {
