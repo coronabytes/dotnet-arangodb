@@ -14,11 +14,11 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageIcon>ArangoDB.png</PackageIcon>
     <PackageIconUrl />
-    <PackageProjectUrl>https://github.com/coronabytes/ArangoDB</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/coronabytes/dotnet-arangodb</PackageProjectUrl>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <RepositoryUrl>https://github.com/coronabytes/ArangoDB.git</RepositoryUrl>
+    <RepositoryUrl>https://github.com/coronabytes/dotnet-arangodb.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
