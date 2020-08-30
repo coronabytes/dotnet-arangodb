@@ -125,7 +125,7 @@ namespace Core.Arango.Modules.Internal
             });
 
             var res = await SendAsync(constructedResponseType, HttpMethod.Post,
-                ApiPath("cursor"), body
+                ApiPath(database, "cursor"), body
                 , cancellationToken: cancellationToken);
 
             var listResult = constructedResponseType.GetProperty("Result").GetValue(res);
