@@ -74,5 +74,13 @@ namespace Core.Arango.Modules.Internal
                 }),
                 cancellationToken: cancellationToken);
         }
+
+        public async Task DropCollectionAsync(ArangoHandle database, string collection,
+            CancellationToken cancellationToken = default)
+        {
+            await SendAsync<JObject>(HttpMethod.Delete,
+                ApiPath(database, $"collection/){UrlEncode(collection)}"),
+                cancellationToken: cancellationToken);
+        }
     }
 }

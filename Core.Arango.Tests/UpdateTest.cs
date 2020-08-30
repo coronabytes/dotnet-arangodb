@@ -10,15 +10,15 @@ namespace Core.Arango.Tests
         [Fact]
         public async Task Collection()
         {
-            await Arango.CreateCollectionAsync("test", "test", ArangoCollectionType.Document);
+            await Arango.Collection.CreateAsync("test", "test", ArangoCollectionType.Document);
 
-            await Arango.CreateDocumentAsync("test", "test", new
+            await Arango.Document.CreateAsync("test", "test", new
             {
                 Key = "abc",
                 Name = "a"
             });
 
-            var res = await Arango.UpdateDocumentAsync("test", "test", new
+            var res = await Arango.Document.UpdateAsync("test", "test", new
             {
                 Key = "abc",
                 Name = "c"

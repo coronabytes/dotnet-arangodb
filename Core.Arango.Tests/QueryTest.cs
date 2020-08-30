@@ -12,8 +12,8 @@ namespace Core.Arango.Tests
         [Fact]
         public async Task NullParameter()
         {
-            await Arango.CreateCollectionAsync("test", "test", ArangoCollectionType.Document);
-            await Arango.CreateDocumentsAsync("test", "test", new List<Entity>
+            await Arango.Collection.CreateAsync("test", "test", ArangoCollectionType.Document);
+            await Arango.Document.CreateAsync("test", "test", new List<Entity>
             {
                 new Entity {Value = 1},
                 new Entity {Value = 2},
@@ -22,18 +22,18 @@ namespace Core.Arango.Tests
 
             Guid? nullParam = null;
 
-            var res = await Arango.SingleOrDefaultAsync<Entity>("test", "test",
+            var res = await Arango.Query.SingleOrDefaultAsync<Entity>("test", "test",
                 $"x.Value == {nullParam}");
 
-            var res2 = await Arango.SingleOrDefaultAsync<Entity>("test", "test",
+            var res2 = await Arango.Query.SingleOrDefaultAsync<Entity>("test", "test",
                 $"x.Value == {null}");
         }
 
         [Fact]
         public async Task QueryIntegerContains()
         {
-            await Arango.CreateCollectionAsync("test", "test", ArangoCollectionType.Document);
-            await Arango.CreateDocumentsAsync("test", "test", new List<Entity>
+            await Arango.Collection.CreateAsync("test", "test", ArangoCollectionType.Document);
+            await Arango.Document.CreateAsync("test", "test", new List<Entity>
             {
                 new Entity {Value = 1},
                 new Entity {Value = 2},
@@ -42,7 +42,7 @@ namespace Core.Arango.Tests
 
             var select = new List<int> {1, 2};
 
-            var res = await Arango.QueryAsync<Entity>("test", $"FOR e IN test FILTER e.Value IN {select} RETURN e");
+            var res = await Arango.Query.QueryAsync<Entity>("test", $"FOR e IN test FILTER e.Value IN {select} RETURN e");
 
             Assert.Equal(2, res.Count);
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -32,13 +33,13 @@ namespace Core.Arango.Modules.Internal
             if (name == "_system")
                 return "_system";
 
-            return UrlEncoder.Default.Encode(_context.Realm + name);
+            return UrlEncode(_context.Realm + name);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected string ApiPath(ArangoHandle handle, string path)
         {
-            return $"{_context.Server}/_db/{_context.DbName(handle)}/_api/{path}";
+            return $"{_context.Server}/_db/{RealmPrefix(handle)}/_api/{path}";
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -59,6 +60,14 @@ namespace Core.Arango.Modules.Internal
             CancellationToken cancellationToken = default)
         {
             return _context.SendAsync<T>(m, url, body, transaction, throwOnError, auth, cancellationToken);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Task<object> SendAsync(Type type, HttpMethod m, string url, string body = null,
+            string transaction = null, bool throwOnError = true, bool auth = true,
+            CancellationToken cancellationToken = default)
+        {
+            return _context.SendAsync(type, m, url, body, transaction, throwOnError, auth, cancellationToken);
         }
 
         public string AddQueryString(string uri,
@@ -99,6 +108,45 @@ namespace Core.Arango.Modules.Internal
         }
 
 
+
+        public string Parameterize(FormattableString query, out Dictionary<string, object> parameter)
+        {
+            var i = 0;
+
+            var set = new Dictionary<object, string>();
+            var nullParam = string.Empty;
+
+            var args = query.GetArguments().Select(x =>
+            {
+                if (x == null)
+                {
+                    if (string.IsNullOrEmpty(nullParam))
+                        nullParam = $"@P{++i}";
+
+                    return nullParam;
+                }
+
+                if (set.TryGetValue(x, out var p))
+                    return (object)p;
+
+                p = $"@P{++i}";
+
+                set.Add(x, p);
+
+                return (object)p;
+            }).ToArray();
+
+            var queryExp = string.Format(query.Format, args);
+
+            var res = set.ToDictionary(x => x.Value.Substring(1), x => x.Key);
+
+            if (!string.IsNullOrEmpty(nullParam))
+                res.Add(nullParam.Substring(1), null);
+
+            parameter = res;
+
+            return queryExp;
+        }
 
     }
 }

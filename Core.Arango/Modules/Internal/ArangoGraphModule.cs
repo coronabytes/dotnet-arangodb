@@ -10,36 +10,33 @@ using Newtonsoft.Json.Linq;
 
 namespace Core.Arango.Modules.Internal
 {
-    internal class ArangoGraphModule : IArangoGraphModule
+    internal class ArangoGraphModule : ArangoModule, IArangoGraphModule
     {
-        private readonly IArangoContext _context;
-
-        internal ArangoGraphModule(IArangoContext context)
+        internal ArangoGraphModule(IArangoContext context) : base(context)
         {
-            _context = context;
         }
 
         public async Task<List<string>> ListAsync(ArangoHandle database,
             CancellationToken cancellationToken = default)
         {
-            var res = await _context.SendAsync<GraphResponse<JObject>>(HttpMethod.Get,
-                $"{_context.Server}/_db/{_context.DbName(database)}/_api/gharial", cancellationToken: cancellationToken);
+            var res = await SendAsync<GraphResponse<JObject>>(HttpMethod.Get,
+                ApiPath(database, "gharial"), cancellationToken: cancellationToken);
             return res.Graphs.Select(x => x.Value<string>("_key")).ToList();
         }
 
         public async Task CreateAsync(ArangoHandle database, ArangoGraph request,
             CancellationToken cancellationToken = default)
         {
-            await _context.SendAsync<JObject>(HttpMethod.Post,
-                $"{_context.Server}/_db/{_context.DbName(database)}/_api/gharial",
+            await SendAsync<JObject>(HttpMethod.Post,
+                ApiPath(database, "gharial"),
                 JsonConvert.SerializeObject(request), cancellationToken: cancellationToken);
         }
 
         public async Task DropAsync(ArangoHandle database, string name,
             CancellationToken cancellationToken = default)
         {
-            await _context.SendAsync<JObject>(HttpMethod.Delete,
-                $"{_context.Server}/_db/{_context.DbName(database)}/_api/gharial/{UrlEncoder.Default.Encode(name)}",
+            await SendAsync<JObject>(HttpMethod.Delete,
+                ApiPath(database, $"gharial/{UrlEncode(name)}"),
                 cancellationToken: cancellationToken);
         }
     }

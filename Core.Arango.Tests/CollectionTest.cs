@@ -10,7 +10,7 @@ namespace Core.Arango.Tests
         [Fact]
         public async Task Collection()
         {
-            await Arango.CreateCollectionAsync("test", new ArangoCollection
+            await Arango.Collection.CreateAsync("test", new ArangoCollection
             {
                 Name = "test",
                 Type = ArangoCollectionType.Document,
@@ -21,7 +21,7 @@ namespace Core.Arango.Tests
                 }
             });
 
-            await Arango.CreateDocumentAsync("test", "test", new
+            await Arango.Document.CreateAsync("test", "test", new
             {
                 Name = "test"
             });

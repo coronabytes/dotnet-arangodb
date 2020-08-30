@@ -11,15 +11,15 @@ namespace Core.Arango.Tests.Core
 
         public async Task InitializeAsync()
         {
-            await Arango.CreateDatabaseAsync("test");
+            await Arango.Database.CreateAsync("test");
         }
 
         public async Task DisposeAsync()
         {
             try
             {
-                foreach (var db in await Arango.ListDatabasesAsync())
-                    await Arango.DropDatabaseAsync(db);
+                foreach (var db in await Arango.Database.ListAsync())
+                    await Arango.Database.DropAsync(db);
             }
             catch
             {

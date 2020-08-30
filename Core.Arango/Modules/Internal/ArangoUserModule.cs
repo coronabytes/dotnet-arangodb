@@ -9,13 +9,10 @@ using Newtonsoft.Json.Linq;
 
 namespace Core.Arango.Modules.Internal
 {
-    internal class ArangoUserModule : IArangoUserModule
+    internal class ArangoUserModule : ArangoModule, IArangoUserModule
     {
-        private readonly IArangoContext _context;
-
-        internal ArangoUserModule(IArangoContext context)
+        internal ArangoUserModule(IArangoContext context) : base(context)
         {
-            _context = context;
         }
 
         /// <summary>
@@ -23,9 +20,8 @@ namespace Core.Arango.Modules.Internal
         /// </summary>
         public async Task<bool> CreateAsync(ArangoUser user, CancellationToken cancellationToken = default)
         {
-            var res = await _context.SendAsync<JObject>(HttpMethod.Post,
-                $"{_context.Server}/_api/user",
-                JsonConvert.SerializeObject(user), cancellationToken: cancellationToken);
+            var res = await SendAsync<JObject>(HttpMethod.Post,
+                ApiPath("user"), Serialize(user), cancellationToken: cancellationToken);
 
             return res != null;
         }
@@ -35,8 +31,8 @@ namespace Core.Arango.Modules.Internal
         /// </summary>
         public async Task<IReadOnlyCollection<ArangoUser>> ListAsync(CancellationToken cancellationToken = default)
         {
-            var res = await _context.SendAsync<QueryResponse<ArangoUser>>(HttpMethod.Get,
-                $"{_context.Server}/_api/user", cancellationToken: cancellationToken);
+            var res = await SendAsync<QueryResponse<ArangoUser>>(HttpMethod.Get,
+                ApiPath("user"), cancellationToken: cancellationToken);
             return res.Result.AsReadOnly();
         }
 
@@ -46,9 +42,9 @@ namespace Core.Arango.Modules.Internal
         public async Task<bool> SetDatabaseAccessAsync(ArangoHandle handle, string user, ArangoAccess access,
             CancellationToken cancellationToken = default)
         {
-            var res = await _context.SendAsync<JObject>(HttpMethod.Put,
-                $"{_context.Server}/_api/user/{UrlEncoder.Default.Encode(user)}/database/{_context.DbName(handle)}",
-                JsonConvert.SerializeObject(new
+            var res = await SendAsync<JObject>(HttpMethod.Put,
+                ApiPath($"user/{UrlEncode(user)}/database/{RealmPrefix(handle)}"),
+                Serialize(new
                 {
                     grant = access
                 }), cancellationToken: cancellationToken);
@@ -62,8 +58,8 @@ namespace Core.Arango.Modules.Internal
         public async Task<bool> DeleteDatabaseAccessAsync(ArangoHandle handle, string user,
             CancellationToken cancellationToken = default)
         {
-            var res = await _context.SendAsync<JObject>(HttpMethod.Delete,
-                $"{_context.Server}/_api/user/{user}/database/{_context.DbName(handle)}",
+            var res = await SendAsync<JObject>(HttpMethod.Delete,
+                ApiPath($"user/{UrlEncode(user)}/database/{RealmPrefix(handle)}"),
                 cancellationToken: cancellationToken);
 
             return res != null;
@@ -74,8 +70,8 @@ namespace Core.Arango.Modules.Internal
         /// </summary>
         public async Task<bool> PatchAsync(ArangoUser user, CancellationToken cancellationToken = default)
         {
-            var res = await _context.SendAsync<JObject>(HttpMethod.Patch,
-                $"{_context.Server}/_api/user/{UrlEncoder.Default.Encode(user.Name)}",
+            var res = await SendAsync<JObject>(HttpMethod.Patch,
+                ApiPath($"user/{UrlEncode(user.Name)}"),
                 JsonConvert.SerializeObject(user),
                 cancellationToken: cancellationToken);
 
@@ -87,8 +83,8 @@ namespace Core.Arango.Modules.Internal
         /// </summary>
         public async Task<bool> DeleteAsync(string user, CancellationToken cancellationToken = default)
         {
-            var res = await _context.SendAsync<JObject>(HttpMethod.Delete,
-                $"{_context.Server}/_api/user/{UrlEncoder.Default.Encode(user)}", cancellationToken: cancellationToken);
+            var res = await SendAsync<JObject>(HttpMethod.Delete,
+                ApiPath($"user/{UrlEncode(user)}"), cancellationToken: cancellationToken);
 
             return res != null;
         }

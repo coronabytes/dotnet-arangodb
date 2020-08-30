@@ -11,9 +11,9 @@ namespace Core.Arango.Tests
         [Fact]
         public async Task AnalyzersViews()
         {
-            var analyzers = await Arango.ListAnalyzersAsync("test");
+            var analyzers = await Arango.Analyzer.ListAsync("test");
 
-            await Arango.CreateAnalyzerAsync("test", new ArangoAnalyzer
+            await Arango.Analyzer.CreateAsync("test", new ArangoAnalyzer
             {
                 Name = "text_de_nostem",
                 Type = "text",
@@ -29,9 +29,9 @@ namespace Core.Arango.Tests
             });
 
 
-            await Arango.CreateCollectionAsync("test", "collection", ArangoCollectionType.Document);
+            await Arango.Collection.CreateAsync("test", "collection", ArangoCollectionType.Document);
 
-            await Arango.CreateViewAsync("test", new ArangoView
+            await Arango.View.CreateAsync("test", new ArangoView
             {
                 Name = "TestView",
                 Links = new Dictionary<string, ArangoLinkProperty>
@@ -49,9 +49,9 @@ namespace Core.Arango.Tests
                 }
             });
 
-            await Arango.DropViewsAsync("test");
+            await Arango.View.DropAllAsync("test");
 
-            await Arango.DeleteAnalyzerAsync("test", "text_de_nostem", true);
+            await Arango.Analyzer.DeleteAsync("test", "text_de_nostem", true);
         }
     }
 }

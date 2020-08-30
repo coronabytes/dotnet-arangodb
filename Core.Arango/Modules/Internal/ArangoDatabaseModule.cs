@@ -9,7 +9,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Core.Arango.Modules.Internal
 {
-    internal class ArangoDatabaseModule : ArangoModule
+    internal class ArangoDatabaseModule : ArangoModule, IArangoDatabaseModule
     {
         internal ArangoDatabaseModule(IArangoContext context) : base(context)
         {
