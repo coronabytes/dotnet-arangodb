@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
-using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Core.Arango.Modules.Internal
@@ -18,70 +15,93 @@ namespace Core.Arango.Modules.Internal
         {
         }
 
-        public async Task CreateMultipleAsync<T>(ArangoHandle database, string collection, IEnumerable<T> docs,
-            bool waitForSync = false,
-            bool silent = true,
-            bool overwrite = false,
+        public async Task<List<ArangoUpdateResult<TR>>> CreateMultipleAsync<T, TR>(ArangoHandle database,
+            string collection, IEnumerable<T> docs, bool? waitForSync = null,
+            bool? keepNull = null, bool? mergeObjects = null, bool? returnOld = null, bool? returnNew = null,
+            bool? silent = null, ArangoOverwriteMode? overwriteMode = null,
             CancellationToken cancellationToken = default) where T : class
         {
-            var query = AddQueryString(
-                ApiPath(database, $"document/{UrlEncode(collection)}"),
-                new Dictionary<string, string>
-                {
-                    {"waitForSync", waitForSync.ToString().ToLowerInvariant()},
-                    {"silent", silent.ToString().ToLowerInvariant()},
-                    {"overwrite", overwrite.ToString().ToLowerInvariant()}
-                });
+            var parameter = new Dictionary<string, string>();
 
-            var res = await SendAsync<JArray>(HttpMethod.Post, query,
+            if (waitForSync.HasValue)
+                parameter.Add("waitForSync", waitForSync.Value.ToString().ToLowerInvariant());
+
+            if (keepNull.HasValue)
+                parameter.Add("keepNull", keepNull.Value.ToString().ToLowerInvariant());
+
+            if (mergeObjects.HasValue)
+                parameter.Add("mergeObjects", mergeObjects.Value.ToString().ToLowerInvariant());
+
+            if (returnOld.HasValue)
+                parameter.Add("returnOld", returnOld.Value.ToString().ToLowerInvariant());
+
+            if (returnNew.HasValue)
+                parameter.Add("returnNew", returnNew.Value.ToString().ToLowerInvariant());
+
+            if (silent.HasValue)
+                parameter.Add("silent", silent.Value.ToString().ToLowerInvariant());
+
+            if (overwriteMode.HasValue)
+                parameter.Add("overwriteMode", overwriteMode.Value.ToString().ToLowerInvariant());
+
+            var query = AddQueryString(ApiPath(database, $"document/{UrlEncode(collection)}"), parameter);
+
+            return await SendAsync<List<ArangoUpdateResult<TR>>>(HttpMethod.Post, query,
                 Serialize(docs),
                 database.Transaction, cancellationToken: cancellationToken);
+        }
 
-            if (res != null)
-                foreach (var r in res)
-                    if (r.Value<bool>("error"))
-                        throw new ArgumentException(res.ToString());
+        public async Task<List<ArangoUpdateResult<JObject>>> CreateMultipleAsync<T>(ArangoHandle database,
+            string collection, IEnumerable<T> docs, bool? waitForSync = null,
+            bool? keepNull = null, bool? mergeObjects = null, bool? returnOld = null, bool? returnNew = null,
+            bool? silent = null, ArangoOverwriteMode? overwriteMode = null,
+            CancellationToken cancellationToken = default) where T : class
+        {
+            return await CreateMultipleAsync<T, JObject>(database, collection, docs, waitForSync, keepNull,
+                mergeObjects,
+                returnOld, returnNew, silent, overwriteMode, cancellationToken);
+        }
 
+        public async Task<ArangoUpdateResult<TR>> CreateAsync<T, TR>(ArangoHandle database, string collection, T doc,
+            bool? waitForSync = null,
+            bool? keepNull = null, bool? mergeObjects = null, bool? returnOld = null, bool? returnNew = null,
+            bool? silent = null, ArangoOverwriteMode? overwriteMode = null,
+            CancellationToken cancellationToken = default) where T : class
+        {
+            var res = await CreateMultipleAsync<T, TR>(database, collection, new List<T> {doc}, waitForSync, keepNull,
+                mergeObjects,
+                returnOld, returnNew, silent, overwriteMode, cancellationToken);
+
+            return res.SingleOrDefault();
+        }
+
+        public async Task<ArangoUpdateResult<JObject>> CreateAsync<T>(ArangoHandle database, string collection, T doc,
+            bool? waitForSync = null, bool? keepNull = null,
+            bool? mergeObjects = null, bool? returnOld = null, bool? returnNew = null, bool? silent = null,
+            ArangoOverwriteMode? overwriteMode = null, CancellationToken cancellationToken = default) where T : class
+        {
+            var res = await CreateMultipleAsync<T, JObject>(database, collection, new List<T> {doc}, waitForSync,
+                keepNull, mergeObjects,
+                returnOld, returnNew, silent, overwriteMode, cancellationToken);
+
+            return res.SingleOrDefault();
         }
 
         public async Task ImportAsync<T>(ArangoHandle database, string collection, IEnumerable<T> docs,
             bool complete = true,
             CancellationToken cancellationToken = default) where T : class
         {
-
             var query = AddQueryString(ApiPath(database, "import"),
                 new Dictionary<string, string>
                 {
-                        {"type", "array"},
-                        {"complete", complete.ToString().ToLowerInvariant()},
-                        {"collection", collection}
+                    {"type", "array"},
+                    {"complete", complete.ToString().ToLowerInvariant()},
+                    {"collection", collection}
                 });
 
             var res = await SendAsync<JObject>(HttpMethod.Post, query,
                 Serialize(docs),
                 cancellationToken: cancellationToken);
-        }
-
-        public async Task<T> CreateAsync<T>(ArangoHandle database, string collection, T doc,
-            bool waitForSync = false,
-            bool silent = true,
-            bool overwrite = false,
-            CancellationToken cancellationToken = default) where T : class
-        {
-            var query = AddQueryString(
-                ApiPath(database, $"document/{UrlEncode(collection)}"),
-                new Dictionary<string, string>
-                {
-                    {"waitForSync", waitForSync.ToString().ToLowerInvariant()},
-                    {"silent", silent.ToString().ToLowerInvariant()},
-                    {"overwrite", overwrite.ToString().ToLowerInvariant()}
-                });
-
-            var res = await SendAsync<DocumentCreateResponse<T>>(HttpMethod.Post, query,
-                Serialize(doc),
-                database.Transaction, cancellationToken: cancellationToken);
-
-            return doc;
         }
 
         public async Task<ArangoUpdateResult<TR>> DeleteAsync<TR>(ArangoHandle database, string collection,
@@ -196,7 +216,7 @@ namespace Core.Arango.Modules.Internal
             CancellationToken cancellationToken = default) where T : class
         {
             var res = await UpdateMultipleAsync<T, JObject>(database, collection,
-                new List<T> { doc }, waitForSync, keepNull, mergeObjects,
+                new List<T> {doc}, waitForSync, keepNull, mergeObjects,
                 returnOld, returnNew, silent, cancellationToken);
 
             return res.SingleOrDefault();
@@ -213,18 +233,18 @@ namespace Core.Arango.Modules.Internal
             CancellationToken cancellationToken = default) where T : class
         {
             var res = await UpdateMultipleAsync<T, TR>(database, collection,
-                new List<T> { doc }, waitForSync, keepNull, mergeObjects,
+                new List<T> {doc}, waitForSync, keepNull, mergeObjects,
                 returnOld, returnNew, silent, cancellationToken);
 
             return res.SingleOrDefault();
         }
 
         public async Task<List<ArangoUpdateResult<TR>>> ReplaceMultipleAsync<T, TR>(ArangoHandle database,
-string collection, IEnumerable<T> docs,
-bool? waitForSync = null,
-bool? returnOld = null,
-bool? returnNew = null,
-CancellationToken cancellationToken = default) where T : class
+            string collection, IEnumerable<T> docs,
+            bool? waitForSync = null,
+            bool? returnOld = null,
+            bool? returnNew = null,
+            CancellationToken cancellationToken = default) where T : class
         {
             var parameter = new Dictionary<string, string>();
 
@@ -263,7 +283,7 @@ CancellationToken cancellationToken = default) where T : class
             bool? returnNew = null,
             CancellationToken cancellationToken = default) where T : class
         {
-            var res = await ReplaceMultipleAsync<T, TR>(database, collection, new List<T> { doc },
+            var res = await ReplaceMultipleAsync<T, TR>(database, collection, new List<T> {doc},
                 waitForSync, returnOld, returnNew, cancellationToken);
 
             return res.SingleOrDefault();
@@ -276,7 +296,7 @@ CancellationToken cancellationToken = default) where T : class
             bool? returnNew = null,
             CancellationToken cancellationToken = default) where T : class
         {
-            var res = await ReplaceMultipleAsync<T, JObject>(database, collection, new List<T> { doc },
+            var res = await ReplaceMultipleAsync<T, JObject>(database, collection, new List<T> {doc},
                 waitForSync, returnOld, returnNew, cancellationToken);
 
             return res.SingleOrDefault();
