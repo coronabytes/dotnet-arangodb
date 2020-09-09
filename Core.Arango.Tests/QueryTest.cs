@@ -13,7 +13,7 @@ namespace Core.Arango.Tests
         public async Task NullParameter()
         {
             await Arango.Collection.CreateAsync("test", "test", ArangoCollectionType.Document);
-            await Arango.Document.CreateMultipleAsync("test", "test", new List<Entity>
+            await Arango.Document.CreateManyAsync("test", "test", new List<Entity>
             {
                 new Entity {Value = 1},
                 new Entity {Value = 2},
@@ -33,7 +33,7 @@ namespace Core.Arango.Tests
         public async Task QueryIntegerContains()
         {
             await Arango.Collection.CreateAsync("test", "test", ArangoCollectionType.Document);
-            await Arango.Document.CreateMultipleAsync("test", "test", new List<Entity>
+            await Arango.Document.CreateManyAsync("test", "test", new List<Entity>
             {
                 new Entity {Value = 1},
                 new Entity {Value = 2},

@@ -14,7 +14,7 @@ namespace Core.Arango.Modules
         /// <summary>
         ///     creates documents
         /// </summary>
-        Task<List<ArangoUpdateResult<TR>>> CreateMultipleAsync<T, TR>(ArangoHandle database,
+        Task<List<ArangoUpdateResult<TR>>> CreateManyAsync<T, TR>(ArangoHandle database,
             string collection,
             IEnumerable<T> docs,
             bool? waitForSync = null,
@@ -29,7 +29,7 @@ namespace Core.Arango.Modules
         /// <summary>
         ///     creates documents
         /// </summary>
-        Task<List<ArangoUpdateResult<JObject>>> CreateMultipleAsync<T>(ArangoHandle database,
+        Task<List<ArangoUpdateResult<JObject>>> CreateManyAsync<T>(ArangoHandle database,
             string collection,
             IEnumerable<T> docs,
             bool? waitForSync = null,
@@ -69,7 +69,7 @@ namespace Core.Arango.Modules
             ArangoOverwriteMode? overwriteMode = null,
             CancellationToken cancellationToken = default) where T : class;
 
-        Task<List<ArangoUpdateResult<TR>>> DeleteMultipleAsync<T, TR>(ArangoHandle database, string collection,
+        Task<List<ArangoUpdateResult<TR>>> DeleteManyAsync<T, TR>(ArangoHandle database, string collection,
             IEnumerable<T> docs, bool? waitForSync = null, bool? returnOld = null,
             CancellationToken cancellationToken = default) where T : class;
 
@@ -87,11 +87,11 @@ namespace Core.Arango.Modules
         Task ImportAsync<T>(ArangoHandle database, string collection, IEnumerable<T> docs, bool complete = true,
             CancellationToken cancellationToken = default) where T : class;
 
-        Task<List<ArangoUpdateResult<TR>>> ReplaceMultipleAsync<T, TR>(ArangoHandle database, string collection,
+        Task<List<ArangoUpdateResult<TR>>> ReplaceManyAsync<T, TR>(ArangoHandle database, string collection,
             IEnumerable<T> docs, bool? waitForSync = null, bool? returnOld = null, bool? returnNew = null,
             CancellationToken cancellationToken = default) where T : class;
 
-        Task<List<ArangoUpdateResult<JObject>>> ReplaceMultipleAsync<T>(ArangoHandle database, string collection,
+        Task<List<ArangoUpdateResult<JObject>>> ReplaceManyAsync<T>(ArangoHandle database, string collection,
             IEnumerable<T> docs, bool? waitForSync = null, bool? returnOld = null, bool? returnNew = null,
             CancellationToken cancellationToken = default) where T : class;
 
@@ -103,12 +103,12 @@ namespace Core.Arango.Modules
             bool waitForSync = false, bool? returnOld = null, bool? returnNew = null,
             CancellationToken cancellationToken = default) where T : class;
 
-        Task<List<ArangoUpdateResult<JObject>>> UpdateMultipleAsync<T>(ArangoHandle database, string collection,
+        Task<List<ArangoUpdateResult<JObject>>> UpdateManyAsync<T>(ArangoHandle database, string collection,
             IEnumerable<T> docs, bool? waitForSync = null, bool? keepNull = null, bool? mergeObjects = null,
             bool? returnOld = null, bool? returnNew = null, bool? silent = null,
             CancellationToken cancellationToken = default) where T : class;
 
-        Task<List<ArangoUpdateResult<TR>>> UpdateMultipleAsync<T, TR>(ArangoHandle database, string collection,
+        Task<List<ArangoUpdateResult<TR>>> UpdateManyAsync<T, TR>(ArangoHandle database, string collection,
             IEnumerable<T> docs, bool? waitForSync = null, bool? keepNull = null, bool? mergeObjects = null,
             bool? returnOld = null, bool? returnNew = null, bool? silent = null,
             CancellationToken cancellationToken = default) where T : class;

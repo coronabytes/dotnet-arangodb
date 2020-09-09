@@ -21,7 +21,7 @@ namespace Core.Arango.Tests
                 }
             });
 
-            await Arango.Document.CreateMultipleAsync(t1, "test", new List<Entity>
+            await Arango.Document.CreateManyAsync(t1, "test", new List<Entity>
             {
                 new Entity {Value = 1},
                 new Entity {Value = 2},
@@ -40,7 +40,7 @@ namespace Core.Arango.Tests
                 }
             });
 
-            await Arango.Document.CreateMultipleAsync(t2, "test", new List<Entity>
+            await Arango.Document.CreateManyAsync(t2, "test", new List<Entity>
             {
                 new Entity {Value = 1},
                 new Entity {Value = 2},
