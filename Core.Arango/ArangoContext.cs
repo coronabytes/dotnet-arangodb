@@ -146,6 +146,9 @@ namespace Core.Arango
 
             var content = await res.Content.ReadAsStringAsync();
 
+            if (res.Headers.TryGetValues("X-Arango-Error-Codes", out var errorCodes))
+                throw new ArangoException(content);
+
             if (content == "{}")
                 return default;
 
