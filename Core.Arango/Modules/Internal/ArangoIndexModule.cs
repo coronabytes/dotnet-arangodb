@@ -37,7 +37,8 @@ namespace Core.Arango.Modules.Internal
             {
                 var indices = await ListAsync(database, col, cancellationToken);
 
-                foreach (var idx in indices) await DropIndexAsync(database, idx, cancellationToken);
+                foreach (var idx in indices) 
+                    await DropAsync(database, idx, cancellationToken);
             }
         }
 
@@ -59,11 +60,11 @@ namespace Core.Arango.Modules.Internal
                 .Select(x => x.Value<string>("id")).ToList();
         }
 
-        public async Task DropIndexAsync(ArangoHandle database, string index,
+        public async Task DropAsync(ArangoHandle database, string index,
             CancellationToken cancellationToken = default)
         {
             await SendAsync<JObject>(HttpMethod.Delete,
-                ApiPath(database, $"index/{UrlEncode(index)}"), cancellationToken: cancellationToken);
+                ApiPath(database, $"index/{index}"), cancellationToken: cancellationToken);
         }
     }
 }
