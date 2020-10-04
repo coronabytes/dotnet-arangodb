@@ -5,7 +5,10 @@ namespace Core.Arango.Protocol
 {
     public class ArangoIndex
     {
-        [JsonProperty(PropertyName = "type")] public string Type { get; set; }
+        [JsonProperty(PropertyName = "name", NullValueHandling = NullValueHandling.Ignore)]
+        public string Name { get; set; }
+
+        [JsonProperty(PropertyName = "type")] public ArangoIndexType Type { get; set; }
 
         [JsonProperty(PropertyName = "fields", NullValueHandling = NullValueHandling.Ignore)]
         public List<string> Fields { get; set; }

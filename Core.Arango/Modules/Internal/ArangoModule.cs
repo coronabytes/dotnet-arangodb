@@ -20,12 +20,13 @@ namespace Core.Arango.Modules.Internal
             _context = context;
         }
 
+        public string Realm => _context.Realm;
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected string Serialize(object value)
         {
             return JsonConvert.SerializeObject(value, ArangoContext.JsonSerializerSettings);
         }
-        public string Realm => _context.Realm;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public string RealmPrefix(string name)
@@ -108,7 +109,6 @@ namespace Core.Arango.Modules.Internal
         }
 
 
-
         public string Parameterize(FormattableString query, out Dictionary<string, object> parameter)
         {
             var i = 0;
@@ -127,13 +127,13 @@ namespace Core.Arango.Modules.Internal
                 }
 
                 if (set.TryGetValue(x, out var p))
-                    return (object)p;
+                    return (object) p;
 
                 p = $"@P{++i}";
 
                 set.Add(x, p);
 
-                return (object)p;
+                return (object) p;
             }).ToArray();
 
             var queryExp = string.Format(query.Format, args);
@@ -147,6 +147,5 @@ namespace Core.Arango.Modules.Internal
 
             return queryExp;
         }
-
     }
 }

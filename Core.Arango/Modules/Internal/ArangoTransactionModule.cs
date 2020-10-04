@@ -8,7 +8,6 @@ namespace Core.Arango.Modules.Internal
 {
     internal class ArangoTransactionModule : ArangoModule, IArangoTransactionModule
     {
-
         internal ArangoTransactionModule(IArangoContext context) : base(context)
         {
         }
@@ -18,7 +17,7 @@ namespace Core.Arango.Modules.Internal
         {
             return await SendAsync<JObject>(HttpMethod.Post,
                 ApiPath(database, "transaction"),
-            Serialize(request), cancellationToken: cancellationToken);
+                Serialize(request), cancellationToken: cancellationToken);
         }
 
         public async Task<ArangoHandle> BeginAsync(ArangoHandle database, ArangoTransaction request,
@@ -26,7 +25,7 @@ namespace Core.Arango.Modules.Internal
         {
             var res = await SendAsync<JObject>(HttpMethod.Post,
                 ApiPath(database, "transaction/begin"),
-            Serialize(request), cancellationToken: cancellationToken);
+                Serialize(request), cancellationToken: cancellationToken);
 
             var transaction = res.GetValue("result").Value<string>("id");
             return new ArangoHandle(database, transaction);

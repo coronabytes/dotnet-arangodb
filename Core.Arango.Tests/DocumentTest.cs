@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
 using Core.Arango.Tests.Core;
@@ -9,6 +8,22 @@ namespace Core.Arango.Tests
 {
     public class DocumentTest : TestBase
     {
+        [Fact]
+        public async Task Get()
+        {
+            await Arango.Collection.CreateAsync("test", "test", ArangoCollectionType.Document);
+
+            await Arango.Document.CreateAsync("test", "test", new
+            {
+                Key = "abc",
+                Name = "a"
+            });
+
+            var doc = await Arango.Document.GetAsync<JObject>("test", "test", "abc");
+
+            Assert.Equal("a", doc["Name"]);
+        }
+
         [Fact]
         public async Task Update()
         {

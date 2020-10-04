@@ -1,11 +1,16 @@
-﻿namespace Core.Arango.Protocol
+﻿using System.Runtime.Serialization;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+
+namespace Core.Arango.Protocol
 {
-    public static class ArangoIndexType
+    [JsonConverter(typeof(StringEnumConverter))]
+    public enum ArangoIndexType
     {
-        public const string Hash = "hash";
-        public const string Skiplist = "skiplist";
-        public const string TTL = "ttl";
-        public const string Geo = "geo";
-        public const string FullText = "fulltext";
+        [EnumMember(Value = "hash")] Hash,
+        [EnumMember(Value = "skiplist")] Skiplist,
+        [EnumMember(Value = "ttl")] TTL,
+        [EnumMember(Value = "geo")] Geo,
+        [EnumMember(Value = "fulltext")] FullText
     }
 }

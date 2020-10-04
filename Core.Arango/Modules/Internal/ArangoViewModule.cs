@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net.Http;
-using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
@@ -10,7 +8,6 @@ using Newtonsoft.Json.Linq;
 
 namespace Core.Arango.Modules.Internal
 {
-
     internal class ArangoViewModule : ArangoModule, IArangoViewModule
     {
         internal ArangoViewModule(IArangoContext context) : base(context)

@@ -17,7 +17,7 @@ namespace Core.Arango
     /// <summary>
     ///     Thread-Safe ArangoDB Context
     /// </summary>
-    public partial class ArangoContext : IArangoContext
+    public class ArangoContext : IArangoContext
     {
         private static readonly HttpClient HttpClient = new HttpClient();
 

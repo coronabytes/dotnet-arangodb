@@ -15,6 +15,13 @@ namespace Core.Arango.Modules.Internal
         {
         }
 
+        public async Task<T> GetAsync<T>(ArangoHandle database, string collection, string key,
+            CancellationToken cancellationToken = default) where T : class
+        {
+            return await SendAsync<T>(HttpMethod.Get, ApiPath(database, $"document/{UrlEncode(collection)}/{key}"),
+                null, database.Transaction, cancellationToken: cancellationToken);
+        }
+
         public async Task<List<ArangoUpdateResult<TR>>> CreateManyAsync<T, TR>(ArangoHandle database,
             string collection, IEnumerable<T> docs, bool? waitForSync = null,
             bool? keepNull = null, bool? mergeObjects = null, bool? returnOld = null, bool? returnNew = null,

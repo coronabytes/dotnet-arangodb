@@ -4,7 +4,6 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Core.Arango.Modules.Internal
@@ -13,7 +12,6 @@ namespace Core.Arango.Modules.Internal
     {
         internal ArangoDatabaseModule(IArangoContext context) : base(context)
         {
-
         }
 
         public async Task<bool> CreateAsync(ArangoHandle name, CancellationToken cancellationToken = default)

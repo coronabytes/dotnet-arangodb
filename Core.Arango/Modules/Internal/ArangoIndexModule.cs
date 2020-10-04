@@ -37,7 +37,7 @@ namespace Core.Arango.Modules.Internal
             {
                 var indices = await ListAsync(database, col, cancellationToken);
 
-                foreach (var idx in indices) 
+                foreach (var idx in indices)
                     await DropAsync(database, idx, cancellationToken);
             }
         }

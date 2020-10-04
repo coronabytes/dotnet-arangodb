@@ -42,7 +42,8 @@ namespace Core.Arango.Tests
 
             var select = new List<int> {1, 2};
 
-            var res = await Arango.Query.ExecuteAsync<Entity>("test", $"FOR e IN test FILTER e.Value IN {select} RETURN e");
+            var res = await Arango.Query.ExecuteAsync<Entity>("test",
+                $"FOR e IN test FILTER e.Value IN {select} RETURN e");
 
             Assert.Equal(2, res.Count);
         }

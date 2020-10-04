@@ -12,6 +12,14 @@ namespace Core.Arango.Modules
     public interface IArangoDocumentModule
     {
         /// <summary>
+        ///     reads a single document
+        /// </summary>
+        Task<T> GetAsync<T>(ArangoHandle database,
+            string collection,
+            string key,
+            CancellationToken cancellationToken = default) where T : class;
+
+        /// <summary>
         ///     creates documents
         /// </summary>
         Task<List<ArangoUpdateResult<TR>>> CreateManyAsync<T, TR>(ArangoHandle database,

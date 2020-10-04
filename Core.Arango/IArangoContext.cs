@@ -4,8 +4,6 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Core.Arango.Modules;
-using Core.Arango.Modules.Internal;
-using Core.Arango.Protocol;
 using Newtonsoft.Json.Linq;
 
 namespace Core.Arango
@@ -20,6 +18,7 @@ namespace Core.Arango
         ///     Callback for query stats
         /// </summary>
         Action<string, IDictionary<string, object>, JToken> QueryProfile { get; set; }
+
         IArangoUserModule User { get; }
         IArangoCollectionModule Collection { get; }
         IArangoGraphModule Graph { get; }
@@ -31,7 +30,10 @@ namespace Core.Arango
         IArangoIndexModule Index { get; }
         IArangoAnalyzerModule Analyzer { get; }
 
-        Task<object> SendAsync(Type type, HttpMethod m, string url, string body = null, string transaction = null, bool throwOnError = true, bool auth = true, CancellationToken cancellationToken = default);
-        Task<T> SendAsync<T>(HttpMethod m, string url, string body = null, string transaction = null, bool throwOnError = true, bool auth = true, CancellationToken cancellationToken = default);
+        Task<object> SendAsync(Type type, HttpMethod m, string url, string body = null, string transaction = null,
+            bool throwOnError = true, bool auth = true, CancellationToken cancellationToken = default);
+
+        Task<T> SendAsync<T>(HttpMethod m, string url, string body = null, string transaction = null,
+            bool throwOnError = true, bool auth = true, CancellationToken cancellationToken = default);
     }
 }

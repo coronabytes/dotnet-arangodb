@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
@@ -17,7 +16,7 @@ namespace Core.Arango.Tests
             await Arango.Index.CreateAsync("test", "test", new ArangoIndex
             {
                 Fields = new List<string> {"test"},
-                Type = ArangoIndexType.Hash,
+                Type = ArangoIndexType.Hash
             });
 
             await Arango.Index.DropAllAsync("test");
