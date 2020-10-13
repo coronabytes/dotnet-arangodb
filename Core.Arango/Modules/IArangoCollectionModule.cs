@@ -22,5 +22,8 @@ namespace Core.Arango.Modules
 
         Task UpdateAsync(ArangoHandle database, string collection, ArangoCollectionUpdate update,
             CancellationToken cancellationToken = default);
+
+        Task DropCollectionAsync(ArangoHandle database, string collection,
+            CancellationToken cancellationToken = default);
     }
 }
