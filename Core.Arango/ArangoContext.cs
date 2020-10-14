@@ -47,8 +47,9 @@ namespace Core.Arango
             Query = new ArangoQueryModule(this);
             Index = new ArangoIndexModule(this);
             Analyzer = new ArangoAnalyzerModule(this);
+            Function = new ArangoFunctionModule(this);
 
-            var builder = new DbConnectionStringBuilder {ConnectionString = cs};
+            var builder = new DbConnectionStringBuilder { ConnectionString = cs };
             builder.TryGetValue("Server", out var s);
             builder.TryGetValue("Realm", out var r);
             builder.TryGetValue("User ID", out var uid);
@@ -87,6 +88,11 @@ namespace Core.Arango
         public IArangoQueryModule Query { get; }
         public IArangoIndexModule Index { get; }
         public IArangoAnalyzerModule Analyzer { get; }
+
+        /// <summary>
+        /// Implementation of user functions API https://www.arangodb.com/docs/stable/http/aql-user-functions.html
+        /// </summary>
+        public IArangoFunctionModule Function { get; }
 
         public int BatchSize { get; set; } = 500;
 
