@@ -1,16 +1,41 @@
-![.NET Core](https://github.com/coronabytes/dotnet-arangodb/workflows/.NET%20Core/badge.svg)
+![Build](https://github.com/coronabytes/dotnet-arangodb/workflows/Build/badge.svg)
+![Nuget](https://img.shields.io/nuget/v/Core.Arango)
+![Nuget](https://img.shields.io/nuget/dt/Core.Arango)
 
-# Disclaimer
-- This is a minimalistic .NET driver for ArangoDB (3.7+)
+# .NET driver for ArangoDB
+- .NET Standard 2.1 driver for ArangoDB 3.6 and 3.7+
 - The key difference to any other available driver is the ability to switch databases on a per request basis, which allows for easy database per tenant deployments
 - Id, Key, From, To properties will always be translated to their respective arango form (_id, _key, _from, _to), which allows to construct updates from anonymous types
 - First parameter of any method in most cases is an ArangoHandle which has implicit conversion from string and GUID
   - e.g. "master" and "logs" database and GUID for each tenant
+- It does not support optimistic concurrency with _rev as constructing patch updates is way easier
 
 ## Initialize context
-- Realm prefixes all further database handles (e.g. "myproject-database")
+- Realm optionally prefixes all further database handles (e.g. "myproject-database")
+- Context is completely thread-safe an can be shared for your whole application
 ```csharp
 var arango = new ArangoContext("Server=http://localhost:8529;Realm=myproject;User=root;Password=;");
+```
+- For AspNetCore DI extension is available:
+```csharp
+public void ConfigureServices(IServiceCollection services)
+{
+    services.AddArango(Configuration.GetConnectionString("Arango"))
+}
+```
+
+```csharp
+[ApiController]
+[Route("api/demo")]
+public class DemoController : Controller 
+{
+    private readonly IArangoContext _arango;
+
+    public DemoController(IArangoContext arango)
+    {
+        _arango = arango;
+    }
+}
 ```
 
 ## Create collection
