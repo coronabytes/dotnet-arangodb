@@ -14,13 +14,16 @@ namespace Core.Arango.Tests
         {
             var collection = new ServiceCollection();
 
-            Assert.Same(collection, collection.AddArango(sp => $"Server={SERVER};Realm={REALM};User={USER};Password=;"));
+            Assert.Same(collection,
+                collection.AddArango(sp => $"Server={SERVER};Realm={REALM};User={USER};Password=;"));
 
             var serviceProvider = collection.BuildServiceProvider();
             var arango = serviceProvider.GetRequiredService<IArangoContext>();
 
             using (var scope = serviceProvider.CreateScope())
+            {
                 Assert.Same(arango, scope.ServiceProvider.GetRequiredService<IArangoContext>());
+            }
 
             Assert.Same(arango, serviceProvider.GetRequiredService<IArangoContext>());
 
@@ -37,7 +40,9 @@ namespace Core.Arango.Tests
             var arango = serviceProvider.GetRequiredService<IArangoContext>();
 
             using (var scope = serviceProvider.CreateScope())
+            {
                 Assert.Same(arango, scope.ServiceProvider.GetRequiredService<IArangoContext>());
+            }
 
             Assert.Same(arango, serviceProvider.GetRequiredService<IArangoContext>());
 
