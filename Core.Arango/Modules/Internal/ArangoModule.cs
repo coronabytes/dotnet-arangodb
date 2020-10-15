@@ -13,7 +13,7 @@ namespace Core.Arango.Modules.Internal
 {
     internal abstract class ArangoModule
     {
-        private readonly IArangoContext _context;
+        protected readonly IArangoContext _context;
 
         protected ArangoModule(IArangoContext context)
         {

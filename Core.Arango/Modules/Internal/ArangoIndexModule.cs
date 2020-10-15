@@ -11,11 +11,8 @@ namespace Core.Arango.Modules.Internal
 {
     internal class ArangoIndexModule : ArangoModule, IArangoIndexModule
     {
-        private readonly IArangoContext _context;
-
         internal ArangoIndexModule(IArangoContext context) : base(context)
         {
-            _context = context;
         }
 
         public async Task CreateAsync(ArangoHandle database, string collection, ArangoIndex request,

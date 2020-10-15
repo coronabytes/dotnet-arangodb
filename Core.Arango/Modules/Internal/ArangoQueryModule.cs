@@ -10,11 +10,8 @@ namespace Core.Arango.Modules.Internal
 {
     internal class ArangoQueryModule : ArangoModule, IArangoQueryModule
     {
-        private readonly IArangoContext _context;
-
         internal ArangoQueryModule(IArangoContext context) : base(context)
         {
-            _context = context;
         }
 
         public async Task<List<T>> FindAsync<T>(ArangoHandle database, string collection, FormattableString filter,
