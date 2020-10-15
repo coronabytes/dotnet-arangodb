@@ -84,7 +84,7 @@ namespace Core.Arango.Tests
 
             var obj = await Arango.Query.SingleOrDefaultAsync<JObject>("test", "test", $"x._key == {"abc"}");
 
-            Assert.Equal(null, obj["Name"]);
+            Assert.Null(obj["Name"]);
             Assert.Equal("c", obj["Value"]);
         }
 
