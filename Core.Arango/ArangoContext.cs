@@ -5,6 +5,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Core.Arango.Modules;
@@ -213,7 +214,10 @@ namespace Core.Arango
         {
             var res = await SendAsync<JObject>(HttpMethod.Get, $"{Server}/_db/_system/_api/version",
                 cancellationToken: cancellationToken);
-            return Version.Parse(res.Value<string>("version"));
+
+            var version = res.Value<string>("version");
+            version = Regex.Replace(version, "[^0-9.]", string.Empty);
+            return Version.Parse(version);
         }
     }
 }
