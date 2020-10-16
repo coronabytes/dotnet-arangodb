@@ -4,6 +4,9 @@ using Newtonsoft.Json.Converters;
 
 namespace Core.Arango.Protocol
 {
+    /// <summary>
+    /// Requires ArangoDB 3.7
+    /// </summary>
     [JsonConverter(typeof(StringEnumConverter))]
     public enum ArangoOverwriteMode
     {

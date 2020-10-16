@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
 using Core.Arango.Tests.Core;
@@ -45,6 +46,9 @@ namespace Core.Arango.Tests
         [Fact]
         public async Task CreateUpdateMode()
         {
+            if (await Arango.GetVersionAsync() < Version.Parse("3.7"))
+                return;
+
             await Arango.Collection.CreateAsync("test", "test", ArangoCollectionType.Document);
 
             await Arango.Document.CreateAsync("test", "test", new
@@ -68,6 +72,9 @@ namespace Core.Arango.Tests
         [Fact]
         public async Task CreateReplaceMode()
         {
+            if (await Arango.GetVersionAsync() < Version.Parse("3.7"))
+                return;
+
             await Arango.Collection.CreateAsync("test", "test", ArangoCollectionType.Document);
 
             await Arango.Document.CreateAsync("test", "test", new
@@ -91,6 +98,9 @@ namespace Core.Arango.Tests
         [Fact]
         public async Task CreateConflictMode()
         {
+            if (await Arango.GetVersionAsync() < Version.Parse("3.7"))
+                return;
+
             await Arango.Collection.CreateAsync("test", "test", ArangoCollectionType.Document);
 
             await Arango.Document.CreateAsync("test", "test", new
