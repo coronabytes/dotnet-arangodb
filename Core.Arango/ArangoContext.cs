@@ -88,10 +88,6 @@ namespace Core.Arango
         public IArangoQueryModule Query { get; }
         public IArangoIndexModule Index { get; }
         public IArangoAnalyzerModule Analyzer { get; }
-
-        /// <summary>
-        /// Implementation of user functions API https://www.arangodb.com/docs/stable/http/aql-user-functions.html
-        /// </summary>
         public IArangoFunctionModule Function { get; }
 
         public int BatchSize { get; set; } = 500;
@@ -126,10 +122,7 @@ namespace Core.Arango
                 _authValidUntil = token.ValidTo;
             }
 
-            var msg = new HttpRequestMessage(m, url)
-            {
-                Version = HttpVersion.Version11
-            };
+            var msg = new HttpRequestMessage(m, url);
 
             msg.Headers.Add(HttpRequestHeader.KeepAlive.ToString(), "true");
 
@@ -180,6 +173,8 @@ namespace Core.Arango
                 _auth = $"Bearer {jwt}";
                 _authValidUntil = token.ValidTo;
             }
+
+            Version version = HttpVersion.Version11;
 
             var msg = new HttpRequestMessage(m, url)
             {

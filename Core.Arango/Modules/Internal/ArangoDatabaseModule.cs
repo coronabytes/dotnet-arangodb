@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
+using Core.Arango.Protocol.Internal;
 using Newtonsoft.Json.Linq;
 
 namespace Core.Arango.Modules.Internal

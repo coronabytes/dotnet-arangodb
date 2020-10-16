@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Core.Arango.Protocol
+namespace Core.Arango.Protocol.Internal
 {
     internal class QueryResponse<T>: QueryResponseBase<T>
     {
@@ -14,11 +13,5 @@ namespace Core.Arango.Protocol
         [JsonProperty(PropertyName = "count")] public long Count { get; set; }
 
         [JsonProperty(PropertyName = "extra")] public JObject Extra { get; set; }
-    }
-
-    internal class GraphResponse<T>
-    {
-        [JsonProperty(PropertyName = "graphs")]
-        public List<T> Graphs { get; set; }
     }
 }

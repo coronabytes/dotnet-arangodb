@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace Core.Arango.Protocol
+namespace Core.Arango.Protocol.Internal
 {
-    public abstract class QueryResponseBase<T>: ArangoResponseBase
+    internal abstract class QueryResponseBase<T>: ResponseBase
     {
         [JsonProperty(PropertyName = "result")]
         public List<T> Result { get; set; }

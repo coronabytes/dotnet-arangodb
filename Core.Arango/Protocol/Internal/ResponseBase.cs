@@ -1,12 +1,11 @@
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 
-namespace Core.Arango.Protocol
+namespace Core.Arango.Protocol.Internal
 {
     /// <summary>
     /// Base response model
     /// </summary>
-    public abstract class ArangoResponseBase
+    internal abstract class ResponseBase
     {
         [JsonProperty(PropertyName = "code")]
         public short Code { get; set; }

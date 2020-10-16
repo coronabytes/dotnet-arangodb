@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Core.Arango.Protocol
+namespace Core.Arango.Protocol.Internal
 {
     internal class DocumentCreateResponse<T>
     {

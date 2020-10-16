@@ -1,8 +1,8 @@
 using Newtonsoft.Json;
 
-namespace Core.Arango.Protocol
+namespace Core.Arango.Protocol.Internal
 {
-    public class FunctionRemoveResponse : ArangoResponseBase
+    internal class FunctionRemoveResponse : ResponseBase
     {
         [JsonProperty(PropertyName = "deletedCount")]
         public int DeletedCount { get; set; }

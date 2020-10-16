@@ -27,27 +27,23 @@ namespace Core.Arango.Tests
         {
             var function = Arango.Function;
 
-            var result = await function.CreateAsync("test", new ArangoFunctionDefinition
+            var isNewlyCreated = await function.CreateAsync("test", new ArangoFunctionDefinition
             {
                 Name = "Testfunctions::TestFn1",
                 Code = "function (a) { return a * 2; }",
-                IsDeterministic = true,
+                IsDeterministic = true
             });
 
-            Assert.NotNull(result);
-            Assert.False(result.Error);
-            Assert.True(result.IsNewlyCreated);
+            Assert.True(isNewlyCreated);
 
-            result = await function.CreateAsync("test", new ArangoFunctionDefinition
+            isNewlyCreated = await function.CreateAsync("test", new ArangoFunctionDefinition
             {
                 Name = "Testfunctions::TestFn1",
                 Code = "function (a) { return a * 2; }",
-                IsDeterministic = true,
+                IsDeterministic = true
             });
 
-            Assert.NotNull(result);
-            Assert.False(result.Error);
-            Assert.False(result.IsNewlyCreated);
+            Assert.False(isNewlyCreated);
         }
 
         [Fact, Priority(2000)]
@@ -87,14 +83,12 @@ namespace Core.Arango.Tests
 
             Assert.NotNull(result);
 
-            Assert.False(result.Error);
-
             AssertFunctionsList(new[]{
                 "Testfunctions::TestFn1",
                 "Testfunctions::TestFn2",
                 "Testfunctions::TestFn3",
                 "OtherTestfunctions::TestFn4",
-            }, result.Result);
+            }, result);
 
             result = await function.ListAsync("test", "Testfunctions::");
 
@@ -102,7 +96,7 @@ namespace Core.Arango.Tests
                 "Testfunctions::TestFn1",
                 "Testfunctions::TestFn2",
                 "Testfunctions::TestFn3",
-            }, result.Result);
+            }, result);
         }
 
         [Fact, Priority(3000)]
@@ -142,63 +136,48 @@ namespace Core.Arango.Tests
 
             await Assert.ThrowsAsync<ArangoException>(async () => await function.RemoveAsync("test", "Testfunctions::"));
 
-            var result = await function.RemoveAsync("test", new FunctionRemoveRequest
-            {
-                Name = "BadNamespace",
-                Group = true,
-            });
+            var deletedCount = await function.RemoveAsync("test", "BadNamespace", true);
 
-            Assert.NotNull(result);
-            Assert.Equal(0, result.DeletedCount);
+            Assert.Equal(0, deletedCount);
 
-            result = await function.RemoveAsync("test", "Testfunctions::TestFn3");
+            deletedCount = await function.RemoveAsync("test", "Testfunctions::TestFn3");
 
-            Assert.NotNull(result);
-            Assert.Equal(1, result.DeletedCount);
+            Assert.Equal(1, deletedCount);
 
             var resultList = await function.ListAsync("test");
 
             Assert.NotNull(resultList);
-            Assert.False(resultList.Error);
 
             AssertFunctionsList(new[]{
                 "Testfunctions::TestFn1",
                 "Testfunctions::TestFn2",
                 "OtherTestfunctions::TestFn4",
-            }, resultList.Result);
+            }, resultList);
 
-            result = await function.RemoveAsync("test", new FunctionRemoveRequest
-            {
-                Name = "Testfunctions::",
-                Group = true,
-            });
+            deletedCount = await function.RemoveAsync("test", "Testfunctions::", true);
 
-            Assert.NotNull(result);
-            Assert.Equal(2, result.DeletedCount);
+            Assert.Equal(2, deletedCount);
 
             resultList = await function.ListAsync("test");
 
             Assert.NotNull(resultList);
-            Assert.False(resultList.Error);
 
             AssertFunctionsList(new[]{
                 "OtherTestfunctions::TestFn4",
-            }, resultList.Result);
+            }, resultList);
 
-            result = await function.RemoveAsync("test", "OtherTestfunctions::TestFn4");
+            deletedCount = await function.RemoveAsync("test", "OtherTestfunctions::TestFn4");
 
-            Assert.NotNull(result);
-            Assert.Equal(1, result.DeletedCount);
+            Assert.Equal(1, deletedCount);
 
             resultList = await function.ListAsync("test");
 
             Assert.NotNull(resultList);
-            Assert.False(resultList.Error);
 
-            AssertFunctionsList(new string[0], resultList.Result);
+            AssertFunctionsList(new string[0], resultList);
         }
 
-        private void AssertFunctionsList(IList<string> expectedNames, IList<ArangoFunctionDefinition> list)
+        private void AssertFunctionsList(IList<string> expectedNames, IReadOnlyCollection<ArangoFunctionDefinition> list)
         {
             Assert.NotNull(expectedNames);
             Assert.NotNull(list);
