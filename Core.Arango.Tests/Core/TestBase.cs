@@ -6,7 +6,7 @@ namespace Core.Arango.Tests.Core
 {
     public abstract class TestBase : IAsyncLifetime
     {
-        protected readonly ArangoContext Arango =
+        protected readonly IArangoContext Arango =
             new ArangoContext($"Server=http://localhost:8529;Realm=CI-{Guid.NewGuid():D};User=root;Password=;");
 
         public async Task InitializeAsync()

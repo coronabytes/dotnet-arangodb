@@ -29,11 +29,14 @@ namespace Core.Arango
         IArangoViewModule View { get; }
         IArangoIndexModule Index { get; }
         IArangoAnalyzerModule Analyzer { get; }
+        IArangoFunctionModule Function { get; }
 
         Task<object> SendAsync(Type type, HttpMethod m, string url, string body = null, string transaction = null,
             bool throwOnError = true, bool auth = true, CancellationToken cancellationToken = default);
 
         Task<T> SendAsync<T>(HttpMethod m, string url, string body = null, string transaction = null,
             bool throwOnError = true, bool auth = true, CancellationToken cancellationToken = default);
+
+        Task<Version> GetVersionAsync(CancellationToken cancellationToken = default);
     }
 }
