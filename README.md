@@ -4,11 +4,17 @@
 
 # .NET driver for ArangoDB
 - .NET Standard 2.1 driver for ArangoDB 3.6 and 3.7+
+- Nuget [Core.ArangoDB](https://www.nuget.org/packages/Core.Arango/)
 - The key difference to any other available driver is the ability to switch databases on a per request basis, which allows for easy database per tenant deployments
 - Id, Key, From, To properties will always be translated to their respective arango form (_id, _key, _from, _to), which allows to construct updates from anonymous types
 - First parameter of any method in most cases is an ArangoHandle which has implicit conversion from string and GUID
   - e.g. "master" and "logs" database and GUID for each tenant
 - It does not support optimistic concurrency with _rev as constructing patch updates is way easier
+
+# Extensions
+This driver has some [extensions](https://github.com/coronabytes/dotnet-arangodb-extensions) for LINQ, DevExtreme, Serilog and DataProtection available.
+
+# Common Snippets
 
 ## Initialize context
 - Realm optionally prefixes all further database handles (e.g. "myproject-database")
@@ -38,10 +44,58 @@ public class DemoController : Controller
 }
 ```
 
+## Create database
+```csharp
+await arango.Database.CreateAsync("database");
+```
+
 ## Create collection
 ```csharp
 await arango.Collection.CreateAsync("database", "collection", ArangoCollectionType.Document);
 ```
+
+- collection with keys in ascending lexicographical sort order (ideal for log/audit collections)
+```csharp
+await arango.Collection.CreateAsync("database", new ArangoCollection
+{
+    Name = "paddedcollection",
+    Type = ArangoCollectionType.Document,
+    KeyOptions = new ArangoKeyOptions
+    {
+        Type = ArangoKeyType.Padded,
+        AllowUserKeys = false
+    }
+});
+```
+
+## Create document
+```csharp
+await arango.Document.CreateAsync("database", "collection", new
+{
+    Key = Guid.NewGuid(),
+    SomeValue = 1
+});
+```
+
+## Update document
+```csharp
+await arango.Document.UpdateAsync("database", "collection", new
+{
+    Key = Guid.Parse("some-guid"),
+    SomeValue = 2
+});
+```
+
+## Query with bind vars through string interpolation
+```csharp
+var list = new List<int> {1, 2, 3};
+
+var result = await arango.Query.ExecuteAsync<JObject>("database",
+  $"FOR c IN collection FILTER c.SomeValue IN {list} RETURN c");
+```
+
+
+# Snippets for Advanced Use Cases
 
 ## Create index
 ```csharp
@@ -119,30 +173,14 @@ await arango.Graph.CreateAsync("database", new ArangoGraph
 });
 ```
 
-## Create document
+## Create custom function
 ```csharp
-await arango.Document.CreateAsync("database", "collection", new
+await arango.Function.CreateAsync("database", new ArangoFunctionDefinition
 {
-    Key = Guid.NewGuid(),
-    SomeValue = 1
+    Name = "CUSTOM::TIMES10",
+    Code = "function (a) { return a * 10; }",
+    IsDeterministic = true
 });
-```
-
-## Update document
-```csharp
-await arango.Document.UpdateAsync("database", "collection", new
-{
-    Key = Guid.Parse("some-guid"),
-    SomeValue = 2
-});
-```
-
-## Query with bind vars through string interpolation
-```csharp
-var list = new List<int> {1, 2, 3};
-
-var result = await arango.Query.ExecuteAsync<JObject>("database",
-  $"FOR c IN collection FILTER c.SomeValue IN {list} RETURN c");
 ```
 
 ## Stream transactions
