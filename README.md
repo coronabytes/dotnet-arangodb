@@ -18,7 +18,7 @@ This driver has some [extensions](https://github.com/coronabytes/dotnet-arangodb
 
 ## Initialize context
 - Realm optionally prefixes all further database handles (e.g. "myproject-database")
-- Context is completely thread-safe an can be shared for your whole application
+- Context is completely thread-safe and can be shared for your whole application
 ```csharp
 var arango = new ArangoContext("Server=http://localhost:8529;Realm=myproject;User=root;Password=;");
 ```
@@ -93,7 +93,14 @@ var list = new List<int> {1, 2, 3};
 var result = await arango.Query.ExecuteAsync<JObject>("database",
   $"FOR c IN collection FILTER c.SomeValue IN {list} RETURN c");
 ```
+results in AQL injection save syntax:
+```js
+'FOR c IN collection FILTER c.SomeValue IN @P1 RETURN c'
 
+{
+  "P1": [1, 2, 3]
+}
+```
 
 # Snippets for Advanced Use Cases
 
