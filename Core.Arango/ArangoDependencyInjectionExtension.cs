@@ -19,12 +19,14 @@ namespace Core.Arango
             });
         }
 
-        public static IServiceCollection AddArango(this IServiceCollection collection, string connectionString)
+        public static IServiceCollection AddArango(this IServiceCollection collection, string connectionString,
+            IArangoConfiguration settings = null)
         {
             if (collection == null) throw new ArgumentNullException(nameof(collection));
             if (connectionString == null) throw new ArgumentNullException(nameof(connectionString));
 
-            return collection.AddSingleton<IArangoContext>(serviceProvider => new ArangoContext(connectionString));
+            return collection.AddSingleton<IArangoContext>(serviceProvider =>
+                new ArangoContext(connectionString, settings));
         }
     }
 }

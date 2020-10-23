@@ -4,7 +4,6 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using Core.Arango.Protocol;
 using Core.Arango.Protocol.Internal;
 
 namespace Core.Arango.Modules.Internal
@@ -60,7 +59,7 @@ namespace Core.Arango.Modules.Internal
                     {
                         Query = query,
                         BindVars = bindVars,
-                        BatchSize = _context.BatchSize,
+                        BatchSize = Context.Configuration.BatchSize,
                         Cache = cache,
                         Options = new QueryRequestOptions
                         {
@@ -70,7 +69,7 @@ namespace Core.Arango.Modules.Internal
 
                 final.AddRange(firstResult.Result);
 
-                _context.QueryProfile?.Invoke(query, bindVars, firstResult.Extra.GetValue("stats"));
+                Context.QueryProfile?.Invoke(query, bindVars, firstResult.Extra.GetValue("stats"));
 
                 if (fullCount.HasValue && fullCount.Value)
                     final.FullCount = firstResult.Extra.GetValue("stats").Value<int>("fullCount");
@@ -96,7 +95,7 @@ namespace Core.Arango.Modules.Internal
             }
             catch
             {
-                _context.QueryProfile?.Invoke(query, bindVars, null);
+                Context.QueryProfile?.Invoke(query, bindVars, null);
                 throw;
             }
         }
@@ -114,7 +113,7 @@ namespace Core.Arango.Modules.Internal
             {
                 Query = query,
                 BindVars = bindVars,
-                BatchSize = _context.BatchSize,
+                BatchSize = Context.Configuration.BatchSize,
                 Cache = cache,
                 Options = new QueryRequestOptions
                 {

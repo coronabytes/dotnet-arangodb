@@ -27,7 +27,7 @@ namespace Core.Arango.Tests
 
             Assert.Same(arango, serviceProvider.GetRequiredService<IArangoContext>());
 
-            Assert.Equal(SERVER, arango.Server);
+            Assert.Equal(SERVER, arango.Configuration.Server);
         }
 
         [Fact]
@@ -46,7 +46,7 @@ namespace Core.Arango.Tests
 
             Assert.Same(arango, serviceProvider.GetRequiredService<IArangoContext>());
 
-            Assert.Equal(SERVER, arango.Server);
+            Assert.Equal(SERVER, arango.Configuration.Server);
         }
     }
 }

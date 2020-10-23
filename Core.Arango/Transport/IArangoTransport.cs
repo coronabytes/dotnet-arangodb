@@ -1,0 +1,18 @@
+﻿using System;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace Core.Arango.Transport
+{
+    public interface IArangoTransport
+    {
+        void Initialize(IArangoContext context);
+
+        Task<object> SendAsync(Type type, HttpMethod m, string url, string body = null, string transaction = null,
+            bool throwOnError = true, bool auth = true, CancellationToken cancellationToken = default);
+
+        Task<T> SendAsync<T>(HttpMethod m, string url, string body = null, string transaction = null,
+            bool throwOnError = true, bool auth = true, CancellationToken cancellationToken = default);
+    }
+}

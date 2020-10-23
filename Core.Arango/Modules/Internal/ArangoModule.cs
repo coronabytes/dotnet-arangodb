@@ -7,25 +7,24 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 
 namespace Core.Arango.Modules.Internal
 {
     internal abstract class ArangoModule
     {
-        protected readonly IArangoContext _context;
+        protected readonly IArangoContext Context;
 
         protected ArangoModule(IArangoContext context)
         {
-            _context = context;
+            Context = context;
         }
 
-        public string Realm => _context.Realm;
+        public string Realm => Context.Configuration.Realm;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected string Serialize(object value)
         {
-            return JsonConvert.SerializeObject(value, ArangoContext.JsonSerializerSettings);
+            return Context.Configuration.Serializer.Serialize(value);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -34,19 +33,19 @@ namespace Core.Arango.Modules.Internal
             if (name == "_system")
                 return "_system";
 
-            return UrlEncode(_context.Realm + name);
+            return UrlEncode(Realm + name);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected string ApiPath(ArangoHandle handle, string path)
         {
-            return $"{_context.Server}/_db/{RealmPrefix(handle)}/_api/{path}";
+            return $"{Context.Configuration.Server}/_db/{RealmPrefix(handle)}/_api/{path}";
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected string ApiPath(string path)
         {
-            return $"{_context.Server}/_api/{path}";
+            return $"{Context.Configuration.Server}/_api/{path}";
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -60,7 +59,8 @@ namespace Core.Arango.Modules.Internal
             string transaction = null, bool throwOnError = true, bool auth = true,
             CancellationToken cancellationToken = default)
         {
-            return _context.SendAsync<T>(m, url, body, transaction, throwOnError, auth, cancellationToken);
+            return Context.Configuration.Transport.SendAsync<T>(m, url, body, transaction, throwOnError, auth,
+                cancellationToken);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -68,7 +68,8 @@ namespace Core.Arango.Modules.Internal
             string transaction = null, bool throwOnError = true, bool auth = true,
             CancellationToken cancellationToken = default)
         {
-            return _context.SendAsync(type, m, url, body, transaction, throwOnError, auth, cancellationToken);
+            return Context.Configuration.Transport.SendAsync(type, m, url, body, transaction, throwOnError, auth,
+                cancellationToken);
         }
 
         public string AddQueryString(string uri,
@@ -107,7 +108,6 @@ namespace Core.Arango.Modules.Internal
             sb.Append(anchorText);
             return sb.ToString();
         }
-
 
         public string Parameterize(FormattableString query, out Dictionary<string, object> parameter)
         {

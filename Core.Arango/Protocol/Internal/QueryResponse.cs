@@ -3,7 +3,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Core.Arango.Protocol.Internal
 {
-    internal class QueryResponse<T>: QueryResponseBase<T>
+    internal class QueryResponse<T> : QueryResponseBase<T>
     {
         [JsonProperty(PropertyName = "hasMore")]
         public bool HasMore { get; set; }

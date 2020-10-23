@@ -28,7 +28,7 @@ namespace Core.Arango.Modules.Internal
         /// </summary>
         public async Task DropAllAsync(ArangoHandle database, CancellationToken cancellationToken = default)
         {
-            var collections = await _context.Collection.ListAsync(database, cancellationToken);
+            var collections = await Context.Collection.ListAsync(database, cancellationToken);
 
             foreach (var col in collections)
             {

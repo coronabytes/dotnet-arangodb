@@ -33,12 +33,14 @@ namespace Core.Arango.Modules.Internal
             CancellationToken cancellationToken = default)
         {
             var res = await SendAsync<FunctionRemoveResponse>(HttpMethod.Delete,
-                ApiPath(database, $"{API}/{name}?group={(group?? false).ToString().ToLowerInvariant()}"), cancellationToken: cancellationToken);
+                ApiPath(database, $"{API}/{name}?group={(group ?? false).ToString().ToLowerInvariant()}"),
+                cancellationToken: cancellationToken);
 
             return res.DeletedCount;
         }
 
-        public async Task<IReadOnlyCollection<ArangoFunctionDefinition>> ListAsync(ArangoHandle database, string ns = null,
+        public async Task<IReadOnlyCollection<ArangoFunctionDefinition>> ListAsync(ArangoHandle database,
+            string ns = null,
             CancellationToken cancellationToken = default)
         {
             ns = string.IsNullOrEmpty(ns) ? "" : "/" + ns;
