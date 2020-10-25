@@ -28,7 +28,7 @@ namespace Core.Arango.Modules.Internal
         {
             await SendAsync<QueryResponse<JObject>>(HttpMethod.Post,
                 ApiPath(database, "analyzer"),
-                Serialize(analyzer),
+                analyzer,
                 cancellationToken: cancellationToken);
         }
 

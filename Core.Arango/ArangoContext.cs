@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.Common;
 using System.Net.Http;
 using System.Text.RegularExpressions;
@@ -7,8 +6,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Core.Arango.Modules;
 using Core.Arango.Modules.Internal;
-using Core.Arango.Serialization;
-using Core.Arango.Transport;
 using Newtonsoft.Json.Linq;
 
 namespace Core.Arango
@@ -18,6 +15,19 @@ namespace Core.Arango
     /// </summary>
     public class ArangoContext : IArangoContext
     {
+        public ArangoContext(IArangoConfiguration config)
+        {
+            if (config == null)
+                throw new ArgumentNullException(nameof(config));
+
+            Configuration = config;
+
+            if (string.IsNullOrWhiteSpace(config.Realm))
+                Configuration.Realm = string.Empty;
+            else
+                Configuration.Realm = config.Realm + "-";
+        }
+
         public ArangoContext(string cs, IArangoConfiguration settings = null)
         {
             Configuration = settings ?? new ArangoConfiguration();
@@ -49,13 +59,6 @@ namespace Core.Arango
             Configuration.User = user;
             Configuration.Password = password;
 
-            if (Configuration.BatchSize <= 0)
-                Configuration.BatchSize = 500;
-
-            Configuration.Serializer ??= new ArangoJsonNetSerializer(new ArangoDefaultContractResolver());
-            Configuration.Transport ??= new ArangoHttpTransport();
-            Configuration.Transport.Initialize(this);
-
             User = new ArangoUserModule(this);
             Collection = new ArangoCollectionModule(this);
             View = new ArangoViewModule(this);
@@ -70,7 +73,6 @@ namespace Core.Arango
         }
 
         public IArangoUserModule User { get; }
-
         public IArangoDatabaseModule Database { get; }
         public IArangoCollectionModule Collection { get; }
         public IArangoViewModule View { get; }
@@ -83,15 +85,10 @@ namespace Core.Arango
         public IArangoFunctionModule Function { get; }
         public IArangoConfiguration Configuration { get; }
 
-        /// <summary>
-        ///     Callback for query stats
-        /// </summary>
-        public Action<string, IDictionary<string, object>, JToken> QueryProfile { get; set; }
-
         public async Task<Version> GetVersionAsync(CancellationToken cancellationToken = default)
         {
             var res = await Configuration.Transport.SendAsync<JObject>(HttpMethod.Get,
-                $"{Configuration.Server}/_db/_system/_api/version",
+                "/_db/_system/_api/version",
                 cancellationToken: cancellationToken);
 
             var version = res.Value<string>("version");

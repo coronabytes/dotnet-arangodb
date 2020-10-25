@@ -21,7 +21,7 @@ namespace Core.Arango.Modules.Internal
         public async Task<bool> CreateAsync(ArangoUser user, CancellationToken cancellationToken = default)
         {
             var res = await SendAsync<JObject>(HttpMethod.Post,
-                ApiPath("user"), Serialize(user), cancellationToken: cancellationToken);
+                ApiPath("user"), user, cancellationToken: cancellationToken);
 
             return res != null;
         }
@@ -44,10 +44,10 @@ namespace Core.Arango.Modules.Internal
         {
             var res = await SendAsync<JObject>(HttpMethod.Put,
                 ApiPath($"user/{UrlEncode(user)}/database/{RealmPrefix(handle)}"),
-                Serialize(new
+                new
                 {
                     grant = access
-                }), cancellationToken: cancellationToken);
+                }, cancellationToken: cancellationToken);
 
             return res != null;
         }

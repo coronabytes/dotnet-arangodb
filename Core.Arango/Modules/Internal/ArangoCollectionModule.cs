@@ -20,11 +20,11 @@ namespace Core.Arango.Modules.Internal
         {
             await SendAsync<JObject>(HttpMethod.Post,
                 ApiPath(database, "collection"),
-                Serialize(new ArangoCollection
+                new ArangoCollection
                 {
                     Name = collection,
                     Type = type
-                }), cancellationToken: cancellationToken);
+                }, cancellationToken: cancellationToken);
         }
 
         public async Task CreateAsync(ArangoHandle database, ArangoCollection collection,
@@ -32,7 +32,7 @@ namespace Core.Arango.Modules.Internal
         {
             await SendAsync<JObject>(HttpMethod.Post,
                 ApiPath(database, "collection"),
-                Serialize(collection),
+                collection,
                 cancellationToken: cancellationToken);
         }
 
@@ -58,7 +58,7 @@ namespace Core.Arango.Modules.Internal
         {
             await SendAsync<JObject>(HttpMethod.Put,
                 ApiPath(database, $"collection/{collection}/properties"),
-                Serialize(update),
+                update,
                 cancellationToken: cancellationToken);
         }
 
@@ -67,10 +67,10 @@ namespace Core.Arango.Modules.Internal
         {
             await SendAsync<JObject>(HttpMethod.Put,
                 ApiPath(database, $"collection/{oldname}/rename"),
-                Serialize(new
+                new
                 {
                     name = newname
-                }),
+                },
                 cancellationToken: cancellationToken);
         }
 

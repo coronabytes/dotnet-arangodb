@@ -12,31 +12,28 @@ namespace Core.Arango.Transport
     public class ArangoHttpTransport : IArangoTransport
     {
         private static readonly HttpClient HttpClient = new HttpClient();
+        private readonly IArangoConfiguration _configuration;
         private string _auth;
         private DateTime _authValidUntil = DateTime.MinValue;
-        private IArangoContext _context;
 
-        public void Initialize(IArangoContext context)
+        public ArangoHttpTransport(IArangoConfiguration configuration)
         {
-            _context = context;
+            _configuration = configuration;
         }
 
-        /// <summary>
-        ///     HTTP request abstraction
-        /// </summary>
-        public async Task<T> SendAsync<T>(HttpMethod m, string url, string body = null,
+        public async Task<T> SendAsync<T>(HttpMethod m, string url, object body = null,
             string transaction = null, bool throwOnError = true, bool auth = true,
             CancellationToken cancellationToken = default)
         {
             if (auth && (_auth == null || _authValidUntil < DateTime.UtcNow.AddMinutes(-10)))
             {
                 var authResponse = await SendAsync<JObject>(HttpMethod.Post,
-                    $"{_context.Configuration.Server}/_open/auth",
-                    _context.Configuration.Serializer.Serialize(new
+                    "/_open/auth",
+                    new
                     {
-                        username = _context.Configuration.User,
-                        password = _context.Configuration.Password ?? string.Empty
-                    }), auth: false, cancellationToken: cancellationToken);
+                        username = _configuration.User,
+                        password = _configuration.Password ?? string.Empty
+                    }, auth: false, cancellationToken: cancellationToken);
 
                 var jwt = authResponse.Value<string>("jwt");
                 var token = new JwtSecurityToken(jwt.Replace("=", ""));
@@ -44,7 +41,7 @@ namespace Core.Arango.Transport
                 _authValidUntil = token.ValidTo;
             }
 
-            var msg = new HttpRequestMessage(m, url);
+            var msg = new HttpRequestMessage(m, _configuration.Server + url);
 
             msg.Headers.Add(HttpRequestHeader.KeepAlive.ToString(), "true");
 
@@ -55,9 +52,15 @@ namespace Core.Arango.Transport
                 msg.Headers.Add("x-arango-trx-id", transaction);
 
             if (body != null)
-                msg.Content = new StringContent(body, Encoding.UTF8, "application/json");
+            {
+                var json = _configuration.Serializer.Serialize(body);
+                msg.Content = new StringContent(json, Encoding.UTF8,
+                    "application/json");
+            }
             else
+            {
                 msg.Headers.Add(HttpRequestHeader.ContentLength.ToString(), "0");
+            }
 
             var res = await HttpClient.SendAsync(msg, cancellationToken);
 
@@ -74,23 +77,23 @@ namespace Core.Arango.Transport
             if (content == "{}")
                 return default;
 
-            return _context.Configuration.Serializer.Deserialize<T>(content);
+            return _configuration.Serializer.Deserialize<T>(content);
         }
 
 
-        public async Task<object> SendAsync(Type type, HttpMethod m, string url, string body = null,
+        public async Task<object> SendAsync(Type type, HttpMethod m, string url, object body = null,
             string transaction = null, bool throwOnError = true, bool auth = true,
             CancellationToken cancellationToken = default)
         {
             if (auth && (_auth == null || _authValidUntil < DateTime.UtcNow.AddMinutes(-10)))
             {
                 var authResponse = await SendAsync<JObject>(HttpMethod.Post,
-                    $"{_context.Configuration.Server}/_open/auth",
-                    _context.Configuration.Serializer.Serialize(new
+                    "/_open/auth",
+                    new
                     {
-                        username = _context.Configuration.User,
-                        password = _context.Configuration.Password ?? string.Empty
-                    }), auth: false, cancellationToken: cancellationToken);
+                        username = _configuration.User,
+                        password = _configuration.Password ?? string.Empty
+                    }, auth: false, cancellationToken: cancellationToken);
 
                 var jwt = authResponse.Value<string>("jwt");
                 var token = new JwtSecurityToken(jwt.Replace("=", ""));
@@ -98,7 +101,7 @@ namespace Core.Arango.Transport
                 _authValidUntil = token.ValidTo;
             }
 
-            var msg = new HttpRequestMessage(m, url);
+            var msg = new HttpRequestMessage(m, _configuration.Server + url);
 
             msg.Headers.Add(HttpRequestHeader.KeepAlive.ToString(), "true");
 
@@ -109,7 +112,8 @@ namespace Core.Arango.Transport
                 msg.Headers.Add("x-arango-trx-id", transaction);
 
             if (body != null)
-                msg.Content = new StringContent(body, Encoding.UTF8, "application/json");
+                msg.Content = new StringContent(_configuration.Serializer.Serialize(body), Encoding.UTF8,
+                    "application/json");
             else
                 msg.Headers.Add(HttpRequestHeader.ContentLength.ToString(), "0");
 
@@ -125,7 +129,7 @@ namespace Core.Arango.Transport
             if (content == "{}")
                 return default;
 
-            return _context.Configuration.Serializer.Deserialize(content, type);
+            return _configuration.Serializer.Deserialize(content, type);
         }
     }
 }

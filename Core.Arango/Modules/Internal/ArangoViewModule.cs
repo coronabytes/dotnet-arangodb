@@ -19,7 +19,7 @@ namespace Core.Arango.Modules.Internal
         {
             await SendAsync<JObject>(HttpMethod.Post,
                 ApiPath(database, "view"),
-                Serialize(view),
+                view,
                 cancellationToken: cancellationToken);
         }
 

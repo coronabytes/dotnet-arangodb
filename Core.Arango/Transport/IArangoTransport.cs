@@ -7,12 +7,10 @@ namespace Core.Arango.Transport
 {
     public interface IArangoTransport
     {
-        void Initialize(IArangoContext context);
-
-        Task<object> SendAsync(Type type, HttpMethod m, string url, string body = null, string transaction = null,
+        Task<object> SendAsync(Type type, HttpMethod m, string url, object body = null, string transaction = null,
             bool throwOnError = true, bool auth = true, CancellationToken cancellationToken = default);
 
-        Task<T> SendAsync<T>(HttpMethod m, string url, string body = null, string transaction = null,
+        Task<T> SendAsync<T>(HttpMethod m, string url, object body = null, string transaction = null,
             bool throwOnError = true, bool auth = true, CancellationToken cancellationToken = default);
     }
 }

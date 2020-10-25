@@ -55,7 +55,7 @@ namespace Core.Arango.Modules.Internal
             {
                 var firstResult = await SendAsync<QueryResponse<T>>(HttpMethod.Post,
                     ApiPath(database, "cursor"),
-                    Serialize(new QueryRequest
+                    new QueryRequest
                     {
                         Query = query,
                         BindVars = bindVars,
@@ -65,11 +65,11 @@ namespace Core.Arango.Modules.Internal
                         {
                             FullCount = fullCount
                         }
-                    }), cancellationToken: cancellationToken);
+                    }, cancellationToken: cancellationToken);
 
                 final.AddRange(firstResult.Result);
 
-                Context.QueryProfile?.Invoke(query, bindVars, firstResult.Extra.GetValue("stats"));
+                Context.Configuration.QueryProfile?.Invoke(query, bindVars, firstResult.Extra.GetValue("stats"));
 
                 if (fullCount.HasValue && fullCount.Value)
                     final.FullCount = firstResult.Extra.GetValue("stats").Value<int>("fullCount");
@@ -95,7 +95,7 @@ namespace Core.Arango.Modules.Internal
             }
             catch
             {
-                Context.QueryProfile?.Invoke(query, bindVars, null);
+                Context.Configuration.QueryProfile?.Invoke(query, bindVars, null);
                 throw;
             }
         }
@@ -109,7 +109,7 @@ namespace Core.Arango.Modules.Internal
             var responseType = typeof(QueryResponse<>);
             var constructedResponseType = responseType.MakeGenericType(type);
 
-            var body = Serialize(new QueryRequest
+            var body = new QueryRequest
             {
                 Query = query,
                 BindVars = bindVars,
@@ -119,7 +119,7 @@ namespace Core.Arango.Modules.Internal
                 {
                     FullCount = fullCount
                 }
-            });
+            };
 
             var res = await SendAsync(constructedResponseType, HttpMethod.Post,
                 ApiPath(database, "cursor"), body

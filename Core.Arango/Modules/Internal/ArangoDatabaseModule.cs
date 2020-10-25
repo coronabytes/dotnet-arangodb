@@ -18,10 +18,10 @@ namespace Core.Arango.Modules.Internal
         {
             var res = await SendAsync<JObject>(HttpMethod.Post,
                 ApiPath("_system", "database"),
-                Serialize(new
+                new
                 {
                     name = RealmPrefix(name)
-                }), throwOnError: false, cancellationToken: cancellationToken);
+                }, throwOnError: false, cancellationToken: cancellationToken);
 
             return res != null;
         }
@@ -32,8 +32,8 @@ namespace Core.Arango.Modules.Internal
                 ApiPath("_system", "database"), cancellationToken: cancellationToken);
 
             return res.Result
-                .Where(x => x.StartsWith(Realm))
-                .Select(x => x.Substring(Realm.Length))
+                .Where(x => x.StartsWith(Context.Configuration.Realm))
+                .Select(x => x.Substring(Context.Configuration.Realm.Length))
                 .ToList();
         }
 

@@ -5,7 +5,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
 using Core.Arango.Protocol.Internal;
-using Newtonsoft.Json;
 
 namespace Core.Arango.Modules.Internal
 {
@@ -24,7 +23,7 @@ namespace Core.Arango.Modules.Internal
                 throw new ArgumentNullException(nameof(request));
 
             var res = await SendAsync<FunctionCreateResponse>(HttpMethod.Post, ApiPath(database, API),
-                JsonConvert.SerializeObject(request), cancellationToken: cancellationToken);
+                request, cancellationToken: cancellationToken);
 
             return res.IsNewlyCreated;
         }

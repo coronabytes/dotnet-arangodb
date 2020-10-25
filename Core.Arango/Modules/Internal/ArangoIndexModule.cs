@@ -4,7 +4,6 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Core.Arango.Modules.Internal
@@ -20,7 +19,7 @@ namespace Core.Arango.Modules.Internal
         {
             await SendAsync<JObject>(HttpMethod.Post,
                 ApiPath(database, $"index?collection={collection}"),
-                JsonConvert.SerializeObject(request), cancellationToken: cancellationToken);
+                request, cancellationToken: cancellationToken);
         }
 
         /// <summary>

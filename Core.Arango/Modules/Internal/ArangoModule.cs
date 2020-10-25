@@ -19,33 +19,25 @@ namespace Core.Arango.Modules.Internal
             Context = context;
         }
 
-        public string Realm => Context.Configuration.Realm;
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        protected string Serialize(object value)
-        {
-            return Context.Configuration.Serializer.Serialize(value);
-        }
-
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public string RealmPrefix(string name)
         {
             if (name == "_system")
                 return "_system";
 
-            return UrlEncode(Realm + name);
+            return UrlEncode(Context.Configuration.Realm + name);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected string ApiPath(ArangoHandle handle, string path)
         {
-            return $"{Context.Configuration.Server}/_db/{RealmPrefix(handle)}/_api/{path}";
+            return $"/_db/{RealmPrefix(handle)}/_api/{path}";
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected string ApiPath(string path)
         {
-            return $"{Context.Configuration.Server}/_api/{path}";
+            return $"/_api/{path}";
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -55,7 +47,7 @@ namespace Core.Arango.Modules.Internal
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Task<T> SendAsync<T>(HttpMethod m, string url, string body = null,
+        public Task<T> SendAsync<T>(HttpMethod m, string url, object body = null,
             string transaction = null, bool throwOnError = true, bool auth = true,
             CancellationToken cancellationToken = default)
         {
@@ -64,7 +56,7 @@ namespace Core.Arango.Modules.Internal
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Task<object> SendAsync(Type type, HttpMethod m, string url, string body = null,
+        public Task<object> SendAsync(Type type, HttpMethod m, string url, object body = null,
             string transaction = null, bool throwOnError = true, bool auth = true,
             CancellationToken cancellationToken = default)
         {

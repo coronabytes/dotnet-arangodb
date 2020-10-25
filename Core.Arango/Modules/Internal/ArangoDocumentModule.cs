@@ -55,7 +55,7 @@ namespace Core.Arango.Modules.Internal
             var query = AddQueryString(ApiPath(database, $"document/{UrlEncode(collection)}"), parameter);
 
             return await SendAsync<List<ArangoUpdateResult<TR>>>(HttpMethod.Post, query,
-                Serialize(docs),
+                docs,
                 database.Transaction, cancellationToken: cancellationToken);
         }
 
@@ -108,7 +108,7 @@ namespace Core.Arango.Modules.Internal
                 });
 
             var res = await SendAsync<JObject>(HttpMethod.Post, query,
-                Serialize(docs),
+                docs,
                 cancellationToken: cancellationToken);
         }
 
@@ -156,7 +156,7 @@ namespace Core.Arango.Modules.Internal
                 ApiPath(database, $"document/{collection}"), parameter);
 
             return await SendAsync<List<ArangoUpdateResult<TR>>>(HttpMethod.Delete, query,
-                Serialize(docs),
+                docs,
                 database.Transaction, cancellationToken: cancellationToken);
         }
 
@@ -209,7 +209,7 @@ namespace Core.Arango.Modules.Internal
                 ApiPath(database, $"document/{UrlEncode(collection)}"), parameter);
 
             return await SendAsync<List<ArangoUpdateResult<TR>>>(HttpMethod.Patch, query,
-                Serialize(docs),
+                docs,
                 database.Transaction, cancellationToken: cancellationToken);
         }
 
@@ -269,7 +269,7 @@ namespace Core.Arango.Modules.Internal
                 ApiPath(database, $"document/{UrlEncode(collection)}"), parameter);
 
             return await SendAsync<List<ArangoUpdateResult<TR>>>(HttpMethod.Put, query,
-                Serialize(docs),
+                docs,
                 database.Transaction, cancellationToken: cancellationToken);
         }
 
@@ -325,13 +325,13 @@ namespace Core.Arango.Modules.Internal
 
             var firstResult = await SendAsync<QueryResponse<JObject>>(HttpMethod.Post,
                 query,
-                Serialize(new ExportRequest
+                new ExportRequest
                 {
                     Flush = flush,
                     FlushWait = flushWait,
                     BatchSize = batchSize,
                     Ttl = ttl
-                }), cancellationToken: cancellationToken);
+                }, cancellationToken: cancellationToken);
 
             yield return firstResult.Result;
 

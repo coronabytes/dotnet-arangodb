@@ -5,7 +5,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
 using Core.Arango.Protocol.Internal;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Core.Arango.Modules.Internal
@@ -29,7 +28,7 @@ namespace Core.Arango.Modules.Internal
         {
             await SendAsync<JObject>(HttpMethod.Post,
                 ApiPath(database, "gharial"),
-                JsonConvert.SerializeObject(request), cancellationToken: cancellationToken);
+                request, cancellationToken: cancellationToken);
         }
 
         public async Task DropAsync(ArangoHandle database, string name,
