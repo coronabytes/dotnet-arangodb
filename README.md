@@ -20,13 +20,30 @@ This driver has some [extensions](https://github.com/coronabytes/dotnet-arangodb
 - Realm optionally prefixes all further database handles (e.g. "myproject-database")
 - Context is completely thread-safe and can be shared for your whole application
 ```csharp
+// from connection string
 var arango = new ArangoContext("Server=http://localhost:8529;Realm=myproject;User=root;Password=;");
+
+// from connection string with camelCase serialization
+var arango = new ArangoContext("Server=http://localhost:8529;Realm=myproject;User=root;Password=;",
+new ArangoConfiguration
+{
+    Serializer = new ArangoJsonNetSerializer(new ArangoCamelCaseContractResolver())
+});
 ```
 - For AspNetCore DI extension is available:
 ```csharp
 public void ConfigureServices(IServiceCollection services)
 {
-    services.AddArango(Configuration.GetConnectionString("Arango"))
+    // add with connection string
+    services.AddArango(Configuration.GetConnectionString("Arango"));
+    
+    // add with configuration set to camelCase serialization 
+    services.AddArango((sp, config) =>
+    {
+        config.Server = "http://localhost:8529"";
+        config.User = "root;
+        config.Serializer = new ArangoJsonNetSerializer(new ArangoCamelCaseContractResolver());
+    });
 }
 ```
 
