@@ -72,7 +72,7 @@ namespace Core.Arango.Modules.Internal
         {
             var res = await SendAsync<JObject>(HttpMethod.Patch,
                 ApiPath($"user/{UrlEncode(user.Name)}"),
-                JsonConvert.SerializeObject(user),
+                user,
                 cancellationToken: cancellationToken);
 
             return res != null;
