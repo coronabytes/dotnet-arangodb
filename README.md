@@ -40,8 +40,8 @@ public void ConfigureServices(IServiceCollection services)
     // add with configuration set to camelCase serialization 
     services.AddArango((sp, config) =>
     {
-        config.Server = "http://localhost:8529"";
-        config.User = "root;
+        config.Server = "http://localhost:8529";
+        config.User = "root";
         config.Serializer = new ArangoJsonNetSerializer(new ArangoCamelCaseContractResolver());
     });
 }
