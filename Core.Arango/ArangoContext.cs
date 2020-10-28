@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data.Common;
+using System.Linq;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -94,6 +97,16 @@ namespace Core.Arango
             var version = res.Value<string>("version");
             version = Regex.Replace(version, "[^0-9.]", string.Empty);
             return Version.Parse(version);
+        }
+        public async Task<IReadOnlyCollection<string>> GetEndpointsAsync(CancellationToken cancellationToken = default)
+        {
+            var res = await Configuration.Transport.SendAsync<JObject>(HttpMethod.Get,
+                "/_api/cluster/endpoints", cancellationToken: cancellationToken);
+
+            var endpoints = res.Value<JArray>("endpoints").
+                Select(x => x.Value<string>("endpoint")).ToList();
+
+            return new ReadOnlyCollection<string>(endpoints);
         }
     }
 }

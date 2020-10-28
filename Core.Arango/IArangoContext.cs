@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Core.Arango.Modules;
@@ -20,5 +21,6 @@ namespace Core.Arango
         IArangoAnalyzerModule Analyzer { get; }
         IArangoFunctionModule Function { get; }
         Task<Version> GetVersionAsync(CancellationToken cancellationToken = default);
+        Task<IReadOnlyCollection<string>> GetEndpointsAsync(CancellationToken cancellationToken = default);
     }
 }
