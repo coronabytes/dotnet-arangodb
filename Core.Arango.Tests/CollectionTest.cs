@@ -8,7 +8,7 @@ namespace Core.Arango.Tests
     public class CollectionTest : TestBase
     {
         [Fact]
-        public async Task Collection()
+        public async Task Create()
         {
             await Arango.Collection.CreateAsync("test", new ArangoCollection
             {
@@ -25,6 +25,27 @@ namespace Core.Arango.Tests
             {
                 Name = "test"
             });
+        }
+
+        [Fact]
+        public async Task CreateExistGetDrop()
+        {
+            await Arango.Collection.CreateAsync("test", new ArangoCollection
+            {
+                Name = "test",
+                Type = ArangoCollectionType.Document
+            });
+
+            Assert.True(await Arango.Collection.ExistAsync("test", "test"));
+
+            var col = await Arango.Collection.GetAsync("test", "test");
+
+            Assert.NotNull(col);
+            Assert.Equal("test", col.Name);
+
+            await Arango.Collection.DropAsync("test", "test");
+
+            Assert.False(await Arango.Collection.ExistAsync("test", "test"));
         }
     }
 }

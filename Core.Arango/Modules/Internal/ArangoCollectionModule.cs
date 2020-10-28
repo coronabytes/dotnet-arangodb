@@ -74,11 +74,28 @@ namespace Core.Arango.Modules.Internal
                 cancellationToken: cancellationToken);
         }
 
-        public async Task DropCollectionAsync(ArangoHandle database, string collection,
+        public async Task<bool> ExistAsync(ArangoHandle database, string collection,
+            CancellationToken cancellationToken = default)
+        {
+            var collections = await ListAsync(database, cancellationToken);
+
+            return collections.Contains(collection);
+        }
+
+        public async Task<ArangoCollection> GetAsync(ArangoHandle database, string collection,
+            CancellationToken cancellationToken = default)
+        {
+            return await SendAsync<ArangoCollection>(
+                HttpMethod.Get, 
+                ApiPath(database, $"collection/{UrlEncode(collection)}"),
+                null, database.Transaction, cancellationToken: cancellationToken);
+        }
+
+        public async Task DropAsync(ArangoHandle database, string collection,
             CancellationToken cancellationToken = default)
         {
             await SendAsync<JObject>(HttpMethod.Delete,
-                ApiPath(database, $"collection/){UrlEncode(collection)}"),
+                ApiPath(database, $"collection/{UrlEncode(collection)}"),
                 cancellationToken: cancellationToken);
         }
     }
