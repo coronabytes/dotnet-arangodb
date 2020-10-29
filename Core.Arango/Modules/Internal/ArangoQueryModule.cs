@@ -15,7 +15,7 @@ namespace Core.Arango.Modules.Internal
         }
 
         public async Task<List<T>> FindAsync<T>(ArangoHandle database, string collection, FormattableString filter,
-            string projection = null, int limit = 1000, CancellationToken cancellationToken = default) where T : new()
+            string projection = null, int limit = 1000, CancellationToken cancellationToken = default)
         {
             var filterExp = Parameterize(filter, out var parameter);
 
@@ -25,7 +25,7 @@ namespace Core.Arango.Modules.Internal
         }
 
         public async Task<T> SingleOrDefaultAsync<T>(ArangoHandle database, string collection, FormattableString filter,
-            string projection = null, CancellationToken cancellationToken = default) where T : new()
+            string projection = null, CancellationToken cancellationToken = default)
         {
             var results = await FindAsync<T>(database, collection, filter, projection, 2, cancellationToken);
 
@@ -36,7 +36,6 @@ namespace Core.Arango.Modules.Internal
 
         public async Task<ArangoList<T>> ExecuteAsync<T>(ArangoHandle database, FormattableString query,
             bool? cache = null, CancellationToken cancellationToken = default)
-            where T : new()
         {
             var queryExp = Parameterize(query, out var parameter);
 
@@ -46,7 +45,6 @@ namespace Core.Arango.Modules.Internal
         public async Task<ArangoList<T>> ExecuteAsync<T>(ArangoHandle database, string query,
             IDictionary<string, object> bindVars, bool? cache = null, bool? fullCount = null,
             CancellationToken cancellationToken = default)
-            where T : new()
         {
             query = query.Trim();
             var final = new ArangoList<T>();

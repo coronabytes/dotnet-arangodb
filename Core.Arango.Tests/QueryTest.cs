@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
 using Core.Arango.Tests.Core;
@@ -46,6 +47,21 @@ namespace Core.Arango.Tests
                 $"FOR e IN test FILTER e.Value IN {select} RETURN e");
 
             Assert.Equal(2, res.Count);
+        }
+
+        [Fact]
+        public async Task Batch()
+        {
+            await Arango.Collection.CreateAsync("test", "test", ArangoCollectionType.Document);
+
+            await Arango.Document.CreateManyAsync("test", "test", 
+                Enumerable.Range(1, 100000)
+                    .Select(x => new Entity { Value = x }));
+
+            var res = await Arango.Query.ExecuteAsync<string>("test",
+                $"FOR e IN test RETURN e._id");
+
+            Assert.Equal(100000, res.Count);
         }
     }
 }
