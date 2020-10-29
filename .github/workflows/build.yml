@@ -15,13 +15,13 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        arango-version: [3.6.7, 3.7.2]
+        arango-image: [arangodb:3.6.8, arangodb:3.7.3, arangodb/enterprise:3.7.3]
 
     steps:
     - uses: actions/checkout@v2
     
-    - name: ArangoDB ${{ matrix.arango-version }}
-      run: docker run -d --rm -e ARANGO_ROOT_PASSWORD= -p 8529:8529 arangodb:${{ matrix.arango-version }}
+    - name: ArangoDB ${{ matrix.arango-image }}
+      run: docker run -d --rm -e ARANGO_ROOT_PASSWORD= -p 8529:8529 -e ARANGO_LICENSE_KEY=${{ secrets.ARANGO_ENTERPRISE }} ${{ matrix.arango-image }}
     
     - name: Setup
       uses: actions/setup-dotnet@v1
