@@ -17,6 +17,7 @@ namespace Core.Arango.Modules
         Task<T> GetAsync<T>(ArangoHandle database,
             string collection,
             string key,
+            bool throwOnError = true,
             CancellationToken cancellationToken = default) where T : class;
 
         /// <summary>

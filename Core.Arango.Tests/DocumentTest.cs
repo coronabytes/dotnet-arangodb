@@ -21,8 +21,15 @@ namespace Core.Arango.Tests
             });
 
             var doc = await Arango.Document.GetAsync<JObject>("test", "test", "abc");
-
             Assert.Equal("a", doc["Name"]);
+
+            var nodoc = await Arango.Document.GetAsync<JObject>("test", "test", "nonexistant", false);
+            Assert.Null(nodoc);
+
+            var ex = await Assert.ThrowsAsync<ArangoException>(
+                async () => await Arango.Document.GetAsync<JObject>("test", "test", "nonexistant"));
+
+            Assert.Contains("document not found", ex.Message);
         }
 
         [Fact]

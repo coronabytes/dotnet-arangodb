@@ -17,7 +17,7 @@ namespace Core.Arango.Tests
                 KeyOptions = new ArangoKeyOptions
                 {
                     Type = ArangoKeyType.Padded,
-                    AllowUserKeys = false
+                    AllowUserKeys = true
                 }
             });
 
