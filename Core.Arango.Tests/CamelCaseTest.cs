@@ -10,7 +10,7 @@ namespace Core.Arango.Tests
     public class CamelCaseTest : IAsyncLifetime
     {
         protected readonly IArangoContext Arango =
-            new ArangoContext($"Server=http://localhost:8529;Realm=CI-{Guid.NewGuid():D};User=root;Password=;",
+            new ArangoContext($"Server=http://172.28.3.1:8529;Realm=CI-{Guid.NewGuid():D};User=root;Password=test;",
                 new ArangoConfiguration
                 {
                     Serializer = new ArangoJsonNetSerializer(new ArangoCamelCaseContractResolver())
