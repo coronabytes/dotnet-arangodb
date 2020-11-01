@@ -119,6 +119,18 @@ results in AQL injection save syntax:
 }
 ```
 
+## Query with async enumerator
+```csharp
+// insert 100.000 entities 
+await Arango.Document.CreateManyAsync("database", "collection", Enumerable.Range(1, 100000).Select(x => new Entity { Value = x }));
+
+// iterate in batches over 100.000 entity ids
+await foreach (var x in Arango.Query.ExecuteStreamAsync<string>("database", $"FOR c IN collection RETURN c._id"))
+{
+    Process(x)
+}
+```
+
 # Snippets for Advanced Use Cases
 
 ## Create index
