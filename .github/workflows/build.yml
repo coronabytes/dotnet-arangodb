@@ -48,3 +48,5 @@ jobs:
       
     - name: test
       run: dotnet test --configuration Release
+      env:
+        ARANGODB_CONNECTION: "Server=http://172.28.3.1:8529;Realm=CI-{UUID};User=root;Password=test;"

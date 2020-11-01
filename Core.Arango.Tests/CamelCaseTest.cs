@@ -2,36 +2,23 @@ using System;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
 using Core.Arango.Serialization;
+using Core.Arango.Tests.Core;
 using Newtonsoft.Json.Linq;
 using Xunit;
 
 namespace Core.Arango.Tests
 {
-    public class CamelCaseTest : IAsyncLifetime
+    public class CamelCaseTest : TestBase
     {
-        protected readonly IArangoContext Arango =
-            new ArangoContext($"Server=http://172.28.3.1:8529;Realm=CI-{Guid.NewGuid():D};User=root;Password=test;",
-                new ArangoConfiguration
-                {
-                    Serializer = new ArangoJsonNetSerializer(new ArangoCamelCaseContractResolver())
-                });
-
-        public async Task InitializeAsync()
+        public override async Task InitializeAsync()
         {
+            Arango =
+                new ArangoContext(UniqueTestRealm(),
+                    new ArangoConfiguration
+                    {
+                        Serializer = new ArangoJsonNetSerializer(new ArangoCamelCaseContractResolver())
+                    });
             await Arango.Database.CreateAsync("test");
-        }
-
-        public async Task DisposeAsync()
-        {
-            try
-            {
-                foreach (var db in await Arango.Database.ListAsync())
-                    await Arango.Database.DropAsync(db);
-            }
-            catch
-            {
-                //
-            }
         }
 
         [Fact]
