@@ -75,7 +75,8 @@ namespace Core.Arango.Tests
 
             int i = 0;
 
-            await foreach (var x in Arango.Query.ExecuteStreamAsync<string>("test", $"FOR e IN test RETURN e._id"))
+            await foreach (var x in Arango.Query.ExecuteStreamAsync<string>("test", 
+                $"FOR e IN test RETURN e._id", batchSize: 1000))
                 ++i;
 
             Assert.Equal(100000, i);
