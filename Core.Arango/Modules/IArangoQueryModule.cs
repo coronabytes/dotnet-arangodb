@@ -14,11 +14,18 @@ namespace Core.Arango.Modules
             IDictionary<string, object> bindVars, bool? cache = null, bool? fullCount = null,
             CancellationToken cancellationToken = default);
 
-        Task<ArangoList<T>> ExecuteAsync<T>(ArangoHandle database, FormattableString query, bool? cache = null,
-            CancellationToken cancellationToken = default);
+        Task<ArangoList<T>> ExecuteAsync<T>(ArangoHandle database, FormattableString query, bool? cache = null, 
+            bool? fullCount = null, CancellationToken cancellationToken = default);
 
         Task<ArangoList<T>> ExecuteAsync<T>(ArangoHandle database, string query, IDictionary<string, object> bindVars,
             bool? cache = null, bool? fullCount = null, CancellationToken cancellationToken = default);
+
+        IAsyncEnumerable<T> ExecuteStreamAsync<T>(ArangoHandle database, FormattableString query, bool? cache = null,
+            CancellationToken cancellationToken = default);
+
+        IAsyncEnumerable<T> ExecuteStreamAsync<T>(ArangoHandle database, string query,
+            IDictionary<string, object> bindVars, bool? cache = null,
+            CancellationToken cancellationToken = default);
 
         Task<T> SingleOrDefaultAsync<T>(ArangoHandle database, string collection, FormattableString filter,
             string projection = null, CancellationToken cancellationToken = default);

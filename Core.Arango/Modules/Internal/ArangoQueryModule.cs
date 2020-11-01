@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Threading.Tasks;
 using Core.Arango.Protocol.Internal;
@@ -35,11 +37,11 @@ namespace Core.Arango.Modules.Internal
         }
 
         public async Task<ArangoList<T>> ExecuteAsync<T>(ArangoHandle database, FormattableString query,
-            bool? cache = null, CancellationToken cancellationToken = default)
+            bool? cache = null, bool? fullCount = null, CancellationToken cancellationToken = default)
         {
             var queryExp = Parameterize(query, out var parameter);
 
-            return await ExecuteAsync<T>(database, queryExp, parameter, cache, cancellationToken: cancellationToken);
+            return await ExecuteAsync<T>(database, queryExp, parameter, cache, fullCount, cancellationToken);
         }
 
         public async Task<ArangoList<T>> ExecuteAsync<T>(ArangoHandle database, string query,
@@ -134,6 +136,52 @@ namespace Core.Arango.Modules.Internal
                 return Activator.CreateInstance(type);
 
             return listResult.GetType().GetProperty("Item").GetValue(listResult, new object[] {0});
+        }
+
+        public IAsyncEnumerable<T> ExecuteStreamAsync<T>(ArangoHandle database, FormattableString query, bool? cache = null,
+            CancellationToken cancellationToken = default)
+        {
+            var queryExp = Parameterize(query, out var parameter);
+            return ExecuteStreamAsync<T>(database, queryExp, parameter, cache, cancellationToken);
+        }
+
+        public async IAsyncEnumerable<T> ExecuteStreamAsync<T>(ArangoHandle database, string query,
+            IDictionary<string, object> bindVars, bool? cache = null,
+            [EnumeratorCancellation] CancellationToken cancellationToken = default)
+        {
+            query = query.Trim();
+
+            var firstResult = await SendAsync<QueryResponse<T>>(HttpMethod.Post,
+                ApiPath(database, "cursor"),
+                new QueryRequest
+                {
+                    Query = query,
+                    BindVars = bindVars,
+                    BatchSize = Context.Configuration.BatchSize,
+                    Cache = cache
+                }, cancellationToken: cancellationToken);
+
+            Context.Configuration.QueryProfile?.Invoke(query, bindVars, firstResult.Extra.GetValue("stats"));
+
+            foreach (var result in firstResult.Result)
+                yield return result;
+
+            if (!firstResult.HasMore)
+                yield break;
+
+            while (true)
+            {
+                var res = await SendAsync<QueryResponse<T>>(HttpMethod.Put,
+                    ApiPath(database, $"/cursor/{firstResult.Id}"),
+                    cancellationToken: cancellationToken);
+
+                if (res.Result?.Any() == true)
+                    foreach (var result in firstResult.Result)
+                        yield return result;
+
+                if (!res.HasMore)
+                    break;
+            }
         }
     }
 }

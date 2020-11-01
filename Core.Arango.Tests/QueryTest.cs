@@ -63,5 +63,22 @@ namespace Core.Arango.Tests
 
             Assert.Equal(100000, res.Count);
         }
+
+        [Fact]
+        public async Task BatchStream()
+        {
+            await Arango.Collection.CreateAsync("test", "test", ArangoCollectionType.Document);
+
+            await Arango.Document.CreateManyAsync("test", "test",
+                Enumerable.Range(1, 100000)
+                    .Select(x => new Entity { Value = x }));
+
+            int i = 0;
+
+            await foreach (var x in Arango.Query.ExecuteStreamAsync<string>("test", $"FOR e IN test RETURN e._id"))
+                ++i;
+
+            Assert.Equal(100000, i);
+        }
     }
 }
