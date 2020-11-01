@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using Core.Arango.Protocol;
 using Core.Arango.Serialization;
 using Core.Arango.Transport;
-using Newtonsoft.Json.Linq;
 
 namespace Core.Arango
 {
@@ -16,6 +16,6 @@ namespace Core.Arango
         int BatchSize { get; set; }
         IArangoSerializer Serializer { get; set; }
         IArangoTransport Transport { get; set; }
-        Action<string, IDictionary<string, object>, JToken> QueryProfile { get; set; }
+        Action<string, IDictionary<string, object>, ArangoQueryStatistic> QueryProfile { get; set; }
     }
 }

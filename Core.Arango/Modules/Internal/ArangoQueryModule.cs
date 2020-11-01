@@ -69,10 +69,10 @@ namespace Core.Arango.Modules.Internal
 
                 final.AddRange(firstResult.Result);
 
-                Context.Configuration.QueryProfile?.Invoke(query, bindVars, firstResult.Extra.GetValue("stats"));
+                Context.Configuration.QueryProfile?.Invoke(query, bindVars, firstResult.Extra.Statistic);
 
                 if (fullCount.HasValue && fullCount.Value)
-                    final.FullCount = firstResult.Extra.GetValue("stats").Value<int>("fullCount");
+                    final.FullCount = firstResult.Extra.Statistic.FullCount;
 
                 if (!firstResult.HasMore)
                     return final;
@@ -138,15 +138,15 @@ namespace Core.Arango.Modules.Internal
             return listResult.GetType().GetProperty("Item").GetValue(listResult, new object[] {0});
         }
 
-        public IAsyncEnumerable<T> ExecuteStreamAsync<T>(ArangoHandle database, FormattableString query, bool? cache = null,
-            CancellationToken cancellationToken = default)
+        public IAsyncEnumerable<T> ExecuteStreamAsync<T>(ArangoHandle database, FormattableString query, bool? cache = null, 
+            int? batchSize = null, CancellationToken cancellationToken = default)
         {
             var queryExp = Parameterize(query, out var parameter);
-            return ExecuteStreamAsync<T>(database, queryExp, parameter, cache, cancellationToken);
+            return ExecuteStreamAsync<T>(database, queryExp, parameter, cache, batchSize, cancellationToken);
         }
 
         public async IAsyncEnumerable<T> ExecuteStreamAsync<T>(ArangoHandle database, string query,
-            IDictionary<string, object> bindVars, bool? cache = null,
+            IDictionary<string, object> bindVars, bool? cache = null, int? batchSize = null,
             [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
             query = query.Trim();
@@ -157,11 +157,11 @@ namespace Core.Arango.Modules.Internal
                 {
                     Query = query,
                     BindVars = bindVars,
-                    BatchSize = Context.Configuration.BatchSize,
+                    BatchSize = batchSize ?? Context.Configuration.BatchSize,
                     Cache = cache
                 }, cancellationToken: cancellationToken);
 
-            Context.Configuration.QueryProfile?.Invoke(query, bindVars, firstResult.Extra.GetValue("stats"));
+            Context.Configuration.QueryProfile?.Invoke(query, bindVars, firstResult.Extra.Statistic);
 
             foreach (var result in firstResult.Result)
                 yield return result;

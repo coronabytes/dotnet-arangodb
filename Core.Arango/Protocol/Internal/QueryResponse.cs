@@ -3,6 +3,11 @@ using Newtonsoft.Json.Linq;
 
 namespace Core.Arango.Protocol.Internal
 {
+    internal class QueryResponseExtra {
+        [JsonProperty(PropertyName = "stats")] 
+        public ArangoQueryStatistic Statistic { get; set; }
+    }
+
     internal class QueryResponse<T> : QueryResponseBase<T>
     {
         [JsonProperty(PropertyName = "hasMore")]
@@ -12,6 +17,6 @@ namespace Core.Arango.Protocol.Internal
 
         [JsonProperty(PropertyName = "count")] public long Count { get; set; }
 
-        [JsonProperty(PropertyName = "extra")] public JObject Extra { get; set; }
+        [JsonProperty(PropertyName = "extra")] public QueryResponseExtra Extra { get; set; }
     }
 }
