@@ -43,6 +43,18 @@ public void ConfigureServices(IServiceCollection services)
         config.Server = "http://localhost:8529";
         config.User = "root";
         config.Serializer = new ArangoJsonNetSerializer(new ArangoCamelCaseContractResolver());
+        
+        // print each query to console
+        config.QueryProfile = (query, bindVars, stats) =>
+        {
+            var boundQuery = query;
+
+            // replace parameters with bound values
+            foreach (var p in bindVars.OrderByDescending(x => x.Key.Length))
+                boundQuery = boundQuery.Replace("@" + p.Key, JsonConvert.SerializeObject(p.Value));
+
+            Console.WriteLine(boundQuery);
+        }
     });
 }
 ```
