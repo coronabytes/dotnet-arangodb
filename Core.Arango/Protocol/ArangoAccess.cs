@@ -1,10 +1,11 @@
 ﻿using System.Runtime.Serialization;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 using Newtonsoft.Json.Converters;
 
 namespace Core.Arango.Protocol
 {
-    [JsonConverter(typeof(StringEnumConverter))]
+    [JsonConverter(typeof(JsonStringEnumConverter))]
+    [Newtonsoft.Json.JsonConverter(typeof(StringEnumConverter))]
     public enum ArangoAccess
     {
         [EnumMember(Value = "none")] None,

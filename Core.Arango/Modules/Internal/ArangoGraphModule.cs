@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
 using Core.Arango.Protocol.Internal;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Core.Arango.Modules.Internal
@@ -15,18 +17,25 @@ namespace Core.Arango.Modules.Internal
         {
         }
 
+        private class GraphRes
+        {
+            [JsonPropertyName("_key")]
+            [JsonProperty(PropertyName = "_key")]
+            public string Key { get; set; }
+        }
+
         public async Task<List<string>> ListAsync(ArangoHandle database,
             CancellationToken cancellationToken = default)
         {
-            var res = await SendAsync<GraphResponse<JObject>>(HttpMethod.Get,
+            var res = await SendAsync<GraphResponse<GraphRes>>(HttpMethod.Get,
                 ApiPath(database, "gharial"), cancellationToken: cancellationToken);
-            return res.Graphs.Select(x => x.Value<string>("_key")).ToList();
+            return res.Graphs.Select(x => x.Key).ToList();
         }
 
         public async Task CreateAsync(ArangoHandle database, ArangoGraph request,
             CancellationToken cancellationToken = default)
         {
-            await SendAsync<JObject>(HttpMethod.Post,
+            await SendAsync<ArangoVoid>(HttpMethod.Post,
                 ApiPath(database, "gharial"),
                 request, cancellationToken: cancellationToken);
         }
@@ -34,7 +43,7 @@ namespace Core.Arango.Modules.Internal
         public async Task DropAsync(ArangoHandle database, string name,
             CancellationToken cancellationToken = default)
         {
-            await SendAsync<JObject>(HttpMethod.Delete,
+            await SendAsync<ArangoVoid>(HttpMethod.Delete,
                 ApiPath(database, $"gharial/{UrlEncode(name)}"),
                 cancellationToken: cancellationToken);
         }

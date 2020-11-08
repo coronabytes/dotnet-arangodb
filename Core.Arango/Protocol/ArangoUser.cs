@@ -1,17 +1,23 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace Core.Arango.Protocol
 {
     public class ArangoUser
     {
-        [JsonProperty(PropertyName = "user")] public string Name { get; set; }
+        [JsonPropertyName("user")]
+        [JsonProperty(PropertyName = "user")] 
+        public string Name { get; set; }
 
+        [JsonPropertyName("passwd")]
         [JsonProperty(PropertyName = "passwd")]
         public string Password { get; set; }
 
+        [JsonPropertyName("active")]
         [JsonProperty(PropertyName = "active", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public bool? Active { get; set; }
 
+        [JsonPropertyName("extra")]
         [JsonProperty(PropertyName = "extra", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public object Extra { get; set; }
     }

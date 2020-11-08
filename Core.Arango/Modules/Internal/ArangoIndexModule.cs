@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Core.Arango.Modules.Internal
@@ -17,7 +18,7 @@ namespace Core.Arango.Modules.Internal
         public async Task CreateAsync(ArangoHandle database, string collection, ArangoIndex request,
             CancellationToken cancellationToken = default)
         {
-            await SendAsync<JObject>(HttpMethod.Post,
+            await SendAsync<ArangoVoid>(HttpMethod.Post,
                 ApiPath(database, $"index?collection={collection}"),
                 request, cancellationToken: cancellationToken);
         }
@@ -38,28 +39,34 @@ namespace Core.Arango.Modules.Internal
             }
         }
 
+        private class IndexResponse
+        {
+            [JsonProperty("indexes")]
+            public List<ArangoIndex> Indexes { get; set; }
+        }
+
         /// <summary>
         ///     Ignores primary and edge indices
         /// </summary>
         public async Task<List<string>> ListAsync(ArangoHandle database, string collection,
             CancellationToken cancellationToken = default)
         {
-            var res = await SendAsync<JObject>(HttpMethod.Get,
+            var res = await SendAsync<IndexResponse>(HttpMethod.Get,
                 ApiPath(database, $"index?collection={UrlEncode(collection)}"),
                 cancellationToken: cancellationToken);
-            return res.GetValue("indexes")
+            return res.Indexes
                 .Where(x =>
                 {
-                    var type = x.Value<string>("type");
-                    return type != "primary" && type != "edge";
+                    var type = x.Type;
+                    return type != ArangoIndexType.Primary && type != ArangoIndexType.Edge;
                 })
-                .Select(x => x.Value<string>("id")).ToList();
+                .Select(x => x.Id).ToList();
         }
 
         public async Task DropAsync(ArangoHandle database, string index,
             CancellationToken cancellationToken = default)
         {
-            await SendAsync<JObject>(HttpMethod.Delete,
+            await SendAsync<ArangoVoid>(HttpMethod.Delete,
                 ApiPath(database, $"index/{index}"), cancellationToken: cancellationToken);
         }
     }

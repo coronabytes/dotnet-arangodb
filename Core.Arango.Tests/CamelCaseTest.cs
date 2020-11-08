@@ -33,7 +33,7 @@ namespace Core.Arango.Tests
                 SomeName = "b"
             });
 
-            var doc = await Arango.Document.GetAsync<JObject>("test", "test", "abc");
+            var doc = await Arango.Document.GetAsync<dynamic>("test", "test", "abc");
 
             Assert.Equal("a", doc["name"]);
             Assert.Equal("b", doc["someName"]);

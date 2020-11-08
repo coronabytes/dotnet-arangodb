@@ -8,6 +8,8 @@ namespace Core.Arango
 {
     public interface IArangoConfiguration
     {
+        void LoadConnectionString(string cs);
+
         string Realm { get; set; }
         string Server { get; set; }
         string User { get; set; }

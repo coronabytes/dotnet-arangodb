@@ -26,7 +26,7 @@ namespace Core.Arango.Modules.Internal
             ArangoAnalyzer analyzer,
             CancellationToken cancellationToken = default)
         {
-            await SendAsync<QueryResponse<JObject>>(HttpMethod.Post,
+            await SendAsync<QueryResponse<ArangoVoid>>(HttpMethod.Post,
                 ApiPath(database, "analyzer"),
                 analyzer,
                 cancellationToken: cancellationToken);
@@ -36,7 +36,7 @@ namespace Core.Arango.Modules.Internal
             string analyzer, bool force = false,
             CancellationToken cancellationToken = default)
         {
-            await SendAsync<QueryResponse<JObject>>(HttpMethod.Delete,
+            await SendAsync<QueryResponse<ArangoVoid>>(HttpMethod.Delete,
                 ApiPath(database, $"analyzer/{UrlEncode(analyzer)}?force={(force ? "true" : "false")}"),
                 cancellationToken: cancellationToken);
         }

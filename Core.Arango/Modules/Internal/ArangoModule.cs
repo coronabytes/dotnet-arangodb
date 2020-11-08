@@ -25,7 +25,11 @@ namespace Core.Arango.Modules.Internal
             if (name == "_system")
                 return "_system";
 
-            return UrlEncode(Context.Configuration.Realm + name);
+            var realm = string.IsNullOrWhiteSpace(Context.Configuration.Realm)
+                ? string.Empty
+                : Context.Configuration.Realm + "-";
+
+            return UrlEncode(realm + name);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

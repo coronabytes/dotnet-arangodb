@@ -1,11 +1,15 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace Core.Arango.Protocol
 {
     public class ArangoSort
     {
-        [JsonProperty(PropertyName = "field")] public string Field { get; set; }
-
+        [JsonPropertyName("field")]
+        [JsonProperty(PropertyName = "field")] 
+        public string Field { get; set; }
+        
+        [JsonPropertyName("direction")]
         [JsonProperty(PropertyName = "direction")]
         public string Direction { get; set; }
     }

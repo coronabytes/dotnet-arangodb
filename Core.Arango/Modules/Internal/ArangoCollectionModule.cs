@@ -18,7 +18,7 @@ namespace Core.Arango.Modules.Internal
         public async Task CreateAsync(ArangoHandle database, string collection, ArangoCollectionType type,
             CancellationToken cancellationToken = default)
         {
-            await SendAsync<JObject>(HttpMethod.Post,
+            await SendAsync<ArangoVoid>(HttpMethod.Post,
                 ApiPath(database, "collection"),
                 new ArangoCollection
                 {
@@ -30,7 +30,7 @@ namespace Core.Arango.Modules.Internal
         public async Task CreateAsync(ArangoHandle database, ArangoCollection collection,
             CancellationToken cancellationToken = default)
         {
-            await SendAsync<JObject>(HttpMethod.Post,
+            await SendAsync<ArangoVoid>(HttpMethod.Post,
                 ApiPath(database, "collection"),
                 collection,
                 cancellationToken: cancellationToken);
@@ -39,7 +39,7 @@ namespace Core.Arango.Modules.Internal
         public async Task TruncateAsync(ArangoHandle database, string collection,
             CancellationToken cancellationToken = default)
         {
-            await SendAsync<JObject>(HttpMethod.Put,
+            await SendAsync<ArangoVoid>(HttpMethod.Put,
                 ApiPath(database, $"collection/{UrlEncode(collection)}/truncate"),
                 cancellationToken: cancellationToken);
         }
@@ -47,16 +47,16 @@ namespace Core.Arango.Modules.Internal
         public async Task<List<string>> ListAsync(ArangoHandle database,
             CancellationToken cancellationToken = default)
         {
-            var res = await SendAsync<QueryResponse<JObject>>(HttpMethod.Get,
+            var res = await SendAsync<QueryResponse<ArangoCollection>>(HttpMethod.Get,
                 ApiPath(database, "collection?excludeSystem=true"),
                 cancellationToken: cancellationToken);
-            return res.Result.Select(x => x.Value<string>("name")).ToList();
+            return res.Result.Select(x => x.Name).ToList();
         }
 
         public async Task UpdateAsync(ArangoHandle database, string collection, ArangoCollectionUpdate update,
             CancellationToken cancellationToken = default)
         {
-            await SendAsync<JObject>(HttpMethod.Put,
+            await SendAsync<ArangoVoid>(HttpMethod.Put,
                 ApiPath(database, $"collection/{collection}/properties"),
                 update,
                 cancellationToken: cancellationToken);
@@ -65,7 +65,7 @@ namespace Core.Arango.Modules.Internal
         public async Task RenameAsync(ArangoHandle database, string oldname, string newname,
             CancellationToken cancellationToken = default)
         {
-            await SendAsync<JObject>(HttpMethod.Put,
+            await SendAsync<ArangoVoid>(HttpMethod.Put,
                 ApiPath(database, $"collection/{oldname}/rename"),
                 new
                 {
@@ -94,7 +94,7 @@ namespace Core.Arango.Modules.Internal
         public async Task DropAsync(ArangoHandle database, string collection,
             CancellationToken cancellationToken = default)
         {
-            await SendAsync<JObject>(HttpMethod.Delete,
+            await SendAsync<ArangoVoid>(HttpMethod.Delete,
                 ApiPath(database, $"collection/{UrlEncode(collection)}"),
                 cancellationToken: cancellationToken);
         }

@@ -4,11 +4,14 @@ using System.Collections.ObjectModel;
 using System.Data.Common;
 using System.Linq;
 using System.Net.Http;
+using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Core.Arango.Modules;
 using Core.Arango.Modules.Internal;
+using Core.Arango.Protocol.Internal;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Core.Arango
@@ -20,47 +23,25 @@ namespace Core.Arango
     {
         public ArangoContext(IArangoConfiguration config)
         {
-            if (config == null)
-                throw new ArgumentNullException(nameof(config));
-
-            Configuration = config;
-
-            if (string.IsNullOrWhiteSpace(config.Realm))
-                Configuration.Realm = string.Empty;
-            else
-                Configuration.Realm = config.Realm + "-";
+            Configuration = config ?? throw new ArgumentNullException(nameof(config));
+            
+            User = new ArangoUserModule(this);
+            Collection = new ArangoCollectionModule(this);
+            View = new ArangoViewModule(this);
+            Database = new ArangoDatabaseModule(this);
+            Graph = new ArangoGraphModule(this);
+            Transaction = new ArangoTransactionModule(this);
+            Document = new ArangoDocumentModule(this);
+            Query = new ArangoQueryModule(this);
+            Index = new ArangoIndexModule(this);
+            Analyzer = new ArangoAnalyzerModule(this);
+            Function = new ArangoFunctionModule(this);
         }
 
         public ArangoContext(string cs, IArangoConfiguration settings = null)
         {
             Configuration = settings ?? new ArangoConfiguration();
-
-            var builder = new DbConnectionStringBuilder {ConnectionString = cs};
-            builder.TryGetValue("Server", out var s);
-            builder.TryGetValue("Realm", out var r);
-            builder.TryGetValue("User ID", out var uid);
-            builder.TryGetValue("User", out var u);
-            builder.TryGetValue("Password", out var p);
-
-            var server = s as string;
-            var user = u as string ?? uid as string;
-            var password = p as string;
-            var realm = r as string;
-
-            if (string.IsNullOrWhiteSpace(server))
-                throw new ArgumentException("Server invalid");
-
-            if (string.IsNullOrWhiteSpace(user))
-                throw new ArgumentException("User invalid");
-
-            if (string.IsNullOrWhiteSpace(realm))
-                Configuration.Realm = string.Empty;
-            else
-                Configuration.Realm = realm + "-";
-
-            Configuration.Server = server;
-            Configuration.User = user;
-            Configuration.Password = password;
+            Configuration.LoadConnectionString(cs);
 
             User = new ArangoUserModule(this);
             Collection = new ArangoCollectionModule(this);
@@ -88,25 +69,30 @@ namespace Core.Arango
         public IArangoFunctionModule Function { get; }
         public IArangoConfiguration Configuration { get; }
 
+        private class VersionResponse
+        {
+            [JsonPropertyName("version")]
+            [JsonProperty("version")]
+           public string Version { get; set; }
+        }
+
         public async Task<Version> GetVersionAsync(CancellationToken cancellationToken = default)
         {
-            var res = await Configuration.Transport.SendAsync<JObject>(HttpMethod.Get,
+            var res = await Configuration.Transport.SendAsync<VersionResponse>(HttpMethod.Get,
                 "/_db/_system/_api/version",
                 cancellationToken: cancellationToken);
 
-            var version = res.Value<string>("version");
+            var version = res.Version;
             version = Regex.Replace(version, "[^0-9.]", string.Empty);
             return Version.Parse(version);
         }
+
         public async Task<IReadOnlyCollection<string>> GetEndpointsAsync(CancellationToken cancellationToken = default)
         {
-            var res = await Configuration.Transport.SendAsync<JObject>(HttpMethod.Get,
+            var res = await Configuration.Transport.SendAsync<EndpointResponse>(HttpMethod.Get,
                 "/_api/cluster/endpoints", cancellationToken: cancellationToken);
 
-            var endpoints = res.Value<JArray>("endpoints").
-                Select(x => x.Value<string>("endpoint")).ToList();
-
-            return new ReadOnlyCollection<string>(endpoints);
+            return new ReadOnlyCollection<string>(res.Endpoints.Select(x=>x.Endpoint).ToList());
         }
     }
 }

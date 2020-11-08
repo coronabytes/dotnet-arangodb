@@ -38,7 +38,7 @@ namespace Core.Arango.Modules
         /// <summary>
         ///     creates documents
         /// </summary>
-        Task<List<ArangoUpdateResult<JObject>>> CreateManyAsync<T>(ArangoHandle database,
+        Task<List<ArangoUpdateResult<ArangoVoid>>> CreateManyAsync<T>(ArangoHandle database,
             string collection,
             IEnumerable<T> docs,
             bool? waitForSync = null,
@@ -67,7 +67,7 @@ namespace Core.Arango.Modules
         /// <summary>
         ///     create document
         /// </summary>
-        Task<ArangoUpdateResult<JObject>> CreateAsync<T>(ArangoHandle database,
+        Task<ArangoUpdateResult<ArangoVoid>> CreateAsync<T>(ArangoHandle database,
             string collection, T doc,
             bool? waitForSync = null,
             bool? keepNull = null,
@@ -89,7 +89,7 @@ namespace Core.Arango.Modules
         /// <summary>
         ///     Note: this API is currently not supported on cluster coordinators.
         /// </summary>
-        IAsyncEnumerable<List<JObject>> ExportAsync(ArangoHandle database, string collection, bool? flush = null,
+        IAsyncEnumerable<List<T>> ExportAsync<T>(ArangoHandle database, string collection, bool? flush = null,
             int? flushWait = null, int? batchSize = null, int? ttl = null,
             CancellationToken cancellationToken = default);
 
@@ -100,7 +100,7 @@ namespace Core.Arango.Modules
             IEnumerable<T> docs, bool? waitForSync = null, bool? returnOld = null, bool? returnNew = null,
             CancellationToken cancellationToken = default) where T : class;
 
-        Task<List<ArangoUpdateResult<JObject>>> ReplaceManyAsync<T>(ArangoHandle database, string collection,
+        Task<List<ArangoUpdateResult<ArangoVoid>>> ReplaceManyAsync<T>(ArangoHandle database, string collection,
             IEnumerable<T> docs, bool? waitForSync = null, bool? returnOld = null, bool? returnNew = null,
             CancellationToken cancellationToken = default) where T : class;
 
@@ -108,11 +108,11 @@ namespace Core.Arango.Modules
             bool waitForSync = false, bool? returnOld = null, bool? returnNew = null,
             CancellationToken cancellationToken = default) where T : class;
 
-        Task<ArangoUpdateResult<JObject>> ReplaceAsync<T>(ArangoHandle database, string collection, T doc,
+        Task<ArangoUpdateResult<ArangoVoid>> ReplaceAsync<T>(ArangoHandle database, string collection, T doc,
             bool waitForSync = false, bool? returnOld = null, bool? returnNew = null,
             CancellationToken cancellationToken = default) where T : class;
 
-        Task<List<ArangoUpdateResult<JObject>>> UpdateManyAsync<T>(ArangoHandle database, string collection,
+        Task<List<ArangoUpdateResult<ArangoVoid>>> UpdateManyAsync<T>(ArangoHandle database, string collection,
             IEnumerable<T> docs, bool? waitForSync = null, bool? keepNull = null, bool? mergeObjects = null,
             bool? returnOld = null, bool? returnNew = null, bool? silent = null,
             CancellationToken cancellationToken = default) where T : class;
@@ -122,7 +122,7 @@ namespace Core.Arango.Modules
             bool? returnOld = null, bool? returnNew = null, bool? silent = null,
             CancellationToken cancellationToken = default) where T : class;
 
-        Task<ArangoUpdateResult<JObject>> UpdateAsync<T>(ArangoHandle database, string collection, T doc,
+        Task<ArangoUpdateResult<ArangoVoid>> UpdateAsync<T>(ArangoHandle database, string collection, T doc,
             bool? waitForSync = null, bool? keepNull = null, bool? mergeObjects = null, bool? returnOld = null,
             bool? returnNew = null, bool? silent = null, CancellationToken cancellationToken = default) where T : class;
 

@@ -14,20 +14,20 @@ namespace Core.Arango.Tests
         {
             await Arango.Collection.CreateAsync("test", "test", ArangoCollectionType.Document);
 
-            await Arango.Document.CreateAsync("test", "test", new
+            await Arango.Document.CreateAsync("test", "test", new Entity
             {
                 Key = "abc",
                 Name = "a"
             });
 
-            var doc = await Arango.Document.GetAsync<JObject>("test", "test", "abc");
+            var doc = await Arango.Document.GetAsync<Entity>("test", "test", "abc");
             Assert.Equal("a", doc["Name"]);
 
-            var nodoc = await Arango.Document.GetAsync<JObject>("test", "test", "nonexistant", false);
+            var nodoc = await Arango.Document.GetAsync<dynamic>("test", "test", "nonexistant", false);
             Assert.Null(nodoc);
 
             var ex = await Assert.ThrowsAsync<ArangoException>(
-                async () => await Arango.Document.GetAsync<JObject>("test", "test", "nonexistant"));
+                async () => await Arango.Document.GetAsync<dynamic>("test", "test", "nonexistant"));
 
             Assert.Contains("document not found", ex.Message);
         }
@@ -70,7 +70,7 @@ namespace Core.Arango.Tests
                 Value = "c"
             }, overwriteMode: ArangoOverwriteMode.Update);
 
-            var obj = await Arango.Query.SingleOrDefaultAsync<JObject>("test", "test", $"x._key == {"abc"}");
+            var obj = await Arango.Query.SingleOrDefaultAsync<dynamic>("test", "test", $"x._key == {"abc"}");
 
             Assert.Equal("a", obj["Name"]);
             Assert.Equal("c", obj["Value"]);
@@ -96,7 +96,7 @@ namespace Core.Arango.Tests
                 Value = "c"
             }, overwriteMode: ArangoOverwriteMode.Replace);
 
-            var obj = await Arango.Query.SingleOrDefaultAsync<JObject>("test", "test", $"x._key == {"abc"}");
+            var obj = await Arango.Query.SingleOrDefaultAsync<dynamic>("test", "test", $"x._key == {"abc"}");
 
             Assert.Null(obj["Name"]);
             Assert.Equal("c", obj["Value"]);

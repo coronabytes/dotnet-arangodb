@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Core.Arango.Protocol;
 using Core.Arango.Protocol.Internal;
 using Newtonsoft.Json.Linq;
 
@@ -16,7 +17,7 @@ namespace Core.Arango.Modules.Internal
 
         public async Task<bool> CreateAsync(ArangoHandle name, CancellationToken cancellationToken = default)
         {
-            var res = await SendAsync<JObject>(HttpMethod.Post,
+            var res = await SendAsync<ArangoVoid>(HttpMethod.Post,
                 ApiPath("_system", "database"),
                 new
                 {
@@ -31,9 +32,13 @@ namespace Core.Arango.Modules.Internal
             var res = await SendAsync<QueryResponse<string>>(HttpMethod.Get,
                 ApiPath("_system", "database"), cancellationToken: cancellationToken);
 
+            var realm = string.IsNullOrWhiteSpace(Context.Configuration.Realm)
+                ? string.Empty
+                : Context.Configuration.Realm + "-";
+
             return res.Result
-                .Where(x => x.StartsWith(Context.Configuration.Realm))
-                .Select(x => x.Substring(Context.Configuration.Realm.Length))
+                .Where(x => x.StartsWith(realm))
+                .Select(x => x.Substring(realm.Length))
                 .ToList();
         }
 
@@ -46,7 +51,7 @@ namespace Core.Arango.Modules.Internal
 
         public async Task DropAsync(ArangoHandle name, CancellationToken cancellationToken = default)
         {
-            await SendAsync<JObject>(HttpMethod.Delete,
+            await SendAsync<ArangoVoid>(HttpMethod.Delete,
                 ApiPath("_system", $"database/{RealmPrefix(name)}"), null,
                 throwOnError: false, cancellationToken: cancellationToken);
         }

@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Core.Arango.Transport
@@ -21,13 +22,19 @@ namespace Core.Arango.Transport
             _configuration = configuration;
         }
 
+        private class AuthResponse
+        {
+            [JsonProperty("jwt")]
+            public string Jwt { get; set; }
+        }
+
         public async Task<T> SendAsync<T>(HttpMethod m, string url, object body = null,
             string transaction = null, bool throwOnError = true, bool auth = true,
             CancellationToken cancellationToken = default)
         {
             if (auth && (_auth == null || _authValidUntil < DateTime.UtcNow.AddMinutes(-10)))
             {
-                var authResponse = await SendAsync<JObject>(HttpMethod.Post,
+                var authResponse = await SendAsync<AuthResponse>(HttpMethod.Post,
                     "/_open/auth",
                     new
                     {
@@ -35,7 +42,7 @@ namespace Core.Arango.Transport
                         password = _configuration.Password ?? string.Empty
                     }, auth: false, cancellationToken: cancellationToken);
 
-                var jwt = authResponse.Value<string>("jwt");
+                var jwt = authResponse.Jwt;
                 var token = new JwtSecurityToken(jwt.Replace("=", ""));
                 _auth = $"Bearer {jwt}";
                 _authValidUntil = token.ValidTo;
@@ -87,7 +94,7 @@ namespace Core.Arango.Transport
         {
             if (auth && (_auth == null || _authValidUntil < DateTime.UtcNow.AddMinutes(-10)))
             {
-                var authResponse = await SendAsync<JObject>(HttpMethod.Post,
+                var authResponse = await SendAsync<AuthResponse>(HttpMethod.Post,
                     "/_open/auth",
                     new
                     {
@@ -95,7 +102,7 @@ namespace Core.Arango.Transport
                         password = _configuration.Password ?? string.Empty
                     }, auth: false, cancellationToken: cancellationToken);
 
-                var jwt = authResponse.Value<string>("jwt");
+                var jwt = authResponse.Jwt;
                 var token = new JwtSecurityToken(jwt.Replace("=", ""));
                 _auth = $"Bearer {jwt}";
                 _authValidUntil = token.ValidTo;

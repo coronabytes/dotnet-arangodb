@@ -14,7 +14,7 @@ namespace Core.Arango.Modules
 
         Task CommitAsync(ArangoHandle database, CancellationToken cancellationToken = default);
 
-        Task<JObject> ExecuteAsync(ArangoHandle database, ArangoTransaction request,
+        Task<T> ExecuteAsync<T>(ArangoHandle database, ArangoTransaction request,
             CancellationToken cancellationToken = default);
     }
 }

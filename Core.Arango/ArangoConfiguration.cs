@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using Core.Arango.Protocol;
 using Core.Arango.Serialization;
 using Core.Arango.Transport;
@@ -14,6 +15,32 @@ namespace Core.Arango
             BatchSize = 500;
             Serializer = new ArangoJsonNetSerializer(new ArangoDefaultContractResolver());
             Transport = new ArangoHttpTransport(this);
+        }
+
+        public void LoadConnectionString(string cs)
+        {
+            var builder = new DbConnectionStringBuilder { ConnectionString = cs };
+            builder.TryGetValue("Server", out var s);
+            builder.TryGetValue("Realm", out var r);
+            builder.TryGetValue("User ID", out var uid);
+            builder.TryGetValue("User", out var u);
+            builder.TryGetValue("Password", out var p);
+
+            var server = s as string;
+            var user = u as string ?? uid as string;
+            var password = p as string;
+            var realm = r as string;
+
+            if (string.IsNullOrWhiteSpace(server))
+                throw new ArgumentException("Server invalid");
+
+            if (string.IsNullOrWhiteSpace(user))
+                throw new ArgumentException("User invalid");
+
+            Realm = realm;
+            Server = server;
+            User = user;
+            Password = password;
         }
 
         public string Realm { get; set; }
