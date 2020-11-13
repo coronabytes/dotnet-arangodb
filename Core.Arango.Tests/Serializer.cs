@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using Core.Arango.Serialization;
+using Core.Arango.Serialization.JsonNet;
+using Core.Arango.Serialization.Newtonsoft;
+using Core.Arango.Serialization.System;
+using Core.Arango.Serialization.SystemTextJson;
 using Core.Arango.Tests.Core;
 using Xunit;
 
@@ -13,7 +17,8 @@ namespace Core.Arango.Tests
             {
                 new ArangoJsonNetSerializer(new ArangoDefaultContractResolver()),
                 new ArangoJsonNetSerializer(new ArangoCamelCaseContractResolver()),
-                new ArangoSystemTextJsonSerializer(new ArangoSystemTextJsonNamingPolicy())
+                new ArangoSystemTextJsonSerializer(new ArangoJsonCamelCasePolicy()),
+                new ArangoSystemTextJsonSerializer(new ArangoJsonPascalCasePolicy())
             };
 
         [Theory]

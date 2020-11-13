@@ -1,10 +1,4 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Core.Arango.Protocol;
 using Core.Arango.Tests.Core;
-using Newtonsoft.Json;
-using Xunit;
 using Xunit.Abstractions;
 
 namespace Core.Arango.Tests
@@ -18,7 +12,7 @@ namespace Core.Arango.Tests
             _output = output;
         }
 
-        public override async Task InitializeAsync()
+        /*public override async Task InitializeAsync()
         {
             Arango =
                 new ArangoContext(UniqueTestRealm(),
@@ -59,6 +53,6 @@ namespace Core.Arango.Tests
 
             Assert.Equal(2, res.Count);
             Assert.Equal(3, res.FullCount);
-        }
+        }*/
     }
 }

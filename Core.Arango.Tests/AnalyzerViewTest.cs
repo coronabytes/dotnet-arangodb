@@ -8,9 +8,11 @@ namespace Core.Arango.Tests
 {
     public class AnalyzerViewTest : TestBase
     {
-        [Fact]
-        public async Task AnalyzersViews()
+        [Theory]
+        [ClassData(typeof(PascalCaseData))]
+        public async Task AnalyzersViews(IArangoContext arango)
         {
+            await SetupAsync(arango);
             var analyzers = await Arango.Analyzer.ListAsync("test");
 
             await Arango.Analyzer.CreateAsync("test", new ArangoAnalyzer

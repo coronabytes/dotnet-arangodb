@@ -1,8 +1,8 @@
 ﻿using System.Text.Json;
 
-namespace Core.Arango.Serialization
+namespace Core.Arango.Serialization.System
 {
-    public class ArangoSystemTextJsonNamingPolicy : JsonNamingPolicy
+    public class ArangoJsonPascalCasePolicy : JsonNamingPolicy
     {
         public override string ConvertName(string name)
         {

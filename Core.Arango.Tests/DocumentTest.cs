@@ -10,9 +10,11 @@ namespace Core.Arango.Tests
 {
     public class DocumentTest : TestBase
     {
-        [Fact]
-        public async Task Get()
+        [Theory]
+        [ClassData(typeof(PascalCaseData))]
+        public async Task Get(IArangoContext arango)
         {
+            await SetupAsync(arango);
             await Arango.Collection.CreateAsync("test", "test", ArangoCollectionType.Document);
 
             await Arango.Document.CreateAsync("test", "test", new Entity
@@ -24,18 +26,20 @@ namespace Core.Arango.Tests
             var doc = await Arango.Document.GetAsync<Entity>("test", "test", "abc");
             Assert.Equal("a", doc.Name);
 
-            var nodoc = await Arango.Document.GetAsync<dynamic>("test", "test", "nonexistant", false);
+            var nodoc = await Arango.Document.GetAsync<Entity>("test", "test", "nonexistant", false);
             Assert.Null(nodoc);
 
             var ex = await Assert.ThrowsAsync<ArangoException>(
-                async () => await Arango.Document.GetAsync<dynamic>("test", "test", "nonexistant"));
+                async () => await Arango.Document.GetAsync<Entity>("test", "test", "nonexistant"));
 
             Assert.Contains("document not found", ex.Message);
         }
 
-        [Fact]
-        public async Task Update()
+        [Theory]
+        [ClassData(typeof(PascalCaseData))]
+        public async Task Update(IArangoContext arango)
         {
+            await SetupAsync(arango);
             await Arango.Collection.CreateAsync("test", "test", ArangoCollectionType.Document);
 
             await Arango.Document.CreateAsync("test", "test", new
@@ -51,9 +55,11 @@ namespace Core.Arango.Tests
             }, returnNew: true, returnOld: true);
         }
 
-        [Fact]
-        public async Task CreateUpdateMode()
+        [Theory]
+        [ClassData(typeof(PascalCaseData))]
+        public async Task CreateUpdateMode(IArangoContext arango)
         {
+            await SetupAsync(arango);
             if (await Arango.GetVersionAsync() < Version.Parse("3.7"))
                 return;
 
@@ -77,9 +83,11 @@ namespace Core.Arango.Tests
             Assert.Equal("c", obj["Value"]);
         }
 
-        [Fact]
-        public async Task CreateReplaceMode()
+        [Theory]
+        [ClassData(typeof(PascalCaseData))]
+        public async Task CreateReplaceMode(IArangoContext arango)
         {
+            await SetupAsync(arango);
             if (await Arango.GetVersionAsync() < Version.Parse("3.7"))
                 return;
 
@@ -103,9 +111,11 @@ namespace Core.Arango.Tests
             Assert.Equal("c", obj["Value"]);
         }
 
-        [Fact]
-        public async Task CreateConflictMode()
+        [Theory]
+        [ClassData(typeof(PascalCaseData))]
+        public async Task CreateConflictMode(IArangoContext arango)
         {
+            await SetupAsync(arango);
             if (await Arango.GetVersionAsync() < Version.Parse("3.7"))
                 return;
 

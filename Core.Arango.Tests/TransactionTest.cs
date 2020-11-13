@@ -8,9 +8,11 @@ namespace Core.Arango.Tests
 {
     public class TransactionTest : TestBase
     {
-        [Fact]
-        public async Task StreamTransaction()
+        [Theory]
+        [ClassData(typeof(PascalCaseData))]
+        public async Task StreamTransaction(IArangoContext arango)
         {
+            await SetupAsync(arango);
             await Arango.Collection.CreateAsync("test", "test", ArangoCollectionType.Document);
 
             var t1 = await Arango.Transaction.BeginAsync("test", new ArangoTransaction

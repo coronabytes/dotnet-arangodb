@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Data.Common;
 using Core.Arango.Protocol;
 using Core.Arango.Serialization;
+using Core.Arango.Serialization.JsonNet;
+using Core.Arango.Serialization.Newtonsoft;
 using Core.Arango.Transport;
-using Newtonsoft.Json.Linq;
 
 namespace Core.Arango
 {

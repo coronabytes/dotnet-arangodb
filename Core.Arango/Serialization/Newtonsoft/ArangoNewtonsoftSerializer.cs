@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace Core.Arango.Serialization
+namespace Core.Arango.Serialization.Newtonsoft
 {
     public class ArangoJsonNetSerializer : IArangoSerializer
     {

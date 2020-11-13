@@ -8,25 +8,15 @@ using Xunit.Priority;
 
 namespace Core.Arango.Tests
 {
-    [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Assembly)]
-    [DefaultPriority(-1000)]
     public class FunctionTest : TestBase
     {
-        private readonly IEqualityComparer<ArangoFunctionDefinition> functionsComparer = new FunctionsComparer();
+        private readonly IEqualityComparer<ArangoFunctionDefinition> _functionsComparer = new FunctionsComparer();
 
-        [Fact]
-        [Priority(0)]
-        public void ModuleExists()
+        [Theory]
+        [ClassData(typeof(PascalCaseData))]
+        public async Task Run(IArangoContext arango)
         {
-            var function = Arango.Function;
-
-            Assert.NotNull(function);
-        }
-
-        [Fact]
-        [Priority(1000)]
-        public async Task CreateTest()
-        {
+            await SetupAsync(arango);
             var function = Arango.Function;
 
             var isNewlyCreated = await function.CreateAsync("test", new ArangoFunctionDefinition
@@ -46,13 +36,6 @@ namespace Core.Arango.Tests
             });
 
             Assert.False(isNewlyCreated);
-        }
-
-        [Fact]
-        [Priority(2000)]
-        public async Task ListTest()
-        {
-            var function = Arango.Function;
 
             await function.CreateAsync("test", new ArangoFunctionDefinition
             {
@@ -102,13 +85,6 @@ namespace Core.Arango.Tests
                 "Testfunctions::TestFn2",
                 "Testfunctions::TestFn3"
             }, result);
-        }
-
-        [Fact]
-        [Priority(3000)]
-        public async Task RemoveTest()
-        {
-            var function = Arango.Function;
 
             await function.CreateAsync("test", new ArangoFunctionDefinition
             {
@@ -196,7 +172,7 @@ namespace Core.Arango.Tests
             Assert.Equal(expectedNames.Count, list.Count);
 
             foreach (var example in expectedNames.Select(name => new ArangoFunctionDefinition {Name = name}))
-                Assert.Contains(example, list, functionsComparer);
+                Assert.Contains(example, list, _functionsComparer);
         }
 
         private class FunctionsComparer : IEqualityComparer<ArangoFunctionDefinition>

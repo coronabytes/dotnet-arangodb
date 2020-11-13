@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.Json;
 
-namespace Core.Arango.Serialization
+namespace Core.Arango.Serialization.SystemTextJson
 {
     public class ArangoSystemTextJsonSerializer : IArangoSerializer
     {

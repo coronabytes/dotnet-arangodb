@@ -10,9 +10,11 @@ namespace Core.Arango.Tests
 {
     public class QueryTest : TestBase
     {
-        [Fact]
-        public async Task NullParameter()
+        [Theory]
+        [ClassData(typeof(PascalCaseData))]
+        public async Task NullParameter(IArangoContext arango)
         {
+            await SetupAsync(arango);
             await Arango.Collection.CreateAsync("test", "test", ArangoCollectionType.Document);
             await Arango.Document.CreateManyAsync("test", "test", new List<Entity>
             {
@@ -30,9 +32,11 @@ namespace Core.Arango.Tests
                 $"x.Value == {null}");
         }
 
-        [Fact]
-        public async Task QueryIntegerContains()
+        [Theory]
+        [ClassData(typeof(PascalCaseData))]
+        public async Task QueryIntegerContains(IArangoContext arango)
         {
+            await SetupAsync(arango);
             await Arango.Collection.CreateAsync("test", "test", ArangoCollectionType.Document);
             await Arango.Document.CreateManyAsync("test", "test", new List<Entity>
             {
@@ -49,9 +53,11 @@ namespace Core.Arango.Tests
             Assert.Equal(2, res.Count);
         }
 
-        [Fact]
-        public async Task Batch()
+        [Theory]
+        [ClassData(typeof(PascalCaseData))]
+        public async Task Batch(IArangoContext arango)
         {
+            await SetupAsync(arango);
             await Arango.Collection.CreateAsync("test", "test", ArangoCollectionType.Document);
 
             await Arango.Document.CreateManyAsync("test", "test", 
@@ -64,9 +70,11 @@ namespace Core.Arango.Tests
             Assert.Equal(100000, res.Count);
         }
 
-        [Fact]
-        public async Task BatchStream()
+        [Theory]
+        [ClassData(typeof(PascalCaseData))]
+        public async Task BatchStream(IArangoContext arango)
         {
+            await SetupAsync(arango);
             await Arango.Collection.CreateAsync("test", "test", ArangoCollectionType.Document);
 
             await Arango.Document.CreateManyAsync("test", "test",

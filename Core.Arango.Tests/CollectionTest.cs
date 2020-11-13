@@ -7,9 +7,11 @@ namespace Core.Arango.Tests
 {
     public class CollectionTest : TestBase
     {
-        [Fact]
-        public async Task Create()
+        [Theory]
+        [ClassData(typeof(PascalCaseData))]
+        public async Task Create(IArangoContext arango)
         {
+            await SetupAsync(arango);
             await Arango.Collection.CreateAsync("test", new ArangoCollection
             {
                 Name = "test",
@@ -27,9 +29,11 @@ namespace Core.Arango.Tests
             });
         }
 
-        [Fact]
-        public async Task CreateExistGetDrop()
+        [Theory]
+        [ClassData(typeof(PascalCaseData))]
+        public async Task CreateExistGetDrop(IArangoContext arango)
         {
+            await SetupAsync(arango);
             await Arango.Collection.CreateAsync("test", new ArangoCollection
             {
                 Name = "test",

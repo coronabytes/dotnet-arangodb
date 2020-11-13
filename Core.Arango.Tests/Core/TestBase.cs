@@ -8,23 +8,14 @@ namespace Core.Arango.Tests.Core
     public abstract class TestBase : IAsyncLifetime
     {
         public IArangoContext Arango { get; protected set; }
-
-        protected string UniqueTestRealm()
+        public virtual Task InitializeAsync()
         {
-            var cs = Environment.GetEnvironmentVariable("ARANGODB_CONNECTION");
-
-            if (string.IsNullOrWhiteSpace(cs))
-                cs = "Server=http://localhost:8529;Realm=CI-{UUID};User=root;Password=;";
-
-            return cs.Replace("{UUID}", Guid.NewGuid().ToString("D"));
+            return Task.CompletedTask;
         }
 
-        public virtual async Task InitializeAsync()
+        public async Task SetupAsync(IArangoContext context)
         {
-            Arango = new ArangoContext(UniqueTestRealm(), new ArangoConfiguration
-            {
-                Serializer = new ArangoSystemTextJsonSerializer(new ArangoSystemTextJsonNamingPolicy())
-            });
+            Arango = context;
             await Arango.Database.CreateAsync("test");
         }
 

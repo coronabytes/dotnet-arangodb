@@ -12,20 +12,12 @@ namespace Core.Arango.Tests
 {
     public class CamelCaseTest : TestBase
     {
-       public override async Task InitializeAsync()
-        {
-            Arango =
-                new ArangoContext(UniqueTestRealm(),
-                    new ArangoConfiguration
-                    {
-                        Serializer = new ArangoJsonNetSerializer(new ArangoCamelCaseContractResolver())
-                    });
-            await Arango.Database.CreateAsync("test");
-        }
 
-        [Fact]
-        public async Task GetCamelCase()
+        [Theory]
+        [ClassData(typeof(CamelCaseData))]
+        public async Task GetCamelCase(IArangoContext arango)
         {
+            await SetupAsync(arango);
             await Arango.Collection.CreateAsync("test", "test", ArangoCollectionType.Document);
 
             await Arango.Document.CreateAsync("test", "test", new
