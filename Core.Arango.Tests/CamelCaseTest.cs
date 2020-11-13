@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
 using Core.Arango.Serialization;
@@ -10,7 +12,7 @@ namespace Core.Arango.Tests
 {
     public class CamelCaseTest : TestBase
     {
-        public override async Task InitializeAsync()
+       public override async Task InitializeAsync()
         {
             Arango =
                 new ArangoContext(UniqueTestRealm(),
@@ -33,7 +35,7 @@ namespace Core.Arango.Tests
                 SomeName = "b"
             });
 
-            var doc = await Arango.Document.GetAsync<dynamic>("test", "test", "abc");
+            var doc = await Arango.Document.GetAsync<Dictionary<string, string>>("test", "test", "abc");
 
             Assert.Equal("a", doc["name"]);
             Assert.Equal("b", doc["someName"]);

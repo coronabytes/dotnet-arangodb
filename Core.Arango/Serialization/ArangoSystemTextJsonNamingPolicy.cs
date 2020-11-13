@@ -1,0 +1,19 @@
+﻿using System.Text.Json;
+
+namespace Core.Arango.Serialization
+{
+    public class ArangoSystemTextJsonNamingPolicy : JsonNamingPolicy
+    {
+        public override string ConvertName(string name)
+        {
+            return name switch
+            {
+                "Key" => "_key",
+                "Id" => "_id",
+                "From" => "_from",
+                "To" => "_to",
+                _ => name
+            };
+        }
+    }
+}

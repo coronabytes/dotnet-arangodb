@@ -8,7 +8,8 @@ namespace Core.Arango.Protocol
     {
 
         [JsonPropertyName("allowImplicit")]
-        [JsonProperty(PropertyName = "allowImplicit", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty(PropertyName = "allowImplicit", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public bool AllowImplicit { get; set; }
 
         [JsonPropertyName("collections")]
@@ -17,22 +18,27 @@ namespace Core.Arango.Protocol
 
         [JsonPropertyName("action")]
         [JsonProperty(PropertyName = "action", NullValueHandling = NullValueHandling.Ignore)]
+        [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string Action { get; set; }
 
         [JsonPropertyName("waitForSync")]
         [JsonProperty(PropertyName = "waitForSync", NullValueHandling = NullValueHandling.Ignore)]
+        [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? WaitForSync { get; set; }
 
         [JsonPropertyName("lockTimeout")]
         [JsonProperty(PropertyName = "lockTimeout", NullValueHandling = NullValueHandling.Ignore)]
+        [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public int? LockTimeout { get; set; }
 
         [JsonPropertyName("params")]
         [JsonProperty(PropertyName = "params", NullValueHandling = NullValueHandling.Ignore)]
+        [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public Dictionary<string, object> Params { get; set; }
 
         [JsonPropertyName("maxTransactionSize")]
         [JsonProperty(PropertyName = "maxTransactionSize", NullValueHandling = NullValueHandling.Ignore)]
+        [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public int? MaxTransactionSize { get; set; }
     }
 }

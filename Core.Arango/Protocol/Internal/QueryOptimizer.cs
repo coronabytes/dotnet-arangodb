@@ -8,6 +8,7 @@ namespace Core.Arango.Protocol.Internal
     {
         [JsonPropertyName("rules")]
         [JsonProperty(PropertyName = "rules", NullValueHandling = NullValueHandling.Ignore)]
+        [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public ICollection<string> Rules { get; set; }
     }
 }

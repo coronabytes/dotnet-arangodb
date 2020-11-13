@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
 using Core.Arango.Tests.Core;
@@ -21,7 +22,7 @@ namespace Core.Arango.Tests
             });
 
             var doc = await Arango.Document.GetAsync<Entity>("test", "test", "abc");
-            Assert.Equal("a", doc["Name"]);
+            Assert.Equal("a", doc.Name);
 
             var nodoc = await Arango.Document.GetAsync<dynamic>("test", "test", "nonexistant", false);
             Assert.Null(nodoc);
@@ -70,7 +71,7 @@ namespace Core.Arango.Tests
                 Value = "c"
             }, overwriteMode: ArangoOverwriteMode.Update);
 
-            var obj = await Arango.Query.SingleOrDefaultAsync<dynamic>("test", "test", $"x._key == {"abc"}");
+            var obj = await Arango.Query.SingleOrDefaultAsync<Dictionary<string, string>>("test", "test", $"x._key == {"abc"}");
 
             Assert.Equal("a", obj["Name"]);
             Assert.Equal("c", obj["Value"]);
@@ -96,9 +97,9 @@ namespace Core.Arango.Tests
                 Value = "c"
             }, overwriteMode: ArangoOverwriteMode.Replace);
 
-            var obj = await Arango.Query.SingleOrDefaultAsync<dynamic>("test", "test", $"x._key == {"abc"}");
+            var obj = await Arango.Query.SingleOrDefaultAsync<Dictionary<string, string>>("test", "test", $"x._key == {"abc"}");
 
-            Assert.Null(obj["Name"]);
+            Assert.DoesNotContain("Name", obj.Keys);
             Assert.Equal("c", obj["Value"]);
         }
 

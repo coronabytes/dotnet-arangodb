@@ -17,6 +17,7 @@ namespace Core.Arango.Protocol
 
         [JsonPropertyName("isSmart")]
         [JsonProperty(PropertyName = "isSmart", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public bool IsSmart { get; set; }
     }
 }

@@ -15,6 +15,7 @@ namespace Core.Arango.Protocol
 
         [JsonPropertyName("isDeterministic")]
         [JsonProperty(PropertyName = "isDeterministic", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public bool IsDeterministic { get; set; }
     }
 }

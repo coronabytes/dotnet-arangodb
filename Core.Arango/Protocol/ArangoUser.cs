@@ -15,10 +15,12 @@ namespace Core.Arango.Protocol
 
         [JsonPropertyName("active")]
         [JsonProperty(PropertyName = "active", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? Active { get; set; }
 
         [JsonPropertyName("extra")]
         [JsonProperty(PropertyName = "extra", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public object Extra { get; set; }
     }
 }
