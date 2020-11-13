@@ -13,7 +13,7 @@ namespace Core.Arango.Tests
             {
                 new ArangoJsonNetSerializer(new ArangoDefaultContractResolver()),
                 new ArangoJsonNetSerializer(new ArangoCamelCaseContractResolver()),
-                new ArangoSystemTextJsonSerializer()
+                new ArangoSystemTextJsonSerializer(new ArangoSystemTextJsonNamingPolicy())
             };
 
         [Theory]

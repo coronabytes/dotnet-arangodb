@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices.ComTypes;
 using System.Text.Json;
 
 namespace Core.Arango.Serialization
@@ -8,25 +7,28 @@ namespace Core.Arango.Serialization
     {
         protected JsonSerializerOptions Options;
 
-        public ArangoSystemTextJsonSerializer()
+        public ArangoSystemTextJsonSerializer(JsonNamingPolicy policy)
         {
-            Options = new JsonSerializerOptions(JsonSerializerDefaults.Web);
-            Options.PropertyNamingPolicy = new ArangoSystemTextJsonNamingPolicy();
+            Options = new JsonSerializerOptions(JsonSerializerDefaults.Web)
+            {
+                PropertyNamingPolicy = policy,
+                IgnoreNullValues = false
+            };
         }
 
         public string Serialize(object value)
         {
-            return System.Text.Json.JsonSerializer.Serialize(value, Options);
+            return JsonSerializer.Serialize(value, Options);
         }
 
         public T Deserialize<T>(string value)
         {
-            return System.Text.Json.JsonSerializer.Deserialize<T>(value, Options);
+            return JsonSerializer.Deserialize<T>(value, Options);
         }
 
         public object Deserialize(string v, Type t)
         {
-            return System.Text.Json.JsonSerializer.Deserialize(v, t, Options);
+            return JsonSerializer.Deserialize(v, t, Options);
         }
     }
 }

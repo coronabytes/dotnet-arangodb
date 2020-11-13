@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Core.Arango.Serialization;
 using Xunit;
 
 namespace Core.Arango.Tests.Core
@@ -20,7 +21,10 @@ namespace Core.Arango.Tests.Core
 
         public virtual async Task InitializeAsync()
         {
-            Arango = new ArangoContext(UniqueTestRealm());
+            Arango = new ArangoContext(UniqueTestRealm(), new ArangoConfiguration
+            {
+                Serializer = new ArangoSystemTextJsonSerializer(new ArangoSystemTextJsonNamingPolicy())
+            });
             await Arango.Database.CreateAsync("test");
         }
 

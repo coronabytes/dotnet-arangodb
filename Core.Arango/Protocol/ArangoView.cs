@@ -4,22 +4,17 @@ using Newtonsoft.Json;
 
 namespace Core.Arango.Protocol
 {
-    public class ArangoVoid
-    {
-
-    }
-
     public class ArangoView
     {
-        [JsonPropertyName("_id")]
+        [JsonPropertyName("name")]
         [JsonProperty(PropertyName = "name")] 
         public string Name { get; set; }
 
-        [JsonPropertyName("_id")]
+        [JsonPropertyName("type")]
         [JsonProperty(PropertyName = "type")] 
         public string Type { get; set; } = "arangosearch";
 
-        [JsonPropertyName("_id")]
+        [JsonPropertyName("links")]
         [JsonProperty(PropertyName = "links")] 
         public IDictionary<string, ArangoLinkProperty> Links { get; set; }
 

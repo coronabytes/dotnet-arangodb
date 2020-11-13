@@ -37,7 +37,7 @@ namespace Core.Arango.Modules.Internal
             string name,
             CancellationToken cancellationToken = default)
         {
-            await SendAsync<JObject>(HttpMethod.Delete,
+            await SendAsync<ArangoVoid>(HttpMethod.Delete,
                 ApiPath(database, $"view/{UrlEncode(name)}"),
                 cancellationToken: cancellationToken);
         }
