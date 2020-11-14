@@ -1,15 +1,18 @@
 ![Build](https://github.com/coronabytes/dotnet-arangodb/workflows/Build/badge.svg)
-![Nuget](https://img.shields.io/nuget/v/Core.Arango)
-![Nuget](https://img.shields.io/nuget/dt/Core.Arango)
+[![Nuget](https://img.shields.io/nuget/v/Core.Arango)](https://www.nuget.org/packages/Core.Arango)
+[![Nuget](https://img.shields.io/nuget/dt/Core.Arango)](https://www.nuget.org/packages/Core.Arango)
 
 # .NET driver for ArangoDB
 - .NET Standard 2.1 driver for ArangoDB 3.6 and 3.7+
-- Nuget [Core.ArangoDB](https://www.nuget.org/packages/Core.Arango/)
+- Nuget [Core.ArangoDB](https://www.nuget.org/packages/Core.Arango)
 - The key difference to any other available driver is the ability to switch databases on a per request basis, which allows for easy database per tenant deployments
 - Id, Key, From, To properties will always be translated to their respective arango form (_id, _key, _from, _to), which allows to construct updates from anonymous types
 - First parameter of any method in most cases is an ArangoHandle which has implicit conversion from string and GUID
   - e.g. "master" and "logs" database and GUID for each tenant
 - It does not support optimistic concurrency with _rev as constructing patch updates is way easier
+
+# Changes in 3.0
+- Optional support for System.Text.Json serializer which in some cases is twices as fast as Newtonsoft
 
 # Extensions
 This driver has some [extensions](https://github.com/coronabytes/dotnet-arangodb-extensions) for LINQ, DevExtreme, Serilog and DataProtection available.
