@@ -9,9 +9,9 @@ namespace Core.Arango.Tests
     {
         [Theory]
         [ClassData(typeof(PascalCaseData))]
-        public async Task Create(IArangoContext arango)
+        public async Task Create(string serializer)
         {
-            await SetupAsync(arango);
+            await SetupAsync(serializer);
             await Arango.Collection.CreateAsync("test", new ArangoCollection
             {
                 Name = "test",
@@ -31,9 +31,9 @@ namespace Core.Arango.Tests
 
         [Theory]
         [ClassData(typeof(PascalCaseData))]
-        public async Task CreateExistGetDrop(IArangoContext arango)
+        public async Task CreateExistGetDrop(string serializer)
         {
-            await SetupAsync(arango);
+            await SetupAsync(serializer);
             await Arango.Collection.CreateAsync("test", new ArangoCollection
             {
                 Name = "test",

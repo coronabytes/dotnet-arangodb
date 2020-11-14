@@ -8,13 +8,11 @@ namespace Core.Arango
 {
     public interface IArangoConfiguration
     {
-        void LoadConnectionString(string cs);
-
+        string ConnectionString { get; set; }
         string Realm { get; set; }
         string Server { get; set; }
         string User { get; set; }
         string Password { get; set; }
-
         int BatchSize { get; set; }
         IArangoSerializer Serializer { get; set; }
         IArangoTransport Transport { get; set; }

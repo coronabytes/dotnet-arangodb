@@ -10,9 +10,9 @@ namespace Core.Arango.Tests
     {
         [Theory]
         [ClassData(typeof(PascalCaseData))]
-        public async Task StreamTransaction(IArangoContext arango)
+        public async Task StreamTransaction(string serializer)
         {
-            await SetupAsync(arango);
+            await SetupAsync(serializer);
             await Arango.Collection.CreateAsync("test", "test", ArangoCollectionType.Document);
 
             var t1 = await Arango.Transaction.BeginAsync("test", new ArangoTransaction

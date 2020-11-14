@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Text.Json;
 
-namespace Core.Arango.Serialization.SystemTextJson
+namespace Core.Arango.Serialization.System
 {
-    public class ArangoSystemTextJsonSerializer : IArangoSerializer
+    public class ArangoJsonSerializer : IArangoSerializer
     {
         protected JsonSerializerOptions Options;
 
-        public ArangoSystemTextJsonSerializer(JsonNamingPolicy policy)
+        public ArangoJsonSerializer(JsonNamingPolicy policy)
         {
             Options = new JsonSerializerOptions(JsonSerializerDefaults.Web)
             {
                 PropertyNamingPolicy = policy,
+                DictionaryKeyPolicy = policy,
                 IgnoreNullValues = false
             };
         }

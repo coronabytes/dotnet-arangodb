@@ -14,9 +14,9 @@ namespace Core.Arango.Tests
 
         [Theory]
         [ClassData(typeof(PascalCaseData))]
-        public async Task Run(IArangoContext arango)
+        public async Task Run(string serializer)
         {
-            await SetupAsync(arango);
+            await SetupAsync(serializer);
             var function = Arango.Function;
 
             var isNewlyCreated = await function.CreateAsync("test", new ArangoFunctionDefinition

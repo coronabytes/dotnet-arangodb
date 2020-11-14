@@ -22,9 +22,9 @@ namespace Core.Arango.Serialization.System
             if (string.IsNullOrEmpty(name) || !char.IsUpper(name[0]))
                 return name;
 
-            return string.Create(name.Length, name, (chars, name) =>
+            return string.Create(name.Length, name, (chars, n) =>
             {
-                name.AsSpan().CopyTo(chars);
+                n.AsSpan().CopyTo(chars);
                 FixCasing(chars);
             });
         }

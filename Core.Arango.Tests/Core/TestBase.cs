@@ -1,6 +1,9 @@
 using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Core.Arango.Serialization;
+using Core.Arango.Serialization.Newtonsoft;
+using Core.Arango.Serialization.System;
 using Xunit;
 
 namespace Core.Arango.Tests.Core
@@ -13,9 +16,19 @@ namespace Core.Arango.Tests.Core
             return Task.CompletedTask;
         }
 
-        public async Task SetupAsync(IArangoContext context)
+        public async Task SetupAsync(string serializer)
         {
-            Arango = context;
+            Arango = new ArangoContext(UniqueTestRealm(), new ArangoConfiguration
+            {
+                Serializer = serializer switch
+                {
+                    "newton-default" => new ArangoNewtonsoftSerializer(new ArangoNewtonsoftDefaultContractResolver()),
+                    "newton-camel" => new ArangoNewtonsoftSerializer(new ArangoNewtonsoftCamelCaseContractResolver()),
+                    "system-default" => new ArangoJsonSerializer(new ArangoJsonDefaultPolicy()),
+                    "system-camel" => new ArangoJsonSerializer(new ArangoJsonCamelCasePolicy()),
+                    _ => new ArangoNewtonsoftSerializer(new ArangoNewtonsoftDefaultContractResolver())
+                }
+            });
             await Arango.Database.CreateAsync("test");
         }
 
@@ -30,6 +43,16 @@ namespace Core.Arango.Tests.Core
             {
                 //
             }
+        }
+
+        protected string UniqueTestRealm()
+        {
+            var cs = Environment.GetEnvironmentVariable("ARANGODB_CONNECTION");
+
+            if (string.IsNullOrWhiteSpace(cs))
+                cs = "Server=http://localhost:8529;Realm=CI-{UUID};User=root;Password=;";
+
+            return cs.Replace("{UUID}", Guid.NewGuid().ToString("D"));
         }
     }
 }

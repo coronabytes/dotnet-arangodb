@@ -1,38 +1,28 @@
+using Core.Arango.Tests.Core;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
 namespace Core.Arango.Tests
 {
-    public class DependencyInjectionTest
+    public class DependencyInjectionTest : TestBase
     {
-        private const string SERVER = "http://localhost:8529";
-        private const string REALM = "TEST0";
-        private const string USER = "UserName";
-
         [Fact]
         public void AddArangoConfigurationCallback()
         {
             var collection = new ServiceCollection();
 
-            Assert.Same(collection,
-                collection.AddArango((sp, config) =>
-                {
-                    config.Server = SERVER;
-                    config.Realm = REALM;
-                    config.User = USER;
-                }));
+            collection.AddArango((sp, config) =>
+            {
+                config.ConnectionString = UniqueTestRealm();
+                config.BatchSize = 1337;
+            });
 
             var serviceProvider = collection.BuildServiceProvider();
-            var arango = serviceProvider.GetRequiredService<IArangoContext>();
+            Arango = serviceProvider.GetRequiredService<IArangoContext>();
 
-            using (var scope = serviceProvider.CreateScope())
-            {
-                Assert.Same(arango, scope.ServiceProvider.GetRequiredService<IArangoContext>());
-            }
+            Arango.GetVersionAsync();
 
-            Assert.Same(arango, serviceProvider.GetRequiredService<IArangoContext>());
-
-            Assert.Equal(SERVER, arango.Configuration.Server);
+            Assert.Equal(1337, Arango.Configuration.BatchSize);
         }
 
         [Fact]
@@ -40,39 +30,25 @@ namespace Core.Arango.Tests
         {
             var collection = new ServiceCollection();
 
-            Assert.Same(collection,
-                collection.AddArango(sp => $"Server={SERVER};Realm={REALM};User={USER};Password=;"));
+            collection.AddArango(sp => UniqueTestRealm());
 
             var serviceProvider = collection.BuildServiceProvider();
-            var arango = serviceProvider.GetRequiredService<IArangoContext>();
+            Arango = serviceProvider.GetRequiredService<IArangoContext>();
 
-            using (var scope = serviceProvider.CreateScope())
-            {
-                Assert.Same(arango, scope.ServiceProvider.GetRequiredService<IArangoContext>());
-            }
-
-            Assert.Same(arango, serviceProvider.GetRequiredService<IArangoContext>());
-
-            Assert.Equal(SERVER, arango.Configuration.Server);
+            Arango.GetVersionAsync();
         }
 
         [Fact]
         public void AddArangoConnectionString()
         {
             var collection = new ServiceCollection();
-            Assert.Same(collection, collection.AddArango($"Server={SERVER};Realm={REALM};User={USER};Password=;"));
+
+            collection.AddArango(UniqueTestRealm());
 
             var serviceProvider = collection.BuildServiceProvider();
-            var arango = serviceProvider.GetRequiredService<IArangoContext>();
+            Arango = serviceProvider.GetRequiredService<IArangoContext>();
 
-            using (var scope = serviceProvider.CreateScope())
-            {
-                Assert.Same(arango, scope.ServiceProvider.GetRequiredService<IArangoContext>());
-            }
-
-            Assert.Same(arango, serviceProvider.GetRequiredService<IArangoContext>());
-
-            Assert.Equal(SERVER, arango.Configuration.Server);
+            Arango.GetVersionAsync();
         }
     }
 }

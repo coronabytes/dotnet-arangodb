@@ -12,9 +12,9 @@ namespace Core.Arango.Tests
     {
         [Theory]
         [ClassData(typeof(PascalCaseData))]
-        public async Task NullParameter(IArangoContext arango)
+        public async Task NullParameter(string serializer)
         {
-            await SetupAsync(arango);
+            await SetupAsync(serializer);
             await Arango.Collection.CreateAsync("test", "test", ArangoCollectionType.Document);
             await Arango.Document.CreateManyAsync("test", "test", new List<Entity>
             {
@@ -34,9 +34,9 @@ namespace Core.Arango.Tests
 
         [Theory]
         [ClassData(typeof(PascalCaseData))]
-        public async Task QueryIntegerContains(IArangoContext arango)
+        public async Task QueryIntegerContains(string serializer)
         {
-            await SetupAsync(arango);
+            await SetupAsync(serializer);
             await Arango.Collection.CreateAsync("test", "test", ArangoCollectionType.Document);
             await Arango.Document.CreateManyAsync("test", "test", new List<Entity>
             {
@@ -55,9 +55,9 @@ namespace Core.Arango.Tests
 
         [Theory]
         [ClassData(typeof(PascalCaseData))]
-        public async Task Batch(IArangoContext arango)
+        public async Task Batch(string serializer)
         {
-            await SetupAsync(arango);
+            await SetupAsync(serializer);
             await Arango.Collection.CreateAsync("test", "test", ArangoCollectionType.Document);
 
             await Arango.Document.CreateManyAsync("test", "test", 
@@ -72,9 +72,9 @@ namespace Core.Arango.Tests
 
         [Theory]
         [ClassData(typeof(PascalCaseData))]
-        public async Task BatchStream(IArangoContext arango)
+        public async Task BatchStream(string serializer)
         {
-            await SetupAsync(arango);
+            await SetupAsync(serializer);
             await Arango.Collection.CreateAsync("test", "test", ArangoCollectionType.Document);
 
             await Arango.Document.CreateManyAsync("test", "test",

@@ -12,9 +12,9 @@ namespace Core.Arango.Tests
     {
         [Theory]
         [ClassData(typeof(PascalCaseData))]
-        public async Task Get(IArangoContext arango)
+        public async Task Get(string serializer)
         {
-            await SetupAsync(arango);
+            await SetupAsync(serializer);
             await Arango.Collection.CreateAsync("test", "test", ArangoCollectionType.Document);
 
             await Arango.Document.CreateAsync("test", "test", new Entity
@@ -37,9 +37,9 @@ namespace Core.Arango.Tests
 
         [Theory]
         [ClassData(typeof(PascalCaseData))]
-        public async Task Update(IArangoContext arango)
+        public async Task Update(string serializer)
         {
-            await SetupAsync(arango);
+            await SetupAsync(serializer);
             await Arango.Collection.CreateAsync("test", "test", ArangoCollectionType.Document);
 
             await Arango.Document.CreateAsync("test", "test", new
@@ -57,9 +57,9 @@ namespace Core.Arango.Tests
 
         [Theory]
         [ClassData(typeof(PascalCaseData))]
-        public async Task CreateUpdateMode(IArangoContext arango)
+        public async Task CreateUpdateMode(string serializer)
         {
-            await SetupAsync(arango);
+            await SetupAsync(serializer);
             if (await Arango.GetVersionAsync() < Version.Parse("3.7"))
                 return;
 
@@ -85,9 +85,9 @@ namespace Core.Arango.Tests
 
         [Theory]
         [ClassData(typeof(PascalCaseData))]
-        public async Task CreateReplaceMode(IArangoContext arango)
+        public async Task CreateReplaceMode(string serializer)
         {
-            await SetupAsync(arango);
+            await SetupAsync(serializer);
             if (await Arango.GetVersionAsync() < Version.Parse("3.7"))
                 return;
 
@@ -113,9 +113,9 @@ namespace Core.Arango.Tests
 
         [Theory]
         [ClassData(typeof(PascalCaseData))]
-        public async Task CreateConflictMode(IArangoContext arango)
+        public async Task CreateConflictMode(string serializer)
         {
-            await SetupAsync(arango);
+            await SetupAsync(serializer);
             if (await Arango.GetVersionAsync() < Version.Parse("3.7"))
                 return;
 

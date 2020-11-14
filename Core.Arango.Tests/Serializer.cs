@@ -1,29 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using Core.Arango.Serialization;
-using Core.Arango.Serialization.JsonNet;
 using Core.Arango.Serialization.Newtonsoft;
 using Core.Arango.Serialization.System;
-using Core.Arango.Serialization.SystemTextJson;
 using Core.Arango.Tests.Core;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Core.Arango.Tests
 {
     public class SerializerTest
     {
-        public static TheoryData<IArangoSerializer> SerializerData =>
-            new TheoryData<IArangoSerializer>
+        private readonly ITestOutputHelper _output;
+
+        public SerializerTest(ITestOutputHelper output)
+        {
+            _output = output;
+        }
+
+        public static TheoryData<IArangoSerializer, string> SerializerData =>
+            new TheoryData<IArangoSerializer, string>
             {
-                new ArangoJsonNetSerializer(new ArangoDefaultContractResolver()),
-                new ArangoJsonNetSerializer(new ArangoCamelCaseContractResolver()),
-                new ArangoSystemTextJsonSerializer(new ArangoJsonCamelCasePolicy()),
-                new ArangoSystemTextJsonSerializer(new ArangoJsonPascalCasePolicy())
+                {new ArangoNewtonsoftSerializer(new ArangoNewtonsoftDefaultContractResolver()), "Newtonsoft(Default)"},
+                {new ArangoNewtonsoftSerializer(new ArangoNewtonsoftCamelCaseContractResolver()), "Newtonsoft(Camel)"},
+                {new ArangoJsonSerializer(new ArangoJsonCamelCasePolicy()), "System.Json.Text(Camel)"},
+                {new ArangoJsonSerializer(new ArangoJsonCamelCasePolicy()), "System.Json.Text(Default)"}
             };
 
         [Theory]
         [MemberData(nameof(SerializerData))]
-        public void SystemTextJson(IArangoSerializer serializer)
+        public void Equality(IArangoSerializer serializer, string name)
         {
             var o1 = new Entity
             {
@@ -45,6 +53,27 @@ namespace Core.Arango.Tests
                 @"{""_key"":""00000000-0000-0000-0000-000000000001"",""Name"":null,""Value"":0}");
 
             Assert.Equal("00000000-0000-0000-0000-000000000001", o3.Key);
+        }
+
+        [Theory]
+        [MemberData(nameof(SerializerData))]
+        public void Performance(IArangoSerializer serializer, string name)
+        {
+            var docs = Enumerable.Range(1, 100000)
+                .Select(x => new Entity {Value = x});
+
+            var sw = new Stopwatch();
+            sw.Start();
+
+            for (var i = 0; i < 10; i++)
+            {
+                var json = serializer.Serialize(docs);
+                serializer.Deserialize<List<Entity>>(json);
+            }
+
+            sw.Stop();
+
+            _output.WriteLine($"{name}: {sw.Elapsed.TotalMilliseconds}");
         }
     }
 }

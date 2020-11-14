@@ -4,11 +4,11 @@ using Newtonsoft.Json.Serialization;
 
 namespace Core.Arango.Serialization.Newtonsoft
 {
-    public class ArangoJsonNetSerializer : IArangoSerializer
+    public class ArangoNewtonsoftSerializer : IArangoSerializer
     {
         protected JsonSerializerSettings Settings;
 
-        public ArangoJsonNetSerializer(IContractResolver resolver)
+        public ArangoNewtonsoftSerializer(IContractResolver resolver)
         {
             Settings = new JsonSerializerSettings
             {

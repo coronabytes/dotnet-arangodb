@@ -2,7 +2,7 @@
 
 namespace Core.Arango.Serialization.System
 {
-    public class ArangoJsonPascalCasePolicy : JsonNamingPolicy
+    public class ArangoJsonDefaultPolicy : JsonNamingPolicy
     {
         public override string ConvertName(string name)
         {

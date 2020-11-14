@@ -2,11 +2,11 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace Core.Arango.Serialization.JsonNet
+namespace Core.Arango.Serialization.Newtonsoft
 {
-    public class ArangoCamelCaseContractResolver : DefaultContractResolver
+    public class ArangoNewtonsoftCamelCaseContractResolver : DefaultContractResolver
     {
-        public ArangoCamelCaseContractResolver()
+        public ArangoNewtonsoftCamelCaseContractResolver()
         {
             NamingStrategy = new CamelCaseNamingStrategy();
         }

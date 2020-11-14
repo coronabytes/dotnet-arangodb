@@ -41,7 +41,7 @@ namespace Core.Arango
         public ArangoContext(string cs, IArangoConfiguration settings = null)
         {
             Configuration = settings ?? new ArangoConfiguration();
-            Configuration.LoadConnectionString(cs);
+            Configuration.ConnectionString = cs;
 
             User = new ArangoUserModule(this);
             Collection = new ArangoCollectionModule(this);
