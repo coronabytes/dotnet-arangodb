@@ -12,7 +12,7 @@
 - It does not support optimistic concurrency with _rev as constructing patch updates is way easier
 
 # Changes in 3.0
-- Optional support for System.Text.Json serializer which in some cases is twices as fast as Newtonsoft
+- Optional support for System.Text.Json serializer which in some cases is twice as fast as Newtonsoft
 
 # Extensions
 This driver has some [extensions](https://github.com/coronabytes/dotnet-arangodb-extensions) for LINQ, DevExtreme, Serilog and DataProtection available.
@@ -30,7 +30,7 @@ var arango = new ArangoContext("Server=http://localhost:8529;Realm=myproject;Use
 var arango = new ArangoContext("Server=http://localhost:8529;Realm=myproject;User=root;Password=;",
 new ArangoConfiguration
 {
-    Serializer = new ArangoJsonNetSerializer(new ArangoCamelCaseContractResolver())
+    Serializer = new ArangoNewtonsoftSerializer(new ArangoNewtonsoftCamelCaseContractResolver())
 });
 ```
 - For AspNetCore DI extension is available:
@@ -40,14 +40,14 @@ public void ConfigureServices(IServiceCollection services)
     // add with connection string
     services.AddArango(Configuration.GetConnectionString("Arango"));
     
-    // add with configuration set to camelCase serialization 
+    // or add with configuration set to System.Json.Text serialization
     services.AddArango((sp, config) =>
     {
-        config.Server = "http://localhost:8529";
-        config.User = "root";
-        config.Serializer = new ArangoJsonNetSerializer(new ArangoCamelCaseContractResolver());
+        config.ConnectionString = Configuration.GetConnectionString("Arango");
+        config.Serializer = new ArangoJsonSerializer(new ArangoJsonDefaultPolicy());
         
-        // print each query to console
+        var logger = sp.GetRequiredService<ILogger<Startup>>();
+ 
         config.QueryProfile = (query, bindVars, stats) =>
         {
             var boundQuery = query;
@@ -56,7 +56,7 @@ public void ConfigureServices(IServiceCollection services)
             foreach (var p in bindVars.OrderByDescending(x => x.Key.Length))
                 boundQuery = boundQuery.Replace("@" + p.Key, JsonConvert.SerializeObject(p.Value));
 
-            Console.WriteLine(boundQuery);
+            logger.LogInformation(boundQuery);
         }
     });
 }
