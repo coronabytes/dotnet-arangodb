@@ -14,6 +14,7 @@
 # Changes in 3.0
 - Optional support for System.Text.Json serializer which in some cases is twice as fast as Newtonsoft
 - Still netstandard 2.1 however dependencies have been updated to 5.0.0 - require for new json serializer - should still work with 3.1
+- Collections schema management is now functional
 
 # Extensions
 This driver has some [extensions](https://github.com/coronabytes/dotnet-arangodb-extensions) for LINQ, DevExtreme, Serilog and DataProtection available.
