@@ -85,8 +85,8 @@ namespace Core.Arango.Tests
                         {
                             name = new {type = "string"}
                         },
-                        required = new[] { "name" },
-                        additionalProperties = true
+                        required = new[] { "name" }
+                        //additionalProperties = true
                     }
                 }
             });
