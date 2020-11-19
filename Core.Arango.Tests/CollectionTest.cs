@@ -76,7 +76,7 @@ namespace Core.Arango.Tests
             {
                 Name = "test",
                 Type = ArangoCollectionType.Document,
-                /*Schema = new ArangoSchema
+                Schema = new ArangoSchema
                 {
                     Rule = new
                     {
@@ -86,9 +86,9 @@ namespace Core.Arango.Tests
                             name = new {type = "string"}
                         },
                         required = new[] { "name" },
-                        additionalProperties = false
+                        //additionalProperties = false
                     }
-                }*/
+                }
             });
 
             await Arango.Document.CreateAsync("test", "test", new
@@ -105,7 +105,7 @@ namespace Core.Arango.Tests
                     name = "test",
                     name2 = "test"
                 });
-            });
+            });*/
 
            await Arango.Collection.UpdateAsync("test", "test", new ArangoCollectionUpdate
            {
@@ -116,7 +116,7 @@ namespace Core.Arango.Tests
            {
                name = "test",
                name2 = "test"
-           });*/
+           });
         }
     }
 }
