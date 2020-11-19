@@ -110,6 +110,8 @@ namespace Core.Arango.Tests
                Schema = null
            });
 
+           await Task.Delay(5000);
+
            await Arango.Document.CreateAsync("test", "test", new
            {
                name = 2,
