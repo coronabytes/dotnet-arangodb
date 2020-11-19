@@ -96,7 +96,7 @@ namespace Core.Arango.Tests
                 name = "test",
             });
 
-            _output.WriteLine(JsonConvert.SerializeObject(await Arango.Query.FindAsync<Dictionary<string, string>>("test", "test", $"true")));
+            throw new Exception(JsonConvert.SerializeObject(await Arango.Query.FindAsync<Dictionary<string, string>>("test", "test", $"true")));
 
            /*await Assert.ThrowsAsync<ArangoException>(async () =>
             {
