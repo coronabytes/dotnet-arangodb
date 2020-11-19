@@ -1,14 +1,24 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
 using Core.Arango.Tests.Core;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Schema;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Core.Arango.Tests
 {
     public class CollectionTest : TestBase
     {
+        private readonly ITestOutputHelper _output;
+
+        public CollectionTest(ITestOutputHelper output)
+        {
+            _output = output;
+        }
+
         [Theory]
         [ClassData(typeof(PascalCaseData))]
         public async Task Create(string serializer)
@@ -66,7 +76,7 @@ namespace Core.Arango.Tests
             {
                 Name = "test",
                 Type = ArangoCollectionType.Document,
-                Schema = new ArangoSchema
+                /*Schema = new ArangoSchema
                 {
                     Rule = new
                     {
@@ -78,7 +88,7 @@ namespace Core.Arango.Tests
                         required = new[] { "name" },
                         additionalProperties = false
                     }
-                }
+                }*/
             });
 
             await Arango.Document.CreateAsync("test", "test", new
@@ -86,7 +96,9 @@ namespace Core.Arango.Tests
                 name = "test",
             });
 
-           await Assert.ThrowsAsync<ArangoException>(async () =>
+            _output.WriteLine(JsonConvert.SerializeObject(await Arango.Query.FindAsync<Dictionary<string, string>>("test", "test", $"true")));
+
+           /*await Assert.ThrowsAsync<ArangoException>(async () =>
             {
                 await Arango.Document.CreateAsync("test", "test", new
                 {
@@ -104,7 +116,7 @@ namespace Core.Arango.Tests
            {
                name = "test",
                name2 = "test"
-           });
+           });*/
         }
     }
 }
