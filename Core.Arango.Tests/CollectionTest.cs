@@ -86,7 +86,7 @@ namespace Core.Arango.Tests
                             name = new {type = "string"}
                         },
                         required = new[] { "name" },
-                        //additionalProperties = false
+                        additionalProperties = true
                     }
                 }
             });
@@ -96,16 +96,14 @@ namespace Core.Arango.Tests
                 name = "test",
             });
 
-            throw new Exception(JsonConvert.SerializeObject(await Arango.Query.FindAsync<Dictionary<string, string>>("test", "test", $"true")));
-
-           /*await Assert.ThrowsAsync<ArangoException>(async () =>
+            await Assert.ThrowsAsync<ArangoException>(async () =>
             {
                 await Arango.Document.CreateAsync("test", "test", new
                 {
-                    name = "test",
+                    name = 2,
                     name2 = "test"
                 });
-            });*/
+            });
 
            await Arango.Collection.UpdateAsync("test", "test", new ArangoCollectionUpdate
            {
@@ -114,7 +112,7 @@ namespace Core.Arango.Tests
 
            await Arango.Document.CreateAsync("test", "test", new
            {
-               name = "test",
+               name = 2,
                name2 = "test"
            });
         }
