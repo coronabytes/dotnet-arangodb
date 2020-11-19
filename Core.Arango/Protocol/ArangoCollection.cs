@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 
 namespace Core.Arango.Protocol
 {
+
     public class ArangoCollection : ArangoCollectionUpdate
     {
         [JsonPropertyName("name")]
