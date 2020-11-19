@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
 using Core.Arango.Tests.Core;
@@ -58,6 +59,8 @@ namespace Core.Arango.Tests
         public async Task Schema(string serializer)
         {
             await SetupAsync(serializer);
+            if (await Arango.GetVersionAsync() < Version.Parse("3.7"))
+                return;
 
             await Arango.Collection.CreateAsync("test", new ArangoCollection
             {
