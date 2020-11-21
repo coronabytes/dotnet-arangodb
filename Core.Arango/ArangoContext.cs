@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data.Common;
-using System.IdentityModel.Tokens.Jwt;
-using System.Net;
+using System.Linq;
 using System.Net.Http;
-using System.Text;
+using System.Text.Json.Serialization;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Core.Arango.Modules;
 using Core.Arango.Modules.Internal;
+using Core.Arango.Protocol.Internal;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -19,24 +21,10 @@ namespace Core.Arango
     /// </summary>
     public class ArangoContext : IArangoContext
     {
-        private static readonly HttpClient HttpClient = new HttpClient();
-
-        internal static readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings
+        public ArangoContext(IArangoConfiguration config)
         {
-            ContractResolver = new ArangoContractResolver(),
-            ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-            Formatting = Formatting.None,
-            DateFormatHandling = DateFormatHandling.IsoDateFormat,
-            DateTimeZoneHandling = DateTimeZoneHandling.Utc
-        };
-
-        private readonly string _password;
-        private readonly string _user;
-        private string _auth;
-        private DateTime _authValidUntil = DateTime.MinValue;
-
-        public ArangoContext(string cs)
-        {
+            Configuration = config ?? throw new ArgumentNullException(nameof(config));
+            
             User = new ArangoUserModule(this);
             Collection = new ArangoCollectionModule(this);
             View = new ArangoViewModule(this);
@@ -48,37 +36,27 @@ namespace Core.Arango
             Index = new ArangoIndexModule(this);
             Analyzer = new ArangoAnalyzerModule(this);
             Function = new ArangoFunctionModule(this);
+        }
 
-            var builder = new DbConnectionStringBuilder { ConnectionString = cs };
-            builder.TryGetValue("Server", out var s);
-            builder.TryGetValue("Realm", out var r);
-            builder.TryGetValue("User ID", out var uid);
-            builder.TryGetValue("User", out var u);
-            builder.TryGetValue("Password", out var p);
+        public ArangoContext(string cs, IArangoConfiguration settings = null)
+        {
+            Configuration = settings ?? new ArangoConfiguration();
+            Configuration.ConnectionString = cs;
 
-            var server = s as string;
-            var user = u as string ?? uid as string;
-            var password = p as string;
-            var realm = r as string;
-
-            if (string.IsNullOrWhiteSpace(server))
-                throw new ArgumentException("Server invalid");
-
-            if (string.IsNullOrWhiteSpace(user))
-                throw new ArgumentException("User invalid");
-
-            if (string.IsNullOrWhiteSpace(realm))
-                Realm = string.Empty;
-            else
-                Realm = realm + "-";
-
-            Server = server;
-            _user = user;
-            _password = password;
+            User = new ArangoUserModule(this);
+            Collection = new ArangoCollectionModule(this);
+            View = new ArangoViewModule(this);
+            Database = new ArangoDatabaseModule(this);
+            Graph = new ArangoGraphModule(this);
+            Transaction = new ArangoTransactionModule(this);
+            Document = new ArangoDocumentModule(this);
+            Query = new ArangoQueryModule(this);
+            Index = new ArangoIndexModule(this);
+            Analyzer = new ArangoAnalyzerModule(this);
+            Function = new ArangoFunctionModule(this);
         }
 
         public IArangoUserModule User { get; }
-
         public IArangoDatabaseModule Database { get; }
         public IArangoCollectionModule Collection { get; }
         public IArangoViewModule View { get; }
@@ -88,137 +66,33 @@ namespace Core.Arango
         public IArangoQueryModule Query { get; }
         public IArangoIndexModule Index { get; }
         public IArangoAnalyzerModule Analyzer { get; }
-
-        /// <summary>
-        /// Implementation of user functions API https://www.arangodb.com/docs/stable/http/aql-user-functions.html
-        /// </summary>
         public IArangoFunctionModule Function { get; }
+        public IArangoConfiguration Configuration { get; }
 
-        public int BatchSize { get; set; } = 500;
-
-        public string Realm { get; }
-        public string Server { get; }
-
-        /// <summary>
-        ///     Callback for query stats
-        /// </summary>
-        public Action<string, IDictionary<string, object>, JToken> QueryProfile { get; set; }
-
-        /// <summary>
-        ///     HTTP request abstraction
-        /// </summary>
-        public async Task<T> SendAsync<T>(HttpMethod m, string url, string body = null,
-            string transaction = null, bool throwOnError = true, bool auth = true,
-            CancellationToken cancellationToken = default)
+        private class VersionResponse
         {
-            if (auth && (_auth == null || _authValidUntil < DateTime.UtcNow.AddMinutes(-10)))
-            {
-                var authResponse = await SendAsync<JObject>(HttpMethod.Post, $"{Server}/_open/auth",
-                    JsonConvert.SerializeObject(new
-                    {
-                        username = _user,
-                        password = _password ?? string.Empty
-                    }, JsonSerializerSettings), auth: false, cancellationToken: cancellationToken);
-
-                var jwt = authResponse.Value<string>("jwt");
-                var token = new JwtSecurityToken(jwt.Replace("=", ""));
-                _auth = $"Bearer {jwt}";
-                _authValidUntil = token.ValidTo;
-            }
-
-            var msg = new HttpRequestMessage(m, url)
-            {
-                Version = HttpVersion.Version11
-            };
-
-            msg.Headers.Add(HttpRequestHeader.KeepAlive.ToString(), "true");
-
-            if (auth)
-                msg.Headers.Add(HttpRequestHeader.Authorization.ToString(), _auth);
-
-            if (transaction != null)
-                msg.Headers.Add("x-arango-trx-id", transaction);
-
-            if (body != null)
-                msg.Content = new StringContent(body, Encoding.UTF8, "application/json");
-            else
-                msg.Headers.Add(HttpRequestHeader.ContentLength.ToString(), "0");
-
-            var res = await HttpClient.SendAsync(msg, cancellationToken);
-
-            if (!res.IsSuccessStatusCode)
-                if (throwOnError)
-                    throw new ArangoException(await res.Content.ReadAsStringAsync());
-                else return default;
-
-            var content = await res.Content.ReadAsStringAsync();
-
-            if (res.Headers.TryGetValues("X-Arango-Error-Codes", out var errorCodes))
-                throw new ArangoException(content);
-
-            if (content == "{}")
-                return default;
-
-            return JsonConvert.DeserializeObject<T>(content, JsonSerializerSettings);
-        }
-
-        public async Task<object> SendAsync(Type type, HttpMethod m, string url, string body = null,
-            string transaction = null, bool throwOnError = true, bool auth = true,
-            CancellationToken cancellationToken = default)
-        {
-            if (auth && (_auth == null || _authValidUntil < DateTime.UtcNow.AddMinutes(-10)))
-            {
-                var authResponse = await SendAsync<JObject>(HttpMethod.Post, $"{Server}/_open/auth",
-                    JsonConvert.SerializeObject(new
-                    {
-                        username = _user,
-                        password = _password ?? string.Empty
-                    }, JsonSerializerSettings), auth: false, cancellationToken: cancellationToken);
-
-                var jwt = authResponse.Value<string>("jwt");
-                var token = new JwtSecurityToken(jwt.Replace("=", ""));
-                _auth = $"Bearer {jwt}";
-                _authValidUntil = token.ValidTo;
-            }
-
-            var msg = new HttpRequestMessage(m, url)
-            {
-                Version = HttpVersion.Version11
-            };
-
-            msg.Headers.Add(HttpRequestHeader.KeepAlive.ToString(), "true");
-
-            if (auth)
-                msg.Headers.Add(HttpRequestHeader.Authorization.ToString(), _auth);
-
-            if (transaction != null)
-                msg.Headers.Add("x-arango-trx-id", transaction);
-
-            if (body != null)
-                msg.Content = new StringContent(body, Encoding.UTF8, "application/json");
-            else
-                msg.Headers.Add(HttpRequestHeader.ContentLength.ToString(), "0");
-
-            var res = await HttpClient.SendAsync(msg, cancellationToken);
-
-            if (!res.IsSuccessStatusCode)
-                if (throwOnError)
-                    throw new ArgumentException(await res.Content.ReadAsStringAsync());
-                else return default;
-
-            var content = await res.Content.ReadAsStringAsync();
-
-            if (content == "{}")
-                return default;
-
-            return JsonConvert.DeserializeObject(content, type, JsonSerializerSettings);
+            [JsonPropertyName("version")]
+            [JsonProperty("version")]
+           public string Version { get; set; }
         }
 
         public async Task<Version> GetVersionAsync(CancellationToken cancellationToken = default)
         {
-            var res = await SendAsync<JObject>(HttpMethod.Get, $"{Server}/_db/_system/_api/version",
+            var res = await Configuration.Transport.SendAsync<VersionResponse>(HttpMethod.Get,
+                "/_db/_system/_api/version",
                 cancellationToken: cancellationToken);
-            return Version.Parse(res.Value<string>("version"));
+
+            var version = res.Version;
+            version = Regex.Replace(version, "[^0-9.]", string.Empty);
+            return Version.Parse(version);
+        }
+
+        public async Task<IReadOnlyCollection<string>> GetEndpointsAsync(CancellationToken cancellationToken = default)
+        {
+            var res = await Configuration.Transport.SendAsync<EndpointResponse>(HttpMethod.Get,
+                "/_api/cluster/endpoints", cancellationToken: cancellationToken);
+
+            return new ReadOnlyCollection<string>(res.Endpoints.Select(x=>x.Endpoint).ToList());
         }
     }
 }

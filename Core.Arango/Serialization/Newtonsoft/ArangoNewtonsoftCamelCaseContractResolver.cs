@@ -2,13 +2,15 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace Core.Arango
+namespace Core.Arango.Serialization.Newtonsoft
 {
-    /// <summary>
-    ///     Json.NET Contract Resolver for translating ArangoDB keywords
-    /// </summary>
-    internal class ArangoContractResolver : DefaultContractResolver
+    public class ArangoNewtonsoftCamelCaseContractResolver : DefaultContractResolver
     {
+        public ArangoNewtonsoftCamelCaseContractResolver()
+        {
+            NamingStrategy = new CamelCaseNamingStrategy();
+        }
+
         protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
         {
             var property = base.CreateProperty(member, memberSerialization);
@@ -21,10 +23,10 @@ namespace Core.Arango
 
             property.PropertyName = property.PropertyName switch
             {
-                "Key" => "_key",
-                "Id" => "_id",
-                "From" => "_from",
-                "To" => "_to",
+                "key" => "_key",
+                "id" => "_id",
+                "from" => "_from",
+                "to" => "_to",
                 _ => property.PropertyName
             };
 

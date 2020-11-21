@@ -1,7 +1,10 @@
 ﻿using System.Net.Http;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
+using Core.Arango.Protocol.Internal;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Core.Arango.Modules.Internal
@@ -12,22 +15,22 @@ namespace Core.Arango.Modules.Internal
         {
         }
 
-        public async Task<JObject> ExecuteAsync(ArangoHandle database, ArangoTransaction request,
+        public async Task<T> ExecuteAsync<T>(ArangoHandle database, ArangoTransaction request,
             CancellationToken cancellationToken = default)
         {
-            return await SendAsync<JObject>(HttpMethod.Post,
+            return await SendAsync<T>(HttpMethod.Post,
                 ApiPath(database, "transaction"),
-                Serialize(request), cancellationToken: cancellationToken);
+                request, cancellationToken: cancellationToken);
         }
 
         public async Task<ArangoHandle> BeginAsync(ArangoHandle database, ArangoTransaction request,
             CancellationToken cancellationToken = default)
         {
-            var res = await SendAsync<JObject>(HttpMethod.Post,
+            var res = await SendAsync<SingleResult<TransactionResponse>>(HttpMethod.Post,
                 ApiPath(database, "transaction/begin"),
-                Serialize(request), cancellationToken: cancellationToken);
+                request, cancellationToken: cancellationToken);
 
-            var transaction = res.GetValue("result").Value<string>("id");
+            string transaction = res.Result.Id;
             return new ArangoHandle(database, transaction);
         }
 
@@ -37,7 +40,7 @@ namespace Core.Arango.Modules.Internal
             if (string.IsNullOrWhiteSpace(database.Transaction))
                 throw new ArangoException("no transaction handle");
 
-            await SendAsync<JObject>(HttpMethod.Put,
+            await SendAsync<ArangoVoid>(HttpMethod.Put,
                 ApiPath(database, $"transaction/{database.Transaction}"),
                 cancellationToken: cancellationToken);
         }
@@ -47,7 +50,7 @@ namespace Core.Arango.Modules.Internal
             if (string.IsNullOrWhiteSpace(database.Transaction))
                 throw new ArangoException("no transaction handle");
 
-            await SendAsync<JObject>(HttpMethod.Delete,
+            await SendAsync<ArangoVoid>(HttpMethod.Delete,
                 ApiPath(database, $"transaction/{database.Transaction}"),
                 cancellationToken: cancellationToken);
         }

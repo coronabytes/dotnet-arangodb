@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
+using Core.Arango.Protocol.Internal;
 using Newtonsoft.Json.Linq;
 
 namespace Core.Arango.Modules.Internal
@@ -17,27 +18,26 @@ namespace Core.Arango.Modules.Internal
         public async Task CreateAsync(ArangoHandle database, ArangoView view,
             CancellationToken cancellationToken = default)
         {
-            await SendAsync<JObject>(HttpMethod.Post,
+            await SendAsync<ArangoVoid>(HttpMethod.Post,
                 ApiPath(database, "view"),
-                Serialize(view),
+                view,
                 cancellationToken: cancellationToken);
         }
 
         public async Task<List<string>> ListAsync(ArangoHandle database,
             CancellationToken cancellationToken = default)
         {
-            var res = await SendAsync<JObject>(HttpMethod.Get,
+            var res = await SendAsync<QueryResponse<ArangoView>>(HttpMethod.Get,
                 ApiPath(database, "view"),
                 cancellationToken: cancellationToken);
-            return res.GetValue("result")
-                .Select(x => x.Value<string>("name")).ToList();
+            return res.Result.Select(x => x.Name).ToList();
         }
 
         public async Task DropAsync(ArangoHandle database,
             string name,
             CancellationToken cancellationToken = default)
         {
-            await SendAsync<JObject>(HttpMethod.Delete,
+            await SendAsync<ArangoVoid>(HttpMethod.Delete,
                 ApiPath(database, $"view/{UrlEncode(name)}"),
                 cancellationToken: cancellationToken);
         }

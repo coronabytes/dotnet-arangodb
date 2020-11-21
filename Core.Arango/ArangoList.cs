@@ -4,6 +4,6 @@ namespace Core.Arango
 {
     public class ArangoList<T> : List<T>
     {
-        public int? FullCount { get; set; }
+        public long? FullCount { get; set; }
     }
 }

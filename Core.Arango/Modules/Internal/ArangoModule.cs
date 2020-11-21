@@ -7,25 +7,16 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 
 namespace Core.Arango.Modules.Internal
 {
     internal abstract class ArangoModule
     {
-        protected readonly IArangoContext _context;
+        protected readonly IArangoContext Context;
 
         protected ArangoModule(IArangoContext context)
         {
-            _context = context;
-        }
-
-        public string Realm => _context.Realm;
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        protected string Serialize(object value)
-        {
-            return JsonConvert.SerializeObject(value, ArangoContext.JsonSerializerSettings);
+            Context = context;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -34,19 +25,23 @@ namespace Core.Arango.Modules.Internal
             if (name == "_system")
                 return "_system";
 
-            return UrlEncode(_context.Realm + name);
+            var realm = string.IsNullOrWhiteSpace(Context.Configuration.Realm)
+                ? string.Empty
+                : Context.Configuration.Realm + "-";
+
+            return UrlEncode(realm + name);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected string ApiPath(ArangoHandle handle, string path)
         {
-            return $"{_context.Server}/_db/{RealmPrefix(handle)}/_api/{path}";
+            return $"/_db/{RealmPrefix(handle)}/_api/{path}";
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected string ApiPath(string path)
         {
-            return $"{_context.Server}/_api/{path}";
+            return $"/_api/{path}";
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -56,19 +51,21 @@ namespace Core.Arango.Modules.Internal
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Task<T> SendAsync<T>(HttpMethod m, string url, string body = null,
+        public Task<T> SendAsync<T>(HttpMethod m, string url, object body = null,
             string transaction = null, bool throwOnError = true, bool auth = true,
             CancellationToken cancellationToken = default)
         {
-            return _context.SendAsync<T>(m, url, body, transaction, throwOnError, auth, cancellationToken);
+            return Context.Configuration.Transport.SendAsync<T>(m, url, body, transaction, throwOnError, auth,
+                cancellationToken);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Task<object> SendAsync(Type type, HttpMethod m, string url, string body = null,
+        public Task<object> SendAsync(Type type, HttpMethod m, string url, object body = null,
             string transaction = null, bool throwOnError = true, bool auth = true,
             CancellationToken cancellationToken = default)
         {
-            return _context.SendAsync(type, m, url, body, transaction, throwOnError, auth, cancellationToken);
+            return Context.Configuration.Transport.SendAsync(type, m, url, body, transaction, throwOnError, auth,
+                cancellationToken);
         }
 
         public string AddQueryString(string uri,
@@ -107,7 +104,6 @@ namespace Core.Arango.Modules.Internal
             sb.Append(anchorText);
             return sb.ToString();
         }
-
 
         public string Parameterize(FormattableString query, out Dictionary<string, object> parameter)
         {

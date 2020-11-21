@@ -8,9 +8,11 @@ namespace Core.Arango.Tests
 {
     public class IndexTest : TestBase
     {
-        [Fact]
-        public async Task DropAll()
+        [Theory]
+        [ClassData(typeof(PascalCaseData))]
+        public async Task DropAll(string serializer)
         {
+            await SetupAsync(serializer);
             await Arango.Collection.CreateAsync("test", "test", ArangoCollectionType.Document);
 
             await Arango.Index.CreateAsync("test", "test", new ArangoIndex

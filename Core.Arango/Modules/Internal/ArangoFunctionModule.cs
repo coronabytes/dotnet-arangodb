@@ -1,15 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
-using Newtonsoft.Json;
+using Core.Arango.Protocol.Internal;
 
 namespace Core.Arango.Modules.Internal
 {
-    /// <summary>
-    /// Implementation of user functions API https://www.arangodb.com/docs/stable/http/aql-user-functions.html
-    /// </summary>
     internal class ArangoFunctionModule : ArangoModule, IArangoFunctionModule
     {
         private const string API = "aqlfunction";
@@ -18,42 +16,38 @@ namespace Core.Arango.Modules.Internal
         {
         }
 
-        public Task<FunctionCreateResponse> CreateAsync(ArangoHandle database, ArangoFunctionDefinition request,
+        public async Task<bool> CreateAsync(ArangoHandle database, ArangoFunctionDefinition request,
             CancellationToken cancellationToken = default)
         {
-            if (database == null)
-                throw new ArgumentNullException(nameof(database));
             if (request == null)
                 throw new ArgumentNullException(nameof(request));
 
-            return SendAsync<FunctionCreateResponse>(HttpMethod.Post, ApiPath(database, API),
-                JsonConvert.SerializeObject(request), cancellationToken: cancellationToken);
+            var res = await SendAsync<FunctionCreateResponse>(HttpMethod.Post, ApiPath(database, API),
+                request, cancellationToken: cancellationToken);
+
+            return res.IsNewlyCreated;
         }
 
-        public Task<FunctionRemoveResponse> RemoveAsync(ArangoHandle database, FunctionRemoveRequest request,
+        public async Task<int> RemoveAsync(ArangoHandle database, string name, bool? group = false,
             CancellationToken cancellationToken = default)
         {
-            if (database == null)
-                throw new ArgumentNullException(nameof(database));
-            if (request == null)
-                throw new ArgumentNullException(nameof(request));
+            var res = await SendAsync<FunctionRemoveResponse>(HttpMethod.Delete,
+                ApiPath(database, $"{API}/{name}?group={(group ?? false).ToString().ToLowerInvariant()}"),
+                cancellationToken: cancellationToken);
 
-            var isGroup = request.Group.ToString().ToLower();
-
-            return SendAsync<FunctionRemoveResponse>(HttpMethod.Delete,
-                ApiPath(database, $"{API}/{request.Name}?group={isGroup}"), cancellationToken: cancellationToken);
+            return res.DeletedCount;
         }
 
-        public Task<FunctionListResponse> ListAsync(ArangoHandle database, FunctionListRequest request = default,
+        public async Task<IReadOnlyCollection<ArangoFunctionDefinition>> ListAsync(ArangoHandle database,
+            string ns = null,
             CancellationToken cancellationToken = default)
         {
-            if (database == null)
-                throw new ArgumentNullException(nameof(database));
+            ns = string.IsNullOrEmpty(ns) ? "" : "/" + ns;
 
-            var @namespace = string.IsNullOrEmpty(request?.Namespace) ? "" : "/" + request.Namespace;
+            var res = await SendAsync<QueryResponse<ArangoFunctionDefinition>>(HttpMethod.Get,
+                ApiPath(database, API + ns), cancellationToken: cancellationToken);
 
-            return SendAsync<FunctionListResponse>(HttpMethod.Get,
-                ApiPath(database, API + @namespace), cancellationToken: cancellationToken);
+            return res.Result;
         }
     }
 }

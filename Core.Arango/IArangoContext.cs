@@ -1,24 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Core.Arango.Modules;
-using Newtonsoft.Json.Linq;
 
 namespace Core.Arango
 {
     public interface IArangoContext
     {
-        int BatchSize { get; set; }
-        string Realm { get; }
-        string Server { get; }
-
-        /// <summary>
-        ///     Callback for query stats
-        /// </summary>
-        Action<string, IDictionary<string, object>, JToken> QueryProfile { get; set; }
-
+        IArangoConfiguration Configuration { get; }
         IArangoUserModule User { get; }
         IArangoCollectionModule Collection { get; }
         IArangoGraphModule Graph { get; }
@@ -29,11 +19,8 @@ namespace Core.Arango
         IArangoViewModule View { get; }
         IArangoIndexModule Index { get; }
         IArangoAnalyzerModule Analyzer { get; }
-
-        Task<object> SendAsync(Type type, HttpMethod m, string url, string body = null, string transaction = null,
-            bool throwOnError = true, bool auth = true, CancellationToken cancellationToken = default);
-
-        Task<T> SendAsync<T>(HttpMethod m, string url, string body = null, string transaction = null,
-            bool throwOnError = true, bool auth = true, CancellationToken cancellationToken = default);
+        IArangoFunctionModule Function { get; }
+        Task<Version> GetVersionAsync(CancellationToken cancellationToken = default);
+        Task<IReadOnlyCollection<string>> GetEndpointsAsync(CancellationToken cancellationToken = default);
     }
 }

@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Threading.Tasks;
-using Core.Arango.Protocol;
+using Core.Arango.Protocol.Internal;
 
 namespace Core.Arango.Modules.Internal
 {
@@ -15,7 +17,7 @@ namespace Core.Arango.Modules.Internal
         }
 
         public async Task<List<T>> FindAsync<T>(ArangoHandle database, string collection, FormattableString filter,
-            string projection = null, int limit = 1000, CancellationToken cancellationToken = default) where T : new()
+            string projection = null, int limit = 1000, CancellationToken cancellationToken = default)
         {
             var filterExp = Parameterize(filter, out var parameter);
 
@@ -25,7 +27,7 @@ namespace Core.Arango.Modules.Internal
         }
 
         public async Task<T> SingleOrDefaultAsync<T>(ArangoHandle database, string collection, FormattableString filter,
-            string projection = null, CancellationToken cancellationToken = default) where T : new()
+            string projection = null, CancellationToken cancellationToken = default)
         {
             var results = await FindAsync<T>(database, collection, filter, projection, 2, cancellationToken);
 
@@ -35,18 +37,16 @@ namespace Core.Arango.Modules.Internal
         }
 
         public async Task<ArangoList<T>> ExecuteAsync<T>(ArangoHandle database, FormattableString query,
-            bool? cache = null, CancellationToken cancellationToken = default)
-            where T : new()
+            bool? cache = null, bool? fullCount = null, CancellationToken cancellationToken = default)
         {
             var queryExp = Parameterize(query, out var parameter);
 
-            return await ExecuteAsync<T>(database, queryExp, parameter, cache, cancellationToken: cancellationToken);
+            return await ExecuteAsync<T>(database, queryExp, parameter, cache, fullCount, cancellationToken);
         }
 
         public async Task<ArangoList<T>> ExecuteAsync<T>(ArangoHandle database, string query,
             IDictionary<string, object> bindVars, bool? cache = null, bool? fullCount = null,
             CancellationToken cancellationToken = default)
-            where T : new()
         {
             query = query.Trim();
             var final = new ArangoList<T>();
@@ -55,24 +55,24 @@ namespace Core.Arango.Modules.Internal
             {
                 var firstResult = await SendAsync<QueryResponse<T>>(HttpMethod.Post,
                     ApiPath(database, "cursor"),
-                    Serialize(new QueryRequest
+                    new QueryRequest
                     {
                         Query = query,
                         BindVars = bindVars,
-                        BatchSize = _context.BatchSize,
+                        BatchSize = Context.Configuration.BatchSize,
                         Cache = cache,
                         Options = new QueryRequestOptions
                         {
                             FullCount = fullCount
                         }
-                    }), cancellationToken: cancellationToken);
+                    }, cancellationToken: cancellationToken);
 
                 final.AddRange(firstResult.Result);
 
-                _context.QueryProfile?.Invoke(query, bindVars, firstResult.Extra.GetValue("stats"));
+                Context.Configuration.QueryProfile?.Invoke(query, bindVars, firstResult.Extra.Statistic);
 
                 if (fullCount.HasValue && fullCount.Value)
-                    final.FullCount = firstResult.Extra.GetValue("stats").Value<int>("fullCount");
+                    final.FullCount = firstResult.Extra.Statistic.FullCount;
 
                 if (!firstResult.HasMore)
                     return final;
@@ -95,7 +95,7 @@ namespace Core.Arango.Modules.Internal
             }
             catch
             {
-                _context.QueryProfile?.Invoke(query, bindVars, null);
+                Context.Configuration.QueryProfile?.Invoke(query, bindVars, null);
                 throw;
             }
         }
@@ -109,17 +109,17 @@ namespace Core.Arango.Modules.Internal
             var responseType = typeof(QueryResponse<>);
             var constructedResponseType = responseType.MakeGenericType(type);
 
-            var body = Serialize(new QueryRequest
+            var body = new QueryRequest
             {
                 Query = query,
                 BindVars = bindVars,
-                BatchSize = _context.BatchSize,
+                BatchSize = Context.Configuration.BatchSize,
                 Cache = cache,
                 Options = new QueryRequestOptions
                 {
                     FullCount = fullCount
                 }
-            });
+            };
 
             var res = await SendAsync(constructedResponseType, HttpMethod.Post,
                 ApiPath(database, "cursor"), body
@@ -136,6 +136,52 @@ namespace Core.Arango.Modules.Internal
                 return Activator.CreateInstance(type);
 
             return listResult.GetType().GetProperty("Item").GetValue(listResult, new object[] {0});
+        }
+
+        public IAsyncEnumerable<T> ExecuteStreamAsync<T>(ArangoHandle database, FormattableString query, bool? cache = null, 
+            int? batchSize = null, CancellationToken cancellationToken = default)
+        {
+            var queryExp = Parameterize(query, out var parameter);
+            return ExecuteStreamAsync<T>(database, queryExp, parameter, cache, batchSize, cancellationToken);
+        }
+
+        public async IAsyncEnumerable<T> ExecuteStreamAsync<T>(ArangoHandle database, string query,
+            IDictionary<string, object> bindVars, bool? cache = null, int? batchSize = null,
+            [EnumeratorCancellation] CancellationToken cancellationToken = default)
+        {
+            query = query.Trim();
+
+            var firstResult = await SendAsync<QueryResponse<T>>(HttpMethod.Post,
+                ApiPath(database, "cursor"),
+                new QueryRequest
+                {
+                    Query = query,
+                    BindVars = bindVars,
+                    BatchSize = batchSize ?? Context.Configuration.BatchSize,
+                    Cache = cache
+                }, cancellationToken: cancellationToken);
+
+            Context.Configuration.QueryProfile?.Invoke(query, bindVars, firstResult.Extra.Statistic);
+
+            foreach (var result in firstResult.Result)
+                yield return result;
+
+            if (!firstResult.HasMore)
+                yield break;
+
+            while (true)
+            {
+                var res = await SendAsync<QueryResponse<T>>(HttpMethod.Put,
+                    ApiPath(database, $"/cursor/{firstResult.Id}"),
+                    cancellationToken: cancellationToken);
+
+                if (res.Result?.Any() == true)
+                    foreach (var result in firstResult.Result)
+                        yield return result;
+
+                if (!res.HasMore)
+                    break;
+            }
         }
     }
 }

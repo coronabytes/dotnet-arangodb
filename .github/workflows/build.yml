@@ -11,22 +11,42 @@ on:
 
 jobs:
   build:
-
+    timeout-minutes: 20
     runs-on: ubuntu-latest
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        dotnet:
+          - 5.0.100
+        arango: 
+          - "arangodb:3.6.8"
+          - "arangodb:3.7.3"
+          - "arangodb/enterprise:3.7.3"
+        topology:
+          - single
+          - cluster
 
     steps:
     - uses: actions/checkout@v2
     
-    - name: ArangoDB 3.7.2
-      run: docker run -d --rm -e ARANGO_ROOT_PASSWORD= -p 8529:8529 arangodb:3.7.2
+    - name: chmod
+      run: find ./docker -name '*.sh' | xargs chmod +x
+      
+    - name: arango
+      run: ./docker/start_db_${{ matrix.topology }}_retry_fail.sh ${{ matrix.arango }}
+      env:
+        ARANGO_LICENSE_KEY: ${{ secrets.ARANGO_LICENSE_KEY }}
     
-    - name: Setup
+    - name: dotnet
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.1.403
+        dotnet-version: ${{ matrix.dotnet }}
     
-    - name: Build
+    - name: build
       run: dotnet build --configuration Release
       
-    - name: Test
+    - name: test
       run: dotnet test --configuration Release
+      env:
+        ARANGODB_CONNECTION: "Server=http://172.28.3.1:8529;Realm=CI-{UUID};User=root;Password=test;"
