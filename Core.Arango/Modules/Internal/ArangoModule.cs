@@ -105,43 +105,85 @@ namespace Core.Arango.Modules.Internal
             return sb.ToString();
         }
 
-        public string Parameterize(FormattableString query, out Dictionary<string, object> parameter)
+        public string Parameterize(FormattableString query, out IDictionary<string, object> parameter)
         {
-            var i = 0;
-
-            var set = new Dictionary<object, string>();
-            var nullParam = string.Empty;
-
-            var args = query.GetArguments().Select(x =>
-            {
-                if (x == null)
-                {
-                    if (string.IsNullOrEmpty(nullParam))
-                        nullParam = $"@P{++i}";
-
-                    return nullParam;
-                }
-
-                if (set.TryGetValue(x, out var p))
-                    return (object) p;
-
-                p = $"@P{++i}";
-
-                set.Add(x, p);
-
-                return (object) p;
-            }).ToArray();
-
-            var queryExp = string.Format(query.Format, args);
-
-            var res = set.ToDictionary(x => x.Value.Substring(1), x => x.Key);
-
-            if (!string.IsNullOrEmpty(nullParam))
-                res.Add(nullParam.Substring(1), null);
-
-            parameter = res;
+            var formatter = new AQLQueryFormatter();
+            var queryExp = query.ToString(formatter);
+            parameter = formatter.Context.Parameters;
 
             return queryExp;
+        }
+
+        protected enum QueryParameterType
+        {
+            Regular,
+            Collection,
+        }
+
+        protected class QueryFormattingContext
+        {
+            private int Counter = 0;
+            private readonly IDictionary<(object value, QueryParameterType type), string> ParamsMap = new Dictionary<(object obj, QueryParameterType type), string>();
+
+            public IDictionary<string, object> Parameters => ParamsMap.ToDictionary(x => x.Value.Substring(1), x => x.Key.value);
+
+            public string Register(QueryParameterType type, object value)
+            {
+                if (!ParamsMap.TryGetValue((value, type), out var paramName))
+                {
+                    switch (type)
+                    {
+                        case QueryParameterType.Regular:
+                            paramName = $"@P{++Counter}";
+                            break;
+                        case QueryParameterType.Collection:
+                            paramName = $"@@C{++Counter}";
+                            break;
+                        default: throw new ArgumentException($"Unsupported parameter type: {type:G}", nameof(type));
+                    }
+                    ParamsMap.Add((value, type), paramName);
+                }
+
+                return paramName;
+            }
+        }
+
+        protected class AQLQueryFormatter : IFormatProvider, ICustomFormatter
+        {
+            public QueryFormattingContext Context { get; } = new QueryFormattingContext();
+
+            public object GetFormat(Type formatType)
+            {
+                if (formatType == typeof(ICustomFormatter))
+                    return this;
+                else
+                    return null;
+            }
+
+            public string Format(string format, object arg, IFormatProvider formatProvider)
+            {
+                if (arg is IFormattable formattable)
+                    return formattable.ToString(format, this);
+
+                QueryParameterType type;
+
+                switch (format)
+                {
+                    case null:
+                    case "":
+                        type = QueryParameterType.Regular;
+                        break;
+                    case "C":
+                    case "c":
+                    case "@":
+                        type = QueryParameterType.Collection;
+                        break;
+                    default:
+                        throw new FormatException($"Unsupported format: {format}");
+                }
+
+                return Context.Register(type, arg);
+            }
         }
     }
 }
