@@ -107,7 +107,7 @@ namespace Core.Arango.Modules.Internal
 
         public string Parameterize(FormattableString query, out IDictionary<string, object> parameter)
         {
-            var formatter = new AQLQueryFormatter();
+            var formatter = new AqlQueryFormatter();
             var queryExp = query.ToString(formatter);
             parameter = formatter.Context.Parameters;
 
@@ -117,72 +117,66 @@ namespace Core.Arango.Modules.Internal
         protected enum QueryParameterType
         {
             Regular,
-            Collection,
+            Collection
         }
 
         protected class QueryFormattingContext
         {
-            private int Counter = 0;
-            private readonly IDictionary<(object value, QueryParameterType type), string> ParamsMap = new Dictionary<(object obj, QueryParameterType type), string>();
+            private readonly IDictionary<(object value, QueryParameterType type), string> _paramsMap =
+                new Dictionary<(object obj, QueryParameterType type), string>();
 
-            public IDictionary<string, object> Parameters => ParamsMap.ToDictionary(x => x.Value.Substring(1), x => x.Key.value);
+            private int _counter;
+
+            public IDictionary<string, object> Parameters =>
+                _paramsMap.ToDictionary(x => x.Value[1..], x => x.Key.value);
 
             public string Register(QueryParameterType type, object value)
             {
-                if (!ParamsMap.TryGetValue((value, type), out var paramName))
+                if (!_paramsMap.TryGetValue((value, type), out var paramName))
                 {
                     switch (type)
                     {
                         case QueryParameterType.Regular:
-                            paramName = $"@P{++Counter}";
+                            paramName = $"@P{++_counter}";
                             break;
                         case QueryParameterType.Collection:
-                            paramName = $"@@C{++Counter}";
+                            paramName = $"@@C{++_counter}";
                             break;
                         default: throw new ArgumentException($"Unsupported parameter type: {type:G}", nameof(type));
                     }
-                    ParamsMap.Add((value, type), paramName);
+
+                    _paramsMap.Add((value, type), paramName);
                 }
 
                 return paramName;
             }
         }
 
-        protected class AQLQueryFormatter : IFormatProvider, ICustomFormatter
+        protected class AqlQueryFormatter : IFormatProvider, ICustomFormatter
         {
             public QueryFormattingContext Context { get; } = new QueryFormattingContext();
-
-            public object GetFormat(Type formatType)
-            {
-                if (formatType == typeof(ICustomFormatter))
-                    return this;
-                else
-                    return null;
-            }
 
             public string Format(string format, object arg, IFormatProvider formatProvider)
             {
                 if (arg is IFormattable formattable)
                     return formattable.ToString(format, this);
 
-                QueryParameterType type;
-
-                switch (format)
+                var type = format switch
                 {
-                    case null:
-                    case "":
-                        type = QueryParameterType.Regular;
-                        break;
-                    case "C":
-                    case "c":
-                    case "@":
-                        type = QueryParameterType.Collection;
-                        break;
-                    default:
-                        throw new FormatException($"Unsupported format: {format}");
-                }
+                    null => QueryParameterType.Regular,
+                    "" => QueryParameterType.Regular,
+                    "C" => QueryParameterType.Collection,
+                    "c" => QueryParameterType.Collection,
+                    "@" => QueryParameterType.Collection,
+                    _ => throw new FormatException($"Unsupported format: {format}")
+                };
 
                 return Context.Register(type, arg);
+            }
+
+            public object GetFormat(Type formatType)
+            {
+                return formatType == typeof(ICustomFormatter) ? this : null;
             }
         }
     }

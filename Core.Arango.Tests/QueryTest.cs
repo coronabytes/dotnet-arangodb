@@ -72,7 +72,7 @@ namespace Core.Arango.Tests
             var res = await Arango.Query.ExecuteAsync<Entity>("test",
                 $"FOR e IN {collection:@} FILTER e.Value == {select} RETURN e");
 
-            Assert.Equal(1, res.Count);
+            Assert.Single(res);
         }
 
         [Theory]
@@ -97,7 +97,7 @@ namespace Core.Arango.Tests
 
             var res = await Arango.Query.ExecuteAsync<Entity>("test", $"{@for} {filter} {@return}");
 
-            Assert.Equal(1, res.Count);
+            Assert.Single(res);
         }
 
         [Theory]
