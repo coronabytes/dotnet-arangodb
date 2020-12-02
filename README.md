@@ -13,7 +13,7 @@
 
 # Changes in 3.0
 - Optional support for System.Text.Json serializer which in some cases is twice as fast as Newtonsoft
-- Still netstandard 2.1 however dependencies have been updated to 5.0.0 - require for new json serializer - should still work with 3.1
+- Still netstandard 2.1 however dependencies have been updated to 5.0.0 - required for new json serializer - should still work with 3.1
 - Collections schema management is now functional
 
 # Extensions
@@ -130,10 +130,11 @@ var result = await arango.Query.ExecuteAsync<JObject>("database",
 ```
 results in AQL injection save syntax:
 ```js
-'FOR c IN collection FILTER c.SomeValue IN @P1 RETURN c'
+'FOR c IN @@P1 FILTER c.SomeValue IN @P2 RETURN c'
 
 {
-  "P1": [1, 2, 3]
+  "P1": "collection",
+  "P2": [1, 2, 3]
 }
 ```
 for collections parameters, formats `'@'`, `'C'` and `'c'` are supported. They all mean the same format.

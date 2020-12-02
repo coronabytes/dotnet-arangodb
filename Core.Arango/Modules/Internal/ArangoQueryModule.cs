@@ -130,7 +130,7 @@ namespace Core.Arango.Modules.Internal
             if (isEnumerable)
                 return listResult;
 
-            var count = (int) listResult.GetType().GetProperty("Count").GetValue(listResult);
+            var count = (long) listResult.GetType().GetProperty("Count").GetValue(listResult);
 
             if (count == 0)
                 return Activator.CreateInstance(type);
