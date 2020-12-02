@@ -65,7 +65,7 @@ namespace Core.Arango.Modules.Internal
                         {
                             FullCount = fullCount
                         }
-                    }, cancellationToken: cancellationToken);
+                    }, database.Transaction, cancellationToken: cancellationToken);
 
                 final.AddRange(firstResult.Result);
 
@@ -81,6 +81,7 @@ namespace Core.Arango.Modules.Internal
                 {
                     var res = await SendAsync<QueryResponse<T>>(HttpMethod.Put,
                         ApiPath(database, $"/cursor/{firstResult.Id}"),
+                        transaction: database.Transaction,
                         cancellationToken: cancellationToken);
 
                     if (res.Result?.Any() == true)
@@ -122,7 +123,7 @@ namespace Core.Arango.Modules.Internal
             };
 
             var res = await SendAsync(constructedResponseType, HttpMethod.Post,
-                ApiPath(database, "cursor"), body
+                ApiPath(database, "cursor"), body, database.Transaction
                 , cancellationToken: cancellationToken);
 
             var listResult = constructedResponseType.GetProperty("Result").GetValue(res);
@@ -159,7 +160,7 @@ namespace Core.Arango.Modules.Internal
                     BindVars = bindVars,
                     BatchSize = batchSize ?? Context.Configuration.BatchSize,
                     Cache = cache
-                }, cancellationToken: cancellationToken);
+                }, database.Transaction, cancellationToken: cancellationToken);
 
             Context.Configuration.QueryProfile?.Invoke(query, bindVars, firstResult.Extra.Statistic);
 
@@ -173,6 +174,7 @@ namespace Core.Arango.Modules.Internal
             {
                 var res = await SendAsync<QueryResponse<T>>(HttpMethod.Put,
                     ApiPath(database, $"/cursor/{firstResult.Id}"),
+                    transaction: database.Transaction,
                     cancellationToken: cancellationToken);
 
                 if (res.Result?.Any() == true)
