@@ -8,8 +8,9 @@ namespace Core.Arango.Serialization.System
         {
             return name switch
             {
-                "Key" => "_key",
                 "Id" => "_id",
+                "Key" => "_key",
+                "Revision" => "_rev",
                 "From" => "_from",
                 "To" => "_to",
                 _ => name

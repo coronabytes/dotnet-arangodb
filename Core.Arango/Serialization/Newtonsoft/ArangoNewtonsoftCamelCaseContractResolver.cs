@@ -23,8 +23,9 @@ namespace Core.Arango.Serialization.Newtonsoft
 
             property.PropertyName = property.PropertyName switch
             {
-                "key" => "_key",
                 "id" => "_id",
+                "key" => "_key",
+                "revision" => "_rev",
                 "from" => "_from",
                 "to" => "_to",
                 _ => property.PropertyName

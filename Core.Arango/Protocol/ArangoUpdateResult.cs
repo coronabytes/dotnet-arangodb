@@ -13,6 +13,14 @@ namespace Core.Arango.Protocol
         [JsonProperty(PropertyName = "_key")]
         public string Key { get; set; }
 
+        [JsonPropertyName("_rev")]
+        [JsonProperty(PropertyName = "_rev")]
+        public string Revision { get; set; }
+
+        [JsonPropertyName("_oldRev")]
+        [JsonProperty(PropertyName = "_oldRev")]
+        public string OldRevision { get; set; }
+
         [JsonPropertyName("old")]
         [JsonProperty(PropertyName = "old")]
         public T Old { get; set; }

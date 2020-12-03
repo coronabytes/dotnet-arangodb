@@ -17,14 +17,22 @@ namespace Core.Arango.Tests
             await SetupAsync(serializer);
             await Arango.Collection.CreateAsync("test", "test", ArangoCollectionType.Document);
 
-            await Arango.Document.CreateAsync("test", "test", new Entity
+            var createRes = await Arango.Document.CreateAsync("test", "test", new Entity
             {
                 Key = "abc",
                 Name = "a"
             });
 
+            Assert.NotNull(createRes);
+            Assert.NotNull(createRes.Id);
+            Assert.NotNull(createRes.Key);
+            Assert.NotNull(createRes.Revision);
+
             var doc = await Arango.Document.GetAsync<Entity>("test", "test", "abc");
             Assert.Equal("a", doc.Name);
+            Assert.Equal(createRes.Id, doc.Id);
+            Assert.Equal(createRes.Key, doc.Key);
+            Assert.Equal(createRes.Revision, doc.Revision);
 
             var nodoc = await Arango.Document.GetAsync<Entity>("test", "test", "nonexistant", false);
             Assert.Null(nodoc);
@@ -42,7 +50,7 @@ namespace Core.Arango.Tests
             await SetupAsync(serializer);
             await Arango.Collection.CreateAsync("test", "test", ArangoCollectionType.Document);
 
-            await Arango.Document.CreateAsync("test", "test", new
+            var createRes = await Arango.Document.CreateAsync("test", "test", new
             {
                 Key = "abc",
                 Name = "a"
@@ -53,6 +61,23 @@ namespace Core.Arango.Tests
                 Key = "abc",
                 Name = "c"
             }, returnNew: true, returnOld: true);
+
+            Assert.Equal(createRes.Id, res.Id);
+            Assert.Equal(createRes.Key, res.Key);
+            Assert.Equal(createRes.Revision, res.OldRevision);
+
+            var doc = await Arango.Document.GetAsync<Entity>("test", "test", "abc");
+            Assert.Equal("c", doc.Name);
+            Assert.Equal(res.Id, doc.Id);
+            Assert.Equal(res.Key, doc.Key);
+            Assert.Equal(res.Revision, doc.Revision);
+
+            var obj = await Arango.Query.SingleOrDefaultAsync<Dictionary<string, string>>("test", "test", $"x._key == {"abc"}");
+
+            Assert.Equal("c", obj["Name"]);
+            Assert.Equal(res.Id, obj["_id"]);
+            Assert.Equal(res.Key, obj["_key"]);
+            Assert.Equal(res.Revision, obj["_rev"]);
         }
 
         [Theory]
@@ -65,22 +90,29 @@ namespace Core.Arango.Tests
 
             await Arango.Collection.CreateAsync("test", "test", ArangoCollectionType.Document);
 
-            await Arango.Document.CreateAsync("test", "test", new
+            var createRes = await Arango.Document.CreateAsync("test", "test", new
             {
                 Key = "abc",
                 Name = "a"
             });
 
-            await Arango.Document.CreateAsync("test", "test", new
+            var res = await Arango.Document.CreateAsync("test", "test", new
             {
                 Key = "abc",
                 Value = "c"
             }, overwriteMode: ArangoOverwriteMode.Update);
 
+            Assert.Equal(createRes.Id, res.Id);
+            Assert.Equal(createRes.Key, res.Key);
+            Assert.Equal(createRes.Revision, res.OldRevision);
+
             var obj = await Arango.Query.SingleOrDefaultAsync<Dictionary<string, string>>("test", "test", $"x._key == {"abc"}");
 
             Assert.Equal("a", obj["Name"]);
             Assert.Equal("c", obj["Value"]);
+            Assert.Equal(res.Id, obj["_id"]);
+            Assert.Equal(res.Key, obj["_key"]);
+            Assert.Equal(res.Revision, obj["_rev"]);
         }
 
         [Theory]
@@ -93,22 +125,29 @@ namespace Core.Arango.Tests
 
             await Arango.Collection.CreateAsync("test", "test", ArangoCollectionType.Document);
 
-            await Arango.Document.CreateAsync("test", "test", new
+            var createRes = await Arango.Document.CreateAsync("test", "test", new
             {
                 Key = "abc",
                 Name = "a"
             });
 
-            await Arango.Document.CreateAsync("test", "test", new
+            var res = await Arango.Document.CreateAsync("test", "test", new
             {
                 Key = "abc",
                 Value = "c"
             }, overwriteMode: ArangoOverwriteMode.Replace);
 
+            Assert.Equal(createRes.Id, res.Id);
+            Assert.Equal(createRes.Key, res.Key);
+            Assert.Equal(createRes.Revision, res.OldRevision);
+
             var obj = await Arango.Query.SingleOrDefaultAsync<Dictionary<string, string>>("test", "test", $"x._key == {"abc"}");
 
             Assert.DoesNotContain("Name", obj.Keys);
             Assert.Equal("c", obj["Value"]);
+            Assert.Equal(res.Id, obj["_id"]);
+            Assert.Equal(res.Key, obj["_key"]);
+            Assert.Equal(res.Revision, obj["_rev"]);
         }
 
         [Theory]
