@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
 using Core.Arango.Tests.Core;
@@ -37,10 +38,14 @@ namespace Core.Arango.Tests
             var nodoc = await Arango.Document.GetAsync<Entity>("test", "test", "nonexistant", false);
             Assert.Null(nodoc);
 
-            var ex = await Assert.ThrowsAsync<ArangoException>(
+            var exception = await Assert.ThrowsAsync<ArangoException>(
                 async () => await Arango.Document.GetAsync<Entity>("test", "test", "nonexistant"));
 
-            Assert.Contains("document not found", ex.Message);
+            Assert.Contains("document not found", exception.Message);
+            Assert.NotNull(exception.ErrorNumber);
+            Assert.NotNull(exception.Code);
+            Assert.Equal(ArangoErrorCode.ErrorArangoDocumentNotFound, exception.ErrorNumber);
+            Assert.Equal(HttpStatusCode.NotFound, exception.Code);
         }
 
         [Theory]
@@ -166,7 +171,7 @@ namespace Core.Arango.Tests
                 Name = "a"
             });
 
-            var ex = await Assert.ThrowsAsync<ArangoException>(async () =>
+            var exception = await Assert.ThrowsAsync<ArangoException>(async () =>
             {
                 await Arango.Document.CreateAsync("test", "test", new
                 {
@@ -175,7 +180,11 @@ namespace Core.Arango.Tests
                 }, overwriteMode: ArangoOverwriteMode.Conflict);
             });
 
-            Assert.Contains("unique constraint", ex.Message);
+            Assert.Contains("unique constraint", exception.Message);
+            Assert.NotNull(exception.ErrorNumber);
+            Assert.NotNull(exception.Code);
+            Assert.Equal(ArangoErrorCode.ErrorArangoUniqueConstraintViolated, exception.ErrorNumber);
+            Assert.Equal(HttpStatusCode.Conflict, exception.Code);
         }
     }
 }

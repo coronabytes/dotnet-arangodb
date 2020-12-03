@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
 using Core.Arango.Tests.Core;
@@ -106,7 +107,12 @@ namespace Core.Arango.Tests
 
             Assert.Equal(3, (await Arango.Query.FindAsync<Entity>("test", "test", $"true")).Count);
 
-            await Assert.ThrowsAsync<ArangoException>(() => Arango.Query.FindAsync<Entity>(t2, "test", $"true"));
+            var exception = await Assert.ThrowsAsync<ArangoException>(() => Arango.Query.FindAsync<Entity>(t2, "test", $"true"));
+
+            Assert.NotNull(exception.ErrorNumber);
+            Assert.NotNull(exception.Code);
+            Assert.Equal(ArangoErrorCode.ErrorTransactionNotFound, exception.ErrorNumber);
+            Assert.Equal(HttpStatusCode.NotFound, exception.Code);
         }
 
         [Theory]
@@ -164,7 +170,12 @@ namespace Core.Arango.Tests
 
             await AssertStreamQuery("test", 100000);
 
-            await Assert.ThrowsAsync<ArangoException>(() => AssertStreamQuery(t2, 100000));
+            var exception = await Assert.ThrowsAsync<ArangoException>(() => AssertStreamQuery(t2, 100000));
+
+            Assert.NotNull(exception.ErrorNumber);
+            Assert.NotNull(exception.Code);
+            Assert.Equal(ArangoErrorCode.ErrorTransactionNotFound, exception.ErrorNumber);
+            Assert.Equal(HttpStatusCode.NotFound, exception.Code);
         }
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
 using Core.Arango.Tests.Core;
@@ -96,7 +97,7 @@ namespace Core.Arango.Tests
                 name = "test",
             });
 
-            await Assert.ThrowsAsync<ArangoException>(async () =>
+            var exception = await Assert.ThrowsAsync<ArangoException>(async () =>
             {
                 await Arango.Document.CreateAsync("test", "test", new
                 {
@@ -104,6 +105,11 @@ namespace Core.Arango.Tests
                     name2 = "test"
                 });
             });
+
+            Assert.NotNull(exception.ErrorNumber);
+            Assert.NotNull(exception.Code);
+            Assert.Equal(ArangoErrorCode.ErrorValidationFailed, exception.ErrorNumber);
+            Assert.Equal(HttpStatusCode.BadRequest, exception.Code);
 
            await Arango.Collection.UpdateAsync("test", "test", new ArangoCollectionUpdate
            {

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
 using Core.Arango.Tests.Core;
@@ -114,11 +115,21 @@ namespace Core.Arango.Tests
                 IsDeterministic = true
             });
 
-            await Assert.ThrowsAsync<ArangoException>(async () =>
+            var exception1 = await Assert.ThrowsAsync<ArangoException>(async () =>
                 await function.RemoveAsync("test", "BadFunctionName"));
 
-            await Assert.ThrowsAsync<ArangoException>(async () =>
+            Assert.NotNull(exception1.ErrorNumber);
+            Assert.NotNull(exception1.Code);
+            Assert.Equal(ArangoErrorCode.ErrorQueryFunctionNotFound, exception1.ErrorNumber);
+            Assert.Equal(HttpStatusCode.NotFound, exception1.Code);
+
+            var exception2 = await Assert.ThrowsAsync<ArangoException>(async () =>
                 await function.RemoveAsync("test", "Testfunctions::"));
+
+            Assert.NotNull(exception2.ErrorNumber);
+            Assert.NotNull(exception2.Code);
+            Assert.Equal(ArangoErrorCode.ErrorQueryFunctionNotFound, exception2.ErrorNumber);
+            Assert.Equal(HttpStatusCode.NotFound, exception2.Code);
 
             var deletedCount = await function.RemoveAsync("test", "BadNamespace", true);
 
