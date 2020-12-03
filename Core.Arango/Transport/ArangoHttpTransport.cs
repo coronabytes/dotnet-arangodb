@@ -1,4 +1,6 @@
-﻿using System;
+﻿using System.Linq;
+using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Net.Http;
@@ -8,6 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Core.Arango.Protocol.Internal;
 using Newtonsoft.Json;
+using Core.Arango.Protocol;
 
 namespace Core.Arango.Transport
 {
@@ -82,10 +85,11 @@ namespace Core.Arango.Transport
 
             var content = await res.Content.ReadAsStringAsync();
 
-            if (res.Headers.TryGetValues("X-Arango-Error-Codes", out var errorCodes))
+            if (res.Headers.Contains("X-Arango-Error-Codes"))
             {
-                var error = _configuration.Serializer.Deserialize<ErrorResponse>(content);
-                throw new ArangoException(content, error.ErrorMessage, (HttpStatusCode)error.Code, (ArangoErrorCode)error.ErrorNum);
+                var errors = _configuration.Serializer.Deserialize<IEnumerable<ErrorResponse>>(content)
+                    .Select(error => new ArangoError(error.ErrorMessage, (ArangoErrorCode)error.ErrorNum));
+                throw new ArangoException(content, errors);
             }
 
             if (content == "{}")

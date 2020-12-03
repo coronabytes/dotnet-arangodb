@@ -106,10 +106,9 @@ namespace Core.Arango.Tests
                 });
             });
 
-            Assert.NotNull(exception.ErrorNumber);
-            Assert.NotNull(exception.Code);
-            Assert.Equal(ArangoErrorCode.ErrorValidationFailed, exception.ErrorNumber);
-            Assert.Equal(HttpStatusCode.BadRequest, exception.Code);
+            Assert.Collection<ArangoError>(exception.Errors, 
+                error => Assert.Equal(ArangoErrorCode.ErrorValidationFailed, error.ErrorNumber)
+            );
 
            await Arango.Collection.UpdateAsync("test", "test", new ArangoCollectionUpdate
            {

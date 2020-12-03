@@ -181,10 +181,9 @@ namespace Core.Arango.Tests
             });
 
             Assert.Contains("unique constraint", exception.Message);
-            Assert.NotNull(exception.ErrorNumber);
-            Assert.NotNull(exception.Code);
-            Assert.Equal(ArangoErrorCode.ErrorArangoUniqueConstraintViolated, exception.ErrorNumber);
-            Assert.Equal(HttpStatusCode.Conflict, exception.Code);
+            Assert.Collection<ArangoError>(exception.Errors, 
+                error => Assert.Equal(ArangoErrorCode.ErrorArangoUniqueConstraintViolated, error.ErrorNumber)
+            );
         }
     }
 }
