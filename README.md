@@ -122,10 +122,11 @@ await arango.Document.UpdateAsync("database", "collection", new
 
 ## Query with bind vars through string interpolation
 ```csharp
+var collectionName = "collection";
 var list = new List<int> {1, 2, 3};
 
 var result = await arango.Query.ExecuteAsync<JObject>("database",
-  $"FOR c IN collection FILTER c.SomeValue IN {list} RETURN c");
+  $"FOR c IN {collectionName:@} FILTER c.SomeValue IN {list} RETURN c");
 ```
 results in AQL injection save syntax:
 ```js
@@ -135,6 +136,20 @@ results in AQL injection save syntax:
   "P1": "collection",
   "P2": [1, 2, 3]
 }
+```
+for collections parameters, formats `'@'`, `'C'` and `'c'` are supported. They all mean the same format.
+
+- Complex queries can be built from parts:
+```csharp
+var collectionName = "collection";
+var list = new List<int> {1, 2, 3};
+
+FormattableString forPart = $"FOR c IN {collectionName:@}";
+FormattableString filterPart = $"FILTER c.SomeValue IN {list}";
+FormattableString returnPart = $"RETURN c";
+
+var result = await arango.Query.ExecuteAsync<JObject>("database",
+  $"{forPart} {filterPart} {returnPart}");
 ```
 
 ## Query with async enumerator

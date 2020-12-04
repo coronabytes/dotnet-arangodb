@@ -55,6 +55,53 @@ namespace Core.Arango.Tests
 
         [Theory]
         [ClassData(typeof(PascalCaseData))]
+        public async Task CollectionNameParameter(string serializer)
+        {
+            await SetupAsync(serializer);
+            await Arango.Collection.CreateAsync("test", "test", ArangoCollectionType.Document);
+            await Arango.Document.CreateManyAsync("test", "test", new List<Entity>
+            {
+                new Entity {Value = 1},
+                new Entity {Value = 2},
+                new Entity {Value = 3}
+            });
+
+            var collection = "test";
+            var select = 1;
+
+            var res = await Arango.Query.ExecuteAsync<Entity>("test",
+                $"FOR e IN {collection:@} FILTER e.Value == {select} RETURN e");
+
+            Assert.Single(res);
+        }
+
+        [Theory]
+        [ClassData(typeof(PascalCaseData))]
+        public async Task InlineFormattable(string serializer)
+        {
+            await SetupAsync(serializer);
+            await Arango.Collection.CreateAsync("test", "test", ArangoCollectionType.Document);
+            await Arango.Document.CreateManyAsync("test", "test", new List<Entity>
+            {
+                new Entity {Value = 1},
+                new Entity {Value = 2},
+                new Entity {Value = 3}
+            });
+
+            var collection = "test";
+            var select = 1;
+
+            FormattableString @for = $"FOR e IN {collection:@}";
+            FormattableString filter = $"FILTER e.Value == {select}";
+            FormattableString @return = $"RETURN e";
+
+            var res = await Arango.Query.ExecuteAsync<Entity>("test", $"{@for} {filter} {@return}");
+
+            Assert.Single(res);
+        }
+
+        [Theory]
+        [ClassData(typeof(PascalCaseData))]
         public async Task Batch(string serializer)
         {
             await SetupAsync(serializer);

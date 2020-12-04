@@ -105,43 +105,79 @@ namespace Core.Arango.Modules.Internal
             return sb.ToString();
         }
 
-        public string Parameterize(FormattableString query, out Dictionary<string, object> parameter)
+        public string Parameterize(FormattableString query, out IDictionary<string, object> parameter)
         {
-            var i = 0;
-
-            var set = new Dictionary<object, string>();
-            var nullParam = string.Empty;
-
-            var args = query.GetArguments().Select(x =>
-            {
-                if (x == null)
-                {
-                    if (string.IsNullOrEmpty(nullParam))
-                        nullParam = $"@P{++i}";
-
-                    return nullParam;
-                }
-
-                if (set.TryGetValue(x, out var p))
-                    return (object) p;
-
-                p = $"@P{++i}";
-
-                set.Add(x, p);
-
-                return (object) p;
-            }).ToArray();
-
-            var queryExp = string.Format(query.Format, args);
-
-            var res = set.ToDictionary(x => x.Value.Substring(1), x => x.Key);
-
-            if (!string.IsNullOrEmpty(nullParam))
-                res.Add(nullParam.Substring(1), null);
-
-            parameter = res;
+            var formatter = new AqlQueryFormatter();
+            var queryExp = query.ToString(formatter);
+            parameter = formatter.Context.Parameters;
 
             return queryExp;
+        }
+
+        protected enum QueryParameterType
+        {
+            Regular,
+            Collection
+        }
+
+        protected class QueryFormattingContext
+        {
+            private readonly IDictionary<(object value, QueryParameterType type), string> _paramsMap =
+                new Dictionary<(object obj, QueryParameterType type), string>();
+
+            private int _counter;
+
+            public IDictionary<string, object> Parameters =>
+                _paramsMap.ToDictionary(x => x.Value[1..], x => x.Key.value);
+
+            public string Register(QueryParameterType type, object value)
+            {
+                if (!_paramsMap.TryGetValue((value, type), out var paramName))
+                {
+                    switch (type)
+                    {
+                        case QueryParameterType.Regular:
+                            paramName = $"@P{++_counter}";
+                            break;
+                        case QueryParameterType.Collection:
+                            paramName = $"@@C{++_counter}";
+                            break;
+                        default: throw new ArgumentException($"Unsupported parameter type: {type:G}", nameof(type));
+                    }
+
+                    _paramsMap.Add((value, type), paramName);
+                }
+
+                return paramName;
+            }
+        }
+
+        protected class AqlQueryFormatter : IFormatProvider, ICustomFormatter
+        {
+            public QueryFormattingContext Context { get; } = new QueryFormattingContext();
+
+            public string Format(string format, object arg, IFormatProvider formatProvider)
+            {
+                if (arg is IFormattable formattable)
+                    return formattable.ToString(format, this);
+
+                var type = format switch
+                {
+                    null => QueryParameterType.Regular,
+                    "" => QueryParameterType.Regular,
+                    "C" => QueryParameterType.Collection,
+                    "c" => QueryParameterType.Collection,
+                    "@" => QueryParameterType.Collection,
+                    _ => throw new FormatException($"Unsupported format: {format}")
+                };
+
+                return Context.Register(type, arg);
+            }
+
+            public object GetFormat(Type formatType)
+            {
+                return formatType == typeof(ICustomFormatter) ? this : null;
+            }
         }
     }
 }
