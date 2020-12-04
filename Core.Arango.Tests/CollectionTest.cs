@@ -1,7 +1,11 @@
 using System;
+using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
 using Core.Arango.Tests.Core;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Schema;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -118,34 +122,6 @@ namespace Core.Arango.Tests
                name = 2,
                name2 = "test"
            });
-        }
-
-        [Theory]
-        [ClassData(typeof(PascalCaseData))]
-        public async Task CollectionParameter(string serializer)
-        {
-            await SetupAsync(serializer);
-            await Arango.Collection.CreateAsync("test", new ArangoCollection
-            {
-                Name = "test",
-                Type = ArangoCollectionType.Document,
-                KeyOptions = new ArangoKeyOptions
-                {
-                    Type = ArangoKeyType.Padded,
-                    AllowUserKeys = true
-                }
-            });
-
-            await Arango.Document.CreateAsync("test", "test", new
-            {
-                Name = "test"
-            });
-
-            var test = "test";
-            var res = await Arango.Query.ExecuteAsync<ArangoVoid>("test", 
-                $"FOR x IN @{test} FILTER x.Name == {test} RETURN x");
-
-            Assert.Single(res);
         }
     }
 }

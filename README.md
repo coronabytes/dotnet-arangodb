@@ -126,16 +126,30 @@ var col = "collection";
 var list = new List<int> {1, 2, 3};
 
 var result = await arango.Query.ExecuteAsync<JObject>("database",
-  $"FOR c IN @{col} FILTER c.SomeValue IN {list} RETURN c");
+  $"FOR c IN {col:@} FILTER c.SomeValue IN {list} RETURN c");
 ```
 results in AQL injection save syntax:
 ```js
-'FOR c IN @@P1 FILTER c.SomeValue IN @P2 RETURN c'
+'FOR c IN @@C1 FILTER c.SomeValue IN @P2 RETURN c'
 
 {
-  "@P1": "collection",
+  "@C1": "collection",
   "P2": [1, 2, 3]
 }
+```
+for collections parameters, formats `'@'`, `'C'` and `'c'` are supported. They all mean the same format.
+
+- Complex queries can be built from parts:
+```csharp
+var collectionName = "collection";
+var list = new List<int> {1, 2, 3};
+
+FormattableString forPart = $"FOR c IN {collectionName:@}";
+FormattableString filterPart = $"FILTER c.SomeValue IN {list}";
+FormattableString returnPart = $"RETURN c";
+
+var result = await arango.Query.ExecuteAsync<JObject>("database",
+  $"{forPart} {filterPart} {returnPart}");
 ```
 
 ## Query with async enumerator
