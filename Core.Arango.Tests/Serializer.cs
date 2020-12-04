@@ -26,7 +26,7 @@ namespace Core.Arango.Tests
                 {new ArangoNewtonsoftSerializer(new ArangoNewtonsoftDefaultContractResolver()), "Newtonsoft(Default)"},
                 {new ArangoNewtonsoftSerializer(new ArangoNewtonsoftCamelCaseContractResolver()), "Newtonsoft(Camel)"},
                 {new ArangoJsonSerializer(new ArangoJsonCamelCasePolicy()), "System.Json.Text(Camel)"},
-                {new ArangoJsonSerializer(new ArangoJsonCamelCasePolicy()), "System.Json.Text(Default)"}
+                {new ArangoJsonSerializer(new ArangoJsonDefaultPolicy()), "System.Json.Text(Default)"}
             };
 
         [Theory]
