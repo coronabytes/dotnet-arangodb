@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
+using Core.Arango.Serialization;
 
 namespace Core.Arango.Modules.Internal
 {
@@ -158,20 +159,26 @@ namespace Core.Arango.Modules.Internal
 
             public string Format(string format, object arg, IFormatProvider formatProvider)
             {
-                if (arg is IFormattable formattable)
-                    return formattable.ToString(format, this);
-
-                var type = format switch
+                string RegisterDefault()
                 {
-                    null => QueryParameterType.Regular,
-                    "" => QueryParameterType.Regular,
-                    "C" => QueryParameterType.Collection,
-                    "c" => QueryParameterType.Collection,
-                    "@" => QueryParameterType.Collection,
-                    _ => throw new FormatException($"Unsupported format: {format}")
-                };
+                    var type = format switch
+                    {
+                        null => QueryParameterType.Regular,
+                        "C" => QueryParameterType.Collection,
+                        "c" => QueryParameterType.Collection,
+                        "@" => QueryParameterType.Collection,
+                        _ => throw new FormatException($"Unsupported format: {format}")
+                    };
 
-                return Context.Register(type, arg);
+                    return Context.Register(type, arg);
+                }
+
+                return arg switch
+                {
+                    FormattableString formattable => formattable.ToString(this),
+                    IArangoFormattable formattable => formattable.ToString(format, this),
+                    _ => RegisterDefault()
+                };
             }
 
             public object GetFormat(Type formatType)
