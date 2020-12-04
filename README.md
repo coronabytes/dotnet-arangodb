@@ -122,18 +122,18 @@ await arango.Document.UpdateAsync("database", "collection", new
 
 ## Query with bind vars through string interpolation
 ```csharp
-var collectionName = "collection";
+var col = "collection";
 var list = new List<int> {1, 2, 3};
 
 var result = await arango.Query.ExecuteAsync<JObject>("database",
-  $"FOR c IN {collectionName:@} FILTER c.SomeValue IN {list} RETURN c");
+  $"FOR c IN @{col} FILTER c.SomeValue IN {list} RETURN c");
 ```
 results in AQL injection save syntax:
 ```js
 'FOR c IN @@P1 FILTER c.SomeValue IN @P2 RETURN c'
 
 {
-  "P1": "collection",
+  "@P1": "collection",
   "P2": [1, 2, 3]
 }
 ```
