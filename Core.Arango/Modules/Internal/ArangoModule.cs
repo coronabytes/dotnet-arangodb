@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Encodings.Web;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -105,79 +106,70 @@ namespace Core.Arango.Modules.Internal
             return sb.ToString();
         }
 
-        public string Parameterize(FormattableString query, out IDictionary<string, object> parameter)
+        private static readonly Regex RegexParams = new Regex("(@)?\\{([0-9]+)\\}", RegexOptions.Compiled);
+
+        public string Parameterize(FormattableString query, out Dictionary<string, object> parameter)
         {
-            var formatter = new AqlQueryFormatter();
-            var queryExp = query.ToString(formatter);
-            parameter = formatter.Context.Parameters;
+            var i = 0;
+            var j = 0;
 
-            return queryExp;
-        }
+            var set = new Dictionary<object, string>();
+            var cols = new Dictionary<object, string>();
+            var nullParam = string.Empty;
 
-        protected enum QueryParameterType
-        {
-            Regular,
-            Collection
-        }
+            var matches = RegexParams.Matches(query.Format);
 
-        protected class QueryFormattingContext
-        {
-            private readonly IDictionary<(object value, QueryParameterType type), string> _paramsMap =
-                new Dictionary<(object obj, QueryParameterType type), string>();
-
-            private int _counter;
-
-            public IDictionary<string, object> Parameters =>
-                _paramsMap.ToDictionary(x => x.Value[1..], x => x.Key.value);
-
-            public string Register(QueryParameterType type, object value)
+            var args = query.GetArguments().Select(x =>
             {
-                if (!_paramsMap.TryGetValue((value, type), out var paramName))
-                {
-                    switch (type)
-                    {
-                        case QueryParameterType.Regular:
-                            paramName = $"@P{++_counter}";
-                            break;
-                        case QueryParameterType.Collection:
-                            paramName = $"@@C{++_counter}";
-                            break;
-                        default: throw new ArgumentException($"Unsupported parameter type: {type:G}", nameof(type));
-                    }
+                var idx = j++;
 
-                    _paramsMap.Add((value, type), paramName);
+                if (x == null)
+                {
+                    if (string.IsNullOrEmpty(nullParam))
+                        nullParam = $"@P{++i}";
+
+                    return nullParam;
                 }
 
-                return paramName;
-            }
-        }
-
-        protected class AqlQueryFormatter : IFormatProvider, ICustomFormatter
-        {
-            public QueryFormattingContext Context { get; } = new QueryFormattingContext();
-
-            public string Format(string format, object arg, IFormatProvider formatProvider)
-            {
-                if (arg is IFormattable formattable)
-                    return formattable.ToString(format, this);
-
-                var type = format switch
+                if (matches[idx].Groups[1].Value == "@")
                 {
-                    null => QueryParameterType.Regular,
-                    "" => QueryParameterType.Regular,
-                    "C" => QueryParameterType.Collection,
-                    "c" => QueryParameterType.Collection,
-                    "@" => QueryParameterType.Collection,
-                    _ => throw new FormatException($"Unsupported format: {format}")
-                };
+                    if (cols.TryGetValue(x, out var p))
+                        return (object) p;
 
-                return Context.Register(type, arg);
-            }
+                    p = $"@P{++i}";
 
-            public object GetFormat(Type formatType)
-            {
-                return formatType == typeof(ICustomFormatter) ? this : null;
-            }
+                    cols.Add(x, "@"+ p);
+
+                    return (object) p;
+                }
+                else
+                {
+                    if (set.TryGetValue(x, out var p))
+                        return (object) p;
+
+                    p = $"@P{++i}";
+
+                    set.Add(x, p);
+
+                    return (object) p;
+                }
+            }).ToArray();
+
+            var queryExp = string.Format(query.Format, args);
+
+            var res = set.ToDictionary(
+                x => x.Value.Substring(1), 
+                x => x.Key);
+
+            foreach (var col in cols)
+                res.Add(col.Value.Substring(1), col.Key);
+
+            if (!string.IsNullOrEmpty(nullParam))
+                res.Add(nullParam.Substring(1), null);
+
+            parameter = res;
+
+            return queryExp;
         }
     }
 }

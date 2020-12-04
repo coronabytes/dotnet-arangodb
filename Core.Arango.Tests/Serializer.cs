@@ -46,7 +46,6 @@ namespace Core.Arango.Tests
             var j1 = serializer.Serialize(o1);
             var j2 = serializer.Serialize(o2);
 
-            _output.WriteLine(name);
             Assert.Contains("_key", j1);
             Assert.DoesNotContain("_key", j2);
 
