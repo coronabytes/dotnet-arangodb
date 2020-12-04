@@ -1,7 +1,11 @@
 using System;
+using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
 using Core.Arango.Tests.Core;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Schema;
 using Xunit;
 using Xunit.Abstractions;
 

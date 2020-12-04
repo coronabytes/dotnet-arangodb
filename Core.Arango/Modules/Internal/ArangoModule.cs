@@ -106,7 +106,7 @@ namespace Core.Arango.Modules.Internal
             return sb.ToString();
         }
 
-        private static readonly Regex RegexParams = new Regex("(@)?\\{([0-9]+)\\}", RegexOptions.Compiled);
+        private static Regex _regexParams = new Regex("(@)?\\{([0-9]+)\\}", RegexOptions.Compiled);
 
         public string Parameterize(FormattableString query, out Dictionary<string, object> parameter)
         {
@@ -117,12 +117,10 @@ namespace Core.Arango.Modules.Internal
             var cols = new Dictionary<object, string>();
             var nullParam = string.Empty;
 
-            var matches = RegexParams.Matches(query.Format);
+            var matches = _regexParams.Matches(query.Format);
 
             var args = query.GetArguments().Select(x =>
             {
-                var idx = j++;
-
                 if (x == null)
                 {
                     if (string.IsNullOrEmpty(nullParam))
@@ -131,7 +129,7 @@ namespace Core.Arango.Modules.Internal
                     return nullParam;
                 }
 
-                if (matches[idx].Groups[1].Value == "@")
+                if (matches[j++].Groups[1].Value == "@")
                 {
                     if (cols.TryGetValue(x, out var p))
                         return (object) p;
