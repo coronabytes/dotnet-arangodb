@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Encodings.Web;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -105,12 +106,18 @@ namespace Core.Arango.Modules.Internal
             return sb.ToString();
         }
 
+        private static Regex _regexParams = new Regex("(@)?\\{([0-9]+)\\}", RegexOptions.Compiled);
+
         public string Parameterize(FormattableString query, out Dictionary<string, object> parameter)
         {
             var i = 0;
+            var j = 0;
 
             var set = new Dictionary<object, string>();
+            var cols = new Dictionary<object, string>();
             var nullParam = string.Empty;
+
+            var matches = _regexParams.Matches(query.Format);
 
             var args = query.GetArguments().Select(x =>
             {
@@ -122,19 +129,38 @@ namespace Core.Arango.Modules.Internal
                     return nullParam;
                 }
 
-                if (set.TryGetValue(x, out var p))
+                if (matches[j++].Groups[1].Value == "@")
+                {
+                    if (cols.TryGetValue(x, out var p))
+                        return (object) p;
+
+                    p = $"@P{++i}";
+
+                    cols.Add(x, "@"+ p);
+
                     return (object) p;
+                }
+                else
+                {
+                    if (set.TryGetValue(x, out var p))
+                        return (object) p;
 
-                p = $"@P{++i}";
+                    p = $"@P{++i}";
 
-                set.Add(x, p);
+                    set.Add(x, p);
 
-                return (object) p;
+                    return (object) p;
+                }
             }).ToArray();
 
             var queryExp = string.Format(query.Format, args);
 
-            var res = set.ToDictionary(x => x.Value.Substring(1), x => x.Key);
+            var res = set.ToDictionary(
+                x => x.Value.Substring(1), 
+                x => x.Key);
+
+            foreach (var col in cols)
+                res.Add(col.Value.Substring(1), col.Key);
 
             if (!string.IsNullOrEmpty(nullParam))
                 res.Add(nullParam.Substring(1), null);
