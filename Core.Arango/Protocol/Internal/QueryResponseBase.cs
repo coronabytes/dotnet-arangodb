@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace Core.Arango.Protocol.Internal
 {
-    internal abstract class QueryResponseBase<T> : ResponseBase
+    internal abstract class QueryResponseBase<T> : ArangoResponseBase
     {
         [JsonPropertyName("result")]
         [JsonProperty(PropertyName = "result")]

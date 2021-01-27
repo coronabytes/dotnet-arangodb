@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Core.Arango.Protocol;
 using Core.Arango.Protocol.Internal;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace Core.Arango.Modules.Internal
 {
@@ -15,6 +14,8 @@ namespace Core.Arango.Modules.Internal
     {
         internal ArangoGraphModule(IArangoContext context) : base(context)
         {
+            Vertex = new ArangoGraphVertexModule(context);
+            Edge = new ArangoGraphEdgeModule(context);
         }
 
         private class GraphRes
@@ -31,6 +32,9 @@ namespace Core.Arango.Modules.Internal
                 ApiPath(database, "gharial"), cancellationToken: cancellationToken);
             return res.Graphs.Select(x => x.Key).ToList();
         }
+
+        public IArangoGraphVertexModule Vertex { get; }
+        public IArangoGraphEdgeModule Edge { get; }
 
         public async Task CreateAsync(ArangoHandle database, ArangoGraph request,
             CancellationToken cancellationToken = default)
