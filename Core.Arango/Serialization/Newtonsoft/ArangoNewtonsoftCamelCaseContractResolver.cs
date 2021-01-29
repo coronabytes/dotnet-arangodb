@@ -21,15 +21,20 @@ namespace Core.Arango.Serialization.Newtonsoft
                 property.ShouldSerialize = i => false;
             }
 
-            property.PropertyName = property.PropertyName switch
+            var atr = member.GetCustomAttribute<JsonPropertyAttribute>();
+
+            if (atr?.PropertyName == null)
             {
-                "id" => "_id",
-                "key" => "_key",
-                "revision" => "_rev",
-                "from" => "_from",
-                "to" => "_to",
-                _ => property.PropertyName
-            };
+                property.PropertyName = property.PropertyName switch
+                {
+                    "id" => "_id",
+                    "key" => "_key",
+                    "revision" => "_rev",
+                    "from" => "_from",
+                    "to" => "_to",
+                    _ => property.PropertyName
+                };
+            }
 
             return property;
         }
