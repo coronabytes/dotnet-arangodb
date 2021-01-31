@@ -37,6 +37,22 @@ namespace Core.Arango.Modules.Internal
                 request, cancellationToken: cancellationToken);
         }
 
+        public async Task AddVertexCollectionAsync(ArangoHandle database, string graph, ArangoVertexCollection vertexCollection,
+            CancellationToken cancellationToken = default)
+        {
+            await SendAsync<ArangoVoid>(HttpMethod.Post,
+                ApiPath(database, $"gharial/{UrlEncode(graph)}/vertex"),
+                vertexCollection, cancellationToken: cancellationToken);
+        }
+
+        public async Task AddEdgeDefinitionAsync(ArangoHandle database, string graph, ArangoEdgeDefinition edgeDefinition,
+            CancellationToken cancellationToken = default)
+        {
+            await SendAsync<ArangoVoid>(HttpMethod.Post,
+                ApiPath(database, $"gharial/{UrlEncode(graph)}/edge"),
+                edgeDefinition, cancellationToken: cancellationToken);
+        }
+
         public async Task DropAsync(ArangoHandle database, string name,
             CancellationToken cancellationToken = default)
         {
