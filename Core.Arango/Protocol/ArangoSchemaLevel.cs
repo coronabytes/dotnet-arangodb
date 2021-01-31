@@ -1,9 +1,10 @@
 ﻿using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 using Newtonsoft.Json.Converters;
 
 namespace Core.Arango.Protocol
 {
-    [System.Text.Json.Serialization.JsonConverter(typeof(CamelCaseJsonStringEnumConverter))]
+    [JsonConverter(typeof(CamelCaseJsonStringEnumConverter))]
     [Newtonsoft.Json.JsonConverter(typeof(StringEnumConverter))]
     public enum ArangoSchemaLevel
     {

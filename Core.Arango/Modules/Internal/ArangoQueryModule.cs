@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Threading.Tasks;
 using Core.Arango.Protocol.Internal;
@@ -141,7 +140,8 @@ namespace Core.Arango.Modules.Internal
             return listResult.GetType().GetProperty("Item").GetValue(listResult, new object[] {0});
         }
 
-        public IAsyncEnumerable<T> ExecuteStreamAsync<T>(ArangoHandle database, FormattableString query, bool? cache = null, 
+        public IAsyncEnumerable<T> ExecuteStreamAsync<T>(ArangoHandle database, FormattableString query,
+            bool? cache = null,
             int? batchSize = null, CancellationToken cancellationToken = default)
         {
             var queryExp = Parameterize(query, out var parameter);

@@ -7,15 +7,15 @@ namespace Core.Arango.Protocol
     public class ArangoView
     {
         [JsonPropertyName("name")]
-        [JsonProperty(PropertyName = "name")] 
+        [JsonProperty(PropertyName = "name")]
         public string Name { get; set; }
 
         [JsonPropertyName("type")]
-        [JsonProperty(PropertyName = "type")] 
+        [JsonProperty(PropertyName = "type")]
         public string Type { get; set; } = "arangosearch";
 
         [JsonPropertyName("links")]
-        [JsonProperty(PropertyName = "links")] 
+        [JsonProperty(PropertyName = "links")]
         public IDictionary<string, ArangoLinkProperty> Links { get; set; }
 
         [JsonPropertyName("primarySort")]

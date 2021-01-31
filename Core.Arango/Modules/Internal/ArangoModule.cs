@@ -34,9 +34,14 @@ namespace Core.Arango.Modules.Internal
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        protected string ApiPath(ArangoHandle handle, string path)
+        protected string ApiPath(ArangoHandle handle, string path, IDictionary<string, string> parameter = null)
         {
-            return $"/_db/{RealmPrefix(handle)}/_api/{path}";
+            var req = $"/_db/{RealmPrefix(handle)}/_api/{path}";
+
+            if (parameter?.Any() == true)
+                req = AddQueryString(req, parameter);
+
+            return req;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

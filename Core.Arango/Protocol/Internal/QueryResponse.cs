@@ -1,6 +1,5 @@
 ﻿using System.Text.Json.Serialization;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace Core.Arango.Protocol.Internal
 {
@@ -11,15 +10,15 @@ namespace Core.Arango.Protocol.Internal
         public bool HasMore { get; set; }
 
         [JsonPropertyName("id")]
-        [JsonProperty(PropertyName = "id")] 
+        [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
 
         [JsonPropertyName("count")]
-        [JsonProperty(PropertyName = "count")] 
+        [JsonProperty(PropertyName = "count")]
         public long Count { get; set; }
 
         [JsonPropertyName("extra")]
-        [JsonProperty(PropertyName = "extra")] 
+        [JsonProperty(PropertyName = "extra")]
         public QueryResponseExtra Extra { get; set; }
     }
 }

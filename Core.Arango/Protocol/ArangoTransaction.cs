@@ -6,7 +6,6 @@ namespace Core.Arango.Protocol
 {
     public class ArangoTransaction
     {
-
         [JsonPropertyName("allowImplicit")]
         [JsonProperty(PropertyName = "allowImplicit", DefaultValueHandling = DefaultValueHandling.Ignore)]
         [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]

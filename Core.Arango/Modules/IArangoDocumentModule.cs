@@ -2,7 +2,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
-using Newtonsoft.Json.Linq;
 
 namespace Core.Arango.Modules
 {

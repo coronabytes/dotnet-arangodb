@@ -12,7 +12,7 @@ namespace Core.Arango.Serialization.System
             Options = new JsonSerializerOptions(JsonSerializerDefaults.Web)
             {
                 PropertyNamingPolicy = policy,
-                DictionaryKeyPolicy = policy,
+                //DictionaryKeyPolicy = policy,
                 IgnoreNullValues = false
             };
         }

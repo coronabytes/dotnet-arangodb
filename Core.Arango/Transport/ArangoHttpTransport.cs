@@ -1,16 +1,16 @@
-﻿using System.Linq;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
+using Core.Arango.Protocol;
 using Core.Arango.Protocol.Internal;
 using Newtonsoft.Json;
-using Core.Arango.Protocol;
 
 namespace Core.Arango.Transport
 {
@@ -24,24 +24,6 @@ namespace Core.Arango.Transport
         public ArangoHttpTransport(IArangoConfiguration configuration)
         {
             _configuration = configuration;
-        }
-
-        private class AuthRequest
-        {
-            [JsonProperty("username")]
-            [JsonPropertyName("username")]
-            public string Username { get; set; }
-
-            [JsonProperty("password")]
-            [JsonPropertyName("password")]
-            public string Password { get; set; }
-        }
-
-        private class AuthResponse
-        {
-            [JsonProperty("jwt")]
-            [JsonPropertyName("jwt")]
-            public string Jwt { get; set; }
         }
 
         public async Task<T> SendAsync<T>(HttpMethod m, string url, object body = null,
@@ -79,16 +61,19 @@ namespace Core.Arango.Transport
                     var errorContent = await res.Content.ReadAsStringAsync();
                     var error = _configuration.Serializer.Deserialize<ErrorResponse>(errorContent);
                     throw new ArangoException(errorContent, error.ErrorMessage,
-                        (HttpStatusCode)error.Code, (ArangoErrorCode)error.ErrorNum);
+                        (HttpStatusCode) error.Code, (ArangoErrorCode) error.ErrorNum);
                 }
-                else return default;
+                else
+                {
+                    return default;
+                }
 
             var content = await res.Content.ReadAsStringAsync();
 
             if (res.Headers.Contains("X-Arango-Error-Codes"))
             {
                 var errors = _configuration.Serializer.Deserialize<IEnumerable<ErrorResponse>>(content)
-                    .Select(error => new ArangoError(error.ErrorMessage, (ArangoErrorCode)error.ErrorNum));
+                    .Select(error => new ArangoError(error.ErrorMessage, (ArangoErrorCode) error.ErrorNum));
                 throw new ArangoException(content, errors);
             }
 
@@ -153,6 +138,24 @@ namespace Core.Arango.Transport
                 _auth = $"Bearer {jwt}";
                 _authValidUntil = token.ValidTo;
             }
+        }
+
+        private class AuthRequest
+        {
+            [JsonProperty("username")]
+            [JsonPropertyName("username")]
+            public string Username { get; set; }
+
+            [JsonProperty("password")]
+            [JsonPropertyName("password")]
+            public string Password { get; set; }
+        }
+
+        private class AuthResponse
+        {
+            [JsonProperty("jwt")]
+            [JsonPropertyName("jwt")]
+            public string Jwt { get; set; }
         }
     }
 }

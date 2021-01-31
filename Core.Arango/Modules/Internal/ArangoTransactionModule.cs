@@ -1,11 +1,8 @@
 ﻿using System.Net.Http;
-using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
 using Core.Arango.Protocol.Internal;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace Core.Arango.Modules.Internal
 {
@@ -30,7 +27,7 @@ namespace Core.Arango.Modules.Internal
                 ApiPath(database, "transaction/begin"),
                 request, cancellationToken: cancellationToken);
 
-            string transaction = res.Result.Id;
+            var transaction = res.Result.Id;
             return new ArangoHandle(database, transaction);
         }
 
