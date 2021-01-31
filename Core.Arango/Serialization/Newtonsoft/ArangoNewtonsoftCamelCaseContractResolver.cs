@@ -24,7 +24,6 @@ namespace Core.Arango.Serialization.Newtonsoft
             var atr = member.GetCustomAttribute<JsonPropertyAttribute>();
 
             if (atr?.PropertyName == null)
-            {
                 property.PropertyName = property.PropertyName switch
                 {
                     "id" => "_id",
@@ -34,7 +33,6 @@ namespace Core.Arango.Serialization.Newtonsoft
                     "to" => "_to",
                     _ => property.PropertyName
                 };
-            }
 
             return property;
         }

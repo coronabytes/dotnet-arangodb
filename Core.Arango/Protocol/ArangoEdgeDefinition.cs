@@ -11,11 +11,11 @@ namespace Core.Arango.Protocol
         public string Collection { get; set; }
 
         [JsonPropertyName("from")]
-        [JsonProperty(PropertyName = "from")] 
+        [JsonProperty(PropertyName = "from")]
         public IList<string> From { get; set; }
 
         [JsonPropertyName("to")]
-        [JsonProperty(PropertyName = "to")] 
+        [JsonProperty(PropertyName = "to")]
         public IList<string> To { get; set; }
     }
 }

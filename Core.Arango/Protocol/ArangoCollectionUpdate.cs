@@ -16,7 +16,7 @@ namespace Core.Arango.Protocol
         public long? JournalSize { get; set; }
 
         /// <summary>
-        ///  When updating collection this needs to contain existing schema or schema will be removed
+        ///     When updating collection this needs to contain existing schema or schema will be removed
         /// </summary>
         [JsonPropertyName("schema")]
         [JsonProperty(PropertyName = "schema", NullValueHandling = NullValueHandling.Include)]

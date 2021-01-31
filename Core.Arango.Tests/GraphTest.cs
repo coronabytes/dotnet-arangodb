@@ -83,10 +83,10 @@ RETURN v");
 
             Assert.Single(friends);
 
-            await Arango.Graph.Edge.UpdateAsync("test", "graph", "edges", new
+            await Arango.Graph.Edge.UpdateAsync("test", "graph", "edges", "ac", new
             {
                 Label = "friend"
-            }, "ac");
+            });
 
             friends = await Arango.Query.ExecuteAsync<Vertex>("test", $@"
 FOR v, e IN 1..1 OUTBOUND {start} GRAPH 'graph' 

@@ -1,7 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
-using Core.Arango.Protocol.Internal;
 
 namespace Core.Arango.Modules
 {
@@ -10,7 +9,8 @@ namespace Core.Arango.Modules
         Task<TR> GetAsync<TR>(ArangoHandle database, string graph, string collection, string key,
             CancellationToken cancellationToken = default);
 
-        Task<ArangoVertexResponse<ArangoVoid>> CreateAsync<T>(ArangoHandle database, string graph, string collection, T doc,
+        Task<ArangoVertexResponse<ArangoVoid>> CreateAsync<T>(ArangoHandle database, string graph, string collection,
+            T doc,
             bool? waitForSync = null, bool? returnNew = null,
             CancellationToken cancellationToken = default);
 
@@ -18,27 +18,33 @@ namespace Core.Arango.Modules
             bool? waitForSync = null, bool? returnNew = null,
             CancellationToken cancellationToken = default);
 
-        Task<ArangoVertexResponse<ArangoVoid>> UpdateAsync<T>(ArangoHandle database, string graph, string collection, T doc, string key,
+        Task<ArangoVertexResponse<ArangoVoid>> UpdateAsync<T>(ArangoHandle database, string graph, string collection,
+            string key, T doc,
             bool? waitForSync = null, bool? keepNull = null, bool? returnNew = null, bool? returnOld = null,
             CancellationToken cancellationToken = default);
 
-        Task<ArangoVertexResponse<TR>> UpdateAsync<T, TR>(ArangoHandle database, string graph, string collection, T doc, string key,
+        Task<ArangoVertexResponse<TR>> UpdateAsync<T, TR>(ArangoHandle database, string graph, string collection,
+            string key, T doc,
             bool? waitForSync = null, bool? keepNull = null, bool? returnNew = null, bool? returnOld = null,
             CancellationToken cancellationToken = default);
 
-        Task<ArangoVertexResponse<ArangoVoid>> ReplaceAsync<T>(ArangoHandle database, string graph, string collection, T doc, string key,
+        Task<ArangoVertexResponse<ArangoVoid>> ReplaceAsync<T>(ArangoHandle database, string graph, string collection,
+            string key, T doc,
             bool? waitForSync = null, bool? keepNull = null, bool? returnNew = null, bool? returnOld = null,
             CancellationToken cancellationToken = default);
 
-        Task<ArangoVertexResponse<TR>> ReplaceAsync<T, TR>(ArangoHandle database, string graph, string collection, T doc, string key,
+        Task<ArangoVertexResponse<TR>> ReplaceAsync<T, TR>(ArangoHandle database, string graph, string collection,
+            string key, T doc,
             bool? waitForSync = null, bool? keepNull = null, bool? returnNew = null, bool? returnOld = null,
             CancellationToken cancellationToken = default);
 
-        Task<ArangoVertexResponse<ArangoVoid>> RemoveAsync(ArangoHandle database, string graph, string collection, string key,
+        Task<ArangoVertexResponse<ArangoVoid>> RemoveAsync(ArangoHandle database, string graph, string collection,
+            string key,
             bool? waitForSync = null, bool? returnOld = null,
             CancellationToken cancellationToken = default);
 
-        Task<ArangoVertexResponse<TR>> RemoveAsync<TR>(ArangoHandle database, string graph, string collection, string key,
+        Task<ArangoVertexResponse<TR>> RemoveAsync<TR>(ArangoHandle database, string graph, string collection,
+            string key,
             bool? waitForSync = null, bool? returnOld = null,
             CancellationToken cancellationToken = default);
     }

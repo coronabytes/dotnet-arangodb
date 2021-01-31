@@ -5,7 +5,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace Core.Arango.Modules.Internal
 {
@@ -39,12 +38,6 @@ namespace Core.Arango.Modules.Internal
             }
         }
 
-        private class IndexResponse
-        {
-            [JsonProperty("indexes")]
-            public List<ArangoIndex> Indexes { get; set; }
-        }
-
         /// <summary>
         ///     Ignores primary and edge indices
         /// </summary>
@@ -68,6 +61,11 @@ namespace Core.Arango.Modules.Internal
         {
             await SendAsync<ArangoVoid>(HttpMethod.Delete,
                 ApiPath(database, $"index/{index}"), cancellationToken: cancellationToken);
+        }
+
+        private class IndexResponse
+        {
+            [JsonProperty("indexes")] public List<ArangoIndex> Indexes { get; set; }
         }
     }
 }

@@ -6,7 +6,7 @@ namespace Core.Arango.Protocol
     public class ArangoUser
     {
         [JsonPropertyName("user")]
-        [JsonProperty(PropertyName = "user")] 
+        [JsonProperty(PropertyName = "user")]
         public string Name { get; set; }
 
         [JsonPropertyName("passwd")]

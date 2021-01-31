@@ -7,7 +7,8 @@ namespace Core.Arango.Protocol.Internal
     internal class QueryRequest
     {
         [JsonPropertyName("query")]
-        [JsonProperty(PropertyName = "query")] public string Query { get; set; }
+        [JsonProperty(PropertyName = "query")]
+        public string Query { get; set; }
 
 
         [JsonPropertyName("bindVars")]

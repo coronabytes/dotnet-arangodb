@@ -6,7 +6,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
 using Core.Arango.Protocol.Internal;
-using Newtonsoft.Json.Linq;
 
 namespace Core.Arango.Modules.Internal
 {
@@ -84,7 +83,8 @@ namespace Core.Arango.Modules.Internal
             return res.SingleOrDefault();
         }
 
-        public async Task<ArangoUpdateResult<ArangoVoid>> CreateAsync<T>(ArangoHandle database, string collection, T doc,
+        public async Task<ArangoUpdateResult<ArangoVoid>> CreateAsync<T>(ArangoHandle database, string collection,
+            T doc,
             bool? waitForSync = null, bool? keepNull = null,
             bool? mergeObjects = null, bool? returnOld = null, bool? returnNew = null, bool? silent = null,
             ArangoOverwriteMode? overwriteMode = null, CancellationToken cancellationToken = default) where T : class

@@ -5,7 +5,6 @@ namespace Core.Arango.Protocol.Internal
 {
     internal class ExportRequest
     {
-
         [JsonPropertyName("flush")]
         [JsonProperty(PropertyName = "flush", NullValueHandling = NullValueHandling.Ignore)]
         [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

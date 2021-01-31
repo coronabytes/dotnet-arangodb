@@ -13,6 +13,7 @@ namespace Core.Arango.Serialization.Newtonsoft
         {
             NamingStrategy = new DefaultNamingStrategy();
         }
+
         protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
         {
             var property = base.CreateProperty(member, memberSerialization);

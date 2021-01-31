@@ -17,7 +17,7 @@ namespace Core.Arango.Protocol
         public string Name { get; set; }
 
         [JsonPropertyName("type")]
-        [JsonProperty(PropertyName = "type")] 
+        [JsonProperty(PropertyName = "type")]
         public ArangoIndexType Type { get; set; }
 
         [JsonPropertyName("fields")]

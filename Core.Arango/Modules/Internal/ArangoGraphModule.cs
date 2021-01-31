@@ -18,13 +18,6 @@ namespace Core.Arango.Modules.Internal
             Edge = new ArangoGraphEdgeModule(context);
         }
 
-        private class GraphRes
-        {
-            [JsonPropertyName("_key")]
-            [JsonProperty(PropertyName = "_key")]
-            public string Key { get; set; }
-        }
-
         public async Task<List<string>> ListAsync(ArangoHandle database,
             CancellationToken cancellationToken = default)
         {
@@ -50,6 +43,13 @@ namespace Core.Arango.Modules.Internal
             await SendAsync<ArangoVoid>(HttpMethod.Delete,
                 ApiPath(database, $"gharial/{UrlEncode(name)}"),
                 cancellationToken: cancellationToken);
+        }
+
+        private class GraphRes
+        {
+            [JsonPropertyName("_key")]
+            [JsonProperty(PropertyName = "_key")]
+            public string Key { get; set; }
         }
     }
 }

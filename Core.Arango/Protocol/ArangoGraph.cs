@@ -6,9 +6,8 @@ namespace Core.Arango.Protocol
 {
     public class ArangoGraph
     {
-
         [JsonPropertyName("name")]
-        [JsonProperty(PropertyName = "name")] 
+        [JsonProperty(PropertyName = "name")]
         public string Name { get; set; }
 
         [JsonPropertyName("edgeDefinitions")]

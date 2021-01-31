@@ -5,7 +5,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
 using Core.Arango.Protocol.Internal;
-using Newtonsoft.Json.Linq;
 
 namespace Core.Arango.Modules.Internal
 {
@@ -86,7 +85,7 @@ namespace Core.Arango.Modules.Internal
             CancellationToken cancellationToken = default)
         {
             return await SendAsync<ArangoCollection>(
-                HttpMethod.Get, 
+                HttpMethod.Get,
                 ApiPath(database, $"collection/{UrlEncode(collection)}"),
                 null, database.Transaction, cancellationToken: cancellationToken);
         }
