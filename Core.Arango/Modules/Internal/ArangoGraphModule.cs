@@ -37,7 +37,8 @@ namespace Core.Arango.Modules.Internal
                 request, cancellationToken: cancellationToken);
         }
 
-        public async Task AddVertexCollectionAsync(ArangoHandle database, string graph, ArangoVertexCollection vertexCollection,
+        public async Task AddVertexCollectionAsync(ArangoHandle database, string graph,
+            ArangoVertexCollection vertexCollection,
             CancellationToken cancellationToken = default)
         {
             await SendAsync<ArangoVoid>(HttpMethod.Post,
@@ -45,12 +46,56 @@ namespace Core.Arango.Modules.Internal
                 vertexCollection, cancellationToken: cancellationToken);
         }
 
-        public async Task AddEdgeDefinitionAsync(ArangoHandle database, string graph, ArangoEdgeDefinition edgeDefinition,
+        public async Task RemoveVertexCollectionAsync(ArangoHandle database, string graph, string vertexCollection,
+            bool? dropCollection = null,
+            CancellationToken cancellationToken = default)
+        {
+            var parameter = new Dictionary<string, string>();
+
+            if (dropCollection.HasValue)
+                parameter.Add("dropCollection", dropCollection.Value.ToString().ToLowerInvariant());
+
+            await SendAsync<ArangoVoid>(HttpMethod.Delete,
+                ApiPath(database, $"gharial/{UrlEncode(graph)}/vertex/{UrlEncode(vertexCollection)}", parameter),
+                cancellationToken: cancellationToken);
+        }
+
+        public async Task AddEdgeDefinitionAsync(ArangoHandle database, string graph,
+            ArangoEdgeDefinition edgeDefinition,
             CancellationToken cancellationToken = default)
         {
             await SendAsync<ArangoVoid>(HttpMethod.Post,
                 ApiPath(database, $"gharial/{UrlEncode(graph)}/edge"),
                 edgeDefinition, cancellationToken: cancellationToken);
+        }
+
+        public async Task ReplaceEdgeDefinitionAsync(ArangoHandle database, string graph,
+            ArangoEdgeDefinition edgeDefinition,
+            bool? dropCollections = null,
+            CancellationToken cancellationToken = default)
+        {
+            var parameter = new Dictionary<string, string>();
+
+            if (dropCollections.HasValue)
+                parameter.Add("dropCollections", dropCollections.Value.ToString().ToLowerInvariant());
+
+            await SendAsync<ArangoVoid>(HttpMethod.Put,
+                ApiPath(database, $"gharial/{UrlEncode(graph)}/edge/{UrlEncode(edgeDefinition.Collection)}", parameter),
+                cancellationToken: cancellationToken);
+        }
+
+        public async Task RemoveEdgeDefinitionAsync(ArangoHandle database, string graph, string edgeDefinition,
+            bool? dropCollections = null,
+            CancellationToken cancellationToken = default)
+        {
+            var parameter = new Dictionary<string, string>();
+
+            if (dropCollections.HasValue)
+                parameter.Add("dropCollections", dropCollections.Value.ToString().ToLowerInvariant());
+
+            await SendAsync<ArangoVoid>(HttpMethod.Delete,
+                ApiPath(database, $"gharial/{UrlEncode(graph)}/edge/{UrlEncode(edgeDefinition)}", parameter),
+                cancellationToken: cancellationToken);
         }
 
         public async Task DropAsync(ArangoHandle database, string name,

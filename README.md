@@ -227,19 +227,52 @@ await arango.View.CreateAsync("database", new ArangoView
 
 ## Create graph
 ```csharp
-await arango.Graph.CreateAsync("database", new ArangoGraph
+await arango.Collection.CreateAsync("database", "vertices", ArangoCollectionType.Document);
+await Arango.Collection.CreateAsync("database", "edges", ArangoCollectionType.Edge);
+
+await Arango.Graph.CreateAsync("database", new ArangoGraph
 {
-    Name = "SomeGraph",
-    EdgeDefinitions = new List<ArangoEdgeDefinition>
-    {
-        new ArangoEdgeDefinition
-        {
-            Collection = "collection_edges",
-            From = new List<string> {"collection"},
-            To = new List<string> {"collection"}
-        }
-    }
+	Name = "graph",
+	EdgeDefinitions = new List<ArangoEdgeDefinition>
+	{
+		new()
+		{
+			Collection = "edges",
+			From = new List<string> {"vertices"},
+			To = new List<string> {"vertices"}
+		}
+	}
 });
+```
+
+## Graph manipulation
+```csharp
+await arango.Graph.Vertex.CreateAsync("database", "graph", "vertices", new
+{
+	Key = "alice",
+	Name = "Alice"
+});
+
+await arango.Graph.Vertex.CreateAsync("database", "graph", "vertices", new
+{
+	Key = "bob",
+	Name = "Bob"
+});
+
+await arango.Graph.Edge.CreateAsync("database", "graph", "edges", new
+{
+	Key = "ab",
+	From = "vertices/alice",
+	To = "vertices/bob",
+	Label = "friend"
+});
+
+await arango.Graph.Edge.UpdateAsync("database", "graph", "edges", "ab", new
+{
+	Label = "foe"
+});
+
+await arango.Graph.Vertex.RemoveAsync("database", "graph", "vertices", "bob");
 ```
 
 ## Create custom function

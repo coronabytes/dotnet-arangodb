@@ -43,5 +43,27 @@ namespace Core.Arango.Modules
         /// </summary>
         Task AddEdgeDefinitionAsync(ArangoHandle database, string graph, ArangoEdgeDefinition edgeDefinition,
             CancellationToken cancellationToken = default);
+
+        /// <summary>
+        ///   Remove a vertex collection form the graph.
+        /// </summary>
+        Task RemoveVertexCollectionAsync(ArangoHandle database, string graph, string vertexCollection,
+            bool? dropCollection = null,
+            CancellationToken cancellationToken = default);
+
+        /// <summary>
+        ///   Replace an existing edge definition
+        /// </summary>
+        /// <returns></returns>
+        Task ReplaceEdgeDefinitionAsync(ArangoHandle database, string graph, ArangoEdgeDefinition edgeDefinition,
+            bool? dropCollections = null,
+            CancellationToken cancellationToken = default);
+
+        /// <summary>
+        ///   Remove an edge definition form the graph
+        /// </summary>
+        Task RemoveEdgeDefinitionAsync(ArangoHandle database, string graph, string edgeDefinition,
+            bool? dropCollections = null,
+            CancellationToken cancellationToken = default);
     }
 }

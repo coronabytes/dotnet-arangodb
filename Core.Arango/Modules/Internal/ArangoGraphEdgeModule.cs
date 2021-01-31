@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
@@ -26,9 +27,8 @@ namespace Core.Arango.Modules.Internal
             bool? waitForSync = null, bool? returnNew = null,
             CancellationToken cancellationToken = default)
         {
-            return await SendAsync<ArangoEdgeResponse<ArangoVoid>>(HttpMethod.Post,
-                ApiPath(database, $"gharial/{UrlEncode(graph)}/edge/{UrlEncode(collection)}"),
-                doc, cancellationToken: cancellationToken);
+            return await CreateAsync<T, ArangoVoid>(database, graph, collection, doc, waitForSync, returnNew,
+                cancellationToken);
         }
 
         public async Task<ArangoEdgeResponse<ArangoVoid>> UpdateAsync<T>(ArangoHandle database, string graph,
@@ -36,9 +36,8 @@ namespace Core.Arango.Modules.Internal
             bool? waitForSync = null, bool? keepNull = null, bool? returnNew = null, bool? returnOld = null,
             CancellationToken cancellationToken = default)
         {
-            return await SendAsync<ArangoEdgeResponse<ArangoVoid>>(HttpMethod.Patch,
-                ApiPath(database, $"gharial/{UrlEncode(graph)}/edge/{UrlEncode(collection)}/{key}"),
-                doc, cancellationToken: cancellationToken);
+            return await UpdateAsync<T, ArangoVoid>(database, graph, collection, key, doc, waitForSync, keepNull,
+                returnNew, returnOld, cancellationToken);
         }
 
         public async Task<ArangoEdgeResponse<ArangoVoid>> ReplaceAsync<T>(ArangoHandle database, string graph,
@@ -46,9 +45,8 @@ namespace Core.Arango.Modules.Internal
             bool? waitForSync = null, bool? keepNull = null, bool? returnNew = null, bool? returnOld = null,
             CancellationToken cancellationToken = default)
         {
-            return await SendAsync<ArangoEdgeResponse<ArangoVoid>>(HttpMethod.Put,
-                ApiPath(database, $"gharial/{UrlEncode(graph)}/edge/{UrlEncode(collection)}/{key}"),
-                doc, cancellationToken: cancellationToken);
+            return await ReplaceAsync<T, ArangoVoid>(database, graph, collection, key, doc, waitForSync, keepNull,
+                returnNew, returnOld, cancellationToken);
         }
 
         public async Task<ArangoEdgeResponse<ArangoVoid>> RemoveAsync<T>(ArangoHandle database, string graph,
@@ -56,9 +54,8 @@ namespace Core.Arango.Modules.Internal
             bool? waitForSync = null, bool? returnOld = null,
             CancellationToken cancellationToken = default)
         {
-            return await SendAsync<ArangoEdgeResponse<ArangoVoid>>(HttpMethod.Delete,
-                ApiPath(database, $"gharial/{UrlEncode(graph)}/edge/{UrlEncode(collection)}/{key}"),
-                cancellationToken: cancellationToken);
+            return await RemoveAsync<T, ArangoVoid>(database, graph, collection, key, waitForSync, returnOld,
+                cancellationToken);
         }
 
         public async Task<ArangoEdgeResponse<TR>> CreateAsync<T, TR>(ArangoHandle database, string graph,
@@ -66,8 +63,16 @@ namespace Core.Arango.Modules.Internal
             bool? waitForSync = null, bool? returnNew = null,
             CancellationToken cancellationToken = default)
         {
+            var parameter = new Dictionary<string, string>();
+
+            if (waitForSync.HasValue)
+                parameter.Add("waitForSync", waitForSync.Value.ToString().ToLowerInvariant());
+
+            if (returnNew.HasValue)
+                parameter.Add("returnNew", returnNew.Value.ToString().ToLowerInvariant());
+
             return await SendAsync<ArangoEdgeResponse<TR>>(HttpMethod.Post,
-                ApiPath(database, $"gharial/{UrlEncode(graph)}/edge/{UrlEncode(collection)}"),
+                ApiPath(database, $"gharial/{UrlEncode(graph)}/edge/{UrlEncode(collection)}", parameter),
                 doc, cancellationToken: cancellationToken);
         }
 
@@ -76,8 +81,22 @@ namespace Core.Arango.Modules.Internal
             bool? waitForSync = null, bool? keepNull = null, bool? returnNew = null, bool? returnOld = null,
             CancellationToken cancellationToken = default)
         {
+            var parameter = new Dictionary<string, string>();
+
+            if (waitForSync.HasValue)
+                parameter.Add("waitForSync", waitForSync.Value.ToString().ToLowerInvariant());
+
+            if (keepNull.HasValue)
+                parameter.Add("keepNull", keepNull.Value.ToString().ToLowerInvariant());
+
+            if (returnNew.HasValue)
+                parameter.Add("returnNew", returnNew.Value.ToString().ToLowerInvariant());
+
+            if (returnOld.HasValue)
+                parameter.Add("returnOld", returnOld.Value.ToString().ToLowerInvariant());
+
             return await SendAsync<ArangoEdgeResponse<TR>>(HttpMethod.Patch,
-                ApiPath(database, $"gharial/{UrlEncode(graph)}/edge/{UrlEncode(collection)}/{key}"),
+                ApiPath(database, $"gharial/{UrlEncode(graph)}/edge/{UrlEncode(collection)}/{key}", parameter),
                 doc, cancellationToken: cancellationToken);
         }
 
@@ -86,8 +105,22 @@ namespace Core.Arango.Modules.Internal
             bool? waitForSync = null, bool? keepNull = null, bool? returnNew = null, bool? returnOld = null,
             CancellationToken cancellationToken = default)
         {
+            var parameter = new Dictionary<string, string>();
+
+            if (waitForSync.HasValue)
+                parameter.Add("waitForSync", waitForSync.Value.ToString().ToLowerInvariant());
+
+            if (keepNull.HasValue)
+                parameter.Add("keepNull", keepNull.Value.ToString().ToLowerInvariant());
+
+            if (returnNew.HasValue)
+                parameter.Add("returnNew", returnNew.Value.ToString().ToLowerInvariant());
+
+            if (returnOld.HasValue)
+                parameter.Add("returnOld", returnOld.Value.ToString().ToLowerInvariant());
+
             return await SendAsync<ArangoEdgeResponse<TR>>(HttpMethod.Put,
-                ApiPath(database, $"gharial/{UrlEncode(graph)}/edge/{UrlEncode(collection)}/{key}"),
+                ApiPath(database, $"gharial/{UrlEncode(graph)}/edge/{UrlEncode(collection)}/{key}", parameter),
                 doc, cancellationToken: cancellationToken);
         }
 
@@ -96,8 +129,16 @@ namespace Core.Arango.Modules.Internal
             bool? waitForSync = null, bool? returnOld = null,
             CancellationToken cancellationToken = default)
         {
+            var parameter = new Dictionary<string, string>();
+
+            if (waitForSync.HasValue)
+                parameter.Add("waitForSync", waitForSync.Value.ToString().ToLowerInvariant());
+
+            if (returnOld.HasValue)
+                parameter.Add("returnOld", returnOld.Value.ToString().ToLowerInvariant());
+
             return await SendAsync<ArangoEdgeResponse<TR>>(HttpMethod.Delete,
-                ApiPath(database, $"gharial/{UrlEncode(graph)}/edge/{UrlEncode(collection)}/{key}"),
+                ApiPath(database, $"gharial/{UrlEncode(graph)}/edge/{UrlEncode(collection)}/{key}", parameter),
                 cancellationToken: cancellationToken);
         }
     }
