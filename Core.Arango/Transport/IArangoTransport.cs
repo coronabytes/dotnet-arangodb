@@ -12,5 +12,8 @@ namespace Core.Arango.Transport
 
         Task<T> SendAsync<T>(HttpMethod m, string url, object body = null, string transaction = null,
             bool throwOnError = true, bool auth = true, CancellationToken cancellationToken = default);
+
+        Task<HttpContent> SendContentAsync<T>(HttpMethod m, string url, HttpContent body = null, string transaction = null,
+            bool throwOnError = true, bool auth = true, CancellationToken cancellationToken = default);
     }
 }

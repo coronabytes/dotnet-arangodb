@@ -20,6 +20,7 @@ namespace Core.Arango
         IArangoIndexModule Index { get; }
         IArangoAnalyzerModule Analyzer { get; }
         IArangoFunctionModule Function { get; }
+        IArangoFoxxModule Foxx { get; }
         Task<Version> GetVersionAsync(CancellationToken cancellationToken = default);
         Task<IReadOnlyCollection<string>> GetEndpointsAsync(CancellationToken cancellationToken = default);
     }

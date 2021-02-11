@@ -36,6 +36,7 @@ namespace Core.Arango
             Index = new ArangoIndexModule(this);
             Analyzer = new ArangoAnalyzerModule(this);
             Function = new ArangoFunctionModule(this);
+            Foxx = new ArangoFoxxModule(this);
         }
 
         public ArangoContext(string cs, IArangoConfiguration settings = null)
@@ -54,6 +55,7 @@ namespace Core.Arango
             Index = new ArangoIndexModule(this);
             Analyzer = new ArangoAnalyzerModule(this);
             Function = new ArangoFunctionModule(this);
+            Foxx = new ArangoFoxxModule(this);
         }
 
         public IArangoUserModule User { get; }
@@ -68,6 +70,7 @@ namespace Core.Arango
         public IArangoAnalyzerModule Analyzer { get; }
         public IArangoFunctionModule Function { get; }
         public IArangoConfiguration Configuration { get; }
+        public IArangoFoxxModule Foxx { get; }
 
         private class VersionResponse
         {

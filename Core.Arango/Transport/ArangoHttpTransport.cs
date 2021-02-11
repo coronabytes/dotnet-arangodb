@@ -83,6 +83,37 @@ namespace Core.Arango.Transport
             return _configuration.Serializer.Deserialize<T>(content);
         }
 
+        public async Task<HttpContent> SendContentAsync<T>(HttpMethod m, string url, HttpContent body = null, string transaction = null,
+            bool throwOnError = true, bool auth = true, CancellationToken cancellationToken = default)
+        {
+            await Authenticate(auth, cancellationToken);
+
+            var msg = new HttpRequestMessage(m, _configuration.Server + url);
+
+            msg.Headers.Add(HttpRequestHeader.KeepAlive.ToString(), "true");
+
+            if (auth)
+                msg.Headers.Add(HttpRequestHeader.Authorization.ToString(), _auth);
+
+            if (transaction != null)
+                msg.Headers.Add("x-arango-trx-id", transaction);
+
+            msg.Content = body;
+
+            var res = await HttpClient.SendAsync(msg, cancellationToken);
+
+            if (!res.IsSuccessStatusCode)
+                if (throwOnError)
+                {
+                    var errorContent = await res.Content.ReadAsStringAsync();
+                    var error = _configuration.Serializer.Deserialize<ErrorResponse>(errorContent);
+                    throw new ArangoException(errorContent, error.ErrorMessage,
+                        (HttpStatusCode)error.Code, (ArangoErrorCode)error.ErrorNum);
+                }
+
+            return res.Content;
+        }
+
 
         public async Task<object> SendAsync(Type type, HttpMethod m, string url, object body = null,
             string transaction = null, bool throwOnError = true, bool auth = true,
