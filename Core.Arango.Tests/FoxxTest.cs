@@ -1,9 +1,9 @@
 using System.IO;
 using System.IO.Compression;
-using System.Net.Http;
-using System.Net.Http.Headers;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Core.Arango.Protocol;
 using Core.Arango.Tests.Core;
 using Xunit;
 
@@ -16,10 +16,7 @@ namespace Core.Arango.Tests
         {
             await SetupAsync("system-camel");
 
-            var data = new MultipartFormDataContent
-            {
-                {
-                    new StringContent(@"
+            await Arango.Foxx.InstallServiceAsync("test", "/sample/service", ArangoFoxxSource.FromJavaScript(@"
 'use strict';
 const createRouter = require('@arangodb/foxx/router');
 const router = createRouter();
@@ -32,12 +29,11 @@ router.get('/hello-world', function (req, res) {
 .response(['text/plain'], 'A generic greeting.')
 .summary('Generic greeting')
 .description('Prints a generic greeting.');
-", Encoding.UTF8, "application/javascript"),
-                    "source"
-                }
-            };
+            "));
 
-            var res = await Arango.Foxx.InstallServiceAsync("test", "/sample/service", data);
+            var services = await Arango.Foxx.ListServicesAsync("test", true);
+            Assert.Single(services);
+            Assert.Equal("/sample/service", services.First().Mount);
         }
 
         [Fact]
@@ -79,7 +75,7 @@ router.get('/hello-world', function (req, res) {
                 await using (var readme = zip.CreateEntry("README").Open())
                 {
                     await readme.WriteAsync(Encoding.UTF8.GetBytes(@"
-TEST TEST
+TEST
 "));
                 }
 
@@ -103,11 +99,12 @@ router.get('/hello-world', function (req, res) {
 
             ms.Position = 0;
 
-            var stream = new StreamContent(ms);
-            stream.Headers.ContentType = new MediaTypeHeaderValue("application/zip");
-            var data = new MultipartFormDataContent {{stream, "source"}};
+            await Arango.Foxx.InstallServiceAsync("test", "/sample/service", ArangoFoxxSource.FromZip(ms));
 
-            var res = await Arango.Foxx.InstallServiceAsync("test", "/sample/service", data);
+            var services = await Arango.Foxx.ListServicesAsync("test", true);
+
+            Assert.Single(services);
+            Assert.Equal("/sample/service", services.First().Mount);
         }
     }
 }

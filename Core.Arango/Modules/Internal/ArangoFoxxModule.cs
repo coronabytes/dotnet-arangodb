@@ -1,5 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.IO.Compression;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
@@ -12,7 +15,7 @@ namespace Core.Arango.Modules.Internal
         {
         }
 
-        public async Task<ArangoVoid> ListServicesAsync(ArangoHandle database, bool? excludeSystem = null,
+        public async Task<ICollection<ArangoFoxxService>> ListServicesAsync(ArangoHandle database, bool? excludeSystem = null,
             CancellationToken cancellationToken = default)
         {
             var parameter = new Dictionary<string, string>();
@@ -20,13 +23,33 @@ namespace Core.Arango.Modules.Internal
             if (excludeSystem.HasValue)
                 parameter.Add("excludeSystem", excludeSystem.Value.ToString().ToLowerInvariant());
 
-            return await SendAsync<ArangoVoid>(HttpMethod.Get,
+            return await SendAsync<List<ArangoFoxxService>>(HttpMethod.Get,
                 ApiPath(database, "foxx", parameter),
                 cancellationToken: cancellationToken);
         }
 
+        private MultipartFormDataContent PackService(ArangoFoxxSource service)
+        {
+            var content = new MultipartFormDataContent();
+
+            if (service.JavaScript != null)
+                content.Add(new StringContent(service.JavaScript, Encoding.UTF8, "application/javascript"), "source");
+            else if (service.Url != null)
+                content.Add(new StringContent(service.Url), "source");
+            else if (service.ZipArchive != null)
+            {
+                var stream = new StreamContent(service.ZipArchive);
+                stream.Headers.ContentType = new MediaTypeHeaderValue("application/zip");
+                content.Add(stream, "source");
+            }
+            else
+                throw new ArangoException("Invalid service description");
+                    
+            return content;
+        }
+
         public async Task<ArangoVoid> InstallServiceAsync(ArangoHandle database,
-            string mount, MultipartFormDataContent content,
+            string mount, ArangoFoxxSource service,
             bool? development = null, bool? setup = null, bool? legacy = null,
             CancellationToken cancellationToken = default)
         {
@@ -42,14 +65,14 @@ namespace Core.Arango.Modules.Internal
                 parameter.Add("legacy", legacy.Value.ToString().ToLowerInvariant());
 
             var res = await Context.Configuration.Transport.SendContentAsync<HttpContent>(HttpMethod.Post,
-                ApiPath(database, "foxx", parameter), content,
+                ApiPath(database, "foxx", parameter), PackService(service),
                 cancellationToken: cancellationToken);
 
             return new ArangoVoid();
         }
 
         public async Task<ArangoVoid> ReplaceServiceAsync(ArangoHandle database,
-            string mount, MultipartFormDataContent content,
+            string mount, ArangoFoxxSource service,
             bool? teardown = null, bool? setup = null, bool? legacy = null, bool? force = null,
             CancellationToken cancellationToken = default)
         {
@@ -68,14 +91,14 @@ namespace Core.Arango.Modules.Internal
                 parameter.Add("force", force.Value.ToString().ToLowerInvariant());
 
             var res = await Context.Configuration.Transport.SendContentAsync<HttpContent>(HttpMethod.Put,
-                ApiPath(database, "foxx", parameter), content,
+                ApiPath(database, "foxx", parameter), PackService(service),
                 cancellationToken: cancellationToken);
 
             return new ArangoVoid();
         }
 
         public async Task<ArangoVoid> UpgradeServiceAsync(ArangoHandle database,
-            string mount, MultipartFormDataContent content,
+            string mount, ArangoFoxxSource service,
             bool? teardown = null, bool? setup = null, bool? legacy = null, bool? force = null,
             CancellationToken cancellationToken = default)
         {
@@ -94,7 +117,7 @@ namespace Core.Arango.Modules.Internal
                 parameter.Add("force", force.Value.ToString().ToLowerInvariant());
 
             var res = await Context.Configuration.Transport.SendContentAsync<HttpContent>(HttpMethod.Patch,
-                ApiPath(database, "foxx", parameter), content,
+                ApiPath(database, "foxx", parameter), PackService(service),
                 cancellationToken: cancellationToken);
 
             return new ArangoVoid();

@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace Core.Arango.Protocol.Internal
 {
-    public class TransactionResponse
+    internal class TransactionResponse
     {
         [JsonPropertyName("id")]
         [JsonProperty("id")]

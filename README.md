@@ -309,3 +309,71 @@ await arango.Document.CreateAsync(transaction, "collection", new
 
 await arango.Transaction.CommitAsync(transaction);
 ```
+
+## Foxx services
+```csharp
+// Build Foxx service zip archive
+await using var ms = new MemoryStream();
+using (var zip = new ZipArchive(ms, ZipArchiveMode.Create, true, Encoding.UTF8))
+{
+    await using (var manifest = zip.CreateEntry("manifest.json").Open())
+    {
+        await manifest.WriteAsync(Encoding.UTF8.GetBytes(@"
+{
+  ""$schema"": ""http://json.schemastore.org/foxx-manifest"",
+  ""name"": ""SampleService"",
+  ""description"": ""test"",
+  ""version"": ""1.0.0"",
+  ""license"": ""MIT"",
+  ""engines"": {
+    ""arangodb"": ""^3.0.0""
+  },
+  ""main"": ""index.js"",
+  ""configuration"": {
+    ""currency"": {
+      ""description"": ""Currency symbol to use for prices in the shop."",
+      ""default"": ""$"",
+      ""type"": ""string""
+    },
+      ""secretKey"": {
+      ""description"": ""Secret key to use for signing session tokens."",
+      ""type"": ""password""
+    }
+  }
+}
+"));
+    }
+
+    await using (var readme = zip.CreateEntry("README").Open())
+    {
+        await readme.WriteAsync(Encoding.UTF8.GetBytes(@"
+README!
+"));
+    }
+
+    await using (var index = zip.CreateEntry("index.js").Open())
+    {
+        await index.WriteAsync(Encoding.UTF8.GetBytes(@"
+'use strict';
+const createRouter = require('@arangodb/foxx/router');
+const router = createRouter();
+
+module.context.use(router);
+router.get('/hello-world', function (req, res) {
+  res.send('Hello World!');
+})
+.response(['text/plain'], 'A generic greeting.')
+.summary('Generic greeting')
+.description('Prints a generic greeting.');
+"));
+    }
+}
+
+ms.Position = 0;
+
+// install service
+await Arango.Foxx.InstallServiceAsync("database", "/sample/service", ArangoFoxxSource.FromZip(ms));
+
+// list services excluding system services
+var services = await Arango.Foxx.ListServicesAsync("database", true);
+```

@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
@@ -7,7 +8,14 @@ namespace Core.Arango.Modules
 {
     public interface IArangoFoxxModule
     {
-        Task<ArangoVoid> ListServicesAsync(ArangoHandle database, bool? excludeSystem = null,
+        /// <summary>
+        ///   List installed services
+        /// </summary>
+        /// <param name="database"></param>
+        /// <param name="excludeSystem">Whether or not system services should be excluded from the result.</param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<ICollection<ArangoFoxxService>> ListServicesAsync(ArangoHandle database, bool? excludeSystem = null,
             CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -15,16 +23,13 @@ namespace Core.Arango.Modules
         /// </summary>
         /// <param name="database">Database the service should be installed at.</param>
         /// <param name="mount">Mount path the service should be installed at.</param>
-        /// <param name="content">
-        ///     Multipart content with single source field as application/zip, application/javascript,
-        ///     application/json or url
-        /// </param>
+        /// <param name="service"></param>
         /// <param name="development">Set to true to enable development mode.</param>
         /// <param name="setup">Set to false to not run the service’s setup script.</param>
         /// <param name="legacy">Set to true to install the service in 2.8 legacy compatibility mode.</param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<ArangoVoid> InstallServiceAsync(ArangoHandle database, string mount, MultipartFormDataContent content,
+        Task<ArangoVoid> InstallServiceAsync(ArangoHandle database, string mount, ArangoFoxxSource service,
             bool? development = null, bool? setup = null, bool? legacy = null,
             CancellationToken cancellationToken = default);
 
@@ -33,17 +38,14 @@ namespace Core.Arango.Modules
         /// </summary>
         /// <param name="database">Database the service should be installed at.</param>
         /// <param name="mount">Mount path the service should be installed at.</param>
-        /// <param name="content">
-        ///     Multipart content with single source field as application/zip, application/javascript,
-        ///     application/json or url
-        /// </param>
+        /// <param name="service"></param>
         /// <param name="teardown">Set to true to run the old service’s teardown script.</param>
         /// <param name="setup">Set to false to not run the service’s setup script.</param>
         /// <param name="legacy">Set to true to install the service in 2.8 legacy compatibility mode.</param>
         /// <param name="force">Set to true to force service install even if no service is installed under given mount.</param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<ArangoVoid> ReplaceServiceAsync(ArangoHandle database, string mount, MultipartFormDataContent content,
+        Task<ArangoVoid> ReplaceServiceAsync(ArangoHandle database, string mount, ArangoFoxxSource service,
             bool? teardown = null, bool? setup = null, bool? legacy = null, bool? force = null,
             CancellationToken cancellationToken = default);
 
@@ -52,17 +54,14 @@ namespace Core.Arango.Modules
         /// </summary>
         /// <param name="database">Database the service should be installed at.</param>
         /// <param name="mount">Mount path the service should be installed at.</param>
-        /// <param name="content">
-        ///     Multipart content with single source field as application/zip, application/javascript,
-        ///     application/json or url
-        /// </param>
+        /// <param name="service"></param>
         /// <param name="teardown">Set to true to run the old service’s teardown script.</param>
         /// <param name="setup">Set to false to not run the service’s setup script.</param>
         /// <param name="legacy">Set to true to install the service in 2.8 legacy compatibility mode.</param>
         /// <param name="force">Set to true to force service install even if no service is installed under given mount.</param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<ArangoVoid> UpgradeServiceAsync(ArangoHandle database, string mount, MultipartFormDataContent content,
+        Task<ArangoVoid> UpgradeServiceAsync(ArangoHandle database, string mount, ArangoFoxxSource service,
             bool? teardown = null, bool? setup = null, bool? legacy = null, bool? force = null,
             CancellationToken cancellationToken = default);
 
