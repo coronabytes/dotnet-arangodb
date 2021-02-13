@@ -45,6 +45,17 @@ namespace Core.Arango.Modules.Internal
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        protected string FoxxPath(ArangoHandle handle, string path, IDictionary<string, string> parameter = null)
+        {
+            var req = $"/_db/{RealmPrefix(handle)}{path}";
+
+            if (parameter?.Any() == true)
+                req = AddQueryString(req, parameter);
+
+            return req;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected string ApiPath(string path)
         {
             return $"/_api/{path}";

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.IO.Compression;
+using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -64,7 +64,7 @@ namespace Core.Arango.Modules.Internal
             if (legacy.HasValue)
                 parameter.Add("legacy", legacy.Value.ToString().ToLowerInvariant());
 
-            var res = await Context.Configuration.Transport.SendContentAsync<HttpContent>(HttpMethod.Post,
+            var res = await Context.Configuration.Transport.SendContentAsync(HttpMethod.Post,
                 ApiPath(database, "foxx", parameter), PackService(service),
                 cancellationToken: cancellationToken);
 
@@ -90,8 +90,8 @@ namespace Core.Arango.Modules.Internal
             if (force.HasValue)
                 parameter.Add("force", force.Value.ToString().ToLowerInvariant());
 
-            var res = await Context.Configuration.Transport.SendContentAsync<HttpContent>(HttpMethod.Put,
-                ApiPath(database, "foxx", parameter), PackService(service),
+            var res = await Context.Configuration.Transport.SendContentAsync(HttpMethod.Put,
+                ApiPath(database, "foxx/service", parameter), PackService(service),
                 cancellationToken: cancellationToken);
 
             return new ArangoVoid();
@@ -116,8 +116,8 @@ namespace Core.Arango.Modules.Internal
             if (force.HasValue)
                 parameter.Add("force", force.Value.ToString().ToLowerInvariant());
 
-            var res = await Context.Configuration.Transport.SendContentAsync<HttpContent>(HttpMethod.Patch,
-                ApiPath(database, "foxx", parameter), PackService(service),
+            var res = await Context.Configuration.Transport.SendContentAsync(HttpMethod.Patch,
+                ApiPath(database, "foxx/service", parameter), PackService(service),
                 cancellationToken: cancellationToken);
 
             return new ArangoVoid();
@@ -198,6 +198,94 @@ namespace Core.Arango.Modules.Internal
 
             return await SendAsync<ArangoVoid>(HttpMethod.Put,
                 ApiPath(database, "foxx/dependencies", parameter), dependencies,
+                cancellationToken: cancellationToken);
+        }
+
+        public async Task EnableDevelopmentModeAsync(ArangoHandle database, string mount,
+            CancellationToken cancellationToken = default)
+        {
+            var parameter = new Dictionary<string, string> {{"mount", mount}};
+
+            await SendAsync<ArangoVoid>(HttpMethod.Post,
+                ApiPath(database, "foxx/development", parameter),
+                cancellationToken: cancellationToken);
+        }
+
+        public async Task DisableDevelopmentModeAsync(ArangoHandle database, string mount,
+            CancellationToken cancellationToken = default)
+        {
+            var parameter = new Dictionary<string, string> {{"mount", mount}};
+
+            await SendAsync<ArangoVoid>(HttpMethod.Delete,
+                ApiPath(database, "foxx/development", parameter),
+                cancellationToken: cancellationToken);
+        }
+
+        public async Task<T> GetAsync<T>(ArangoHandle database, string mount, 
+            IDictionary<string, string> queryParams = null,
+            CancellationToken cancellationToken = default)
+        {
+            return await SendAsync<T>(HttpMethod.Get,
+                FoxxPath(database, mount, queryParams),
+                cancellationToken: cancellationToken);
+        }
+
+        public async Task<T> PostAsync<T>(ArangoHandle database, string mount, object body,
+            IDictionary<string, string> queryParams = null,
+            CancellationToken cancellationToken = default)
+        {
+            return await SendAsync<T>(HttpMethod.Post,
+                FoxxPath(database, mount, queryParams), body,
+                cancellationToken: cancellationToken);
+        }
+
+        public async Task<T> PutAsync<T>(ArangoHandle database, string mount, object body,
+            IDictionary<string, string> queryParams = null,
+            CancellationToken cancellationToken = default)
+        {
+            return await SendAsync<T>(HttpMethod.Post,
+                FoxxPath(database, mount, queryParams), body,
+                cancellationToken: cancellationToken);
+        }
+
+        public async Task<T> PatchAsync<T>(ArangoHandle database, string mount, object body,
+            IDictionary<string, string> queryParams = null,
+            CancellationToken cancellationToken = default)
+        {
+            return await SendAsync<T>(HttpMethod.Post,
+                FoxxPath(database, mount, queryParams), body,
+                cancellationToken: cancellationToken);
+        }
+
+        public async Task<T> DeleteAsync<T>(ArangoHandle database, string mount,
+            IDictionary<string, string> queryParams = null,
+            CancellationToken cancellationToken = default)
+        {
+            return await SendAsync<T>(HttpMethod.Delete,
+                FoxxPath(database, mount, queryParams),
+                cancellationToken: cancellationToken);
+        }
+
+        public async Task<Stream> DownloadServiceAsync<T>(ArangoHandle database, string mount,
+            CancellationToken cancellationToken = default)
+        {
+            var parameter = new Dictionary<string, string> {{"mount", mount}};
+
+            var res = await Context.Configuration.Transport.SendContentAsync(HttpMethod.Post,
+                ApiPath(database, "foxx/download", parameter),
+                cancellationToken: cancellationToken);
+
+            return await res.ReadAsStreamAsync();
+        }
+
+        public async Task<T> RunServiceScriptAsync<T>(ArangoHandle database, string mount, string name, 
+            object body = null,
+            CancellationToken cancellationToken = default)
+        {
+            var parameter = new Dictionary<string, string> {{"mount", mount}};
+
+           return await SendAsync<T>(HttpMethod.Post,
+                ApiPath(database, $"foxx/scripts/{UrlEncode(name)}", parameter), body,
                 cancellationToken: cancellationToken);
         }
     }

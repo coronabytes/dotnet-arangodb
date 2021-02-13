@@ -77,13 +77,13 @@ namespace Core.Arango.Transport
                 throw new ArangoException(content, errors);
             }
 
-            if (content == "{}")
+            if (content == "{}" || string.IsNullOrWhiteSpace(content))
                 return default;
 
             return _configuration.Serializer.Deserialize<T>(content);
         }
 
-        public async Task<HttpContent> SendContentAsync<T>(HttpMethod m, string url, HttpContent body = null, string transaction = null,
+        public async Task<HttpContent> SendContentAsync(HttpMethod m, string url, HttpContent body = null, string transaction = null,
             bool throwOnError = true, bool auth = true, CancellationToken cancellationToken = default)
         {
             await Authenticate(auth, cancellationToken);
@@ -146,7 +146,7 @@ namespace Core.Arango.Transport
 
             var content = await res.Content.ReadAsStringAsync();
 
-            if (content == "{}")
+            if (content == "{}" || string.IsNullOrWhiteSpace(content))
                 return default;
 
             return _configuration.Serializer.Deserialize(content, type);

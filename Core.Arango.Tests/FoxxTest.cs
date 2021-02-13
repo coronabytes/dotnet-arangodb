@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -36,12 +37,9 @@ router.get('/hello-world', function (req, res) {
             Assert.Equal("/sample/service", services.First().Mount);
         }
 
-        [Fact]
-        public async Task InstallZip()
+        private async Task<Stream> BuildService(string response)
         {
-            await SetupAsync("system-camel");
-
-            await using var ms = new MemoryStream();
+            var ms = new MemoryStream();
             using (var zip = new ZipArchive(ms, ZipArchiveMode.Create, true, Encoding.UTF8))
             {
                 await using (var manifest = zip.CreateEntry("manifest.json").Open())
@@ -81,16 +79,16 @@ TEST
 
                 await using (var index = zip.CreateEntry("index.js").Open())
                 {
-                    await index.WriteAsync(Encoding.UTF8.GetBytes(@"
+                    await index.WriteAsync(Encoding.UTF8.GetBytes($@"
 'use strict';
 const createRouter = require('@arangodb/foxx/router');
 const router = createRouter();
 
 module.context.use(router);
-router.get('/hello-world', function (req, res) {
-  res.send('Hello World!');
-})
-.response(['text/plain'], 'A generic greeting.')
+router.get('/hello-world', function (req, res) {{
+  res.send({{ hello: '{response}' }});
+}})
+.response(['application/json'], 'A generic greeting.')
 .summary('Generic greeting')
 .description('Prints a generic greeting.');
 "));
@@ -98,13 +96,42 @@ router.get('/hello-world', function (req, res) {
             }
 
             ms.Position = 0;
+            return ms;
+        }
 
-            await Arango.Foxx.InstallServiceAsync("test", "/sample/service", ArangoFoxxSource.FromZip(ms));
+        [Fact]
+        public async Task InstallZip()
+        {
+            await SetupAsync("system-camel");
+            
+            await Arango.Foxx.InstallServiceAsync("test", "/sample/service", 
+                ArangoFoxxSource.FromZip(await BuildService("world")));
+
+            await Arango.Foxx.ReplaceConfigurationAsync("test", "/sample/service", new
+            {
+                currency = "€",
+                secretKey = "s3cr3t"
+            });
 
             var services = await Arango.Foxx.ListServicesAsync("test", true);
 
             Assert.Single(services);
             Assert.Equal("/sample/service", services.First().Mount);
+
+            var res = await Arango.Foxx.GetAsync<Dictionary<string, string>>("test", "/sample/service/hello-world");
+            Assert.Equal("world", res["hello"]);
+
+            await Arango.Foxx.UpgradeServiceAsync("test", "/sample/service", 
+                ArangoFoxxSource.FromZip(await BuildService("universe")));
+
+            var res2 = await Arango.Foxx.GetAsync<Dictionary<string, string>>("test", "/sample/service/hello-world");
+            Assert.Equal("universe", res2["hello"]);
+
+            await Arango.Foxx.UninstallServiceAsync("test", "/sample/service");
+
+            services = await Arango.Foxx.ListServicesAsync("test", true);
+
+            Assert.Empty(services);
         }
     }
 }
