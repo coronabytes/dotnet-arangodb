@@ -54,7 +54,7 @@ namespace Core.Arango.Modules.Internal
 
             var query = AddQueryString(ApiPath(database, $"document/{UrlEncode(collection)}"), parameter);
 
-            return await SendAsync<List<ArangoUpdateResult<TR>>>(HttpMethod.Post, query,
+            return await SendAsync<List<ArangoUpdateResult<TR>>>(database, HttpMethod.Post, query,
                 docs,
                 database.Transaction, cancellationToken: cancellationToken);
         }

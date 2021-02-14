@@ -52,7 +52,7 @@ namespace Core.Arango.Modules.Internal
 
             try
             {
-                var firstResult = await SendAsync<QueryResponse<T>>(HttpMethod.Post,
+                var firstResult = await SendAsync<QueryResponse<T>>(database, HttpMethod.Post,
                     ApiPath(database, "cursor"),
                     new QueryRequest
                     {
@@ -73,7 +73,7 @@ namespace Core.Arango.Modules.Internal
                 if (fullCount.HasValue && fullCount.Value)
                     final.FullCount = firstResult.Extra.Statistic.FullCount;
 
-                if (!firstResult.HasMore)
+                if (!firstResult.HasMore || database.Batches != null)
                     return final;
 
                 while (true)
@@ -154,7 +154,7 @@ namespace Core.Arango.Modules.Internal
         {
             query = query.Trim();
 
-            var firstResult = await SendAsync<QueryResponse<T>>(HttpMethod.Post,
+            var firstResult = await SendAsync<QueryResponse<T>>(database, HttpMethod.Post,
                 ApiPath(database, "cursor"),
                 new QueryRequest
                 {
@@ -169,7 +169,7 @@ namespace Core.Arango.Modules.Internal
             foreach (var result in firstResult.Result)
                 yield return result;
 
-            if (!firstResult.HasMore)
+            if (!firstResult.HasMore || database.Batches != null)
                 yield break;
 
             while (true)

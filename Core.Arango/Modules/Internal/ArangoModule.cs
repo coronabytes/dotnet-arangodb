@@ -77,6 +77,18 @@ namespace Core.Arango.Modules.Internal
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Task<T> SendAsync<T>(ArangoHandle handle, HttpMethod m, string url, object body = null,
+            string transaction = null, bool throwOnError = true, bool auth = true,
+            CancellationToken cancellationToken = default)
+        {
+            if (handle.Batches != null)
+                return Context.Configuration.Transport.WriteBatchAsync<T>(handle, m, url, body);
+
+            return Context.Configuration.Transport.SendAsync<T>(m, url, body, transaction, throwOnError, auth,
+                cancellationToken);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Task<object> SendAsync(Type type, HttpMethod m, string url, object body = null,
             string transaction = null, bool throwOnError = true, bool auth = true,
             CancellationToken cancellationToken = default)

@@ -15,5 +15,9 @@ namespace Core.Arango.Modules
 
         Task<T> ExecuteAsync<T>(ArangoHandle database, ArangoTransaction request,
             CancellationToken cancellationToken = default);
+
+        ArangoHandle CreateBatch(ArangoHandle database);
+
+        Task ExecuteBatch(ArangoHandle database);
     }
 }
