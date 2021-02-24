@@ -17,6 +17,7 @@ namespace Core.Arango.Modules.Internal
         {
             var res = await SendAsync<ArangoVertexResponse<TR>>(HttpMethod.Get,
                 ApiPath(database, $"gharial/{UrlEncode(graph)}/vertex/{UrlEncode(collection)}"),
+                transaction: database.Transaction,
                 cancellationToken: cancellationToken);
 
             return res.Vertex;
@@ -46,7 +47,7 @@ namespace Core.Arango.Modules.Internal
 
             return await SendAsync<ArangoVertexResponse<TR>>(HttpMethod.Post,
                 ApiPath(database, $"gharial/{UrlEncode(graph)}/vertex/{UrlEncode(collection)}", parameter),
-                doc, cancellationToken: cancellationToken);
+                doc, database.Transaction, cancellationToken: cancellationToken);
         }
 
         public async Task<ArangoVertexResponse<ArangoVoid>> UpdateAsync<T>(ArangoHandle database, string graph,
@@ -79,7 +80,7 @@ namespace Core.Arango.Modules.Internal
 
             return await SendAsync<ArangoVertexResponse<TR>>(HttpMethod.Patch,
                 ApiPath(database, $"gharial/{UrlEncode(graph)}/vertex/{UrlEncode(collection)}/{key}", parameter),
-                doc, cancellationToken: cancellationToken);
+                doc, database.Transaction, cancellationToken: cancellationToken);
         }
 
         public async Task<ArangoVertexResponse<ArangoVoid>> ReplaceAsync<T>(ArangoHandle database, string graph,
@@ -112,7 +113,7 @@ namespace Core.Arango.Modules.Internal
 
             return await SendAsync<ArangoVertexResponse<TR>>(HttpMethod.Put,
                 ApiPath(database, $"gharial/{UrlEncode(graph)}/vertex/{UrlEncode(collection)}/{key}", parameter),
-                doc, cancellationToken: cancellationToken);
+                doc, database.Transaction, cancellationToken: cancellationToken);
         }
 
         public async Task<ArangoVertexResponse<ArangoVoid>> RemoveAsync(ArangoHandle database, string graph,
@@ -139,7 +140,7 @@ namespace Core.Arango.Modules.Internal
 
             return await SendAsync<ArangoVertexResponse<TR>>(HttpMethod.Delete,
                 ApiPath(database, $"gharial/{UrlEncode(graph)}/vertex/{UrlEncode(collection)}/{key}", parameter),
-                cancellationToken: cancellationToken, throwOnError: false);
+                transaction: database.Transaction, cancellationToken: cancellationToken, throwOnError: false);
         }
     }
 }
