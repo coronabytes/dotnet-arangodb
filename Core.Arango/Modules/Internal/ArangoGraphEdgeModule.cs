@@ -17,6 +17,7 @@ namespace Core.Arango.Modules.Internal
         {
             var res = await SendAsync<ArangoEdgeResponse<TR>>(HttpMethod.Get,
                 ApiPath(database, $"gharial/{UrlEncode(graph)}/vertex/{UrlEncode(collection)}"),
+                transaction: database.Transaction,
                 cancellationToken: cancellationToken);
 
             return res.Edge;
@@ -73,7 +74,7 @@ namespace Core.Arango.Modules.Internal
 
             return await SendAsync<ArangoEdgeResponse<TR>>(HttpMethod.Post,
                 ApiPath(database, $"gharial/{UrlEncode(graph)}/edge/{UrlEncode(collection)}", parameter),
-                doc, cancellationToken: cancellationToken);
+                doc, database.Transaction, cancellationToken: cancellationToken);
         }
 
         public async Task<ArangoEdgeResponse<TR>> UpdateAsync<T, TR>(ArangoHandle database, string graph,
@@ -97,7 +98,7 @@ namespace Core.Arango.Modules.Internal
 
             return await SendAsync<ArangoEdgeResponse<TR>>(HttpMethod.Patch,
                 ApiPath(database, $"gharial/{UrlEncode(graph)}/edge/{UrlEncode(collection)}/{key}", parameter),
-                doc, cancellationToken: cancellationToken);
+                doc, database.Transaction, cancellationToken: cancellationToken);
         }
 
         public async Task<ArangoEdgeResponse<TR>> ReplaceAsync<T, TR>(ArangoHandle database, string graph,
@@ -121,7 +122,7 @@ namespace Core.Arango.Modules.Internal
 
             return await SendAsync<ArangoEdgeResponse<TR>>(HttpMethod.Put,
                 ApiPath(database, $"gharial/{UrlEncode(graph)}/edge/{UrlEncode(collection)}/{key}", parameter),
-                doc, cancellationToken: cancellationToken);
+                doc, database.Transaction, cancellationToken: cancellationToken);
         }
 
         public async Task<ArangoEdgeResponse<TR>> RemoveAsync<T, TR>(ArangoHandle database, string graph,
@@ -139,6 +140,7 @@ namespace Core.Arango.Modules.Internal
 
             return await SendAsync<ArangoEdgeResponse<TR>>(HttpMethod.Delete,
                 ApiPath(database, $"gharial/{UrlEncode(graph)}/edge/{UrlEncode(collection)}/{key}", parameter),
+                transaction: database.Transaction,
                 cancellationToken: cancellationToken);
         }
     }

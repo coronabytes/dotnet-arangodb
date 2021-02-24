@@ -76,10 +76,10 @@ namespace Core.Arango.Tests
 
             var start = "vertices/alice";
 
-            var friends = await Arango.Query.ExecuteAsync<Vertex>("test",$@"
-FOR v, e IN 1..1 OUTBOUND {start} GRAPH 'graph' 
-FILTER e.label == 'friend'
-RETURN v");
+            var friends = await Arango.Query.ExecuteAsync<Vertex>("test", $@"
+                FOR v, e IN 1..1 OUTBOUND {start} GRAPH 'graph' 
+                FILTER e.label == 'friend'
+                RETURN v");
 
             Assert.Single(friends);
 
@@ -89,20 +89,136 @@ RETURN v");
             });
 
             friends = await Arango.Query.ExecuteAsync<Vertex>("test", $@"
-FOR v, e IN 1..1 OUTBOUND {start} GRAPH 'graph' 
-FILTER e.label == 'friend'
-RETURN v");
+                FOR v, e IN 1..1 OUTBOUND {start} GRAPH 'graph' 
+                FILTER e.label == 'friend'
+                RETURN v");
 
             Assert.Equal(2, friends.Count);
 
             await Arango.Graph.Vertex.RemoveAsync("test", "graph", "vertices", "bob");
-            
+
             friends = await Arango.Query.ExecuteAsync<Vertex>("test", $@"
-FOR v, e IN 1..1 OUTBOUND {start} GRAPH 'graph' 
-FILTER e.label == 'friend'
-RETURN v");
+                FOR v, e IN 1..1 OUTBOUND {start} GRAPH 'graph' 
+                FILTER e.label == 'friend'
+                RETURN v");
 
             Assert.Single(friends);
+
+            await Arango.Graph.DropAsync("test", "graph");
+        }
+
+        [Theory]
+        [ClassData(typeof(CamelCaseData))]
+        public async Task TransactionalOperations(string serializer)
+        {
+            await SetupAsync(serializer);
+            await Arango.Collection.CreateAsync("test", "vertices", ArangoCollectionType.Document);
+            await Arango.Collection.CreateAsync("test", "edges", ArangoCollectionType.Edge);
+
+            await Arango.Graph.CreateAsync("test", new ArangoGraph
+            {
+                Name = "graph",
+                EdgeDefinitions = new List<ArangoEdgeDefinition>
+                {
+                    new()
+                    {
+                        Collection = "edges",
+                        From = new List<string> {"vertices"},
+                        To = new List<string> {"vertices"}
+                    }
+                }
+            });
+
+            var transaction0 = await Arango.Transaction.BeginAsync("test", new() { Collections = new() { Write = new[] { "vertices", "edges" } } });
+
+            await Arango.Graph.Vertex.CreateAsync(transaction0, "graph", "vertices", new
+            {
+                Key = "alice",
+                Name = "Alice"
+            });
+
+            await Arango.Graph.Vertex.CreateAsync("test", "graph", "vertices", new
+            {
+                Key = "bob",
+                Name = "Bob"
+            });
+
+            await Arango.Graph.Vertex.CreateAsync("test", "graph", "vertices", new
+            {
+                Key = "cesar",
+                Name = "Cesar"
+            });
+
+            var nodes = await Arango.Query.ExecuteAsync<Vertex>("test", $@"FOR v IN {"vertices":@} RETURN v");
+
+            Assert.Equal(2, nodes.Count);
+
+            nodes = await Arango.Query.ExecuteAsync<Vertex>(transaction0, $@"FOR v IN {"vertices":@} RETURN v");
+
+            Assert.Collection(nodes, node => Assert.Equal("Alice", node.Name));
+
+            await Arango.Transaction.CommitAsync(transaction0);
+
+            nodes = await Arango.Query.ExecuteAsync<Vertex>("test", $@"FOR v IN {"vertices":@} RETURN v");
+
+            Assert.Equal(3, nodes.Count);
+
+            var transaction1 = await Arango.Transaction.BeginAsync("test", new() { Collections = new() { Write = new[] { "vertices", "edges" } } });
+
+            await Arango.Graph.Edge.CreateAsync(transaction1, "graph", "edges", new
+            {
+                Key = "ab",
+                From = "vertices/alice",
+                To = "vertices/bob",
+                Label = "friend"
+            });
+
+            var transaction2 = await Arango.Transaction.BeginAsync("test", new() { Collections = new() { Write = new[] { "vertices", "edges" } } });
+
+            await Arango.Graph.Edge.CreateAsync(transaction2, "graph", "edges", new
+            {
+                Key = "ac",
+                From = "vertices/alice",
+                To = "vertices/cesar",
+                Label = "friend"
+            });
+
+
+            var start = "vertices/alice";
+
+            var friends = await Arango.Query.ExecuteAsync<Vertex>("test", $@"
+                FOR v, e IN 1..1 OUTBOUND {start} GRAPH 'graph'
+                RETURN v");
+
+            Assert.Empty(friends);
+
+            friends = await Arango.Query.ExecuteAsync<Vertex>(transaction1, $@"
+                FOR v, e IN 1..1 OUTBOUND {start} GRAPH 'graph'
+                RETURN v");
+
+            Assert.Collection(friends, friend => Assert.Equal("Bob", friend.Name));
+
+            friends = await Arango.Query.ExecuteAsync<Vertex>(transaction2, $@"
+                FOR v, e IN 1..1 OUTBOUND {start} GRAPH 'graph'
+                RETURN v");
+
+            Assert.Collection(friends, friend => Assert.Equal("Cesar", friend.Name));
+
+            await Arango.Transaction.CommitAsync(transaction1);
+
+            friends = await Arango.Query.ExecuteAsync<Vertex>("test", $@"
+                FOR v, e IN 1..1 OUTBOUND {start} GRAPH 'graph'
+                RETURN v");
+
+            Assert.Collection(friends, friend => Assert.Equal("Bob", friend.Name));
+
+            await Arango.Transaction.CommitAsync(transaction2);
+
+            friends = await Arango.Query.ExecuteAsync<Vertex>("test", $@"
+                FOR v, e IN 1..1 OUTBOUND {start} GRAPH 'graph'
+                RETURN v");
+
+            Assert.Equal(2, friends.Count);
 
             await Arango.Graph.DropAsync("test", "graph");
         }
