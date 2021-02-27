@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Core.Arango.Modules;
+using Core.Arango.Protocol;
 
 namespace Core.Arango
 {
@@ -21,7 +22,9 @@ namespace Core.Arango
         IArangoAnalyzerModule Analyzer { get; }
         IArangoFunctionModule Function { get; }
         IArangoFoxxModule Foxx { get; }
-        Task<Version> GetVersionAsync(CancellationToken cancellationToken = default);
+        IArangoBackupModule Backup { get; }
+        IArangoBatchModule Batch { get; }
+        Task<ArangoVersion> GetVersionAsync(CancellationToken cancellationToken = default);
         Task<IReadOnlyCollection<string>> GetEndpointsAsync(CancellationToken cancellationToken = default);
     }
 }

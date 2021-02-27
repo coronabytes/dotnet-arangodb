@@ -23,7 +23,7 @@ namespace Core.Arango.Tests
                     Write = new List<string> { "test" }
                 }
             });
-            var batch = Arango.Transaction.CreateBatch(trx);
+            var batch = Arango.Batch.Create(trx);
 
             var r1 = Arango.Document.CreateAsync(batch, "test", new Entity
             {
@@ -33,11 +33,11 @@ namespace Core.Arango.Tests
 
             var r2 = Arango.Document.CreateAsync(batch, "test", new Entity
             {
-                Key = "2",
+                Key = "1",
                 Name = "b"
             });
 
-            await Arango.Transaction.ExecuteBatch(batch);
+            await Arango.Batch.ExecuteAsync(batch);
             await Arango.Transaction.AbortAsync(trx);
 
             await r1;

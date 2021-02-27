@@ -90,7 +90,7 @@ namespace Core.Arango.Tests
         public async Task CreateUpdateMode(string serializer)
         {
             await SetupAsync(serializer);
-            if (await Arango.GetVersionAsync() < Version.Parse("3.7"))
+            if ((await Arango.GetVersionAsync()).SemanticVersion < Version.Parse("3.7"))
                 return;
 
             await Arango.Collection.CreateAsync("test", "test", ArangoCollectionType.Document);
@@ -125,7 +125,7 @@ namespace Core.Arango.Tests
         public async Task CreateReplaceMode(string serializer)
         {
             await SetupAsync(serializer);
-            if (await Arango.GetVersionAsync() < Version.Parse("3.7"))
+            if ((await Arango.GetVersionAsync()).SemanticVersion < Version.Parse("3.7"))
                 return;
 
             await Arango.Collection.CreateAsync("test", "test", ArangoCollectionType.Document);
@@ -160,7 +160,7 @@ namespace Core.Arango.Tests
         public async Task CreateConflictMode(string serializer)
         {
             await SetupAsync(serializer);
-            if (await Arango.GetVersionAsync() < Version.Parse("3.7"))
+            if ((await Arango.GetVersionAsync()).SemanticVersion < Version.Parse("3.7"))
                 return;
 
             await Arango.Collection.CreateAsync("test", "test", ArangoCollectionType.Document);

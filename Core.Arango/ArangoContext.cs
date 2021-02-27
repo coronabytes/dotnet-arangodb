@@ -10,6 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Core.Arango.Modules;
 using Core.Arango.Modules.Internal;
+using Core.Arango.Protocol;
 using Core.Arango.Protocol.Internal;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -37,6 +38,8 @@ namespace Core.Arango
             Analyzer = new ArangoAnalyzerModule(this);
             Function = new ArangoFunctionModule(this);
             Foxx = new ArangoFoxxModule(this);
+            Batch = new ArangoBatchModule(this);
+            Backup = new ArangoBackupModule(this);
         }
 
         public ArangoContext(string cs, IArangoConfiguration settings = null)
@@ -56,6 +59,8 @@ namespace Core.Arango
             Analyzer = new ArangoAnalyzerModule(this);
             Function = new ArangoFunctionModule(this);
             Foxx = new ArangoFoxxModule(this);
+            Batch = new ArangoBatchModule(this);
+            Backup = new ArangoBackupModule(this);
         }
 
         public IArangoUserModule User { get; }
@@ -71,23 +76,21 @@ namespace Core.Arango
         public IArangoFunctionModule Function { get; }
         public IArangoConfiguration Configuration { get; }
         public IArangoFoxxModule Foxx { get; }
+        public IArangoBackupModule Backup { get; }
+        public IArangoBatchModule Batch { get; }
 
-        private class VersionResponse
-        {
-            [JsonPropertyName("version")]
-            [JsonProperty("version")]
-           public string Version { get; set; }
-        }
+      
 
-        public async Task<Version> GetVersionAsync(CancellationToken cancellationToken = default)
+        public async Task<ArangoVersion> GetVersionAsync(CancellationToken cancellationToken = default)
         {
-            var res = await Configuration.Transport.SendAsync<VersionResponse>(HttpMethod.Get,
+            var res = await Configuration.Transport.SendAsync<ArangoVersion>(HttpMethod.Get,
                 "/_db/_system/_api/version",
                 cancellationToken: cancellationToken);
 
-            var version = res.Version;
-            version = Regex.Replace(version, "[^0-9.]", string.Empty);
-            return Version.Parse(version);
+            var clean = Regex.Replace(res.Version, "[^0-9.]", string.Empty);
+
+            res.SemanticVersion = Version.Parse(clean);
+            return res;
         }
 
         public async Task<IReadOnlyCollection<string>> GetEndpointsAsync(CancellationToken cancellationToken = default)
