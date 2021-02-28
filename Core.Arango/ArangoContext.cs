@@ -79,8 +79,6 @@ namespace Core.Arango
         public IArangoBackupModule Backup { get; }
         public IArangoBatchModule Batch { get; }
 
-      
-
         public async Task<ArangoVersion> GetVersionAsync(CancellationToken cancellationToken = default)
         {
             var res = await Configuration.Transport.SendAsync<ArangoVersion>(HttpMethod.Get,

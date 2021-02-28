@@ -21,7 +21,7 @@ namespace Core.Arango.Modules.Internal
         public async Task<List<string>> ListAsync(ArangoHandle database,
             CancellationToken cancellationToken = default)
         {
-            var res = await SendAsync<GraphResponse<GraphRes>>(HttpMethod.Get,
+            var res = await SendAsync<GraphResponse<GraphRes>>(database, HttpMethod.Get,
                 ApiPath(database, "gharial"), cancellationToken: cancellationToken);
             return res.Graphs.Select(x => x.Key).ToList();
         }
@@ -32,7 +32,7 @@ namespace Core.Arango.Modules.Internal
         public async Task CreateAsync(ArangoHandle database, ArangoGraph request,
             CancellationToken cancellationToken = default)
         {
-            await SendAsync<ArangoVoid>(HttpMethod.Post,
+            await SendAsync<ArangoVoid>(database, HttpMethod.Post,
                 ApiPath(database, "gharial"),
                 request, cancellationToken: cancellationToken);
         }
@@ -41,7 +41,7 @@ namespace Core.Arango.Modules.Internal
             ArangoVertexCollection vertexCollection,
             CancellationToken cancellationToken = default)
         {
-            await SendAsync<ArangoVoid>(HttpMethod.Post,
+            await SendAsync<ArangoVoid>(database, HttpMethod.Post,
                 ApiPath(database, $"gharial/{UrlEncode(graph)}/vertex"),
                 vertexCollection, cancellationToken: cancellationToken);
         }
@@ -55,7 +55,7 @@ namespace Core.Arango.Modules.Internal
             if (dropCollection.HasValue)
                 parameter.Add("dropCollection", dropCollection.Value.ToString().ToLowerInvariant());
 
-            await SendAsync<ArangoVoid>(HttpMethod.Delete,
+            await SendAsync<ArangoVoid>(database, HttpMethod.Delete,
                 ApiPath(database, $"gharial/{UrlEncode(graph)}/vertex/{UrlEncode(vertexCollection)}", parameter),
                 cancellationToken: cancellationToken);
         }
@@ -64,7 +64,7 @@ namespace Core.Arango.Modules.Internal
             ArangoEdgeDefinition edgeDefinition,
             CancellationToken cancellationToken = default)
         {
-            await SendAsync<ArangoVoid>(HttpMethod.Post,
+            await SendAsync<ArangoVoid>(database, HttpMethod.Post,
                 ApiPath(database, $"gharial/{UrlEncode(graph)}/edge"),
                 edgeDefinition, cancellationToken: cancellationToken);
         }
@@ -79,7 +79,7 @@ namespace Core.Arango.Modules.Internal
             if (dropCollections.HasValue)
                 parameter.Add("dropCollections", dropCollections.Value.ToString().ToLowerInvariant());
 
-            await SendAsync<ArangoVoid>(HttpMethod.Put,
+            await SendAsync<ArangoVoid>(database, HttpMethod.Put,
                 ApiPath(database, $"gharial/{UrlEncode(graph)}/edge/{UrlEncode(edgeDefinition.Collection)}", parameter),
                 cancellationToken: cancellationToken);
         }
@@ -93,7 +93,7 @@ namespace Core.Arango.Modules.Internal
             if (dropCollections.HasValue)
                 parameter.Add("dropCollections", dropCollections.Value.ToString().ToLowerInvariant());
 
-            await SendAsync<ArangoVoid>(HttpMethod.Delete,
+            await SendAsync<ArangoVoid>(database, HttpMethod.Delete,
                 ApiPath(database, $"gharial/{UrlEncode(graph)}/edge/{UrlEncode(edgeDefinition)}", parameter),
                 cancellationToken: cancellationToken);
         }
@@ -101,7 +101,7 @@ namespace Core.Arango.Modules.Internal
         public async Task DropAsync(ArangoHandle database, string name,
             CancellationToken cancellationToken = default)
         {
-            await SendAsync<ArangoVoid>(HttpMethod.Delete,
+            await SendAsync<ArangoVoid>(database, HttpMethod.Delete,
                 ApiPath(database, $"gharial/{UrlEncode(name)}"),
                 cancellationToken: cancellationToken);
         }

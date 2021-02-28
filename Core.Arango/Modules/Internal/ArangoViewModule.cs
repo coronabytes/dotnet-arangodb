@@ -17,7 +17,7 @@ namespace Core.Arango.Modules.Internal
         public async Task CreateAsync(ArangoHandle database, ArangoView view,
             CancellationToken cancellationToken = default)
         {
-            await SendAsync<ArangoVoid>(HttpMethod.Post,
+            await SendAsync<ArangoVoid>(database, HttpMethod.Post,
                 ApiPath(database, "view"),
                 view,
                 cancellationToken: cancellationToken);
@@ -26,7 +26,7 @@ namespace Core.Arango.Modules.Internal
         public async Task<List<string>> ListAsync(ArangoHandle database,
             CancellationToken cancellationToken = default)
         {
-            var res = await SendAsync<QueryResponse<ArangoView>>(HttpMethod.Get,
+            var res = await SendAsync<QueryResponse<ArangoView>>(database, HttpMethod.Get,
                 ApiPath(database, "view"),
                 cancellationToken: cancellationToken);
             return res.Result.Select(x => x.Name).ToList();
@@ -36,7 +36,7 @@ namespace Core.Arango.Modules.Internal
             string name,
             CancellationToken cancellationToken = default)
         {
-            await SendAsync<ArangoVoid>(HttpMethod.Delete,
+            await SendAsync<ArangoVoid>(database, HttpMethod.Delete,
                 ApiPath(database, $"view/{UrlEncode(name)}"),
                 cancellationToken: cancellationToken);
         }

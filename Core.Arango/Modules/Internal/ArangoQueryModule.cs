@@ -64,7 +64,7 @@ namespace Core.Arango.Modules.Internal
                         {
                             FullCount = fullCount
                         }
-                    }, database.Transaction, cancellationToken: cancellationToken);
+                    }, cancellationToken: cancellationToken);
 
                 final.AddRange(firstResult.Result);
 
@@ -78,9 +78,8 @@ namespace Core.Arango.Modules.Internal
 
                 while (true)
                 {
-                    var res = await SendAsync<QueryResponse<T>>(HttpMethod.Put,
+                    var res = await SendAsync<QueryResponse<T>>(database, HttpMethod.Put,
                         ApiPath(database, $"/cursor/{firstResult.Id}"),
-                        transaction: database.Transaction,
                         cancellationToken: cancellationToken);
 
                     if (res.Result?.Any() == true)
@@ -162,7 +161,7 @@ namespace Core.Arango.Modules.Internal
                     BindVars = bindVars,
                     BatchSize = batchSize ?? Context.Configuration.BatchSize,
                     Cache = cache
-                }, database.Transaction, cancellationToken: cancellationToken);
+                }, cancellationToken: cancellationToken);
 
             Context.Configuration.QueryProfile?.Invoke(query, bindVars, firstResult.Extra.Statistic);
 
@@ -174,9 +173,8 @@ namespace Core.Arango.Modules.Internal
 
             while (true)
             {
-                var res = await SendAsync<QueryResponse<T>>(HttpMethod.Put,
+                var res = await SendAsync<QueryResponse<T>>(database, HttpMethod.Put,
                     ApiPath(database, $"/cursor/{firstResult.Id}"),
-                    transaction: database.Transaction,
                     cancellationToken: cancellationToken);
 
                 if (res.Result?.Any() == true)

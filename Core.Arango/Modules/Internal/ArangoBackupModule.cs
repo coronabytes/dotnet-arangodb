@@ -17,7 +17,7 @@ namespace Core.Arango.Modules.Internal
 
         public async Task<ArangoBackup> CreateAsync(ArangoBackupRequest request, CancellationToken cancellationToken = default)
         {
-            var res = await SendAsync<SingleResult<ArangoBackup>>(HttpMethod.Post, "/_admin/backup/create",
+            var res = await SendAsync<SingleResult<ArangoBackup>>(null, HttpMethod.Post, "/_admin/backup/create",
                 request, cancellationToken: cancellationToken);
 
             return res.Result;
@@ -25,7 +25,7 @@ namespace Core.Arango.Modules.Internal
 
         public async Task RestoreAsync(string id, CancellationToken cancellationToken = default)
         {
-            await SendAsync<ArangoVoid>(HttpMethod.Post, "/_admin/backup/restore",
+            await SendAsync<ArangoVoid>(null, HttpMethod.Post, "/_admin/backup/restore",
                 new
                 {
                     id
@@ -34,7 +34,7 @@ namespace Core.Arango.Modules.Internal
 
         public async Task DeleteAsync(string id, CancellationToken cancellationToken = default)
         {
-            await SendAsync<ArangoVoid>(HttpMethod.Post, "/_admin/backup/delete",
+            await SendAsync<ArangoVoid>(null, HttpMethod.Post, "/_admin/backup/delete",
                 new
                 {
                     id
@@ -48,7 +48,7 @@ namespace Core.Arango.Modules.Internal
             if (id != null)
                 req = new {id};
 
-            var res = await SendAsync<SingleResult<BackupList>>(HttpMethod.Post, "/_admin/backup/list",
+            var res = await SendAsync<SingleResult<BackupList>>(null, HttpMethod.Post, "/_admin/backup/list",
                 req, cancellationToken: cancellationToken);
 
             return res.Result.List.Values.ToList();

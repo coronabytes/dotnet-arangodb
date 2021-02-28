@@ -18,7 +18,7 @@ namespace Core.Arango.Modules.Internal
         /// </summary>
         public async Task<bool> CreateAsync(ArangoUser user, CancellationToken cancellationToken = default)
         {
-            var res = await SendAsync<ArangoVoid>(HttpMethod.Post,
+            var res = await SendAsync<ArangoVoid>(null, HttpMethod.Post,
                 ApiPath("user"), user, cancellationToken: cancellationToken);
 
             return res != null;
@@ -29,7 +29,7 @@ namespace Core.Arango.Modules.Internal
         /// </summary>
         public async Task<IReadOnlyCollection<ArangoUser>> ListAsync(CancellationToken cancellationToken = default)
         {
-            var res = await SendAsync<QueryResponse<ArangoUser>>(HttpMethod.Get,
+            var res = await SendAsync<QueryResponse<ArangoUser>>(null, HttpMethod.Get,
                 ApiPath("user"), cancellationToken: cancellationToken);
             return res.Result.AsReadOnly();
         }
@@ -40,7 +40,7 @@ namespace Core.Arango.Modules.Internal
         public async Task<bool> SetDatabaseAccessAsync(ArangoHandle handle, string user, ArangoAccess access,
             CancellationToken cancellationToken = default)
         {
-            var res = await SendAsync<ArangoVoid>(HttpMethod.Put,
+            var res = await SendAsync<ArangoVoid>(null, HttpMethod.Put,
                 ApiPath($"user/{UrlEncode(user)}/database/{RealmPrefix(handle)}"),
                 new
                 {
@@ -56,7 +56,7 @@ namespace Core.Arango.Modules.Internal
         public async Task<bool> DeleteDatabaseAccessAsync(ArangoHandle handle, string user,
             CancellationToken cancellationToken = default)
         {
-            var res = await SendAsync<ArangoVoid>(HttpMethod.Delete,
+            var res = await SendAsync<ArangoVoid>(null, HttpMethod.Delete,
                 ApiPath($"user/{UrlEncode(user)}/database/{RealmPrefix(handle)}"),
                 cancellationToken: cancellationToken);
 
@@ -68,7 +68,7 @@ namespace Core.Arango.Modules.Internal
         /// </summary>
         public async Task<bool> PatchAsync(ArangoUser user, CancellationToken cancellationToken = default)
         {
-            var res = await SendAsync<ArangoVoid>(HttpMethod.Patch,
+            var res = await SendAsync<ArangoVoid>(null, HttpMethod.Patch,
                 ApiPath($"user/{UrlEncode(user.Name)}"),
                 user,
                 cancellationToken: cancellationToken);
@@ -81,7 +81,7 @@ namespace Core.Arango.Modules.Internal
         /// </summary>
         public async Task<bool> DeleteAsync(string user, CancellationToken cancellationToken = default)
         {
-            var res = await SendAsync<ArangoVoid>(HttpMethod.Delete,
+            var res = await SendAsync<ArangoVoid>(null, HttpMethod.Delete,
                 ApiPath($"user/{UrlEncode(user)}"), cancellationToken: cancellationToken);
 
             return res != null;

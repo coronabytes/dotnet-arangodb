@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
@@ -68,23 +69,17 @@ namespace Core.Arango.Modules.Internal
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Task<T> SendAsync<T>(HttpMethod m, string url, object body = null,
-            string transaction = null, bool throwOnError = true, bool auth = true,
+        public Task<T> SendAsync<T>(ArangoHandle handle, HttpMethod m, string url, object body = null, bool throwOnError = true, bool auth = true,
             CancellationToken cancellationToken = default)
         {
-            return Context.Configuration.Transport.SendAsync<T>(m, url, body, transaction, throwOnError, auth,
-                cancellationToken);
-        }
+            if (handle == null)
+                return Context.Configuration.Transport.SendAsync<T>(m, url, body, null, throwOnError, auth,
+                    cancellationToken);
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Task<T> SendAsync<T>(ArangoHandle handle, HttpMethod m, string url, object body = null,
-            string transaction = null, bool throwOnError = true, bool auth = true,
-            CancellationToken cancellationToken = default)
-        {
             if (handle.Batches != null)
                 return Context.Configuration.Transport.WriteBatchAsync<T>(handle, m, url, body);
 
-            return Context.Configuration.Transport.SendAsync<T>(m, url, body, transaction, throwOnError, auth,
+            return Context.Configuration.Transport.SendAsync<T>(m, url, body, handle.Transaction, throwOnError, auth,
                 cancellationToken);
         }
 
