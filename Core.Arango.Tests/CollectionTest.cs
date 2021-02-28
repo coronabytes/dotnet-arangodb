@@ -70,7 +70,7 @@ namespace Core.Arango.Tests
         public async Task Schema(string serializer)
         {
             await SetupAsync(serializer);
-            if (await Arango.GetVersionAsync() < Version.Parse("3.7"))
+            if ((await Arango.GetVersionAsync()).SemanticVersion < Version.Parse("3.7"))
                 return;
 
             await Arango.Collection.CreateAsync("test", new ArangoCollection

@@ -17,7 +17,7 @@ namespace Core.Arango.Modules.Internal
         public async Task CreateAsync(ArangoHandle database, string collection, ArangoIndex request,
             CancellationToken cancellationToken = default)
         {
-            await SendAsync<ArangoVoid>(HttpMethod.Post,
+            await SendAsync<ArangoVoid>(database, HttpMethod.Post,
                 ApiPath(database, $"index?collection={collection}"),
                 request, cancellationToken: cancellationToken);
         }
@@ -44,7 +44,7 @@ namespace Core.Arango.Modules.Internal
         public async Task<List<string>> ListAsync(ArangoHandle database, string collection,
             CancellationToken cancellationToken = default)
         {
-            var res = await SendAsync<IndexResponse>(HttpMethod.Get,
+            var res = await SendAsync<IndexResponse>(database, HttpMethod.Get,
                 ApiPath(database, $"index?collection={UrlEncode(collection)}"),
                 cancellationToken: cancellationToken);
             return res.Indexes
@@ -59,7 +59,7 @@ namespace Core.Arango.Modules.Internal
         public async Task DropAsync(ArangoHandle database, string index,
             CancellationToken cancellationToken = default)
         {
-            await SendAsync<ArangoVoid>(HttpMethod.Delete,
+            await SendAsync<ArangoVoid>(database, HttpMethod.Delete,
                 ApiPath(database, $"index/{index}"), cancellationToken: cancellationToken);
         }
 

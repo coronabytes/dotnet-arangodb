@@ -16,7 +16,7 @@ namespace Core.Arango.Modules.Internal
 
         public async Task<bool> CreateAsync(ArangoHandle name, CancellationToken cancellationToken = default)
         {
-            var res = await SendAsync<ArangoVoid>(HttpMethod.Post,
+            var res = await SendAsync<ArangoVoid>(name, HttpMethod.Post,
                 ApiPath("_system", "database"),
                 new
                 {
@@ -28,7 +28,7 @@ namespace Core.Arango.Modules.Internal
 
         public async Task<List<string>> ListAsync(CancellationToken cancellationToken = default)
         {
-            var res = await SendAsync<QueryResponse<string>>(HttpMethod.Get,
+            var res = await SendAsync<QueryResponse<string>>(null, HttpMethod.Get,
                 ApiPath("_system", "database"), cancellationToken: cancellationToken);
 
             var realm = string.IsNullOrWhiteSpace(Context.Configuration.Realm)
@@ -44,13 +44,12 @@ namespace Core.Arango.Modules.Internal
         public async Task<bool> ExistAsync(ArangoHandle name, CancellationToken cancellationToken = default)
         {
             var dbs = await ListAsync(cancellationToken);
-
             return dbs.Contains(name);
         }
 
         public async Task DropAsync(ArangoHandle name, CancellationToken cancellationToken = default)
         {
-            await SendAsync<ArangoVoid>(HttpMethod.Delete,
+            await SendAsync<ArangoVoid>(name, HttpMethod.Delete,
                 ApiPath("_system", $"database/{RealmPrefix(name)}"), null,
                 throwOnError: false, cancellationToken: cancellationToken);
         }

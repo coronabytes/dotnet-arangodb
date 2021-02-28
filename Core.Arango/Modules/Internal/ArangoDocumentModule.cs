@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
@@ -19,8 +20,8 @@ namespace Core.Arango.Modules.Internal
             bool throwOnError = true,
             CancellationToken cancellationToken = default) where T : class
         {
-            return await SendAsync<T>(HttpMethod.Get, ApiPath(database, $"document/{UrlEncode(collection)}/{key}"),
-                null, database.Transaction, throwOnError, cancellationToken: cancellationToken);
+            return await SendAsync<T>(database, HttpMethod.Get, ApiPath(database, $"document/{UrlEncode(collection)}/{key}"),
+                null, throwOnError, cancellationToken: cancellationToken);
         }
 
         public async Task<List<ArangoUpdateResult<TR>>> CreateManyAsync<T, TR>(ArangoHandle database,
@@ -54,9 +55,8 @@ namespace Core.Arango.Modules.Internal
 
             var query = AddQueryString(ApiPath(database, $"document/{UrlEncode(collection)}"), parameter);
 
-            return await SendAsync<List<ArangoUpdateResult<TR>>>(HttpMethod.Post, query,
-                docs,
-                database.Transaction, cancellationToken: cancellationToken);
+            return await SendAsync<List<ArangoUpdateResult<TR>>>(database, HttpMethod.Post, query,
+                docs, cancellationToken: cancellationToken);
         }
 
         public async Task<List<ArangoUpdateResult<ArangoVoid>>> CreateManyAsync<T>(ArangoHandle database,
@@ -108,7 +108,7 @@ namespace Core.Arango.Modules.Internal
                     {"collection", collection}
                 });
 
-            await SendAsync<ArangoVoid>(HttpMethod.Post, query,
+            await SendAsync<ArangoVoid>(database, HttpMethod.Post, query,
                 docs,
                 cancellationToken: cancellationToken);
         }
@@ -135,8 +135,7 @@ namespace Core.Arango.Modules.Internal
                 ApiPath(database, $"document/{UrlEncode(collection)}/{UrlEncode(key)}"),
                 parameter);
 
-            return await SendAsync<ArangoUpdateResult<TR>>(HttpMethod.Delete, query, transaction: database.Transaction,
-                cancellationToken: cancellationToken);
+            return await SendAsync<ArangoUpdateResult<TR>>(database, HttpMethod.Delete, query, cancellationToken: cancellationToken);
         }
 
         public async Task<List<ArangoUpdateResult<TR>>> DeleteManyAsync<T, TR>(ArangoHandle database,
@@ -156,9 +155,9 @@ namespace Core.Arango.Modules.Internal
             var query = AddQueryString(
                 ApiPath(database, $"document/{collection}"), parameter);
 
-            return await SendAsync<List<ArangoUpdateResult<TR>>>(HttpMethod.Delete, query,
+            return await SendAsync<List<ArangoUpdateResult<TR>>>(database, HttpMethod.Delete, query,
                 docs,
-                database.Transaction, cancellationToken: cancellationToken);
+                cancellationToken: cancellationToken);
         }
 
         public async Task<List<ArangoUpdateResult<ArangoVoid>>> UpdateManyAsync<T>(ArangoHandle database,
@@ -209,9 +208,8 @@ namespace Core.Arango.Modules.Internal
             var query = AddQueryString(
                 ApiPath(database, $"document/{UrlEncode(collection)}"), parameter);
 
-            return await SendAsync<List<ArangoUpdateResult<TR>>>(HttpMethod.Patch, query,
-                docs,
-                database.Transaction, cancellationToken: cancellationToken);
+            return await SendAsync<List<ArangoUpdateResult<TR>>>(database, HttpMethod.Patch, query,
+                docs, cancellationToken: cancellationToken);
         }
 
         public async Task<ArangoUpdateResult<ArangoVoid>> UpdateAsync<T>(ArangoHandle database, string collection,
@@ -269,9 +267,8 @@ namespace Core.Arango.Modules.Internal
             var query = AddQueryString(
                 ApiPath(database, $"document/{UrlEncode(collection)}"), parameter);
 
-            return await SendAsync<List<ArangoUpdateResult<TR>>>(HttpMethod.Put, query,
-                docs,
-                database.Transaction, cancellationToken: cancellationToken);
+            return await SendAsync<List<ArangoUpdateResult<TR>>>(database, HttpMethod.Put, query,
+                docs, cancellationToken: cancellationToken);
         }
 
         public async Task<List<ArangoUpdateResult<ArangoVoid>>> ReplaceManyAsync<T>(ArangoHandle database,
@@ -316,6 +313,9 @@ namespace Core.Arango.Modules.Internal
             string collection, bool? flush = null, int? flushWait = null, int? batchSize = null, int? ttl = null,
             [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
+            if (database.Batches != null)
+                throw new NotSupportedException("no batch support");
+
             var parameter = new Dictionary<string, string>
             {
                 ["collection"] = collection
@@ -324,7 +324,7 @@ namespace Core.Arango.Modules.Internal
             var query = AddQueryString(
                 ApiPath(database, "export"), parameter);
 
-            var firstResult = await SendAsync<QueryResponse<T>>(HttpMethod.Post,
+            var firstResult = await SendAsync<QueryResponse<T>>(database, HttpMethod.Post,
                 query,
                 new ExportRequest
                 {
@@ -340,7 +340,7 @@ namespace Core.Arango.Modules.Internal
             {
                 while (true)
                 {
-                    var res = await SendAsync<QueryResponse<T>>(HttpMethod.Put,
+                    var res = await SendAsync<QueryResponse<T>>(database, HttpMethod.Put,
                         ApiPath(database, $"cursor/{firstResult.Id}"),
                         cancellationToken: cancellationToken);
 
@@ -352,7 +352,7 @@ namespace Core.Arango.Modules.Internal
 
                 try
                 {
-                    await SendAsync<ArangoVoid>(HttpMethod.Delete,
+                    await SendAsync<ArangoVoid>(database, HttpMethod.Delete,
                         ApiPath(database, $"cursor/{firstResult.Id}"),
                         cancellationToken: cancellationToken);
                 }

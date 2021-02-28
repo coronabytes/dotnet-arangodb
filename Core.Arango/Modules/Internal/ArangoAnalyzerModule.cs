@@ -16,7 +16,7 @@ namespace Core.Arango.Modules.Internal
         public async Task<List<ArangoAnalyzer>> ListAsync(ArangoHandle database,
             CancellationToken cancellationToken = default)
         {
-            return (await SendAsync<QueryResponse<ArangoAnalyzer>>(HttpMethod.Get,
+            return (await SendAsync<QueryResponse<ArangoAnalyzer>>(database, HttpMethod.Get,
                 ApiPath(database, "analyzer"),
                 cancellationToken: cancellationToken)).Result;
         }
@@ -25,7 +25,7 @@ namespace Core.Arango.Modules.Internal
             ArangoAnalyzer analyzer,
             CancellationToken cancellationToken = default)
         {
-            await SendAsync<QueryResponse<ArangoVoid>>(HttpMethod.Post,
+            await SendAsync<QueryResponse<ArangoVoid>>(database, HttpMethod.Post,
                 ApiPath(database, "analyzer"),
                 analyzer,
                 cancellationToken: cancellationToken);
@@ -35,7 +35,7 @@ namespace Core.Arango.Modules.Internal
             string analyzer, bool force = false,
             CancellationToken cancellationToken = default)
         {
-            await SendAsync<QueryResponse<ArangoVoid>>(HttpMethod.Delete,
+            await SendAsync<QueryResponse<ArangoVoid>>(database, HttpMethod.Delete,
                 ApiPath(database, $"analyzer/{UrlEncode(analyzer)}?force={(force ? "true" : "false")}"),
                 cancellationToken: cancellationToken);
         }

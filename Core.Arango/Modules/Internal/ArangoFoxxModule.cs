@@ -23,7 +23,7 @@ namespace Core.Arango.Modules.Internal
             if (excludeSystem.HasValue)
                 parameter.Add("excludeSystem", excludeSystem.Value.ToString().ToLowerInvariant());
 
-            return await SendAsync<List<ArangoFoxxService>>(HttpMethod.Get,
+            return await SendAsync<List<ArangoFoxxService>>(database, HttpMethod.Get,
                 ApiPath(database, "foxx", parameter),
                 cancellationToken: cancellationToken);
         }
@@ -132,7 +132,7 @@ namespace Core.Arango.Modules.Internal
             if (teardown.HasValue)
                 parameter.Add("teardown", teardown.Value.ToString().ToLowerInvariant());
 
-            return await SendAsync<ArangoVoid>(HttpMethod.Delete,
+            return await SendAsync<ArangoVoid>(database, HttpMethod.Delete,
                 ApiPath(database, "foxx/service", parameter),
                 cancellationToken: cancellationToken);
         }
@@ -142,7 +142,7 @@ namespace Core.Arango.Modules.Internal
         {
             var parameter = new Dictionary<string, string> {{"mount", mount}};
 
-            return await SendAsync<T>(HttpMethod.Get,
+            return await SendAsync<T>(database, HttpMethod.Get,
                 ApiPath(database, "foxx/configuration", parameter),
                 cancellationToken: cancellationToken);
         }
@@ -153,7 +153,7 @@ namespace Core.Arango.Modules.Internal
         {
             var parameter = new Dictionary<string, string> {{"mount", mount}};
 
-            return await SendAsync<ArangoVoid>(HttpMethod.Patch,
+            return await SendAsync<ArangoVoid>(database, HttpMethod.Patch,
                 ApiPath(database, "foxx/configuration", parameter), configuration,
                 cancellationToken: cancellationToken);
         }
@@ -164,7 +164,7 @@ namespace Core.Arango.Modules.Internal
         {
             var parameter = new Dictionary<string, string> {{"mount", mount}};
 
-            return await SendAsync<ArangoVoid>(HttpMethod.Put,
+            return await SendAsync<ArangoVoid>(database, HttpMethod.Put,
                 ApiPath(database, "foxx/configuration", parameter), configuration,
                 cancellationToken: cancellationToken);
         }
@@ -174,7 +174,7 @@ namespace Core.Arango.Modules.Internal
         {
             var parameter = new Dictionary<string, string> {{"mount", mount}};
 
-            return await SendAsync<T>(HttpMethod.Get,
+            return await SendAsync<T>(database, HttpMethod.Get,
                 ApiPath(database, "foxx/dependencies", parameter),
                 cancellationToken: cancellationToken);
         }
@@ -185,7 +185,7 @@ namespace Core.Arango.Modules.Internal
         {
             var parameter = new Dictionary<string, string> {{"mount", mount}};
 
-            return await SendAsync<ArangoVoid>(HttpMethod.Patch,
+            return await SendAsync<ArangoVoid>(database, HttpMethod.Patch,
                 ApiPath(database, "foxx/dependencies", parameter), dependencies,
                 cancellationToken: cancellationToken);
         }
@@ -196,7 +196,7 @@ namespace Core.Arango.Modules.Internal
         {
             var parameter = new Dictionary<string, string> {{"mount", mount}};
 
-            return await SendAsync<ArangoVoid>(HttpMethod.Put,
+            return await SendAsync<ArangoVoid>(database, HttpMethod.Put,
                 ApiPath(database, "foxx/dependencies", parameter), dependencies,
                 cancellationToken: cancellationToken);
         }
@@ -206,7 +206,7 @@ namespace Core.Arango.Modules.Internal
         {
             var parameter = new Dictionary<string, string> {{"mount", mount}};
 
-            await SendAsync<ArangoVoid>(HttpMethod.Post,
+            await SendAsync<ArangoVoid>(database, HttpMethod.Post,
                 ApiPath(database, "foxx/development", parameter),
                 cancellationToken: cancellationToken);
         }
@@ -216,7 +216,7 @@ namespace Core.Arango.Modules.Internal
         {
             var parameter = new Dictionary<string, string> {{"mount", mount}};
 
-            await SendAsync<ArangoVoid>(HttpMethod.Delete,
+            await SendAsync<ArangoVoid>(database, HttpMethod.Delete,
                 ApiPath(database, "foxx/development", parameter),
                 cancellationToken: cancellationToken);
         }
@@ -225,7 +225,7 @@ namespace Core.Arango.Modules.Internal
             IDictionary<string, string> queryParams = null,
             CancellationToken cancellationToken = default)
         {
-            return await SendAsync<T>(HttpMethod.Get,
+            return await SendAsync<T>(database, HttpMethod.Get,
                 FoxxPath(database, mount, queryParams),
                 cancellationToken: cancellationToken);
         }
@@ -234,7 +234,7 @@ namespace Core.Arango.Modules.Internal
             IDictionary<string, string> queryParams = null,
             CancellationToken cancellationToken = default)
         {
-            return await SendAsync<T>(HttpMethod.Post,
+            return await SendAsync<T>(database, HttpMethod.Post,
                 FoxxPath(database, mount, queryParams), body,
                 cancellationToken: cancellationToken);
         }
@@ -243,7 +243,7 @@ namespace Core.Arango.Modules.Internal
             IDictionary<string, string> queryParams = null,
             CancellationToken cancellationToken = default)
         {
-            return await SendAsync<T>(HttpMethod.Post,
+            return await SendAsync<T>(database, HttpMethod.Post,
                 FoxxPath(database, mount, queryParams), body,
                 cancellationToken: cancellationToken);
         }
@@ -252,7 +252,7 @@ namespace Core.Arango.Modules.Internal
             IDictionary<string, string> queryParams = null,
             CancellationToken cancellationToken = default)
         {
-            return await SendAsync<T>(HttpMethod.Post,
+            return await SendAsync<T>(database, HttpMethod.Post,
                 FoxxPath(database, mount, queryParams), body,
                 cancellationToken: cancellationToken);
         }
@@ -261,7 +261,7 @@ namespace Core.Arango.Modules.Internal
             IDictionary<string, string> queryParams = null,
             CancellationToken cancellationToken = default)
         {
-            return await SendAsync<T>(HttpMethod.Delete,
+            return await SendAsync<T>(database, HttpMethod.Delete,
                 FoxxPath(database, mount, queryParams),
                 cancellationToken: cancellationToken);
         }
@@ -284,7 +284,7 @@ namespace Core.Arango.Modules.Internal
         {
             var parameter = new Dictionary<string, string> {{"mount", mount}};
 
-           return await SendAsync<T>(HttpMethod.Post,
+           return await SendAsync<T>(database, HttpMethod.Post,
                 ApiPath(database, $"foxx/scripts/{UrlEncode(name)}", parameter), body,
                 cancellationToken: cancellationToken);
         }

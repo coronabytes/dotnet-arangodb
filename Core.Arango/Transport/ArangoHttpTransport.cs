@@ -83,6 +83,32 @@ namespace Core.Arango.Transport
             return _configuration.Serializer.Deserialize<T>(content);
         }
 
+        public Task<T> WriteBatchAsync<T>(ArangoHandle handle, HttpMethod m, string url, object body = null)
+        {
+            var tcs = new TaskCompletionSource<T>();
+
+            handle.Batches.Add(new ArangoBatch
+            {
+                ContentId = Guid.NewGuid(),
+                Request = $"{m.Method} {url} HTTP/1.1\r\n" + (body != null ? "\r\n" + _configuration.Serializer.Serialize(body)+ "\r\n" : string.Empty),
+                Complete = s =>
+                {
+                    try
+                    {
+                        tcs.SetResult(_configuration.Serializer.Deserialize<T>(s));
+                    }
+                    catch (Exception e)
+                    {
+                        tcs.SetException(e);
+                    }
+                },
+                Cancel = () => tcs.SetCanceled(),
+                Fail = exception => tcs.SetException(exception)
+            });
+
+            return tcs.Task;
+        }
+
         public async Task<HttpContent> SendContentAsync(HttpMethod m, string url, HttpContent body = null, string transaction = null,
             bool throwOnError = true, bool auth = true, CancellationToken cancellationToken = default)
         {
@@ -113,8 +139,7 @@ namespace Core.Arango.Transport
 
             return res.Content;
         }
-
-
+        
         public async Task<object> SendAsync(Type type, HttpMethod m, string url, object body = null,
             string transaction = null, bool throwOnError = true, bool auth = true,
             CancellationToken cancellationToken = default)

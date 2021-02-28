@@ -15,9 +15,8 @@ namespace Core.Arango.Modules.Internal
         public async Task<TR> GetAsync<TR>(ArangoHandle database, string graph, string collection, string key,
             CancellationToken cancellationToken = default)
         {
-            var res = await SendAsync<ArangoEdgeResponse<TR>>(HttpMethod.Get,
+            var res = await SendAsync<ArangoEdgeResponse<TR>>(database, HttpMethod.Get,
                 ApiPath(database, $"gharial/{UrlEncode(graph)}/vertex/{UrlEncode(collection)}"),
-                transaction: database.Transaction,
                 cancellationToken: cancellationToken);
 
             return res.Edge;
@@ -72,9 +71,9 @@ namespace Core.Arango.Modules.Internal
             if (returnNew.HasValue)
                 parameter.Add("returnNew", returnNew.Value.ToString().ToLowerInvariant());
 
-            return await SendAsync<ArangoEdgeResponse<TR>>(HttpMethod.Post,
+            return await SendAsync<ArangoEdgeResponse<TR>>(database, HttpMethod.Post,
                 ApiPath(database, $"gharial/{UrlEncode(graph)}/edge/{UrlEncode(collection)}", parameter),
-                doc, database.Transaction, cancellationToken: cancellationToken);
+                doc, cancellationToken: cancellationToken);
         }
 
         public async Task<ArangoEdgeResponse<TR>> UpdateAsync<T, TR>(ArangoHandle database, string graph,
@@ -96,9 +95,9 @@ namespace Core.Arango.Modules.Internal
             if (returnOld.HasValue)
                 parameter.Add("returnOld", returnOld.Value.ToString().ToLowerInvariant());
 
-            return await SendAsync<ArangoEdgeResponse<TR>>(HttpMethod.Patch,
+            return await SendAsync<ArangoEdgeResponse<TR>>(database, HttpMethod.Patch,
                 ApiPath(database, $"gharial/{UrlEncode(graph)}/edge/{UrlEncode(collection)}/{key}", parameter),
-                doc, database.Transaction, cancellationToken: cancellationToken);
+                doc, cancellationToken: cancellationToken);
         }
 
         public async Task<ArangoEdgeResponse<TR>> ReplaceAsync<T, TR>(ArangoHandle database, string graph,
@@ -120,9 +119,9 @@ namespace Core.Arango.Modules.Internal
             if (returnOld.HasValue)
                 parameter.Add("returnOld", returnOld.Value.ToString().ToLowerInvariant());
 
-            return await SendAsync<ArangoEdgeResponse<TR>>(HttpMethod.Put,
+            return await SendAsync<ArangoEdgeResponse<TR>>(database, HttpMethod.Put,
                 ApiPath(database, $"gharial/{UrlEncode(graph)}/edge/{UrlEncode(collection)}/{key}", parameter),
-                doc, database.Transaction, cancellationToken: cancellationToken);
+                doc, cancellationToken: cancellationToken);
         }
 
         public async Task<ArangoEdgeResponse<TR>> RemoveAsync<T, TR>(ArangoHandle database, string graph,
@@ -138,9 +137,8 @@ namespace Core.Arango.Modules.Internal
             if (returnOld.HasValue)
                 parameter.Add("returnOld", returnOld.Value.ToString().ToLowerInvariant());
 
-            return await SendAsync<ArangoEdgeResponse<TR>>(HttpMethod.Delete,
+            return await SendAsync<ArangoEdgeResponse<TR>>(database, HttpMethod.Delete,
                 ApiPath(database, $"gharial/{UrlEncode(graph)}/edge/{UrlEncode(collection)}/{key}", parameter),
-                transaction: database.Transaction,
                 cancellationToken: cancellationToken);
         }
     }

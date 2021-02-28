@@ -310,6 +310,33 @@ await arango.Document.CreateAsync(transaction, "collection", new
 await arango.Transaction.CommitAsync(transaction);
 ```
 
+## Batch requests
+For performance optimization multiple requests can be batched together into a single HTTP request.
+Query and export cursors will only return the first 'page' though.
+
+No transaction support for now: (https://github.com/arangodb/arangodb/issues/13552)
+
+```csharp
+var batch = Arango.Batch.Create("database");
+var r1 = Arango.Document.CreateAsync(batch, "test", new Entity
+{
+	Key = "1",
+	Name = "a"
+});
+
+var r2 = Arango.Document.CreateAsync(batch, "test", new Entity
+{
+	Key = "2",
+	Name = "b"
+});
+
+await Arango.Batch.ExecuteAsync(batch);
+
+// For demonstation purposes
+// The tasks will be finish instantly or throw an exption if the underyling operation failed
+await Task.WhenAll(r1, r2);
+```
+
 ## Foxx services
 ```csharp
 // Build Foxx service zip archive
@@ -359,10 +386,10 @@ const createRouter = require('@arangodb/foxx/router');
 const router = createRouter();
 
 module.context.use(router);
-router.get('/hello-world', function (req, res) {
-  res.send('Hello World!');
-})
-.response(['text/plain'], 'A generic greeting.')
+router.get('/hello-world', function (req, res) {{
+  res.send({{ hello: 'world' }});
+}})
+.response(['application/json'], 'A generic greeting.')
 .summary('Generic greeting')
 .description('Prints a generic greeting.');
 "));
@@ -376,4 +403,25 @@ await Arango.Foxx.InstallServiceAsync("database", "/sample/service", ArangoFoxxS
 
 // list services excluding system services
 var services = await Arango.Foxx.ListServicesAsync("database", true);
+
+// call service
+var res = await Arango.Foxx.GetAsync<Dictionary<string, string>>("database", "/sample/service/hello-world");
+Assert.Equal("world", res["hello"]);
+```
+
+## Hot Backup (Enterprise Edition only)
+```csharp
+var backup = await Arango.Backup.CreateAsync(new ArangoBackupRequest
+{
+	AllowInconsistent = false,
+	Force = true,
+	Label = "test",
+	Timeout = 30
+});
+
+var backups = await Arango.Backup.ListAsync();
+
+await Arango.Backup.RestoreAsync(backup.Id);
+
+await Arango.Backup.DeleteAsync(backup.Id);
 ```

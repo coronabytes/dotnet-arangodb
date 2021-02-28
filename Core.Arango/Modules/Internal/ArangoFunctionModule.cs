@@ -22,7 +22,7 @@ namespace Core.Arango.Modules.Internal
             if (request == null)
                 throw new ArgumentNullException(nameof(request));
 
-            var res = await SendAsync<FunctionCreateResponse>(HttpMethod.Post, ApiPath(database, API),
+            var res = await SendAsync<FunctionCreateResponse>(database, HttpMethod.Post, ApiPath(database, API),
                 request, cancellationToken: cancellationToken);
 
             return res.IsNewlyCreated;
@@ -31,7 +31,7 @@ namespace Core.Arango.Modules.Internal
         public async Task<int> RemoveAsync(ArangoHandle database, string name, bool? group = false,
             CancellationToken cancellationToken = default)
         {
-            var res = await SendAsync<FunctionRemoveResponse>(HttpMethod.Delete,
+            var res = await SendAsync<FunctionRemoveResponse>(database, HttpMethod.Delete,
                 ApiPath(database, $"{API}/{name}?group={(group ?? false).ToString().ToLowerInvariant()}"),
                 cancellationToken: cancellationToken);
 
@@ -44,7 +44,7 @@ namespace Core.Arango.Modules.Internal
         {
             ns = string.IsNullOrEmpty(ns) ? "" : "/" + ns;
 
-            var res = await SendAsync<QueryResponse<ArangoFunctionDefinition>>(HttpMethod.Get,
+            var res = await SendAsync<QueryResponse<ArangoFunctionDefinition>>(database, HttpMethod.Get,
                 ApiPath(database, API + ns), cancellationToken: cancellationToken);
 
             return res.Result;

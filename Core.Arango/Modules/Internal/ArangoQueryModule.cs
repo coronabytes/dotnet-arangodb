@@ -52,7 +52,7 @@ namespace Core.Arango.Modules.Internal
 
             try
             {
-                var firstResult = await SendAsync<QueryResponse<T>>(HttpMethod.Post,
+                var firstResult = await SendAsync<QueryResponse<T>>(database, HttpMethod.Post,
                     ApiPath(database, "cursor"),
                     new QueryRequest
                     {
@@ -64,7 +64,7 @@ namespace Core.Arango.Modules.Internal
                         {
                             FullCount = fullCount
                         }
-                    }, database.Transaction, cancellationToken: cancellationToken);
+                    }, cancellationToken: cancellationToken);
 
                 final.AddRange(firstResult.Result);
 
@@ -73,14 +73,13 @@ namespace Core.Arango.Modules.Internal
                 if (fullCount.HasValue && fullCount.Value)
                     final.FullCount = firstResult.Extra.Statistic.FullCount;
 
-                if (!firstResult.HasMore)
+                if (!firstResult.HasMore || database.Batches != null)
                     return final;
 
                 while (true)
                 {
-                    var res = await SendAsync<QueryResponse<T>>(HttpMethod.Put,
+                    var res = await SendAsync<QueryResponse<T>>(database, HttpMethod.Put,
                         ApiPath(database, $"/cursor/{firstResult.Id}"),
-                        transaction: database.Transaction,
                         cancellationToken: cancellationToken);
 
                     if (res.Result?.Any() == true)
@@ -154,7 +153,7 @@ namespace Core.Arango.Modules.Internal
         {
             query = query.Trim();
 
-            var firstResult = await SendAsync<QueryResponse<T>>(HttpMethod.Post,
+            var firstResult = await SendAsync<QueryResponse<T>>(database, HttpMethod.Post,
                 ApiPath(database, "cursor"),
                 new QueryRequest
                 {
@@ -162,21 +161,20 @@ namespace Core.Arango.Modules.Internal
                     BindVars = bindVars,
                     BatchSize = batchSize ?? Context.Configuration.BatchSize,
                     Cache = cache
-                }, database.Transaction, cancellationToken: cancellationToken);
+                }, cancellationToken: cancellationToken);
 
             Context.Configuration.QueryProfile?.Invoke(query, bindVars, firstResult.Extra.Statistic);
 
             foreach (var result in firstResult.Result)
                 yield return result;
 
-            if (!firstResult.HasMore)
+            if (!firstResult.HasMore || database.Batches != null)
                 yield break;
 
             while (true)
             {
-                var res = await SendAsync<QueryResponse<T>>(HttpMethod.Put,
+                var res = await SendAsync<QueryResponse<T>>(database, HttpMethod.Put,
                     ApiPath(database, $"/cursor/{firstResult.Id}"),
-                    transaction: database.Transaction,
                     cancellationToken: cancellationToken);
 
                 if (res.Result?.Any() == true)
