@@ -5,6 +5,9 @@ using Core.Arango.Protocol;
 
 namespace Core.Arango.Modules
 {
+    /// <summary>
+    ///   HotBackup (enterprise only)
+    /// </summary>
     public interface IArangoBackupModule
     {
         /// <summary>

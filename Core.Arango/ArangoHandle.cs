@@ -14,14 +14,18 @@ namespace Core.Arango
     }
 
     /// <summary>
-    ///     Identifies database with optional transaction
+    ///     Arango database / transaction / batch handle
     /// </summary>
     public sealed class ArangoHandle
     {
+        internal readonly List<ArangoBatch> Batches;
         internal readonly string Name;
         internal readonly string Transaction;
-        internal readonly List<ArangoBatch> Batches;
 
+        /// <summary>
+        ///     Construct handle from database name
+        /// </summary>
+        /// <param name="name">database name</param>
         public ArangoHandle(string name)
         {
             Name = name;
@@ -29,6 +33,10 @@ namespace Core.Arango
             Batches = null;
         }
 
+        /// <summary>
+        ///     Construct handle from database guid (requires realm)
+        /// </summary>
+        /// <param name="name">database name</param>
         public ArangoHandle(Guid name)
         {
             Name = name.ToString("D");
@@ -36,6 +44,9 @@ namespace Core.Arango
             Batches = null;
         }
 
+        /// <summary>
+        ///     Constructs wrapping handle with transaction
+        /// </summary>
         public ArangoHandle(ArangoHandle other, string transaction)
         {
             Name = other.Name;
@@ -43,6 +54,9 @@ namespace Core.Arango
             Batches = null;
         }
 
+        /// <summary>
+        ///     Constructs wrapping handle with batch
+        /// </summary>
         public ArangoHandle(ArangoHandle other, bool batch)
         {
             Name = other.Name;
@@ -50,21 +64,34 @@ namespace Core.Arango
             Batches = new List<ArangoBatch>();
         }
 
+        /// <summary>
+        ///     Convert from string
+        /// </summary>
+        /// <param name="x"></param>
         public static implicit operator ArangoHandle(string x)
         {
             return new ArangoHandle(x);
         }
 
+        /// <summary>
+        ///     Convert from Guid
+        /// </summary>
         public static implicit operator ArangoHandle(Guid x)
         {
             return new ArangoHandle(x);
         }
 
+        /// <summary>
+        ///     Convert to string
+        /// </summary>
         public static implicit operator string(ArangoHandle x)
         {
             return x.Name;
         }
 
+        /// <summary>
+        ///     ToString
+        /// </summary>
         public override string ToString()
         {
             return Name;

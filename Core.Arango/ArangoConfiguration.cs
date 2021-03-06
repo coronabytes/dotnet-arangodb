@@ -8,10 +8,15 @@ using Core.Arango.Transport;
 
 namespace Core.Arango
 {
+    /// <summary>
+    ///     Driver configuration.
+    /// </summary>
     public class ArangoConfiguration : IArangoConfiguration
     {
         private string _connectionString;
 
+        /// <summary>
+        /// </summary>
         public ArangoConfiguration()
         {
             BatchSize = 500;
@@ -19,13 +24,15 @@ namespace Core.Arango
             Transport = new ArangoHttpTransport(this);
         }
 
+        
+        /// <inheritdoc/>
         public string ConnectionString
         {
             get => _connectionString;
             set
             {
                 _connectionString = value;
-                var builder = new DbConnectionStringBuilder { ConnectionString = value };
+                var builder = new DbConnectionStringBuilder {ConnectionString = value};
                 builder.TryGetValue("Server", out var s);
                 builder.TryGetValue("Realm", out var r);
                 builder.TryGetValue("User ID", out var uid);
@@ -50,13 +57,28 @@ namespace Core.Arango
             }
         }
 
+        /// <inheritdoc/>
         public string Realm { get; set; }
+
+        /// <inheritdoc/>
         public string Server { get; set; }
+
+        /// <inheritdoc/>
         public string User { get; set; }
+
+        /// <inheritdoc/>
         public string Password { get; set; }
+
+        /// <inheritdoc/>
         public int BatchSize { get; set; }
+
+        /// <inheritdoc/>
         public IArangoSerializer Serializer { get; set; }
+
+        /// <inheritdoc/>
         public IArangoTransport Transport { get; set; }
+
+        /// <inheritdoc/>
         public Action<string, IDictionary<string, object>, ArangoQueryStatistic> QueryProfile { get; set; }
     }
 }

@@ -18,7 +18,7 @@ jobs:
       fail-fast: false
       matrix:
         dotnet:
-          - 5.0.103
+          - 5.0.200
         arango: 
           - "arangodb:3.6.10"
           - "arangodb:3.7.7"

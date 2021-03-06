@@ -3,8 +3,14 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Core.Arango
 {
+    /// <summary>
+    ///     Arango dependency injection for ASP.NET Core
+    /// </summary>
     public static class ArangoDependencyInjectionExtension
     {
+        /// <summary>
+        ///     Add Arango service (singleton)
+        /// </summary>
         public static IServiceCollection AddArango(this IServiceCollection collection,
             Func<IServiceProvider, string> configurator)
         {
@@ -19,6 +25,9 @@ namespace Core.Arango
             });
         }
 
+        /// <summary>
+        ///     Add Arango service (singleton)
+        /// </summary>
         public static IServiceCollection AddArango(this IServiceCollection collection,
             Action<IServiceProvider, IArangoConfiguration> configurator)
         {
@@ -33,6 +42,9 @@ namespace Core.Arango
             });
         }
 
+        /// <summary>
+        ///     Add Arango service (singleton)
+        /// </summary>
         public static IServiceCollection AddArango(this IServiceCollection collection, string connectionString,
             IArangoConfiguration settings = null)
         {

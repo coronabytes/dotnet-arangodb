@@ -1,5 +1,8 @@
 namespace Core.Arango
 {
+    /// <summary>
+    /// Arango error codes in exception
+    /// </summary>
     public enum ArangoErrorCode
     {
         #region General errors
