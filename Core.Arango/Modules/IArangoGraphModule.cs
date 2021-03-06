@@ -5,6 +5,9 @@ using Core.Arango.Protocol;
 
 namespace Core.Arango.Modules
 {
+    /// <summary>
+    ///  Graph management
+    /// </summary>
     public interface IArangoGraphModule
     {
         /// <summary>

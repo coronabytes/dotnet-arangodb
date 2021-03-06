@@ -1594,37 +1594,97 @@
         </member>
         <member name="T:Core.Arango.Modules.IArangoDocumentModule">
             <summary>
-                Document operations
+                Document module
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.IArangoDocumentModule.GetAsync``1(Core.Arango.ArangoHandle,System.String,System.String,System.Boolean,System.Threading.CancellationToken)">
             <summary>
-                reads a single document
+                Reads a single document
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.IArangoDocumentModule.CreateManyAsync``2(Core.Arango.ArangoHandle,System.String,System.Collections.Generic.IEnumerable{``0},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{Core.Arango.Protocol.ArangoOverwriteMode},System.Threading.CancellationToken)">
             <summary>
-                creates documents
+                Creates multiple documents
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.IArangoDocumentModule.CreateManyAsync``1(Core.Arango.ArangoHandle,System.String,System.Collections.Generic.IEnumerable{``0},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{Core.Arango.Protocol.ArangoOverwriteMode},System.Threading.CancellationToken)">
             <summary>
-                creates documents
+                Creates multiple documents
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.IArangoDocumentModule.CreateAsync``2(Core.Arango.ArangoHandle,System.String,``0,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{Core.Arango.Protocol.ArangoOverwriteMode},System.Threading.CancellationToken)">
             <summary>
-                create document
+                Create document
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.IArangoDocumentModule.CreateAsync``1(Core.Arango.ArangoHandle,System.String,``0,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{Core.Arango.Protocol.ArangoOverwriteMode},System.Threading.CancellationToken)">
             <summary>
-                create document
+                Create document
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoDocumentModule.DeleteManyAsync``2(Core.Arango.ArangoHandle,System.String,System.Collections.Generic.IEnumerable{``0},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+                Removes multiple documents
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoDocumentModule.DeleteAsync``1(Core.Arango.ArangoHandle,System.String,System.String,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+                Removes single document by key
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.IArangoDocumentModule.ExportAsync``1(Core.Arango.ArangoHandle,System.String,System.Nullable{System.Boolean},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
             <summary>
                 Note: this API is currently not supported on cluster coordinators.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoDocumentModule.ImportAsync``1(Core.Arango.ArangoHandle,System.String,System.Collections.Generic.IEnumerable{``0},System.Boolean,System.Threading.CancellationToken)">
+            <summary>
+                Bulk import
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoDocumentModule.ReplaceManyAsync``2(Core.Arango.ArangoHandle,System.String,System.Collections.Generic.IEnumerable{``0},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+                Replaces multiple documents
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoDocumentModule.ReplaceManyAsync``1(Core.Arango.ArangoHandle,System.String,System.Collections.Generic.IEnumerable{``0},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+                Replaces multiple documents
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoDocumentModule.ReplaceAsync``2(Core.Arango.ArangoHandle,System.String,``0,System.Boolean,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+                Replace single document
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoDocumentModule.ReplaceAsync``1(Core.Arango.ArangoHandle,System.String,``0,System.Boolean,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+                Replace single document
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoDocumentModule.UpdateManyAsync``1(Core.Arango.ArangoHandle,System.String,System.Collections.Generic.IEnumerable{``0},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+                Updates multiple documents
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoDocumentModule.UpdateManyAsync``2(Core.Arango.ArangoHandle,System.String,System.Collections.Generic.IEnumerable{``0},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+                Updates multiple documents
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoDocumentModule.UpdateAsync``1(Core.Arango.ArangoHandle,System.String,``0,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+                Updates single document
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoDocumentModule.UpdateAsync``2(Core.Arango.ArangoHandle,System.String,``0,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+                Updates single document
+            </summary>
+        </member>
+        <member name="T:Core.Arango.Modules.IArangoFoxxModule">
+            <summary>
+             Foxx service management and execution
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.IArangoFoxxModule.ListServicesAsync(Core.Arango.ArangoHandle,System.Nullable{System.Boolean},System.Threading.CancellationToken)">
@@ -1810,6 +1870,61 @@
             <param name="cancellationToken"></param>
             <returns>list of function definitions</returns>
         </member>
+        <member name="T:Core.Arango.Modules.IArangoGraphEdgeModule">
+            <summary>
+             Graph edge manipulation
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoGraphEdgeModule.GetAsync``1(Core.Arango.ArangoHandle,System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+                Fetch an edge
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoGraphEdgeModule.CreateAsync``1(Core.Arango.ArangoHandle,System.String,System.String,``0,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+                Creates an edge in an existing graph
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoGraphEdgeModule.UpdateAsync``1(Core.Arango.ArangoHandle,System.String,System.String,System.String,``0,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+                Modify an existing edge
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoGraphEdgeModule.ReplaceAsync``1(Core.Arango.ArangoHandle,System.String,System.String,System.String,``0,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+                Replace the content of an existing edge
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoGraphEdgeModule.RemoveAsync``1(Core.Arango.ArangoHandle,System.String,System.String,System.String,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+                Removes an edge from graph
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoGraphEdgeModule.CreateAsync``2(Core.Arango.ArangoHandle,System.String,System.String,``0,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+                Creates an edge in an existing graph
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoGraphEdgeModule.UpdateAsync``2(Core.Arango.ArangoHandle,System.String,System.String,System.String,``0,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+                Modify an existing edge
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoGraphEdgeModule.ReplaceAsync``2(Core.Arango.ArangoHandle,System.String,System.String,System.String,``0,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+                Replace the content of an existing edge
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoGraphEdgeModule.RemoveAsync``2(Core.Arango.ArangoHandle,System.String,System.String,System.String,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+                Removes an edge from graph
+            </summary>
+        </member>
+        <member name="T:Core.Arango.Modules.IArangoGraphModule">
+            <summary>
+             Graph management
+            </summary>
+        </member>
         <member name="P:Core.Arango.Modules.IArangoGraphModule.Vertex">
             <summary>
               Vertex manipulation module.
@@ -1859,6 +1974,194 @@
         <member name="M:Core.Arango.Modules.IArangoGraphModule.RemoveEdgeDefinitionAsync(Core.Arango.ArangoHandle,System.String,System.String,System.Nullable{System.Boolean},System.Threading.CancellationToken)">
             <summary>
               Remove an edge definition form the graph
+            </summary>
+        </member>
+        <member name="T:Core.Arango.Modules.IArangoGraphVertexModule">
+            <summary>
+                Graph vertex manipulation
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoGraphVertexModule.GetAsync``1(Core.Arango.ArangoHandle,System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+                fetches an existing vertex
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoGraphVertexModule.CreateAsync``1(Core.Arango.ArangoHandle,System.String,System.String,``0,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+                Create a new vertex
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoGraphVertexModule.CreateAsync``2(Core.Arango.ArangoHandle,System.String,System.String,``0,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+                Create a new vertex
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoGraphVertexModule.UpdateAsync``1(Core.Arango.ArangoHandle,System.String,System.String,System.String,``0,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+                Update an existing vertex
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoGraphVertexModule.UpdateAsync``2(Core.Arango.ArangoHandle,System.String,System.String,System.String,``0,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+                Update an existing vertex
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoGraphVertexModule.ReplaceAsync``1(Core.Arango.ArangoHandle,System.String,System.String,System.String,``0,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+                Replaces an existing vertex
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoGraphVertexModule.ReplaceAsync``2(Core.Arango.ArangoHandle,System.String,System.String,System.String,``0,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+                Replaces an existing vertex
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoGraphVertexModule.RemoveAsync(Core.Arango.ArangoHandle,System.String,System.String,System.String,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+                Removes a vertex from a graph
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoGraphVertexModule.RemoveAsync``1(Core.Arango.ArangoHandle,System.String,System.String,System.String,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+                Removes a vertex from a graph
+            </summary>
+        </member>
+        <member name="T:Core.Arango.Modules.IArangoIndexModule">
+            <summary>
+                Index management
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoIndexModule.CreateAsync(Core.Arango.ArangoHandle,System.String,Core.Arango.Protocol.ArangoIndex,System.Threading.CancellationToken)">
+            <summary>
+                creates an index
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoIndexModule.DropAllAsync(Core.Arango.ArangoHandle,System.Threading.CancellationToken)">
+            <summary>
+                Drops all indexes of a collection
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoIndexModule.DropAsync(Core.Arango.ArangoHandle,System.String,System.Threading.CancellationToken)">
+            <summary>
+                Drops an index
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoIndexModule.ListAsync(Core.Arango.ArangoHandle,System.String,System.Threading.CancellationToken)">
+            <summary>
+                Returns all indexes of a collection
+            </summary>
+        </member>
+        <member name="T:Core.Arango.Modules.IArangoQueryModule">
+            <summary>
+            Query documents
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoQueryModule.FindAsync``1(Core.Arango.ArangoHandle,System.String,System.FormattableString,System.String,System.Int32,System.Threading.CancellationToken)">
+            <summary>
+             Finds documents
+            </summary>
+            <typeparam name="T">RETURN element type</typeparam>
+            <param name="database"></param>
+            <param name="collection"></param>
+            <param name="filter">FILTER expression with "x."</param>
+            <param name="projection">RETURN expression</param>
+            <param name="limit"></param>
+            <param name="cancellationToken"></param>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoQueryModule.SingleOrDefaultAsync``1(Core.Arango.ArangoHandle,System.String,System.FormattableString,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Finds single document (and throws exception of more than one are found)
+            </summary>
+            <typeparam name="T">RETURN element type</typeparam>
+            <param name="database"></param>
+            <param name="collection"></param>
+            <param name="filter">FILTER expression with "x."</param>
+            <param name="projection">RETURN expression</param>
+            <param name="cancellationToken"></param>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoQueryModule.ExecuteAsync(System.Type,System.Boolean,Core.Arango.ArangoHandle,System.String,System.Collections.Generic.IDictionary{System.String,System.Object},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+             Execute query (Linq provider)
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoQueryModule.ExecuteAsync``1(Core.Arango.ArangoHandle,System.FormattableString,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+             Execute query with string interpolated bind parameters
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoQueryModule.ExecuteAsync``1(Core.Arango.ArangoHandle,System.String,System.Collections.Generic.IDictionary{System.String,System.Object},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+             Execute query with bind parameters in dictionary
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoQueryModule.ExecuteStreamAsync``1(Core.Arango.ArangoHandle,System.FormattableString,System.Nullable{System.Boolean},System.Nullable{System.Int32},System.Threading.CancellationToken)">
+            <summary>
+             Execute query with string interpolated bind parameters (IAsyncEnumerable)
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoQueryModule.ExecuteStreamAsync``1(Core.Arango.ArangoHandle,System.String,System.Collections.Generic.IDictionary{System.String,System.Object},System.Nullable{System.Boolean},System.Nullable{System.Int32},System.Threading.CancellationToken)">
+            <summary>
+             Execute query with bind parameters in dictionary (IAsyncEnumerable)
+            </summary>
+        </member>
+        <member name="T:Core.Arango.Modules.IArangoTransactionModule">
+            <summary>
+            Stream and JavaScript transactions
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoTransactionModule.BeginAsync(Core.Arango.ArangoHandle,Core.Arango.Protocol.ArangoTransaction,System.Threading.CancellationToken)">
+            <summary>
+            Begin a server-side transaction
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoTransactionModule.AbortAsync(Core.Arango.ArangoHandle,System.Threading.CancellationToken)">
+            <summary>
+            Abort a server-side transaction
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoTransactionModule.CommitAsync(Core.Arango.ArangoHandle,System.Threading.CancellationToken)">
+            <summary>
+            Commit a server-side transaction
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoTransactionModule.ExecuteAsync``1(Core.Arango.ArangoHandle,Core.Arango.Protocol.ArangoTransaction,System.Threading.CancellationToken)">
+            <summary>
+            execute a server-side (script) transaction
+            </summary>
+        </member>
+        <member name="T:Core.Arango.Modules.IArangoUserModule">
+            <summary>
+                User management
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoUserModule.CreateAsync(Core.Arango.Protocol.ArangoUser,System.Threading.CancellationToken)">
+            <summary>
+                Create a new user.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoUserModule.DeleteAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+                Delete a user permanently.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoUserModule.DeleteDatabaseAccessAsync(Core.Arango.ArangoHandle,System.String,System.Threading.CancellationToken)">
+            <summary>
+                Clear the database access level, revert back to the default access level
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoUserModule.ListAsync(System.Threading.CancellationToken)">
+            <summary>
+                Lists all users
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoUserModule.PatchAsync(Core.Arango.Protocol.ArangoUser,System.Threading.CancellationToken)">
+            <summary>
+                Modify attributes of an existing user
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoUserModule.SetDatabaseAccessAsync(Core.Arango.ArangoHandle,System.String,Core.Arango.Protocol.ArangoAccess,System.Threading.CancellationToken)">
+            <summary>
+                Set the database access level.
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.Internal.ArangoIndexModule.DropAllAsync(Core.Arango.ArangoHandle,System.Threading.CancellationToken)">
@@ -2013,6 +2316,59 @@
         <member name="T:Core.Arango.Protocol.ArangoResponseBase">
             <summary>
                 Base response model
+            </summary>
+        </member>
+        <member name="T:Core.Arango.Protocol.ArangoTransaction">
+            <summary>
+             Arango JavaScript transaction
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoTransaction.AllowImplicit">
+            <summary>
+                Allow reading from undeclared collections.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoTransaction.Collections">
+            <summary>
+                Collections must be a JSON object that can have one or all sub-attributes read, write or exclusive, each being an
+                array of collection names or a single collection name as string.
+                Collections that will be written to in the transaction must be declared with the write or exclusive attribute or it
+                will fail, whereas non-declared collections from which is solely read will be added lazily.
+                The optional sub-attribute allowImplicit can be set to false to let transactions fail in case of undeclared
+                collections for reading.
+                Collections for reading should be fully declared if possible, to avoid deadlocks. See locking and isolation for
+                more information.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoTransaction.Action">
+            <summary>
+                The actual transaction operations to be executed, in the form of stringified JavaScript code.
+                The code will be executed on server side, with late binding.
+                It is thus critical that the code specified in action properly sets up all the variables it needs.
+                If the code specified in action ends with a return statement, the value returned will also be returned by the REST
+                API in the result attribute if the transaction committed successfully.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoTransaction.WaitForSync">
+            <summary>
+                An optional boolean flag that, if set, will force the transaction to write all data to disk before returning.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoTransaction.LockTimeout">
+            <summary>
+                An optional numeric value that can be used to set a timeout for waiting on collection locks.
+                If not specified, a default value will be used.
+                Setting lockTimeout to 0 will make ArangoDB not time out waiting for a lock.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoTransaction.Params">
+            <summary>
+                Optional arguments passed to action.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoTransaction.MaxTransactionSize">
+            <summary>
+                Transaction size limit in bytes. Honored by the RocksDB storage engine only.
             </summary>
         </member>
         <member name="T:Core.Arango.Serialization.IArangoFormattable">

@@ -7,6 +7,9 @@ using Core.Arango.Protocol;
 
 namespace Core.Arango.Modules
 {
+    /// <summary>
+    ///  Foxx service management and execution
+    /// </summary>
     public interface IArangoFoxxModule
     {
         /// <summary>
