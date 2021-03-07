@@ -7,7 +7,7 @@ namespace Core.Arango.Protocol
     /// <summary>
     ///   User access modes for database and collection
     /// </summary>
-    [JsonConverter(typeof(CamelCaseJsonStringEnumConverter))]
+    [JsonConverter(typeof(JsonStringEnumMemberConverter))]
     [Newtonsoft.Json.JsonConverter(typeof(StringEnumConverter))]
     public enum ArangoAccess
     {
@@ -19,11 +19,11 @@ namespace Core.Arango.Protocol
         /// <summary>
         ///   Read access only
         /// </summary>
-        [EnumMember(Value = "ro")] Ro,
+        [EnumMember(Value = "ro")] ReadOnly,
 
         /// <summary>
         ///   Read and write access
         /// </summary>
-        [EnumMember(Value = "rw")] Rw
+        [EnumMember(Value = "rw")] ReadWrite
     }
 }

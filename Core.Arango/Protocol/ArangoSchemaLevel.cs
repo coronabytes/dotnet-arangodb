@@ -7,7 +7,7 @@ namespace Core.Arango.Protocol
     /// <summary>
     ///   Arango schema validation level
     /// </summary>
-    [JsonConverter(typeof(CamelCaseJsonStringEnumConverter))]
+    [JsonConverter(typeof(JsonStringEnumMemberConverter))]
     [Newtonsoft.Json.JsonConverter(typeof(StringEnumConverter))]
     public enum ArangoSchemaLevel
     {

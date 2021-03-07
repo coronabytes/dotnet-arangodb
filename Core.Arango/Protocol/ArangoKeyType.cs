@@ -7,7 +7,7 @@ namespace Core.Arango.Protocol
     /// <summary>
     ///   Arango key generation type
     /// </summary>
-    [JsonConverter(typeof(CamelCaseJsonStringEnumConverter))]
+    [JsonConverter(typeof(JsonStringEnumMemberConverter))]
     [Newtonsoft.Json.JsonConverter(typeof(StringEnumConverter))]
     public enum ArangoKeyType
     {

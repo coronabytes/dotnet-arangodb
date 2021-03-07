@@ -6,7 +6,7 @@ namespace Core.Arango.Protocol
     /// <summary>
     ///   Arango View Consolidation Type
     /// </summary>
-    [System.Text.Json.Serialization.JsonConverter(typeof(CamelCaseJsonStringEnumConverter))]
+    [System.Text.Json.Serialization.JsonConverter(typeof(JsonStringEnumMemberConverter))]
     [Newtonsoft.Json.JsonConverter(typeof(StringEnumConverter))]
     public enum ArangoViewConsolidationType
     {

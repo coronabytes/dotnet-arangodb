@@ -10,11 +10,4 @@ namespace Core.Arango.Protocol.Internal
         [JsonProperty(PropertyName = "result")]
         public List<T> Result { get; set; }
     }
-
-    internal class SingleResult<T>
-    {
-        [JsonPropertyName("result")]
-        [JsonProperty(PropertyName = "result")]
-        public T Result { get; set; }
-    }
 }

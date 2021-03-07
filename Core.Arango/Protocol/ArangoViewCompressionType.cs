@@ -6,7 +6,7 @@ namespace Core.Arango.Protocol
     /// <summary>
     ///  Arango View Compression
     /// </summary>
-    [System.Text.Json.Serialization.JsonConverter(typeof(CamelCaseJsonStringEnumConverter))]
+    [System.Text.Json.Serialization.JsonConverter(typeof(JsonStringEnumMemberConverter))]
     [Newtonsoft.Json.JsonConverter(typeof(StringEnumConverter))]
     public enum ArangoViewCompressionType
     {
