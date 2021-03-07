@@ -6,6 +6,9 @@ namespace Core.Arango.Protocol
 {
     public class ArangoLinkProperty
     {
+        /// <summary>
+        ///   
+        /// </summary>
         [JsonPropertyName("analyzers")]
         [JsonProperty(PropertyName = "analyzers", NullValueHandling = NullValueHandling.Ignore)]
         [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

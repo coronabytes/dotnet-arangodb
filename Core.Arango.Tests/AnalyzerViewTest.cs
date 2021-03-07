@@ -18,18 +18,17 @@ namespace Core.Arango.Tests
             await Arango.Analyzer.CreateAsync("test", new ArangoAnalyzer
             {
                 Name = "text_de_nostem",
-                Type = "text",
+                Type = ArangoAnalyzerType.Text,
                 Properties = new ArangoAnalyzerProperties
                 {
                     Locale = "de.utf-8",
-                    Case = "lower",
+                    Case = ArangoAnalyzerCase.Lower,
                     Accent = false,
                     Stopwords = new List<string>(),
                     Stemming = false
                 },
                 Features = new List<string> {"position", "norm", "frequency"}
             });
-
 
             await Arango.Collection.CreateAsync("test", "collection", ArangoCollectionType.Document);
 

@@ -2164,6 +2164,31 @@
                 Set the database access level.
             </summary>
         </member>
+        <member name="T:Core.Arango.Modules.IArangoViewModule">
+            <summary>
+              Arango View (ArangoSearch) management
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoViewModule.CreateAsync(Core.Arango.ArangoHandle,Core.Arango.Protocol.ArangoView,System.Threading.CancellationToken)">
+            <summary>
+               creates an ArangoSearch View
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoViewModule.DropAllAsync(Core.Arango.ArangoHandle,System.Threading.CancellationToken)">
+            <summary>
+              Drops all Views in database
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoViewModule.DropAsync(Core.Arango.ArangoHandle,System.String,System.Threading.CancellationToken)">
+            <summary>
+               Drops a View
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoViewModule.ListAsync(Core.Arango.ArangoHandle,System.Threading.CancellationToken)">
+            <summary>
+               Returns all Views
+            </summary>
+        </member>
         <member name="M:Core.Arango.Modules.Internal.ArangoIndexModule.DropAllAsync(Core.Arango.ArangoHandle,System.Threading.CancellationToken)">
             <summary>
                 Drops all user created indices over all collections in database
@@ -2204,14 +2229,433 @@
                 Delete a user permanently.
             </summary>
         </member>
+        <member name="T:Core.Arango.Protocol.ArangoAccess">
+            <summary>
+              User access modes for database and collection
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoAccess.None">
+            <summary>
+              No access
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoAccess.Ro">
+            <summary>
+              Read access only
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoAccess.Rw">
+            <summary>
+              Read and write access
+            </summary>
+        </member>
+        <member name="T:Core.Arango.Protocol.ArangoAnalyzer">
+            <summary>
+              ArangoSearch Analyzer
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoAnalyzer.Name">
+            <summary>
+               The Analyzer name.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoAnalyzer.Type">
+             <summary>
+                The Analyzer type.
+             </summary>
+             <example>
+            
+             </example>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoAnalyzer.Properties">
+            <summary>
+               The properties used to configure the specified Analyzer type.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoAnalyzer.Features">
+            <summary>
+               The set of features to set on the Analyzer generated fields. The default value is an empty array.
+            </summary>
+        </member>
+        <member name="T:Core.Arango.Protocol.ArangoAnalyzerCase">
+            <summary>
+              AnalyzerType
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoAnalyzerCase.Lower">
+            <summary>
+               To convert to all lower-case characters (default)
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoAnalyzerCase.Upper">
+            <summary>
+               To convert to all upper-case characters
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoAnalyzerCase.None">
+            <summary>
+              To not change character case
+            </summary>
+        </member>
+        <member name="T:Core.Arango.Protocol.ArangoAnalyzerProperties">
+            <summary>
+              ArangoSearch Analyzer Properties
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoAnalyzerProperties.Locale">
+            <summary>
+              (Stem | Norm | Text) A locale in the format language[_COUNTRY][.encoding][@variant]
+            </summary>
+            <example>
+             "de.utf-8" or "en_US.utf-8"
+            </example>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoAnalyzerProperties.Case">
+            <summary>
+              (Text | Norm) Character conversion
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoAnalyzerProperties.Stopwords">
+            <summary>
+              (Text)
+              An array of strings with words to omit from result.
+              Default: load words from stopwordsPath.
+              To disable stop-word filtering provide an empty array [].
+              If both stopwords and stopwordsPath are provided then both word sources are combined.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoAnalyzerProperties.StopwordsPath">
+            <summary>
+              (Text)
+              Path with a language sub-directory containing files with words to omit.
+              Each word has to be on a separate line.
+              Everything after the first whitespace character on a line will be ignored and can be used for comments.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoAnalyzerProperties.Accent">
+            <summary>
+              (Text | Norm) To preserve accented characters or to convert accented characters to their base characters (default)
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoAnalyzerProperties.Stemming">
+            <summary>
+              (Text) To apply stemming on returned words (default) or to leave the tokenized words as-is.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoAnalyzerProperties.EdgeNgram">
+            <summary>
+              (Text) If present, then edge n-grams are generated for each token (word)
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoAnalyzerProperties.Delimiter">
+            <summary>
+              (Delimiter) The delimiting character(s)
+            </summary>
+        </member>
+        <member name="T:Core.Arango.Protocol.ArangoAnalyzerType">
+            <summary>
+              AnalyzerType
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoAnalyzerType.Identity">
+            <summary>
+               Treat value as atom (no transformation)
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoAnalyzerType.Delimiter">
+            <summary>
+              Split into tokens at user-defined character
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoAnalyzerType.Stem">
+            <summary>
+              Apply stemming to the value as a whole
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoAnalyzerType.Norm">
+            <summary>
+              Apply normalization to the value as a whole
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoAnalyzerType.Ngram">
+            <summary>
+              Create n-grams from value with user-defined lengths
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoAnalyzerType.Text">
+            <summary>
+              Tokenize into words, optionally with stemming, normalization, stop-word filtering and edge n-gram generation
+            </summary>
+        </member>
+        <member name="T:Core.Arango.Protocol.ArangoBackup">
+            <summary>
+              Arango HotBackup
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoBackup.Id">
+            <summary>
+              Unique identifier
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoBackup.Version">
+            <summary>
+              ArangoDB version
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoBackup.Keys">
+            <summary>
+              Keys
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoBackup.SizeInBytes">
+            <summary>
+               SizeInBytes
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoBackup.NrFiles">
+            <summary>
+             Number of files
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoBackup.NrDbServers">
+            <summary>
+              Number of database servers
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoBackup.Available">
+            <summary>
+              is available?
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoBackup.NrPiecesPresent">
+            <summary>
+              Number of pieces present
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoBackup.PotentiallyInconsistent">
+            <summary>
+             Is potentially inconsistent?
+            </summary>
+        </member>
+        <member name="T:Core.Arango.Protocol.ArangoBackupRequest">
+            <summary>
+              Arango HotBackup request
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoBackupRequest.Label">
+            <summary>
+              The label for this backup.
+              The label is used together with a timestamp string create a unique backup identifier, {timestamp}_{label}.
+              If no label is specified, the empty string is assumed and a default UUID is created for this part of the ID.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoBackupRequest.Timeout">
+            <summary>
+              The time in seconds that the operation tries to get a consistent snapshot. The default is 120 seconds.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoBackupRequest.AllowInconsistent">
+            <summary>
+              If this flag is set to true and no global transaction lock can be acquired within the given timeout, a possibly inconsistent backup is taken.
+              The default for this flag is false and in this case a timeout results in an HTTP 408 error.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoBackupRequest.Force">
+            <summary>
+              If this flag is set to true and no global transaction lock can be acquired within the given timeout, all running transactions are forcefully aborted to ensure that a consistent backup can be created.
+              This does not include JavaScript transactions.
+              It waits for the transactions to be aborted at most timeout seconds.
+              Thus using force the request timeout is doubled. To abort transactions is almost certainly not what you want for your application.
+              In the presence of intermediate commits it can even destroy the atomicity of your transactions.
+              Use at your own risk, and only if you need a consistent backup at all costs.
+              The default and recommended value is false.
+              If both allowInconsistent and force are set to true, then the latter takes precedence and transactions are aborted.
+              This is only available in the cluster.
+            </summary>
+        </member>
+        <member name="T:Core.Arango.Protocol.ArangoCollection">
+            <summary>
+              Arango collection
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoCollection.Name">
+            <summary>
+              The name of the collection.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoCollection.Type">
+            <summary>
+              The type of the collection to create.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoCollection.IsSystem">
+            <summary>
+             If true, create a system collection.
+             In this case collection-name should start with an underscore.
+             End users should normally create non-system collections only. API implementors may be required to create system collections in very special occasions, but normally a regular collection will do. (The default is false)
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoCollection.NumberOfShards">
+            <summary>
+              (The default is 1): in a cluster, this value determines the number of shards to create for the collection.
+              In a single server setup, this option is meaningless.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoCollection.KeyOptions">
+            <summary>
+              Additional options for key generation.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoCollection.ShardKeys">
+            <summary>
+              (The default is [ “_key” ]): in a cluster, this attribute determines which document attributes are used to determine the target shard for documents.
+              Documents are sent to shards based on the values of their shard key attributes.
+              The values of all shard key attributes in a document are hashed, and the hash value is used to determine the target shard. Note: Values of shard key attributes cannot be changed once set.
+              This option is meaningless in a single server setup.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoCollection.ReplicationFactor">
+            <summary>
+              (The default is 1): in a cluster, this attribute determines how many copies of each shard are kept on different DB-Servers.
+              The value 1 means that only one copy (no synchronous replication) is kept.
+              A value of k means that k-1 replicas are kept.
+              It can also be the string "satellite" for a SatelliteCollection, where the replication factor is matched to the number of DB-Servers (Enterprise Edition only).
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoCollection.ShardingStrategy">
+            <summary>
+              This attribute specifies the name of the sharding strategy to use for the collection.
+              Since ArangoDB 3.4 there are different sharding strategies to select from when creating a new collection. The selected shardingStrategy value will remain fixed for the collection and cannot be changed afterwards.
+              This is important to make the collection keep its sharding settings and always find documents already distributed to shards using the same initial sharding algorithm.
+              community-compat, enterprise-compat, enterprise-smart-edge-compat, hash, enterprise-hash-smart-edge
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoCollection.DistributeShardsLike">
+            <summary>
+              (The default is ”“): in an Enterprise Edition cluster, this attribute binds the specifics of sharding for the newly created collection to follow that of a specified existing collection.
+              Note: Using this parameter has consequences for the prototype collection.
+              It can no longer be dropped, before the sharding-imitating collections are dropped.
+              Equally, backups and restores of imitating collections alone will generate warnings (which can be overridden) about missing sharding prototype.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoCollection.WriteConcern">
+            <summary>
+              Write concern for this collection (default: 1).
+              It determines how many copies of each shard are required to be in sync on the different DB-Servers.
+              If there are less then these many copies in the cluster a shard will refuse to write.
+              Writes to shards with enough up-to-date copies will succeed at the same time however.
+              The value of writeConcern can not be larger than replicationFactor. (cluster only)
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoCollection.SmartJoinAttribute">
+            <summary>
+              In an Enterprise Edition cluster, this attribute determines an attribute of the collection that must contain the shard key value of the referred-to SmartJoin collection.
+              Additionally, the shard key for a document in this collection must contain the value of this attribute, followed by a colon, followed by the actual primary key of the document.
+            </summary>
+        </member>
+        <member name="T:Core.Arango.Protocol.ArangoCollectionType">
+            <summary>
+              Arango collection type
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoCollectionType.Document">
+            <summary>
+             document collection
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoCollectionType.Edge">
+            <summary>
+             edge collection
+            </summary>
+        </member>
+        <member name="T:Core.Arango.Protocol.ArangoCollectionUpdate">
+            <summary>
+              Arango collections updatable properties
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoCollectionUpdate.WaitForSync">
+            <summary>
+               If true then the data is synchronized to disk before returning from a document create, update, replace or removal operation. (default: false)
+            </summary>
+        </member>
         <member name="P:Core.Arango.Protocol.ArangoCollectionUpdate.Schema">
             <summary>
-                When updating collection this needs to contain existing schema or schema will be removed
+               Optional object that specifies the collection level schema for documents.
+               When updating collection this needs to contain existing schema or schema will be removed
+            </summary>
+        </member>
+        <member name="T:Core.Arango.Protocol.ArangoEdgeDefinition">
+            <summary>
+              Edge definition
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoEdgeDefinition.Collection">
+            <summary>
+               The name of the edge collection to be used.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoEdgeDefinition.From">
+            <summary>
+               One or many vertex collections that can contain source vertices.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoEdgeDefinition.To">
+            <summary>
+               One or many vertex collections that can contain target vertices.
+            </summary>
+        </member>
+        <member name="T:Core.Arango.Protocol.ArangoEdgeNgram">
+            <summary>
+               N-grams for substring matching
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoEdgeNgram.Min">
+            <summary>
+              (Ngram) unsigned integer for the minimum n-gram length
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoEdgeNgram.Max">
+            <summary>
+               (Ngram) unsigned integer for the maximum n-gram length
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoEdgeNgram.PreserveOriginal">
+            <summary>
+               (Ngram) to include the original value as well (true) or to produce the n-grams based on min and max only (false)
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoEdgeNgram.StartMarker">
+            <summary>
+               (Ngram) This value will be prepended to n-grams which include the beginning of the input.
+               Can be used for matching prefixes.
+               Choose a character or sequence as marker which does not occur in the input.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoEdgeNgram.EndMarker">
+            <summary>
+              (Ngram)  this value will be appended to n-grams which include the end of the input.
+              Can be used for matching suffixes.
+              Choose a character or sequence as marker which does not occur in the input.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoEdgeNgram.StreamType">
+            <summary>
+              (Ngram) type of the input stream
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoFoxxSource">
             <summary>
               Foxx service installation source
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Protocol.ArangoFoxxSource.FromZip(System.IO.Stream)">
+            <summary>
+              Foxx service from zip archive
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Protocol.ArangoFoxxSource.FromJavaScript(System.String)">
+            <summary>
+               Foxx service from single javascript file
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoGraph.Name">
@@ -2271,10 +2715,200 @@
                 writeConcern can not be larger than replicationFactor. (cluster only)
             </summary>
         </member>
+        <member name="T:Core.Arango.Protocol.ArangoIndex">
+            <summary>
+              Arango index
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoIndex.Id">
+            <summary>
+              The identifier of the index
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoIndex.Name">
+            <summary>
+              Name of the index or null for auto generation
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoIndex.Type">
+            <summary>
+              Type of the index
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoIndex.Fields">
+            <summary>
+              (Hash | Skiplist) An array of attribute paths.
+              (TTL | Fulltext) An array with exactly one attribute path.
+              (Geo) An array with one or two attribute paths.
+                If it is an array with one attribute path location, then a geo-spatial index on all documents is created using location as path to the coordinates.
+                The value of the attribute must be an array with at least two double values.
+                The array must contain the latitude (first value) and the longitude (second value).
+                All documents, which do not have the attribute path or with value that are not suitable, are ignored.
+                If it is an array with two attribute paths latitude and longitude, then a geo-spatial index on all documents is created using latitude and longitude as paths the latitude and the longitude.
+                The value of the attribute latitude and of the attribute longitude must a double.
+                All documents, which do not have the attribute paths or which values are not suitable, are ignored.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoIndex.MinLength">
+            <summary>
+              (Fulltext)  Minimum character length of words to index.
+              Will default to a server-defined value if unspecified.
+              It is thus recommended to set this value explicitly when creating the index.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoIndex.GeoJson">
+            <summary>
+              (Geo) If a geo-spatial index on a location is constructed and geoJson is true, then the order within the array is longitude followed by latitude.
+              This corresponds to the format described in http://geojson.org/geojson-spec.html#positions
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoIndex.Sparse">
+            <summary>
+              (Hash | SkipList)
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoIndex.Unique">
+            <summary>
+              (Hash | SkipList) Note: Unique indexes on non-shard keys are not supported in a cluster.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoIndex.InBackground">
+            <summary>
+              Indexes can also be created in “background”, not using an exclusive lock during the entire index creation.
+              Background index creation might be slower than the “foreground” index creation and require more RAM.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoIndex.Deduplicate">
+            <summary>
+              (Hash | SkipList) Controls whether inserting duplicate index values from the same document into a unique array index will lead to a unique constraint error or not.
+              The default value is true, so only a single instance of each non-unique index value will be inserted into the index per document.
+              Trying to insert a value into the index that already exists in the index will always fail, regardless of the value of this attribute.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoIndex.ExpireAfter">
+            <summary>
+              (TTL) The time (in seconds) after a document’s creation after which the documents count as “expired”.
+            </summary>
+        </member>
+        <member name="T:Core.Arango.Protocol.ArangoIndexType">
+            <summary>
+             Arango Index Type
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoIndexType.Hash">
+            <summary>
+              Hash - for exact matches
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoIndexType.Skiplist">
+            <summary>
+             Skiplist index - for number/date/string range matches
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoIndexType.Ttl">
+            <summary>
+            Time to Live index
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoIndexType.Geo">
+            <summary>
+             Geo-spatial index
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoIndexType.Fulltext">
+            <summary>
+              Fulltext index - Better use ArangoSearch Views
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoIndexType.Edge">
+            <summary>
+             (System) Edge Index
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoIndexType.Primary">
+            <summary>
+             (System) Primary Index
+            </summary>
+        </member>
+        <member name="T:Core.Arango.Protocol.ArangoKeyOptions">
+            <summary>
+             Arango collection key generating options
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoKeyOptions.Type">
+            <summary>
+              Specifies the type of the key generator.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoKeyOptions.AllowUserKeys">
+            <summary>
+              If set to true, then it is allowed to supply own key values in the _key attribute of a document.
+              If set to false, then the key generator will solely be responsible for generating keys and supplying own key values in the _key attribute of documents is considered an error.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoKeyOptions.Increment">
+            <summary>
+              increment value for autoincrement key generator. Not used for other key generator types.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoKeyOptions.Offset">
+            <summary>
+              Initial offset value for autoincrement key generator. Not used for other key generator types.
+            </summary>
+        </member>
+        <member name="T:Core.Arango.Protocol.ArangoKeyType">
+            <summary>
+              Arango key generation type
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoKeyType.Traditional">
+            <summary>
+              The traditional key generator generates numerical keys in ascending order. 
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoKeyType.Autoincrement">
+            <summary>
+             The autoincrement key generator generates numerical keys in ascending order, the initial offset and the spacing can be configured
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoKeyType.Uuid">
+            <summary>
+             The uuid key generator generates universally unique 128 bit keys, which are stored in hexadecimal human-readable format.
+             This key generator can be used in a single-server or cluster to generate “seemingly random” keys.
+             The keys produced by this key generator are not lexicographically sorted.
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoKeyType.Padded">
+            <summary>
+              The padded key generator generates keys of a fixed length (16 bytes) in ascending lexicographical sort order.
+              This is ideal for usage with the RocksDB engine, which will slightly benefit keys that are inserted in lexicographically ascending order.
+              The key generator can be used in a single-server or cluster
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoLinkProperty.Analyzers">
+            <summary>
+              
+            </summary>
+        </member>
         <member name="P:Core.Arango.Protocol.ArangoLinkProperty.StoreValues">
             <summary>
                 none: Do not store values with the view.
                 id: Store information about value presence to allow use of the EXISTS() function
+            </summary>
+        </member>
+        <member name="T:Core.Arango.Protocol.ArangoNgramStreamType">
+            <summary>
+              N-gram stream type
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoNgramStreamType.Binary">
+            <summary>
+               One byte is considered as one character (default)
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoNgramStreamType.Utf8">
+            <summary>
+               one Unicode codepoint is treated as one character
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoOverwriteMode">
@@ -2316,6 +2950,59 @@
         <member name="T:Core.Arango.Protocol.ArangoResponseBase">
             <summary>
                 Base response model
+            </summary>
+        </member>
+        <member name="T:Core.Arango.Protocol.ArangoSchema">
+            <summary>
+              Schema Validation
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoSchema.Rule">
+            <summary>
+              The rule attribute must contain the JSON Schema description.
+            </summary>
+            <example>
+             {
+               properties: { nums: { type: "array", items: { type: "number", maximum: 6 } } }, 
+               additionalProperties: { type: "string" },
+               required: ["nums"]
+             }
+            </example>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoSchema.Level">
+            <summary>
+                controls when the validation will be applied.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoSchema.Message">
+            <summary>
+               sets the message that will be used when validation fails.
+            </summary>
+        </member>
+        <member name="T:Core.Arango.Protocol.ArangoSchemaLevel">
+            <summary>
+              Arango schema validation level
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoSchemaLevel.None">
+            <summary>
+              The rule is inactive and validation thus turned off.
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoSchemaLevel.New">
+            <summary>
+              Only newly inserted documents are validated.
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoSchemaLevel.Moderate">
+            <summary>
+              New and modified documents must pass validation, except for modified documents where the OLD value did not pass validation already.
+              This level is useful if you have documents which do not match your target structure, but you want to stop the insertion of more invalid documents and prohibit that valid documents are changed to invalid documents.
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoSchemaLevel.Strict">
+            <summary>
+              All new and modified document must strictly pass validation. No exceptions are made (default).
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoTransaction">
@@ -2369,6 +3056,169 @@
         <member name="P:Core.Arango.Protocol.ArangoTransaction.MaxTransactionSize">
             <summary>
                 Transaction size limit in bytes. Honored by the RocksDB storage engine only.
+            </summary>
+        </member>
+        <member name="T:Core.Arango.Protocol.ArangoViewConsolidationPolicy">
+            <summary>
+              Arango View Consolidation Policy
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoViewConsolidationPolicy.Type">
+            <summary>
+              The segment candidates for the “consolidation” operation are selected based upon several possible configurable formulas as defined by their types.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoViewConsolidationPolicy.Threshold">
+            <summary>
+              value in the range [0.0, 1.0]
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoViewConsolidationPolicy.SegmentsBytesFloor">
+            <summary>
+              Defines the value (in bytes) to treat all smaller segments as equal for consolidation selection (default: 2097152)
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoViewConsolidationPolicy.SegmentsBytesMax">
+            <summary>
+              Maximum allowed size of all consolidated segments in bytes (default: 5368709120)
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoViewConsolidationPolicy.SegmentsMax">
+            <summary>
+              The maximum number of segments that will be evaluated as candidates for consolidation (default: 10)
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoViewConsolidationPolicy.SegmentsMin">
+            <summary>
+              The minimum number of segments that will be evaluated as candidates for consolidation (default: 1)
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoViewConsolidationPolicy.MinScore">
+            <summary>
+              ?
+            </summary>
+        </member>
+        <member name="T:Core.Arango.Protocol.ArangoView">
+            <summary>
+              ArangoSearch View
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoView.Name">
+            <summary>
+              The name of the View.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoView.Type">
+            <summary>
+              The type of the View. Must be equal to “arangosearch”. This option is immutable.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoView.Links">
+            <summary>
+              Expects an object with the attribute keys being names of to be linked collections, and the link properties as attribute values.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoView.PrimarySort">
+            <summary>
+              A primary sort order can be defined to enable an AQL optimization.
+              If a query iterates over all documents of a View, wants to sort them by attribute values and the (left-most) fields to sort by as well as their sorting direction match with the primarySort definition, then the SORT operation is optimized away.
+              This option is immutable.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoView.PrimarySortCompression">
+            <summary>
+              Defines how to compress the primary sort data (introduced in v3.7.1). ArangoDB v3.5 and v3.6 always compress the index using LZ4.
+              This option is immutable.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoView.StoredValues">
+            <summary>
+              An array of objects to describe which document attributes to store in the View index (introduced in v3.7.1).
+              It can then cover search queries, which means the data can be taken from the index directly and accessing the storage engine can be avoided.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoView.CleanupIntervalStep">
+            <summary>
+              Wait at least this many commits between removing unused files in the ArangoSearch data directory (default: 2, to disable use: 0).
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoView.CommitIntervalMsec">
+            <summary>
+              Wait at least this many milliseconds between committing View data store changes and making documents visible to queries (default: 1000, to disable use: 0)
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoView.ConsolidationPolicy">
+            <summary>
+             The consolidation policy to apply for selecting which segments should be merged
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoView.ConsolidationIntervalMsec">
+            <summary>
+              Wait at least this many milliseconds between applying ‘consolidationPolicy’ to consolidate View data store and possibly release space on the filesystem (default: 10000, to disable use: 0).
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoView.WritebufferIdle">
+            <summary>
+              Maximum number of writers (segments) cached in the pool (default: 64, use 0 to disable, immutable)
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoView.WritebufferActive">
+            <summary>
+              Maximum number of concurrent active writers (segments) that perform a transaction. Other writers (segments) wait till current active writers (segments) finish (default: 0, use 0 to disable, immutable)
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoView.WritebufferSizeMax">
+            <summary>
+              Maximum memory byte size per writer (segment) before a writer (segment) flush is triggered.
+              0 value turns off this limit for any writer (buffer) and data will be flushed periodically based on the value defined for the flush thread (ArangoDB server startup option).
+              0 value should be used carefully due to high potential memory consumption (default: 33554432, use 0 to disable, immutable)
+            </summary>
+        </member>
+        <member name="T:Core.Arango.Protocol.ArangoViewCompressionType">
+            <summary>
+             Arango View Compression
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoViewCompressionType.Lz4">
+            <summary>
+               LZ4
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoViewCompressionType.None">
+            <summary>
+               None
+            </summary>
+        </member>
+        <member name="T:Core.Arango.Protocol.ArangoViewConsolidationType">
+            <summary>
+              Arango View Consolidation Type
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoViewConsolidationType.Tier">
+            <summary>
+              (default): consolidate based on segment byte size and live document count as dictated by the customization attributes.
+              If this type is used, then below segments* and minScore properties are available.
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoViewConsolidationType.BytesAccum">
+            <summary>
+              Consolidate if and only if {threshold} > (segment_bytes + sum_of_merge_candidate_segment_bytes) / all_segment_bytes i.e. the sum of all candidate segment byte size is less than the total segment byte size multiplied by the {threshold}.
+              If this type is used, then below threshold property is available.
+            </summary>
+        </member>
+        <member name="T:Core.Arango.Protocol.ArangoViewStoredValue">
+            <summary>
+              
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoViewStoredValue.Fields">
+            <summary>
+              Attribute paths to store
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoViewStoredValue.Compression">
+            <summary>
+             Compression
             </summary>
         </member>
         <member name="T:Core.Arango.Serialization.IArangoFormattable">
