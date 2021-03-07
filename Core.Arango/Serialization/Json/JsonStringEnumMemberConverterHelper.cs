@@ -10,8 +10,10 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Text.Json;
 
-namespace Core.Arango
+namespace Core.Arango.Serialization.Json
 {
+	#nullable enable
+	
 	internal class JsonStringEnumMemberConverterHelper<TEnum>
 		where TEnum : struct, Enum
 	{
@@ -346,4 +348,6 @@ namespace Core.Arango
 			};
 		}
 	}
+	
+	#nullable restore
 }

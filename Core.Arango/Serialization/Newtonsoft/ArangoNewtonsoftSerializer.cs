@@ -4,13 +4,20 @@ using Newtonsoft.Json.Serialization;
 
 namespace Core.Arango.Serialization.Newtonsoft
 {
+    /// <summary>
+    ///   Arango Json Serializer with Newtonsoft
+    /// </summary>
     public class ArangoNewtonsoftSerializer : IArangoSerializer
     {
-        protected JsonSerializerSettings Settings;
+        private readonly JsonSerializerSettings _settings;
 
+        /// <summary>
+        ///   Arango Json Serializer with Newtonsoft
+        /// </summary>
+        /// <param name="resolver">PascalCase or camelCaseResolver</param>
         public ArangoNewtonsoftSerializer(IContractResolver resolver)
         {
-            Settings = new JsonSerializerSettings
+            _settings = new JsonSerializerSettings
             {
                 ContractResolver = resolver,
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
@@ -20,19 +27,22 @@ namespace Core.Arango.Serialization.Newtonsoft
             };
         }
 
+        /// <inheritdoc/>
         public string Serialize(object value)
         {
-            return JsonConvert.SerializeObject(value, Settings);
+            return JsonConvert.SerializeObject(value, _settings);
         }
 
+        /// <inheritdoc/>
         public T Deserialize<T>(string value)
         {
-            return JsonConvert.DeserializeObject<T>(value, Settings);
+            return JsonConvert.DeserializeObject<T>(value, _settings);
         }
 
+        /// <inheritdoc/>
         public object Deserialize(string v, Type t)
         {
-            return JsonConvert.DeserializeObject(v, t, Settings);
+            return JsonConvert.DeserializeObject(v, t, _settings);
         }
     }
 }

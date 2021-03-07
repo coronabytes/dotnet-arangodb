@@ -7,10 +7,13 @@ using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Core.Arango
+namespace Core.Arango.Serialization.Json
 {
+    #nullable enable
+    
+    // TODO: Obsolete with .NET 6?
     /// <summary>
-    ///   System.Text.Json camelCase enums
+    ///   System.Text.Json EnumMember support
     /// </summary>
     public class JsonStringEnumMemberConverter : JsonConverterFactory
     {
@@ -116,4 +119,6 @@ namespace Core.Arango
                 => _JsonStringEnumMemberConverterHelper.Write(writer, value!.Value);
         }
     }
+    
+#nullable restore
 }

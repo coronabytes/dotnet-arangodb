@@ -1441,67 +1441,6 @@
                 Get Arango cluster endpoints
             </summary>
         </member>
-        <member name="T:Core.Arango.JsonStringEnumMemberConverter">
-            <summary>
-              System.Text.Json camelCase enums
-            </summary>
-        </member>
-        <member name="M:Core.Arango.JsonStringEnumMemberConverter.#ctor">
-            <summary>
-            Initializes a new instance of the <see cref="T:Core.Arango.JsonStringEnumMemberConverter"/> class.
-            </summary>
-        </member>
-        <member name="M:Core.Arango.JsonStringEnumMemberConverter.#ctor(System.Text.Json.JsonNamingPolicy,System.Boolean)">
-            <summary>
-            Initializes a new instance of the <see cref="T:Core.Arango.JsonStringEnumMemberConverter"/> class.
-            </summary>
-            <param name="namingPolicy">
-            Optional naming policy for writing enum values.
-            </param>
-            <param name="allowIntegerValues">
-            True to allow undefined enum values. When true, if an enum value isn't
-            defined it will output as a number rather than a string.
-            </param>
-        </member>
-        <member name="M:Core.Arango.JsonStringEnumMemberConverter.CanConvert(System.Type)">
-            <inheritdoc/>
-        </member>
-        <member name="M:Core.Arango.JsonStringEnumMemberConverter.CreateConverter(System.Type,System.Text.Json.JsonSerializerOptions)">
-            <inheritdoc/>
-        </member>
-        <member name="M:Core.Arango.JsonStringEnumMemberConverterHelper`1.GenerateJsonException(System.Type)">
-            <summary>
-            Generate a <see cref="T:System.Text.Json.JsonException"/> using the internal
-            <c>JsonException.AppendPathInformation</c> property that will
-            eventually include the JSON path, line number, and byte position in
-            line.
-            <para>
-            The final message of the exception looks like: The JSON value could
-            not be converted to {0}. Path: $.{JSONPath} | LineNumber:
-            {LineNumber} | BytePositionInLine: {BytePositionInLine}.
-            </para>
-            </summary>
-            <param name="propertyType">Property type.</param>
-            <returns><see cref="T:System.Text.Json.JsonException"/>.</returns>
-        </member>
-        <member name="M:Core.Arango.JsonStringEnumMemberConverterHelper`1.GenerateJsonException(System.Type,System.String,System.Exception)">
-            <summary>
-            Generate a <see cref="T:System.Text.Json.JsonException"/> using the internal
-            <c>JsonException.AppendPathInformation</c> property that will
-            eventually include the JSON path, line number, and byte position in
-            line.
-            <para>
-            The final message of the exception looks like: The JSON value '{1}'
-            could not be converted to {0}. Path: $.{JSONPath} | LineNumber:
-            {LineNumber} | BytePositionInLine: {BytePositionInLine}.
-            </para>
-            </summary>
-            <param name="propertyType">Property type.</param>
-            <param name="propertyValue">Value that could not be parsed into
-            property type.</param>
-            <param name="innerException">Optional inner <see cref="T:System.Exception"/>.</param>
-            <returns><see cref="T:System.Text.Json.JsonException"/>.</returns>
-        </member>
         <member name="T:Core.Arango.Modules.IArangoAnalyzerModule">
             <summary>
              ArangoSearch analyzer
@@ -2693,6 +2632,81 @@
               (Ngram) type of the input stream
             </summary>
         </member>
+        <member name="T:Core.Arango.Protocol.ArangoEdgeResponse`1">
+            <summary>
+              Arango Graph Edge Response
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoEdgeResponse`1.Edge">
+            <summary>
+             Edge
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoEdgeResponse`1.New">
+            <summary>
+             New version
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoEdgeResponse`1.Old">
+            <summary>
+             Old version
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoEdgeResponse`1.Removed">
+            <summary>
+             When Removed
+            </summary>
+        </member>
+        <member name="T:Core.Arango.Protocol.ArangoError">
+            <summary>
+             Arango Error Description
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Protocol.ArangoError.#ctor(System.String,Core.Arango.ArangoErrorCode)">
+             Arango Error Description
+            <param name="errorMessage">message</param>
+            <param name="errorNumber">code</param>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoError.ErrorMessage">
+            <summary>
+             Message
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoError.ErrorNumber">
+            <summary>
+             Code
+            </summary>
+        </member>
+        <member name="T:Core.Arango.Protocol.ArangoFoxxService">
+            <summary>
+             Foxx Service Description
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoFoxxService.Mount">
+            <summary>
+               the mount path of the service
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoFoxxService.Development">
+            <summary>
+             true if the service is running in development mode
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoFoxxService.Legacy">
+            <summary>
+             true if the service is running in 2.8 legacy compatibility mode
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoFoxxService.Name">
+            <summary>
+             a string identifying the service type
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoFoxxService.Version">
+            <summary>
+             a semver-compatible version string
+            </summary>
+        </member>
         <member name="T:Core.Arango.Protocol.ArangoFoxxSource">
             <summary>
               Foxx service installation source
@@ -2706,6 +2720,32 @@
         <member name="M:Core.Arango.Protocol.ArangoFoxxSource.FromJavaScript(System.String)">
             <summary>
                Foxx service from single javascript file
+            </summary>
+        </member>
+        <member name="T:Core.Arango.Protocol.ArangoFunctionDefinition">
+            <summary>
+             Arango User Functions
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoFunctionDefinition.Name">
+            <summary>
+             The fully qualified name of the user functions.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoFunctionDefinition.Code">
+            <summary>
+             A string representation of the function body.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoFunctionDefinition.IsDeterministic">
+            <summary>
+             An optional boolean value to indicate whether the function results are fully deterministic (function return value solely depends on the input value and return value is the same for repeated calls with same input).
+             The isDeterministic attribute is currently not used but may be used later for optimizations.
+            </summary>
+        </member>
+        <member name="T:Core.Arango.Protocol.ArangoGraph">
+            <summary>
+             Arango Graph Description
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoGraph.Name">
@@ -2736,6 +2776,11 @@
         <member name="P:Core.Arango.Protocol.ArangoGraph.Options">
             <summary>
                 JSON object to define options for creating collections within this graph. It can contain the following attributes:
+            </summary>
+        </member>
+        <member name="T:Core.Arango.Protocol.ArangoGraphOptions">
+            <summary>
+             Arango Graph Options
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoGraphOptions.SmartGraphAttribute">
@@ -2935,15 +2980,40 @@
               The key generator can be used in a single-server or cluster
             </summary>
         </member>
+        <member name="T:Core.Arango.Protocol.ArangoLinkProperty">
+            <summary>
+             Arango View Link Property
+            </summary>
+        </member>
         <member name="P:Core.Arango.Protocol.ArangoLinkProperty.Analyzers">
             <summary>
-              
+               A list of Analyzers, by name as defined via the Analyzers, that should be applied to values of processed document attributes.
+               default: [ "identity" ]
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoLinkProperty.IncludeAllFields">
+            <summary>
+               If set to true, then process all document attributes. Otherwise, only consider attributes mentioned in fields.
+               Attributes not explicitly specified in fields will be processed with default link properties, i.e. {}.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoLinkProperty.TrackListPositions">
+            <summary>
+               If set to true, then for array values track the value position in arrays.
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoLinkProperty.StoreValues">
             <summary>
                 none: Do not store values with the view.
                 id: Store information about value presence to allow use of the EXISTS() function
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoLinkProperty.Fields">
+            <summary>
+               An object of fields that should be processed at each level of the document.
+               Each key specifies the document attribute to be processed.
+               Note that the value of includeAllFields is also consulted when selecting fields to be processed.
+               It is a recursive data structure.
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoNgramStreamType">
@@ -2997,9 +3067,74 @@
                 either.
             </summary>
         </member>
+        <member name="T:Core.Arango.Protocol.ArangoQueryStatistic">
+            <summary>
+               Arango Query Statistic
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoQueryStatistic.ScannedFull">
+            <summary>
+              Documents processed with a full collection scan
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoQueryStatistic.ScannedIndex">
+            <summary>
+              Documents processed with a index scan
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoQueryStatistic.WritesExecuted">
+            <summary>
+              Documents which have been written
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoQueryStatistic.PeakMemoryUsage">
+            <summary>
+              Memory usage in bytes
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoQueryStatistic.ExecutionTime">
+            <summary>
+              Execution time in ms
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoQueryStatistic.FullCount">
+            <summary>
+             Result size ignoring LIMIT clause
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoQueryStatistic.WritesIgnored">
+            <summary>
+             Document writes ignored
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoQueryStatistic.Filtered">
+            <summary>
+             Filtered documents
+            </summary>
+        </member>
         <member name="T:Core.Arango.Protocol.ArangoResponseBase">
             <summary>
                 Base response model
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoResponseBase.Code">
+            <summary>
+             HTTP Status Code
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoResponseBase.Error">
+            <summary>
+             Has Error?
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoResponseBase.ErrorMessage">
+            <summary>
+             Error Message
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoResponseBase.ErrorNum">
+            <summary>
+             Error Code
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoSchema">
@@ -3055,6 +3190,21 @@
               All new and modified document must strictly pass validation. No exceptions are made (default).
             </summary>
         </member>
+        <member name="T:Core.Arango.Protocol.ArangoSort">
+            <summary>
+             ArangoView Sort description
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoSort.Field">
+            <summary>
+             Attribute to sort by
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoSort.Direction">
+            <summary>
+             Sort direction
+            </summary>
+        </member>
         <member name="T:Core.Arango.Protocol.ArangoTransaction">
             <summary>
              Arango JavaScript transaction
@@ -3106,6 +3256,137 @@
         <member name="P:Core.Arango.Protocol.ArangoTransaction.MaxTransactionSize">
             <summary>
                 Transaction size limit in bytes. Honored by the RocksDB storage engine only.
+            </summary>
+        </member>
+        <member name="T:Core.Arango.Protocol.ArangoTransactionScope">
+            <summary>
+             Arango Transaction Scope
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoTransactionScope.Read">
+            <summary>
+             Collections to read from
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoTransactionScope.Write">
+            <summary>
+             Collections to write to
+            </summary>
+        </member>
+        <member name="T:Core.Arango.Protocol.ArangoUpdateResult`1">
+            <summary>
+             Arango document update result
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoUpdateResult`1.Id">
+            <summary>
+             Id
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoUpdateResult`1.Key">
+            <summary>
+             Key
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoUpdateResult`1.Revision">
+            <summary>
+              Revision
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoUpdateResult`1.OldRevision">
+            <summary>
+             Old Revision
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoUpdateResult`1.Old">
+            <summary>
+             Old document
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoUpdateResult`1.New">
+            <summary>
+             New document
+            </summary>
+        </member>
+        <member name="T:Core.Arango.Protocol.ArangoUser">
+            <summary>
+             Arango User
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoUser.Name">
+            <summary>
+             The name of the user as a string. This is mandatory.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoUser.Password">
+            <summary>
+             The user password as a string. If no password is specified, the empty string will be used. 
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoUser.Active">
+            <summary>
+             An optional flag that specifies whether the user is active. If not specified, this will default to true
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoUser.Extra">
+            <summary>
+             An optional JSON object with arbitrary extra data about the user.
+            </summary>
+        </member>
+        <member name="T:Core.Arango.Protocol.ArangoVersion">
+            <summary>
+             Arango Server Version and License Information
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoVersion.Version">
+            <summary>
+             Raw version string
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoVersion.License">
+            <summary>
+            license string
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoVersion.SemanticVersion">
+            <summary>
+             Parsed (comparable) version
+            </summary>
+        </member>
+        <member name="T:Core.Arango.Protocol.ArangoVertexCollection">
+            <summary>
+             Arango Vertex Collection
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoVertexCollection.Collection">
+            <summary>
+             Collection name
+            </summary>
+        </member>
+        <member name="T:Core.Arango.Protocol.ArangoVertexResponse`1">
+            <summary>
+              Arango Graph Vertex Response
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoVertexResponse`1.Vertex">
+            <summary>
+             Vertex
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoVertexResponse`1.New">
+            <summary>
+             New version
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoVertexResponse`1.Old">
+            <summary>
+             Old version
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoVertexResponse`1.Removed">
+            <summary>
+             When Removed
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoView">
@@ -3271,14 +3552,222 @@
              Compression
             </summary>
         </member>
+        <member name="T:Core.Arango.Protocol.ArangoVoid">
+            <summary>
+             Something to deserialize to when no response needed
+            </summary>
+        </member>
         <member name="T:Core.Arango.Serialization.IArangoFormattable">
             <summary>
                 Special interface for custom formattable query parts
             </summary>
         </member>
+        <member name="T:Core.Arango.Serialization.IArangoSerializer">
+            <summary>
+             Arango Serializer Interface
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Serialization.IArangoSerializer.Serialize(System.Object)">
+            <summary>
+              Convert object to string
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Serialization.IArangoSerializer.Deserialize``1(System.String)">
+            <summary>
+              Convert string to object
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Serialization.IArangoSerializer.Deserialize(System.String,System.Type)">
+            <summary>
+              Convert string to object
+            </summary>
+        </member>
+        <member name="T:Core.Arango.Serialization.Json.ArangoJsonCamelCasePolicy">
+            <summary>
+              System.Json.Text PascalCase Naming Policy for Arango
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Serialization.Json.ArangoJsonCamelCasePolicy.ConvertName(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Core.Arango.Serialization.Json.ArangoJsonDefaultPolicy">
+            <summary>
+              System.Json.Text PascalCase Naming Policy for Arango
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Serialization.Json.ArangoJsonDefaultPolicy.ConvertName(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Core.Arango.Serialization.Json.ArangoJsonSerializer">
+            <summary>
+              Arango Json Serializer with System.Json.Text
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Serialization.Json.ArangoJsonSerializer.#ctor(System.Text.Json.JsonNamingPolicy)">
+            <summary>
+            
+            </summary>
+            <param name="policy">PascalCase or camelCase policy</param>
+        </member>
+        <member name="M:Core.Arango.Serialization.Json.ArangoJsonSerializer.Serialize(System.Object)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Core.Arango.Serialization.Json.ArangoJsonSerializer.Deserialize``1(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Core.Arango.Serialization.Json.ArangoJsonSerializer.Deserialize(System.String,System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Core.Arango.Serialization.Json.JsonStringEnumMemberConverter">
+            <summary>
+              System.Text.Json EnumMember support
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Serialization.Json.JsonStringEnumMemberConverter.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Core.Arango.Serialization.Json.JsonStringEnumMemberConverter"/> class.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Serialization.Json.JsonStringEnumMemberConverter.#ctor(System.Text.Json.JsonNamingPolicy,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Core.Arango.Serialization.Json.JsonStringEnumMemberConverter"/> class.
+            </summary>
+            <param name="namingPolicy">
+            Optional naming policy for writing enum values.
+            </param>
+            <param name="allowIntegerValues">
+            True to allow undefined enum values. When true, if an enum value isn't
+            defined it will output as a number rather than a string.
+            </param>
+        </member>
+        <member name="M:Core.Arango.Serialization.Json.JsonStringEnumMemberConverter.CanConvert(System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Core.Arango.Serialization.Json.JsonStringEnumMemberConverter.CreateConverter(System.Type,System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Core.Arango.Serialization.Json.JsonStringEnumMemberConverterHelper`1.GenerateJsonException(System.Type)">
+            <summary>
+            Generate a <see cref="T:System.Text.Json.JsonException"/> using the internal
+            <c>JsonException.AppendPathInformation</c> property that will
+            eventually include the JSON path, line number, and byte position in
+            line.
+            <para>
+            The final message of the exception looks like: The JSON value could
+            not be converted to {0}. Path: $.{JSONPath} | LineNumber:
+            {LineNumber} | BytePositionInLine: {BytePositionInLine}.
+            </para>
+            </summary>
+            <param name="propertyType">Property type.</param>
+            <returns><see cref="T:System.Text.Json.JsonException"/>.</returns>
+        </member>
+        <member name="M:Core.Arango.Serialization.Json.JsonStringEnumMemberConverterHelper`1.GenerateJsonException(System.Type,System.String,System.Exception)">
+            <summary>
+            Generate a <see cref="T:System.Text.Json.JsonException"/> using the internal
+            <c>JsonException.AppendPathInformation</c> property that will
+            eventually include the JSON path, line number, and byte position in
+            line.
+            <para>
+            The final message of the exception looks like: The JSON value '{1}'
+            could not be converted to {0}. Path: $.{JSONPath} | LineNumber:
+            {LineNumber} | BytePositionInLine: {BytePositionInLine}.
+            </para>
+            </summary>
+            <param name="propertyType">Property type.</param>
+            <param name="propertyValue">Value that could not be parsed into
+            property type.</param>
+            <param name="innerException">Optional inner <see cref="T:System.Exception"/>.</param>
+            <returns><see cref="T:System.Text.Json.JsonException"/>.</returns>
+        </member>
+        <member name="T:Core.Arango.Serialization.Newtonsoft.ArangoNewtonsoftCamelCaseContractResolver">
+            <summary>
+              Newtonsoft camelCase Naming Policy for Arango
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Serialization.Newtonsoft.ArangoNewtonsoftCamelCaseContractResolver.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="M:Core.Arango.Serialization.Newtonsoft.ArangoNewtonsoftCamelCaseContractResolver.CreateProperty(System.Reflection.MemberInfo,Newtonsoft.Json.MemberSerialization)">
+            <inheritdoc/>
+        </member>
         <member name="T:Core.Arango.Serialization.Newtonsoft.ArangoNewtonsoftDefaultContractResolver">
             <summary>
-                Json.NET Contract Resolver for translating ArangoDB keywords
+              System.Json.Text PascalCase Naming Policy for Arango
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Serialization.Newtonsoft.ArangoNewtonsoftDefaultContractResolver.#ctor">
+            <summary>
+              System.Json.Text PascalCase Naming Policy for Arango
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Serialization.Newtonsoft.ArangoNewtonsoftDefaultContractResolver.CreateProperty(System.Reflection.MemberInfo,Newtonsoft.Json.MemberSerialization)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Core.Arango.Serialization.Newtonsoft.ArangoNewtonsoftSerializer">
+            <summary>
+              Arango Json Serializer with Newtonsoft
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Serialization.Newtonsoft.ArangoNewtonsoftSerializer.#ctor(Newtonsoft.Json.Serialization.IContractResolver)">
+            <summary>
+              Arango Json Serializer with Newtonsoft
+            </summary>
+            <param name="resolver">PascalCase or camelCaseResolver</param>
+        </member>
+        <member name="M:Core.Arango.Serialization.Newtonsoft.ArangoNewtonsoftSerializer.Serialize(System.Object)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Core.Arango.Serialization.Newtonsoft.ArangoNewtonsoftSerializer.Deserialize``1(System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Core.Arango.Serialization.Newtonsoft.ArangoNewtonsoftSerializer.Deserialize(System.String,System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Core.Arango.Transport.ArangoHttpTransport">
+            <summary>
+              Arango HTTP 1.1/2.0 Transport Implementation
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Transport.ArangoHttpTransport.#ctor(Core.Arango.IArangoConfiguration)">
+            <summary>
+              Arango HTTP 1.1/2.0 Transport Implementation
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Transport.ArangoHttpTransport.SendAsync``1(System.Net.Http.HttpMethod,System.String,System.Object,System.String,System.Boolean,System.Boolean,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Core.Arango.Transport.ArangoHttpTransport.WriteBatchAsync``1(Core.Arango.ArangoHandle,System.Net.Http.HttpMethod,System.String,System.Object)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Core.Arango.Transport.ArangoHttpTransport.SendContentAsync(System.Net.Http.HttpMethod,System.String,System.Net.Http.HttpContent,System.String,System.Boolean,System.Boolean,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Core.Arango.Transport.ArangoHttpTransport.SendAsync(System.Type,System.Net.Http.HttpMethod,System.String,System.Object,System.String,System.Boolean,System.Boolean,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Core.Arango.Transport.IArangoTransport">
+            <summary>
+             Arango Transport Interface
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Transport.IArangoTransport.SendAsync(System.Type,System.Net.Http.HttpMethod,System.String,System.Object,System.String,System.Boolean,System.Boolean,System.Threading.CancellationToken)">
+            <summary>
+             Send request to ArangoDB
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Transport.IArangoTransport.SendAsync``1(System.Net.Http.HttpMethod,System.String,System.Object,System.String,System.Boolean,System.Boolean,System.Threading.CancellationToken)">
+            <summary>
+             Send request to ArangoDB
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Transport.IArangoTransport.SendContentAsync(System.Net.Http.HttpMethod,System.String,System.Net.Http.HttpContent,System.String,System.Boolean,System.Boolean,System.Threading.CancellationToken)">
+            <summary>
+             Send raw HTTP content request to ArangoDB
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Transport.IArangoTransport.WriteBatchAsync``1(Core.Arango.ArangoHandle,System.Net.Http.HttpMethod,System.String,System.Object)">
+            <summary>
+             Send request to batch to be later send to ArangoDB
             </summary>
         </member>
     </members>

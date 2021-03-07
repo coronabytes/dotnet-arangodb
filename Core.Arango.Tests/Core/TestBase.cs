@@ -2,8 +2,8 @@ using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Core.Arango.Serialization;
+using Core.Arango.Serialization.Json;
 using Core.Arango.Serialization.Newtonsoft;
-using Core.Arango.Serialization.System;
 using Xunit;
 
 namespace Core.Arango.Tests.Core

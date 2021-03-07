@@ -3,6 +3,9 @@ using Newtonsoft.Json;
 
 namespace Core.Arango.Protocol
 {
+    /// <summary>
+    ///  Arango Graph Options
+    /// </summary>
     public class ArangoGraphOptions
     {
         /// <summary>

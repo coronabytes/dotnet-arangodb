@@ -14,6 +14,9 @@ using Newtonsoft.Json;
 
 namespace Core.Arango.Transport
 {
+    /// <summary>
+    ///   Arango HTTP 1.1/2.0 Transport Implementation
+    /// </summary>
     public class ArangoHttpTransport : IArangoTransport
     {
         private static readonly HttpClient HttpClient = new HttpClient();
@@ -21,11 +24,15 @@ namespace Core.Arango.Transport
         private string _auth;
         private DateTime _authValidUntil = DateTime.MinValue;
 
+        /// <summary>
+        ///   Arango HTTP 1.1/2.0 Transport Implementation
+        /// </summary>
         public ArangoHttpTransport(IArangoConfiguration configuration)
         {
             _configuration = configuration;
         }
 
+        /// <inheritdoc/>
         public async Task<T> SendAsync<T>(HttpMethod m, string url, object body = null,
             string transaction = null, bool throwOnError = true, bool auth = true,
             CancellationToken cancellationToken = default)
@@ -83,6 +90,7 @@ namespace Core.Arango.Transport
             return _configuration.Serializer.Deserialize<T>(content);
         }
 
+        /// <inheritdoc/>
         public Task<T> WriteBatchAsync<T>(ArangoHandle handle, HttpMethod m, string url, object body = null)
         {
             var tcs = new TaskCompletionSource<T>();
@@ -109,6 +117,7 @@ namespace Core.Arango.Transport
             return tcs.Task;
         }
 
+        /// <inheritdoc/>
         public async Task<HttpContent> SendContentAsync(HttpMethod m, string url, HttpContent body = null, string transaction = null,
             bool throwOnError = true, bool auth = true, CancellationToken cancellationToken = default)
         {
@@ -140,6 +149,7 @@ namespace Core.Arango.Transport
             return res.Content;
         }
         
+        /// <inheritdoc/>
         public async Task<object> SendAsync(Type type, HttpMethod m, string url, object body = null,
             string transaction = null, bool throwOnError = true, bool auth = true,
             CancellationToken cancellationToken = default)
