@@ -16,7 +16,7 @@ jobs:
     - name: Setup
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 5.0.200
+        dotnet-version: 5.0.201
         
     - name: Build Version
       id: vars
