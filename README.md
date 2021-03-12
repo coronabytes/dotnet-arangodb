@@ -333,7 +333,7 @@ var r2 = Arango.Document.CreateAsync(batch, "test", new Entity
 await Arango.Batch.ExecuteAsync(batch);
 
 // For demonstation purposes
-// The tasks will be finish instantly or throw an exption if the underyling operation failed
+// The tasks will finish instantly or throw an exception if the underyling operation failed
 await Task.WhenAll(r1, r2);
 ```
 

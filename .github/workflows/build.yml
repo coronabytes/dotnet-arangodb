@@ -20,12 +20,12 @@ jobs:
         dotnet:
           - 5.0.200
         arango: 
-          - "arangodb:3.6.10"
-          - "arangodb:3.7.7"
-          - "arangodb/enterprise:3.7.7"
+          - "arangodb:3.6.11"
+          - "arangodb:3.7.9"
+#         - "arangodb/enterprise:3.7.7"
         topology:
           - single
-          - cluster
+#          - cluster
 
     steps:
     - uses: actions/checkout@v2
