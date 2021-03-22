@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using Core.Arango.Protocol;
 using Core.Arango.Serialization;
 using Core.Arango.Transport;
@@ -58,5 +59,10 @@ namespace Core.Arango
         ///     Callback for each query execute with stats
         /// </summary>
         Action<string, IDictionary<string, object>, ArangoQueryStatistic> QueryProfile { get; set; }
+
+        /// <summary>
+        ///   Override HttpClient
+        /// </summary>
+        HttpClient HttpClient { get; set; }
     }
 }

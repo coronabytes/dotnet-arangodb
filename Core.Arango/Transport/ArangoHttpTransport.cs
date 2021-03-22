@@ -19,7 +19,8 @@ namespace Core.Arango.Transport
     /// </summary>
     public class ArangoHttpTransport : IArangoTransport
     {
-        private static readonly HttpClient HttpClient = new HttpClient();
+        private static readonly HttpClient DefaultHttpClient = new ();
+        private readonly HttpClient _httpClient;
         private readonly IArangoConfiguration _configuration;
         private string _auth;
         private DateTime _authValidUntil = DateTime.MinValue;
@@ -30,6 +31,7 @@ namespace Core.Arango.Transport
         public ArangoHttpTransport(IArangoConfiguration configuration)
         {
             _configuration = configuration;
+            _httpClient = configuration.HttpClient ?? DefaultHttpClient;
         }
 
         /// <inheritdoc/>
@@ -60,7 +62,7 @@ namespace Core.Arango.Transport
                 msg.Headers.Add(HttpRequestHeader.ContentLength.ToString(), "0");
             }
 
-            var res = await HttpClient.SendAsync(msg, cancellationToken);
+            var res = await _httpClient.SendAsync(msg, cancellationToken);
 
             if (!res.IsSuccessStatusCode)
                 if (throwOnError)
@@ -135,7 +137,7 @@ namespace Core.Arango.Transport
 
             msg.Content = body;
 
-            var res = await HttpClient.SendAsync(msg, cancellationToken);
+            var res = await _httpClient.SendAsync(msg, cancellationToken);
 
             if (!res.IsSuccessStatusCode)
                 if (throwOnError)
@@ -172,7 +174,7 @@ namespace Core.Arango.Transport
             else
                 msg.Headers.Add(HttpRequestHeader.ContentLength.ToString(), "0");
 
-            var res = await HttpClient.SendAsync(msg, cancellationToken);
+            var res = await _httpClient.SendAsync(msg, cancellationToken);
 
             if (!res.IsSuccessStatusCode)
                 if (throwOnError)

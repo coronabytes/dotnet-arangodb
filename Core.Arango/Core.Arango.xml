@@ -40,6 +40,9 @@
         <member name="P:Core.Arango.ArangoConfiguration.QueryProfile">
             <inheritdoc/>
         </member>
+        <member name="P:Core.Arango.ArangoConfiguration.HttpClient">
+            <inheritdoc/>
+        </member>
         <member name="T:Core.Arango.ArangoContext">
             <inheritdoc/>
         </member>
@@ -1349,6 +1352,11 @@
         <member name="P:Core.Arango.IArangoConfiguration.QueryProfile">
             <summary>
                 Callback for each query execute with stats
+            </summary>
+        </member>
+        <member name="P:Core.Arango.IArangoConfiguration.HttpClient">
+            <summary>
+              Override HttpClient
             </summary>
         </member>
         <member name="T:Core.Arango.IArangoContext">

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Common;
+using System.Net.Http;
 using Core.Arango.Protocol;
 using Core.Arango.Serialization;
 using Core.Arango.Serialization.Newtonsoft;
@@ -80,5 +81,8 @@ namespace Core.Arango
 
         /// <inheritdoc/>
         public Action<string, IDictionary<string, object>, ArangoQueryStatistic> QueryProfile { get; set; }
+
+        /// <inheritdoc/>
+        public HttpClient HttpClient { get; set; }
     }
 }
