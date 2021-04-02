@@ -14,6 +14,7 @@ namespace Core.Arango.Protocol
         /// </summary>
         [JsonPropertyName("name")]
         [JsonProperty(PropertyName = "name")]
+        [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string Name { get; set; }
 
 
@@ -39,6 +40,7 @@ namespace Core.Arango.Protocol
         /// </summary>
         [JsonPropertyName("features")]
         [JsonProperty(PropertyName = "features")]
+        [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public IList<string> Features { get; set; }
     }
 }

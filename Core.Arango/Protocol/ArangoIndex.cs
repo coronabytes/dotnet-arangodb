@@ -104,6 +104,14 @@ namespace Core.Arango.Protocol
         public bool? Deduplicate { get; set; }
 
         /// <summary>
+        ///   (Hash | SkipList) Doc?
+        /// </summary>
+        [JsonPropertyName("estimate")]
+        [JsonProperty(PropertyName = "estimate", NullValueHandling = NullValueHandling.Ignore)]
+        [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? Estimate { get; set; }
+
+        /// <summary>
         ///   (TTL) The time (in seconds) after a document’s creation after which the documents count as “expired”.
         /// </summary>
         [JsonPropertyName("expireAfter")]

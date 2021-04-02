@@ -2294,59 +2294,128 @@
               To not change character case
             </summary>
         </member>
+        <member name="T:Core.Arango.Protocol.ArangoAnalyzerGeoJsonType">
+            <summary>
+              ArangoGeoJsonType
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoAnalyzerGeoJsonType.Shape">
+            <summary>
+               index all GeoJSON geometry types (Point, Polygon etc.)
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoAnalyzerGeoJsonType.Centroid">
+            <summary>
+               compute and only index the centroid of the input geometry
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoAnalyzerGeoJsonType.Point">
+            <summary>
+              only index GeoJSON objects of type Point, ignore all other geometry types
+            </summary>
+        </member>
         <member name="T:Core.Arango.Protocol.ArangoAnalyzerProperties">
             <summary>
-              ArangoSearch Analyzer Properties
+                ArangoSearch Analyzer Properties
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoAnalyzerProperties.Locale">
             <summary>
-              (Stem | Norm | Text) A locale in the format language[_COUNTRY][.encoding][@variant]
+                (Stem | Norm | Text) A locale in the format language[_COUNTRY][.encoding][@variant]
             </summary>
             <example>
-             "de.utf-8" or "en_US.utf-8"
+                "de.utf-8" or "en_US.utf-8"
             </example>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoAnalyzerProperties.Case">
             <summary>
-              (Text | Norm) Character conversion
+                (Text | Norm) Character conversion
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoAnalyzerProperties.Stopwords">
             <summary>
-              (Text)
-              An array of strings with words to omit from result.
-              Default: load words from stopwordsPath.
-              To disable stop-word filtering provide an empty array [].
-              If both stopwords and stopwordsPath are provided then both word sources are combined.
+                (Text | Stopwords)
+                An array of strings with words to omit from result.
+                Default: load words from stopwordsPath.
+                To disable stop-word filtering provide an empty array [].
+                If both stopwords and stopwordsPath are provided then both word sources are combined.
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoAnalyzerProperties.StopwordsPath">
             <summary>
-              (Text)
-              Path with a language sub-directory containing files with words to omit.
-              Each word has to be on a separate line.
-              Everything after the first whitespace character on a line will be ignored and can be used for comments.
+                (Text)
+                Path with a language sub-directory containing files with words to omit.
+                Each word has to be on a separate line.
+                Everything after the first whitespace character on a line will be ignored and can be used for comments.
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoAnalyzerProperties.Accent">
             <summary>
-              (Text | Norm) To preserve accented characters or to convert accented characters to their base characters (default)
+                (Text | Norm) To preserve accented characters or to convert accented characters to their base characters (default)
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoAnalyzerProperties.Stemming">
             <summary>
-              (Text) To apply stemming on returned words (default) or to leave the tokenized words as-is.
+                (Text) To apply stemming on returned words (default) or to leave the tokenized words as-is.
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoAnalyzerProperties.EdgeNgram">
             <summary>
-              (Text) If present, then edge n-grams are generated for each token (word)
+                (Text) If present, then edge n-grams are generated for each token (word)
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoAnalyzerProperties.Delimiter">
             <summary>
-              (Delimiter) The delimiting character(s)
+                (Delimiter) The delimiting character(s)
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoAnalyzerProperties.QueryString">
+            <summary>
+                (Aql) AQL query to be executed
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoAnalyzerProperties.CollapsePositions">
+            <summary>
+                (Aql)  true: set the position to 0 for all members of the query result array.  false (default): set the position
+                corresponding to the index of the result array member
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoAnalyzerProperties.KeepNull">
+            <summary>
+                (Aql)  true (default): treat null like an empty string | false: discard nulls from View index. Can be used for
+                index filtering (i.e. make your query return null for unwanted data). Note that empty results are always discarded.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoAnalyzerProperties.BatchSize">
+            <summary>
+                (Aql) number between 1 and 1000 (default = 1) that determines the batch size for reading data from the query. In
+                general, a single token is expected to be returned. However, if the query is expected to return many results, then
+                increasing batchSize trades memory for performance.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoAnalyzerProperties.MemoryLimit">
+            <summary>
+                (Aql) memory limit for query execution in bytes. (default is 1048576 = 1Mb) Maximum is 33554432U (32Mb)
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoAnalyzerProperties.Pipeline">
+            <summary>
+                (Pipeline) an array of Analyzer definition-like objects with type and properties attributes
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoAnalyzerProperties.Latitude">
+            <summary>
+                (GeoPoint) array of strings that describes the attribute path of the latitude value relative to the field for which the Analyzer is defined in the View
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoAnalyzerProperties.Longitude">
+            <summary>
+                (GeoPoint) array of strings that describes the attribute path of the longitude value relative to the field for which the Analyzer is defined in the View
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoAnalyzerProperties.Type">
+            <summary>
+                (GeoJson)  (default): index all GeoJSON geometry types (Point, Polygon etc.)
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoAnalyzerType">
@@ -2382,6 +2451,33 @@
         <member name="F:Core.Arango.Protocol.ArangoAnalyzerType.Text">
             <summary>
               Tokenize into words, optionally with stemming, normalization, stop-word filtering and edge n-gram generation
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoAnalyzerType.Stopwords">
+            <summary>
+               An Analyzer capable of removing specified tokens from the input.
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoAnalyzerType.Pipeline">
+            <summary>
+               An Analyzer capable of chaining effects of multiple Analyzers into one.
+               The pipeline is a list of Analyzers, where the output of an Analyzer is passed to the next for further processing.
+               The final token value is determined by last Analyzer in the pipeline.
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoAnalyzerType.Aql">
+            <summary>
+              An Analyzer capable of running a restricted AQL query to perform data manipulation / filtering.
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoAnalyzerType.GeoJson">
+            <summary>
+              An Analyzer capable of breaking up a GeoJSON object into a set of indexable tokens for further usage with ArangoSearch Geo functions.
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoAnalyzerType.GeoPoint">
+            <summary>
+              An Analyzer capable of breaking up JSON object describing a coordinate into a set of indexable tokens for further usage with ArangoSearch Geo functions.
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoBackup">
@@ -2886,6 +2982,11 @@
               (Hash | SkipList) Controls whether inserting duplicate index values from the same document into a unique array index will lead to a unique constraint error or not.
               The default value is true, so only a single instance of each non-unique index value will be inserted into the index per document.
               Trying to insert a value into the index that already exists in the index will always fail, regardless of the value of this attribute.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoIndex.Estimate">
+            <summary>
+              (Hash | SkipList) Doc?
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoIndex.ExpireAfter">
