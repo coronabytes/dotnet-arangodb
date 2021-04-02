@@ -22,6 +22,7 @@ jobs:
         arango: 
           - "arangodb:3.6.11"
           - "arangodb:3.7.9"
+          - "arangodb/arangodb-preview:3.8.0-alpha.1"
 #         - "arangodb/enterprise:3.7.7"
         topology:
           - single
