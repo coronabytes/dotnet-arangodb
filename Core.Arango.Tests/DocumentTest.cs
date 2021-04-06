@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Security;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
 using Core.Arango.Tests.Core;
@@ -184,6 +185,43 @@ namespace Core.Arango.Tests
             Assert.Collection<ArangoError>(exception.Errors, 
                 error => Assert.Equal(ArangoErrorCode.ErrorArangoUniqueConstraintViolated, error.ErrorNumber)
             );
+        }
+
+        private class RevEntity
+        {
+            public string Key { get; set; }
+
+            public string Name { get; set; }
+            public string Revision { get; set; }
+        }
+
+        [Theory]
+        [ClassData(typeof(PascalCaseData))]
+        public async Task OptimisticConcurrency(string serializer)
+        {
+            await SetupAsync(serializer);
+            await Arango.Collection.CreateAsync("test", "test", ArangoCollectionType.Document);
+
+            await Arango.Document.CreateAsync("test", "test", new RevEntity
+            {
+                Key = "1",
+                Name = "A"
+            });
+
+            var doc = await Arango.Document.GetAsync<RevEntity>("test", "test", "1");
+            doc.Name = "B";
+            await Arango.Document.UpdateAsync("test", "test", doc, ignoreRevs: false);
+
+            doc.Name = "C";
+
+            var exception = await Assert.ThrowsAsync<ArangoException>(async () =>
+            {
+                await Arango.Document.UpdateAsync("test", "test", doc, ignoreRevs: false);
+            });
+
+            doc = await Arango.Document.GetAsync<RevEntity>("test", "test", "1");
+            doc.Name = "C";
+            await Arango.Document.UpdateAsync("test", "test", doc, ignoreRevs: false);
         }
     }
 }

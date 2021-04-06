@@ -9,7 +9,6 @@
 - Id, Key, Revision, From, To properties will always be translated to their respective arango form (_id, _key, _rev, _from, _to), which allows to construct updates from anonymous types
 - First parameter of any method in most cases is an ArangoHandle which has implicit conversion from string and GUID
   - e.g. "master" and "logs" database and GUID for each tenant
-- It does not support optimistic concurrency with _rev as constructing patch updates is way easier
 
 # Changes in 3.0
 - Optional support for System.Text.Json serializer which in some cases is twice as fast as Newtonsoft

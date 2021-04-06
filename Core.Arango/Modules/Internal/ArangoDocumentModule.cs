@@ -141,7 +141,8 @@ namespace Core.Arango.Modules.Internal
         public async Task<List<ArangoUpdateResult<TR>>> DeleteManyAsync<T, TR>(ArangoHandle database,
             string collection, IEnumerable<T> docs,
             bool? waitForSync = null,
-            bool? returnOld = null,
+            bool? returnOld = null,  
+            bool? ignoreRevs = null,
             CancellationToken cancellationToken = default) where T : class
         {
             var parameter = new Dictionary<string, string>();
@@ -151,6 +152,9 @@ namespace Core.Arango.Modules.Internal
 
             if (returnOld.HasValue)
                 parameter.Add("returnOld", returnOld.Value.ToString().ToLowerInvariant());
+
+            if (ignoreRevs.HasValue)
+                parameter.Add("ignoreRevs", ignoreRevs.Value.ToString().ToLowerInvariant());
 
             var query = AddQueryString(
                 ApiPath(database, $"document/{collection}"), parameter);
@@ -168,11 +172,12 @@ namespace Core.Arango.Modules.Internal
             bool? returnOld = null,
             bool? returnNew = null,
             bool? silent = null,
+            bool? ignoreRevs = null,
             CancellationToken cancellationToken = default) where T : class
         {
             return await UpdateManyAsync<T, ArangoVoid>(database, collection, docs, waitForSync, keepNull,
                 mergeObjects,
-                returnOld, returnNew, silent, cancellationToken);
+                returnOld, returnNew, silent, ignoreRevs, cancellationToken);
         }
 
         public async Task<List<ArangoUpdateResult<TR>>> UpdateManyAsync<T, TR>(ArangoHandle database,
@@ -183,6 +188,7 @@ namespace Core.Arango.Modules.Internal
             bool? returnOld = null,
             bool? returnNew = null,
             bool? silent = null,
+            bool? ignoreRevs = null,
             CancellationToken cancellationToken = default) where T : class
         {
             var parameter = new Dictionary<string, string>();
@@ -205,6 +211,9 @@ namespace Core.Arango.Modules.Internal
             if (silent.HasValue)
                 parameter.Add("silent", silent.Value.ToString().ToLowerInvariant());
 
+            if (ignoreRevs.HasValue)
+                parameter.Add("ignoreRevs", ignoreRevs.Value.ToString().ToLowerInvariant());
+
             var query = AddQueryString(
                 ApiPath(database, $"document/{UrlEncode(collection)}"), parameter);
 
@@ -220,11 +229,12 @@ namespace Core.Arango.Modules.Internal
             bool? returnOld = null,
             bool? returnNew = null,
             bool? silent = null,
+            bool? ignoreRevs = null,
             CancellationToken cancellationToken = default) where T : class
         {
             var res = await UpdateManyAsync<T, ArangoVoid>(database, collection,
                 new List<T> {doc}, waitForSync, keepNull, mergeObjects,
-                returnOld, returnNew, silent, cancellationToken);
+                returnOld, returnNew, silent, ignoreRevs, cancellationToken);
 
             return res.SingleOrDefault();
         }
@@ -237,11 +247,12 @@ namespace Core.Arango.Modules.Internal
             bool? returnOld = null,
             bool? returnNew = null,
             bool? silent = null,
+            bool? ignoreRevs = null,
             CancellationToken cancellationToken = default) where T : class
         {
             var res = await UpdateManyAsync<T, TR>(database, collection,
                 new List<T> {doc}, waitForSync, keepNull, mergeObjects,
-                returnOld, returnNew, silent, cancellationToken);
+                returnOld, returnNew, silent, ignoreRevs, cancellationToken);
 
             return res.SingleOrDefault();
         }
@@ -251,6 +262,7 @@ namespace Core.Arango.Modules.Internal
             bool? waitForSync = null,
             bool? returnOld = null,
             bool? returnNew = null,
+            bool? ignoreRevs = null,
             CancellationToken cancellationToken = default) where T : class
         {
             var parameter = new Dictionary<string, string>();
@@ -264,6 +276,9 @@ namespace Core.Arango.Modules.Internal
             if (returnNew.HasValue)
                 parameter.Add("returnNew", returnNew.Value.ToString().ToLowerInvariant());
 
+            if (ignoreRevs.HasValue)
+                parameter.Add("ignoreRevs", ignoreRevs.Value.ToString().ToLowerInvariant());
+
             var query = AddQueryString(
                 ApiPath(database, $"document/{UrlEncode(collection)}"), parameter);
 
@@ -276,10 +291,11 @@ namespace Core.Arango.Modules.Internal
             bool? waitForSync = null,
             bool? returnOld = null,
             bool? returnNew = null,
+            bool? ignoreRevs = null,
             CancellationToken cancellationToken = default) where T : class
         {
             return await ReplaceManyAsync<T, ArangoVoid>(database, collection, docs,
-                waitForSync, returnOld, returnNew, cancellationToken);
+                waitForSync, returnOld, returnNew, ignoreRevs, cancellationToken);
         }
 
         public async Task<ArangoUpdateResult<TR>> ReplaceAsync<T, TR>(ArangoHandle database, string collection,
@@ -287,10 +303,11 @@ namespace Core.Arango.Modules.Internal
             bool waitForSync = false,
             bool? returnOld = null,
             bool? returnNew = null,
+            bool? ignoreRevs = null,
             CancellationToken cancellationToken = default) where T : class
         {
             var res = await ReplaceManyAsync<T, TR>(database, collection, new List<T> {doc},
-                waitForSync, returnOld, returnNew, cancellationToken);
+                waitForSync, returnOld, returnNew, ignoreRevs, cancellationToken);
 
             return res.SingleOrDefault();
         }
@@ -300,10 +317,11 @@ namespace Core.Arango.Modules.Internal
             bool waitForSync = false,
             bool? returnOld = null,
             bool? returnNew = null,
+            bool? ignoreRevs = null,
             CancellationToken cancellationToken = default) where T : class
         {
             var res = await ReplaceManyAsync<T, ArangoVoid>(database, collection, new List<T> {doc},
-                waitForSync, returnOld, returnNew, cancellationToken);
+                waitForSync, returnOld, returnNew, ignoreRevs, cancellationToken);
 
             return res.SingleOrDefault();
         }
