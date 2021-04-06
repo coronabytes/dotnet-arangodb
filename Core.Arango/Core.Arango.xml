@@ -1612,8 +1612,25 @@
         </member>
         <member name="M:Core.Arango.Modules.IArangoDocumentModule.GetAsync``1(Core.Arango.ArangoHandle,System.String,System.String,System.Boolean,System.String,System.String,System.Threading.CancellationToken)">
             <summary>
-                Reads a single document
+                Read a single document
             </summary>
+            <param name="handle">database, transaction, batch handle</param>
+            <param name="collection">collection</param>
+            <param name="key">document key</param>
+            <param name="throwOnError">when false does not throw an exception if document does not exist</param>
+            <param name="ifMatch">The document is returned, if it has the same revision as the given Etag. Otherwise a HTTP 412 is returned.</param>
+            <param name="ifNoneMatch">The document is returned, if it has a different revision than the given Etag. Otherwise an HTTP 304 is returned.</param>
+            <param name="cancellationToken"></param>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoDocumentModule.GetManyAsync``1(Core.Arango.ArangoHandle,System.String,System.Collections.Generic.IEnumerable{System.Object},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+                Read multiple documents
+            </summary>
+            <param name="handle">database, transaction, batch handle</param>
+            <param name="collection">collection</param>
+            <param name="keys">list of keys with optional revision</param>
+            <param name="ignoreRevs">If a search document contains a value for the _rev field, then the document is only returned if it has the same revision value</param>
+            <param name="cancellationToken"></param>
         </member>
         <member name="M:Core.Arango.Modules.IArangoDocumentModule.CreateManyAsync``2(Core.Arango.ArangoHandle,System.String,System.Collections.Generic.IEnumerable{``0},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{Core.Arango.Protocol.ArangoOverwriteMode},System.Threading.CancellationToken)">
             <summary>

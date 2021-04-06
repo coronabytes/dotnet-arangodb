@@ -230,5 +230,51 @@ namespace Core.Arango.Tests
             doc = await Arango.Document.GetAsync<RevEntity>("test", "test", "1");
             doc = await Arango.Document.GetAsync<RevEntity>("test", "test", "1", ifMatch: doc.Revision);
         }
+
+        [Theory]
+        [ClassData(typeof(PascalCaseData))]
+        public async Task OptimisticConcurrencyMulti(string serializer)
+        {
+            await SetupAsync(serializer);
+            await Arango.Collection.CreateAsync("test", "test", ArangoCollectionType.Document);
+
+            await Arango.Document.CreateManyAsync("test", "test", new List<RevEntity>
+            {
+                new()
+                {
+                  Key = "1",
+                  Name = "A"
+                },
+                new()
+                {
+                    Key = "2",
+                    Name = "B"
+                }
+            });
+
+            var list = await Arango.Document.GetManyAsync<RevEntity>("test", "test", new List<object>
+            {
+                new
+                {
+                    Key = "1"
+                },
+                new 
+                {
+                    Key = "2",
+                }
+            });
+
+            Assert.Equal(2, list.Count);
+
+            list[1].Name = "C";
+            await Arango.Document.UpdateManyAsync("test", "test", list, ignoreRevs: false);
+
+            var ex = await Assert.ThrowsAsync<ArangoException>(async () =>
+            {
+                await Arango.Document.UpdateManyAsync("test", "test", list, ignoreRevs: false);
+            });
+
+            await Arango.Document.UpdateManyAsync("test", "test", list, ignoreRevs: true);
+        }
     }
 }
