@@ -17,6 +17,8 @@ namespace Core.Arango.Modules
             string collection,
             string key,
             bool throwOnError = true,
+            string ifMatch = null,
+            string ifNoneMatch = null,
             CancellationToken cancellationToken = default) where T : class;
 
         /// <summary>
@@ -88,7 +90,7 @@ namespace Core.Arango.Modules
         ///     Removes single document by key
         /// </summary>
         Task<ArangoUpdateResult<TR>> DeleteAsync<TR>(ArangoHandle database, string collection, string key,
-            bool? waitForSync = null, bool? returnOld = null, bool? silent = null, 
+            bool? waitForSync = null, bool? returnOld = null, bool? silent = null, string ifMatch = null,
             CancellationToken cancellationToken = default);
 
         /// <summary>

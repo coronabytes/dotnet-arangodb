@@ -18,10 +18,19 @@ namespace Core.Arango.Modules.Internal
 
         public async Task<T> GetAsync<T>(ArangoHandle database, string collection, string key,
             bool throwOnError = true,
+            string ifMatch = null,
+            string ifNoneMatch = null,
             CancellationToken cancellationToken = default) where T : class
         {
+            var headers = new Dictionary<string, string>();
+
+            if (!string.IsNullOrEmpty(ifMatch))
+                headers.Add("If-Match", $"\"{ifMatch}\"");
+            if (!string.IsNullOrEmpty(ifNoneMatch))
+                headers.Add("If-None-Match", $"\"{ifNoneMatch}\"");
+
             return await SendAsync<T>(database, HttpMethod.Get, ApiPath(database, $"document/{UrlEncode(collection)}/{key}"),
-                null, throwOnError, cancellationToken: cancellationToken);
+                null, throwOnError, headers: headers, cancellationToken: cancellationToken);
         }
 
         public async Task<List<ArangoUpdateResult<TR>>> CreateManyAsync<T, TR>(ArangoHandle database,
@@ -118,6 +127,7 @@ namespace Core.Arango.Modules.Internal
             bool? waitForSync = null,
             bool? returnOld = null,
             bool? silent = null,
+            string ifMatch = null,
             CancellationToken cancellationToken = default)
         {
             var parameter = new Dictionary<string, string>();
@@ -135,7 +145,12 @@ namespace Core.Arango.Modules.Internal
                 ApiPath(database, $"document/{UrlEncode(collection)}/{UrlEncode(key)}"),
                 parameter);
 
-            return await SendAsync<ArangoUpdateResult<TR>>(database, HttpMethod.Delete, query, cancellationToken: cancellationToken);
+            var headers = new Dictionary<string, string>();
+
+            if (!string.IsNullOrEmpty(ifMatch))
+                headers.Add("If-Match", $"\"{ifMatch}\"");
+
+            return await SendAsync<ArangoUpdateResult<TR>>(database, HttpMethod.Delete, query, headers: headers, cancellationToken: cancellationToken);
         }
 
         public async Task<List<ArangoUpdateResult<TR>>> DeleteManyAsync<T, TR>(ArangoHandle database,

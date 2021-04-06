@@ -36,20 +36,13 @@ namespace Core.Arango.Transport
 
         /// <inheritdoc/>
         public async Task<T> SendAsync<T>(HttpMethod m, string url, object body = null,
-            string transaction = null, bool throwOnError = true, bool auth = true,
+            string transaction = null, bool throwOnError = true, bool auth = true, IDictionary<string, string> headers = null,
             CancellationToken cancellationToken = default)
         {
             await Authenticate(auth, cancellationToken);
 
             var msg = new HttpRequestMessage(m, _configuration.Server + url);
-
-            msg.Headers.Add(HttpRequestHeader.KeepAlive.ToString(), "true");
-
-            if (auth)
-                msg.Headers.Add(HttpRequestHeader.Authorization.ToString(), _auth);
-
-            if (transaction != null)
-                msg.Headers.Add("x-arango-trx-id", transaction);
+            ApplyHeaders(transaction, auth, msg, headers);
 
             if (body != null)
             {
@@ -92,8 +85,26 @@ namespace Core.Arango.Transport
             return _configuration.Serializer.Deserialize<T>(content);
         }
 
+        private void ApplyHeaders(string transaction, bool auth, HttpRequestMessage msg, IDictionary<string, string> headers)
+        {
+            msg.Headers.Add(HttpRequestHeader.KeepAlive.ToString(), "true");
+
+            if (auth)
+                msg.Headers.Add(HttpRequestHeader.Authorization.ToString(), _auth);
+
+            if (transaction != null)
+                msg.Headers.Add("x-arango-trx-id", transaction);
+
+            if (_configuration.AllowDirtyRead)
+                msg.Headers.Add("x-arango-allow-dirty-read", "true");
+
+            if (headers != null)
+                foreach (var header in headers)
+                    msg.Headers.Add(header.Key, header.Value);
+        }
+
         /// <inheritdoc/>
-        public Task<T> WriteBatchAsync<T>(ArangoHandle handle, HttpMethod m, string url, object body = null)
+        public Task<T> WriteBatchAsync<T>(ArangoHandle handle, HttpMethod m, string url, object body = null, IDictionary<string, string> headers = null)
         {
             var tcs = new TaskCompletionSource<T>();
 
@@ -121,20 +132,12 @@ namespace Core.Arango.Transport
 
         /// <inheritdoc/>
         public async Task<HttpContent> SendContentAsync(HttpMethod m, string url, HttpContent body = null, string transaction = null,
-            bool throwOnError = true, bool auth = true, CancellationToken cancellationToken = default)
+            bool throwOnError = true, bool auth = true, IDictionary<string, string> headers = null, CancellationToken cancellationToken = default)
         {
             await Authenticate(auth, cancellationToken);
 
             var msg = new HttpRequestMessage(m, _configuration.Server + url);
-
-            msg.Headers.Add(HttpRequestHeader.KeepAlive.ToString(), "true");
-
-            if (auth)
-                msg.Headers.Add(HttpRequestHeader.Authorization.ToString(), _auth);
-
-            if (transaction != null)
-                msg.Headers.Add("x-arango-trx-id", transaction);
-
+            ApplyHeaders(transaction, auth, msg, headers);
             msg.Content = body;
 
             var res = await _httpClient.SendAsync(msg, cancellationToken);
@@ -153,20 +156,13 @@ namespace Core.Arango.Transport
         
         /// <inheritdoc/>
         public async Task<object> SendAsync(Type type, HttpMethod m, string url, object body = null,
-            string transaction = null, bool throwOnError = true, bool auth = true,
+            string transaction = null, bool throwOnError = true, bool auth = true, IDictionary<string, string> headers = null,
             CancellationToken cancellationToken = default)
         {
             await Authenticate(auth, cancellationToken);
 
             var msg = new HttpRequestMessage(m, _configuration.Server + url);
-
-            msg.Headers.Add(HttpRequestHeader.KeepAlive.ToString(), "true");
-
-            if (auth)
-                msg.Headers.Add(HttpRequestHeader.Authorization.ToString(), _auth);
-
-            if (transaction != null)
-                msg.Headers.Add("x-arango-trx-id", transaction);
+            ApplyHeaders(transaction, auth, msg, headers);
 
             if (body != null)
                 msg.Content = new StringContent(_configuration.Serializer.Serialize(body), Encoding.UTF8,

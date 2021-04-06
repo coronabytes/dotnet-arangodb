@@ -69,27 +69,29 @@ namespace Core.Arango.Modules.Internal
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Task<T> SendAsync<T>(ArangoHandle handle, HttpMethod m, string url, object body = null, bool throwOnError = true, bool auth = true,
+        public Task<T> SendAsync<T>(ArangoHandle handle, HttpMethod m, 
+            string url, object body = null, 
+            bool throwOnError = true, bool auth = true, IDictionary<string, string> headers = null,
             CancellationToken cancellationToken = default)
         {
             if (handle == null)
                 return Context.Configuration.Transport.SendAsync<T>(m, url, body, null, throwOnError, auth,
-                    cancellationToken);
+                    headers, cancellationToken);
 
             if (handle.Batches != null)
                 return Context.Configuration.Transport.WriteBatchAsync<T>(handle, m, url, body);
 
             return Context.Configuration.Transport.SendAsync<T>(m, url, body, handle.Transaction, throwOnError, auth,
-                cancellationToken);
+                headers,cancellationToken);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Task<object> SendAsync(Type type, HttpMethod m, string url, object body = null,
-            string transaction = null, bool throwOnError = true, bool auth = true,
+            string transaction = null, bool throwOnError = true, bool auth = true, IDictionary<string, string> headers = null,
             CancellationToken cancellationToken = default)
         {
             return Context.Configuration.Transport.SendAsync(type, m, url, body, transaction, throwOnError, auth,
-                cancellationToken);
+                headers, cancellationToken);
         }
 
         public string AddQueryString(string uri,

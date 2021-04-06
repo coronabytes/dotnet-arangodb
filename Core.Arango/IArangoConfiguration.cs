@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Net.Http;
 using Core.Arango.Protocol;
 using Core.Arango.Serialization;
@@ -64,5 +65,16 @@ namespace Core.Arango
         ///   Override HttpClient
         /// </summary>
         HttpClient HttpClient { get; set; }
+
+
+        /// <summary>
+        ///   Enables read queries from followers
+        /// </summary>
+        public bool AllowDirtyRead { get; set; }
+
+        /// <summary>
+        ///  Multiple servers
+        /// </summary>
+        public IReadOnlyList<string> Endpoints { get; set; }
     }
 }

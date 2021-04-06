@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data.Common;
+using System.Linq;
 using System.Net.Http;
 using Core.Arango.Protocol;
 using Core.Arango.Serialization;
@@ -39,11 +41,15 @@ namespace Core.Arango
                 builder.TryGetValue("User ID", out var uid);
                 builder.TryGetValue("User", out var u);
                 builder.TryGetValue("Password", out var p);
+                builder.TryGetValue("AllowDirtyRead", out var dr);
+                builder.TryGetValue("Endpoints", out var eps);
 
                 var server = s as string;
                 var user = u as string ?? uid as string;
                 var password = p as string;
                 var realm = r as string;
+                var allowDirtyRead = dr as string;
+                var endpoints = dr as string;
 
                 if (string.IsNullOrWhiteSpace(server))
                     throw new ArgumentException("Server invalid");
@@ -55,6 +61,11 @@ namespace Core.Arango
                 Server = server;
                 User = user;
                 Password = password;
+
+                Endpoints = endpoints?.Split(',', StringSplitOptions.RemoveEmptyEntries).ToList();
+
+                if (allowDirtyRead?.Equals("true", StringComparison.InvariantCultureIgnoreCase) == true)
+                    AllowDirtyRead = true;
             }
         }
 
@@ -84,5 +95,11 @@ namespace Core.Arango
 
         /// <inheritdoc/>
         public HttpClient HttpClient { get; set; }
+
+        /// <inheritdoc/>
+        public bool AllowDirtyRead { get; set; }
+
+        /// <inheritdoc/>
+        public IReadOnlyList<string> Endpoints { get; set; }
     }
 }

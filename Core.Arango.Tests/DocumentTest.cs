@@ -190,7 +190,6 @@ namespace Core.Arango.Tests
         private class RevEntity
         {
             public string Key { get; set; }
-
             public string Name { get; set; }
             public string Revision { get; set; }
         }
@@ -214,7 +213,7 @@ namespace Core.Arango.Tests
 
             doc.Name = "C";
 
-            var exception = await Assert.ThrowsAsync<ArangoException>(async () =>
+            var ex1 = await Assert.ThrowsAsync<ArangoException>(async () =>
             {
                 await Arango.Document.UpdateAsync("test", "test", doc, ignoreRevs: false);
             });
@@ -222,6 +221,14 @@ namespace Core.Arango.Tests
             doc = await Arango.Document.GetAsync<RevEntity>("test", "test", "1");
             doc.Name = "C";
             await Arango.Document.UpdateAsync("test", "test", doc, ignoreRevs: false);
+
+            var ex2 = await Assert.ThrowsAsync<ArangoException>(async () =>
+            {
+                doc = await Arango.Document.GetAsync<RevEntity>("test", "test", "1", ifMatch: doc.Revision);
+            });
+
+            doc = await Arango.Document.GetAsync<RevEntity>("test", "test", "1");
+            doc = await Arango.Document.GetAsync<RevEntity>("test", "test", "1", ifMatch: doc.Revision);
         }
     }
 }

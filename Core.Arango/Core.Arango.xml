@@ -43,6 +43,12 @@
         <member name="P:Core.Arango.ArangoConfiguration.HttpClient">
             <inheritdoc/>
         </member>
+        <member name="P:Core.Arango.ArangoConfiguration.AllowDirtyRead">
+            <inheritdoc/>
+        </member>
+        <member name="P:Core.Arango.ArangoConfiguration.Endpoints">
+            <inheritdoc/>
+        </member>
         <member name="T:Core.Arango.ArangoContext">
             <inheritdoc/>
         </member>
@@ -1359,6 +1365,16 @@
               Override HttpClient
             </summary>
         </member>
+        <member name="P:Core.Arango.IArangoConfiguration.AllowDirtyRead">
+            <summary>
+              Enables read queries from followers
+            </summary>
+        </member>
+        <member name="P:Core.Arango.IArangoConfiguration.Endpoints">
+            <summary>
+             Multiple servers
+            </summary>
+        </member>
         <member name="T:Core.Arango.IArangoContext">
             <summary>
                 Arango connection to server or cluster
@@ -1594,7 +1610,7 @@
                 Document module
             </summary>
         </member>
-        <member name="M:Core.Arango.Modules.IArangoDocumentModule.GetAsync``1(Core.Arango.ArangoHandle,System.String,System.String,System.Boolean,System.Threading.CancellationToken)">
+        <member name="M:Core.Arango.Modules.IArangoDocumentModule.GetAsync``1(Core.Arango.ArangoHandle,System.String,System.String,System.Boolean,System.String,System.String,System.Threading.CancellationToken)">
             <summary>
                 Reads a single document
             </summary>
@@ -1624,7 +1640,7 @@
                 Removes multiple documents
             </summary>
         </member>
-        <member name="M:Core.Arango.Modules.IArangoDocumentModule.DeleteAsync``1(Core.Arango.ArangoHandle,System.String,System.String,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
+        <member name="M:Core.Arango.Modules.IArangoDocumentModule.DeleteAsync``1(Core.Arango.ArangoHandle,System.String,System.String,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.String,System.Threading.CancellationToken)">
             <summary>
                 Removes single document by key
             </summary>
@@ -3842,16 +3858,16 @@
               Arango HTTP 1.1/2.0 Transport Implementation
             </summary>
         </member>
-        <member name="M:Core.Arango.Transport.ArangoHttpTransport.SendAsync``1(System.Net.Http.HttpMethod,System.String,System.Object,System.String,System.Boolean,System.Boolean,System.Threading.CancellationToken)">
+        <member name="M:Core.Arango.Transport.ArangoHttpTransport.SendAsync``1(System.Net.Http.HttpMethod,System.String,System.Object,System.String,System.Boolean,System.Boolean,System.Collections.Generic.IDictionary{System.String,System.String},System.Threading.CancellationToken)">
             <inheritdoc/>
         </member>
-        <member name="M:Core.Arango.Transport.ArangoHttpTransport.WriteBatchAsync``1(Core.Arango.ArangoHandle,System.Net.Http.HttpMethod,System.String,System.Object)">
+        <member name="M:Core.Arango.Transport.ArangoHttpTransport.WriteBatchAsync``1(Core.Arango.ArangoHandle,System.Net.Http.HttpMethod,System.String,System.Object,System.Collections.Generic.IDictionary{System.String,System.String})">
             <inheritdoc/>
         </member>
-        <member name="M:Core.Arango.Transport.ArangoHttpTransport.SendContentAsync(System.Net.Http.HttpMethod,System.String,System.Net.Http.HttpContent,System.String,System.Boolean,System.Boolean,System.Threading.CancellationToken)">
+        <member name="M:Core.Arango.Transport.ArangoHttpTransport.SendContentAsync(System.Net.Http.HttpMethod,System.String,System.Net.Http.HttpContent,System.String,System.Boolean,System.Boolean,System.Collections.Generic.IDictionary{System.String,System.String},System.Threading.CancellationToken)">
             <inheritdoc/>
         </member>
-        <member name="M:Core.Arango.Transport.ArangoHttpTransport.SendAsync(System.Type,System.Net.Http.HttpMethod,System.String,System.Object,System.String,System.Boolean,System.Boolean,System.Threading.CancellationToken)">
+        <member name="M:Core.Arango.Transport.ArangoHttpTransport.SendAsync(System.Type,System.Net.Http.HttpMethod,System.String,System.Object,System.String,System.Boolean,System.Boolean,System.Collections.Generic.IDictionary{System.String,System.String},System.Threading.CancellationToken)">
             <inheritdoc/>
         </member>
         <member name="T:Core.Arango.Transport.IArangoTransport">
@@ -3859,22 +3875,22 @@
              Arango Transport Interface
             </summary>
         </member>
-        <member name="M:Core.Arango.Transport.IArangoTransport.SendAsync(System.Type,System.Net.Http.HttpMethod,System.String,System.Object,System.String,System.Boolean,System.Boolean,System.Threading.CancellationToken)">
+        <member name="M:Core.Arango.Transport.IArangoTransport.SendAsync(System.Type,System.Net.Http.HttpMethod,System.String,System.Object,System.String,System.Boolean,System.Boolean,System.Collections.Generic.IDictionary{System.String,System.String},System.Threading.CancellationToken)">
             <summary>
              Send request to ArangoDB
             </summary>
         </member>
-        <member name="M:Core.Arango.Transport.IArangoTransport.SendAsync``1(System.Net.Http.HttpMethod,System.String,System.Object,System.String,System.Boolean,System.Boolean,System.Threading.CancellationToken)">
+        <member name="M:Core.Arango.Transport.IArangoTransport.SendAsync``1(System.Net.Http.HttpMethod,System.String,System.Object,System.String,System.Boolean,System.Boolean,System.Collections.Generic.IDictionary{System.String,System.String},System.Threading.CancellationToken)">
             <summary>
              Send request to ArangoDB
             </summary>
         </member>
-        <member name="M:Core.Arango.Transport.IArangoTransport.SendContentAsync(System.Net.Http.HttpMethod,System.String,System.Net.Http.HttpContent,System.String,System.Boolean,System.Boolean,System.Threading.CancellationToken)">
+        <member name="M:Core.Arango.Transport.IArangoTransport.SendContentAsync(System.Net.Http.HttpMethod,System.String,System.Net.Http.HttpContent,System.String,System.Boolean,System.Boolean,System.Collections.Generic.IDictionary{System.String,System.String},System.Threading.CancellationToken)">
             <summary>
              Send raw HTTP content request to ArangoDB
             </summary>
         </member>
-        <member name="M:Core.Arango.Transport.IArangoTransport.WriteBatchAsync``1(Core.Arango.ArangoHandle,System.Net.Http.HttpMethod,System.String,System.Object)">
+        <member name="M:Core.Arango.Transport.IArangoTransport.WriteBatchAsync``1(Core.Arango.ArangoHandle,System.Net.Http.HttpMethod,System.String,System.Object,System.Collections.Generic.IDictionary{System.String,System.String})">
             <summary>
              Send request to batch to be later send to ArangoDB
             </summary>
