@@ -17,8 +17,14 @@ namespace Core.Arango.Modules
         /// <param name="collection">collection</param>
         /// <param name="key">document key</param>
         /// <param name="throwOnError">when false does not throw an exception if document does not exist</param>
-        /// <param name="ifMatch">The document is returned, if it has the same revision as the given Etag. Otherwise a HTTP 412 is returned.</param>
-        /// <param name="ifNoneMatch">The document is returned, if it has a different revision than the given Etag. Otherwise an HTTP 304 is returned.</param>
+        /// <param name="ifMatch">
+        ///     The document is returned, if it has the same revision as the given Etag. Otherwise a HTTP 412 is
+        ///     returned.
+        /// </param>
+        /// <param name="ifNoneMatch">
+        ///     The document is returned, if it has a different revision than the given Etag. Otherwise an
+        ///     HTTP 304 is returned.
+        /// </param>
         /// <param name="cancellationToken"></param>
         Task<T> GetAsync<T>(ArangoHandle handle,
             string collection,
@@ -34,7 +40,10 @@ namespace Core.Arango.Modules
         /// <param name="handle">database, transaction, batch handle</param>
         /// <param name="collection">collection</param>
         /// <param name="keys">list of keys with optional revision</param>
-        /// <param name="ignoreRevs">If a search document contains a value for the _rev field, then the document is only returned if it has the same revision value</param>
+        /// <param name="ignoreRevs">
+        ///     If a search document contains a value for the _rev field, then the document is only returned
+        ///     if it has the same revision value
+        /// </param>
         /// <param name="cancellationToken"></param>
         Task<List<T>> GetManyAsync<T>(ArangoHandle handle,
             string collection,
@@ -131,14 +140,16 @@ namespace Core.Arango.Modules
         ///     Replaces multiple documents
         /// </summary>
         Task<List<ArangoUpdateResult<TR>>> ReplaceManyAsync<T, TR>(ArangoHandle database, string collection,
-            IEnumerable<T> docs, bool? waitForSync = null, bool? returnOld = null, bool? returnNew = null, bool? ignoreRevs = null,
+            IEnumerable<T> docs, bool? waitForSync = null, bool? returnOld = null, bool? returnNew = null,
+            bool? ignoreRevs = null,
             CancellationToken cancellationToken = default);
 
         /// <summary>
         ///     Replaces multiple documents
         /// </summary>
         Task<List<ArangoUpdateResult<ArangoVoid>>> ReplaceManyAsync<T>(ArangoHandle database, string collection,
-            IEnumerable<T> docs, bool? waitForSync = null, bool? returnOld = null, bool? returnNew = null, bool? ignoreRevs = null,
+            IEnumerable<T> docs, bool? waitForSync = null, bool? returnOld = null, bool? returnNew = null,
+            bool? ignoreRevs = null,
             CancellationToken cancellationToken = default);
 
         /// <summary>

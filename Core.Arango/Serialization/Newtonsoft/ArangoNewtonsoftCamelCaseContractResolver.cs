@@ -5,17 +5,17 @@ using Newtonsoft.Json.Serialization;
 namespace Core.Arango.Serialization.Newtonsoft
 {
     /// <summary>
-    ///   Newtonsoft camelCase Naming Policy for Arango
+    ///     Newtonsoft camelCase Naming Policy for Arango
     /// </summary>
     public class ArangoNewtonsoftCamelCaseContractResolver : DefaultContractResolver
     {
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public ArangoNewtonsoftCamelCaseContractResolver()
         {
             NamingStrategy = new CamelCaseNamingStrategy();
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
         {
             var property = base.CreateProperty(member, memberSerialization);

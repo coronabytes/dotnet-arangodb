@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
@@ -69,8 +68,8 @@ namespace Core.Arango.Modules.Internal
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Task<T> SendAsync<T>(ArangoHandle handle, HttpMethod m, 
-            string url, object body = null, 
+        public Task<T> SendAsync<T>(ArangoHandle handle, HttpMethod m,
+            string url, object body = null,
             bool throwOnError = true, bool auth = true, IDictionary<string, string> headers = null,
             CancellationToken cancellationToken = default)
         {
@@ -78,16 +77,14 @@ namespace Core.Arango.Modules.Internal
                 return Context.Configuration.Transport.SendAsync<T>(m, url, body, null, throwOnError, auth,
                     headers, cancellationToken);
 
-            if (handle.Batches != null)
-                return Context.Configuration.Transport.WriteBatchAsync<T>(handle, m, url, body);
-
             return Context.Configuration.Transport.SendAsync<T>(m, url, body, handle.Transaction, throwOnError, auth,
-                headers,cancellationToken);
+                headers, cancellationToken);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Task<object> SendAsync(Type type, HttpMethod m, string url, object body = null,
-            string transaction = null, bool throwOnError = true, bool auth = true, IDictionary<string, string> headers = null,
+            string transaction = null, bool throwOnError = true, bool auth = true,
+            IDictionary<string, string> headers = null,
             CancellationToken cancellationToken = default)
         {
             return Context.Configuration.Transport.SendAsync(type, m, url, body, transaction, throwOnError, auth,
@@ -180,7 +177,7 @@ namespace Core.Arango.Modules.Internal
 
         protected class AqlQueryFormatter : IFormatProvider, ICustomFormatter
         {
-            public QueryFormattingContext Context { get; } = new QueryFormattingContext();
+            public QueryFormattingContext Context { get; } = new();
 
             public string Format(string format, object arg, IFormatProvider formatProvider)
             {

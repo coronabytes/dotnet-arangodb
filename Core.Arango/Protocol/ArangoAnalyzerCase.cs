@@ -1,32 +1,30 @@
 ﻿using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 using Core.Arango.Serialization.Json;
 using Newtonsoft.Json.Converters;
 
 namespace Core.Arango.Protocol
 {
     /// <summary>
-    ///   AnalyzerType
+    ///     AnalyzerType
     /// </summary>
-    [System.Text.Json.Serialization.JsonConverter(typeof(JsonStringEnumMemberConverter))]
+    [JsonConverter(typeof(JsonStringEnumMemberConverter))]
     [Newtonsoft.Json.JsonConverter(typeof(StringEnumConverter))]
     public enum ArangoAnalyzerCase
     {
         /// <summary>
-        ///    To convert to all lower-case characters (default)
+        ///     To convert to all lower-case characters (default)
         /// </summary>
-        [EnumMember(Value = "lower")]
-        Lower,
+        [EnumMember(Value = "lower")] Lower,
 
         /// <summary>
-        ///    To convert to all upper-case characters
+        ///     To convert to all upper-case characters
         /// </summary>
-        [EnumMember(Value = "upper")]
-        Upper,
-        
+        [EnumMember(Value = "upper")] Upper,
+
         /// <summary>
-        ///   To not change character case
+        ///     To not change character case
         /// </summary>
-        [EnumMember(Value = "none")]
-        None
+        [EnumMember(Value = "none")] None
     }
 }

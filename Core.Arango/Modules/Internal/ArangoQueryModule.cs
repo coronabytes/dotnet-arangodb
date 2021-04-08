@@ -73,7 +73,7 @@ namespace Core.Arango.Modules.Internal
                 if (fullCount.HasValue && fullCount.Value)
                     final.FullCount = firstResult.Extra.Statistic.FullCount;
 
-                if (!firstResult.HasMore || database.Batches != null)
+                if (!firstResult.HasMore)
                     return final;
 
                 while (true)
@@ -168,7 +168,7 @@ namespace Core.Arango.Modules.Internal
             foreach (var result in firstResult.Result)
                 yield return result;
 
-            if (!firstResult.HasMore || database.Batches != null)
+            if (!firstResult.HasMore)
                 yield break;
 
             while (true)

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
@@ -29,21 +28,24 @@ namespace Core.Arango.Modules.Internal
             if (!string.IsNullOrEmpty(ifNoneMatch))
                 headers.Add("If-None-Match", $"\"{ifNoneMatch}\"");
 
-            return await SendAsync<T>(database, HttpMethod.Get, ApiPath(database, $"document/{UrlEncode(collection)}/{key}"),
+            return await SendAsync<T>(database, HttpMethod.Get,
+                ApiPath(database, $"document/{UrlEncode(collection)}/{key}"),
                 null, throwOnError, headers: headers, cancellationToken: cancellationToken);
         }
 
-        public async Task<List<T>> GetManyAsync<T>(ArangoHandle database, string collection, IEnumerable<object> docs, bool? ignoreRevs = null,
+        public async Task<List<T>> GetManyAsync<T>(ArangoHandle database, string collection, IEnumerable<object> docs,
+            bool? ignoreRevs = null,
             CancellationToken cancellationToken = default)
         {
             var parameter = new Dictionary<string, string> {{"getonly", "true"}};
-            
+
             if (ignoreRevs.HasValue)
                 parameter.Add("ignoreRevs", ignoreRevs.Value.ToString().ToLowerInvariant());
 
             var query = AddQueryString(ApiPath(database, $"document/{UrlEncode(collection)}"), parameter);
 
-            return await SendAsync<List<T>>(database, HttpMethod.Put, query, docs, cancellationToken: cancellationToken);
+            return await SendAsync<List<T>>(database, HttpMethod.Put, query, docs,
+                cancellationToken: cancellationToken);
         }
 
         public async Task<List<ArangoUpdateResult<TR>>> CreateManyAsync<T, TR>(ArangoHandle database,
@@ -109,7 +111,7 @@ namespace Core.Arango.Modules.Internal
             T doc,
             bool? waitForSync = null, bool? keepNull = null,
             bool? mergeObjects = null, bool? returnOld = null, bool? returnNew = null, bool? silent = null,
-            ArangoOverwriteMode? overwriteMode = null, CancellationToken cancellationToken = default) 
+            ArangoOverwriteMode? overwriteMode = null, CancellationToken cancellationToken = default)
         {
             var res = await CreateManyAsync<T, ArangoVoid>(database, collection, new List<T> {doc}, waitForSync,
                 keepNull, mergeObjects,
@@ -163,13 +165,14 @@ namespace Core.Arango.Modules.Internal
             if (!string.IsNullOrEmpty(ifMatch))
                 headers.Add("If-Match", $"\"{ifMatch}\"");
 
-            return await SendAsync<ArangoUpdateResult<TR>>(database, HttpMethod.Delete, query, headers: headers, cancellationToken: cancellationToken);
+            return await SendAsync<ArangoUpdateResult<TR>>(database, HttpMethod.Delete, query, headers: headers,
+                cancellationToken: cancellationToken);
         }
 
         public async Task<List<ArangoUpdateResult<TR>>> DeleteManyAsync<T, TR>(ArangoHandle database,
             string collection, IEnumerable<T> docs,
             bool? waitForSync = null,
-            bool? returnOld = null,  
+            bool? returnOld = null,
             bool? ignoreRevs = null,
             CancellationToken cancellationToken = default)
         {
@@ -359,9 +362,6 @@ namespace Core.Arango.Modules.Internal
             string collection, bool? flush = null, int? flushWait = null, int? batchSize = null, int? ttl = null,
             [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
-            if (database.Batches != null)
-                throw new NotSupportedException("no batch support");
-
             var parameter = new Dictionary<string, string>
             {
                 ["collection"] = collection

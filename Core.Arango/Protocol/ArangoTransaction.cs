@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 namespace Core.Arango.Protocol
 {
     /// <summary>
-    ///  Arango JavaScript transaction
+    ///     Arango JavaScript transaction
     /// </summary>
     public class ArangoTransaction
     {

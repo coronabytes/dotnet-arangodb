@@ -6,27 +6,27 @@ using Core.Arango.Protocol;
 namespace Core.Arango.Modules
 {
     /// <summary>
-    ///   HotBackup (enterprise only)
+    ///     HotBackup (enterprise only)
     /// </summary>
     public interface IArangoBackupModule
     {
         /// <summary>
-        /// Creates a local backup.
+        ///     Creates a local backup.
         /// </summary>
         Task<ArangoBackup> CreateAsync(ArangoBackupRequest request, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Restores from a local backup.
+        ///     Restores from a local backup.
         /// </summary>
         Task RestoreAsync(string id, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Delete a specific local backup.
+        ///     Delete a specific local backup.
         /// </summary>
         Task DeleteAsync(string id, CancellationToken cancellationToken = default);
 
         /// <summary>
-        ///  List all local backups.
+        ///     List all local backups.
         /// </summary>
         Task<List<ArangoBackup>> ListAsync(string id = null, CancellationToken cancellationToken = default);
     }

@@ -1,18 +1,13 @@
-using System;
 using System.Collections.Generic;
-using System.Text.Json;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
-using Core.Arango.Serialization;
 using Core.Arango.Tests.Core;
-using Newtonsoft.Json.Linq;
 using Xunit;
 
 namespace Core.Arango.Tests
 {
     public class CamelCaseTest : TestBase
     {
-
         [Theory]
         [ClassData(typeof(CamelCaseData))]
         public async Task GetCamelCase(string serializer)

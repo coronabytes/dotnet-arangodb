@@ -45,11 +45,11 @@ namespace Core.Arango.Tests
 
             await Arango.Document.CreateManyAsync("test", "test", new List<Entity>
             {
-                new Entity {Value = 1},
-                new Entity {Value = 2},
-                new Entity {Value = 3},
-                new Entity {Value = 4},
-                new Entity {Value = 5}
+                new() {Value = 1},
+                new() {Value = 2},
+                new() {Value = 3},
+                new() {Value = 4},
+                new() {Value = 5}
             });
 
             var select = new List<int> {1, 2, 3};

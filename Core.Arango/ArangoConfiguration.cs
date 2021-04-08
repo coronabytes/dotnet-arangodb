@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Data.Common;
 using System.Linq;
 using System.Net.Http;
@@ -27,8 +26,8 @@ namespace Core.Arango
             Transport = new ArangoHttpTransport(this);
         }
 
-        
-        /// <inheritdoc/>
+
+        /// <inheritdoc />
         public string ConnectionString
         {
             get => _connectionString;
@@ -69,37 +68,37 @@ namespace Core.Arango
             }
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public string Realm { get; set; }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public string Server { get; set; }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public string User { get; set; }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public string Password { get; set; }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public int BatchSize { get; set; }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public IArangoSerializer Serializer { get; set; }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public IArangoTransport Transport { get; set; }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public Action<string, IDictionary<string, object>, ArangoQueryStatistic> QueryProfile { get; set; }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public HttpClient HttpClient { get; set; }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public bool AllowDirtyRead { get; set; }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public IReadOnlyList<string> Endpoints { get; set; }
     }
 }

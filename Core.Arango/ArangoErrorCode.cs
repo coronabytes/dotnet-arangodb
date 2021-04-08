@@ -1,11 +1,12 @@
 namespace Core.Arango
 {
     /// <summary>
-    /// Arango error codes in exception
+    ///     Arango error codes in exception
     /// </summary>
     public enum ArangoErrorCode
     {
         #region General errors
+
         /// <summary>No error has occurred.</summary>
         ErrorNoError = 0,
 
@@ -107,9 +108,11 @@ namespace Core.Arango
 
         /// <summary>Will be raised when a requested resource is not enabled.</summary>
         ErrorDisabled = 36,
+
         #endregion
 
         #region HTTP error status codes
+
         /// <summary>Will be raised when the HTTP request does not fulfill the requirements.</summary>
         ErrorHttpBadParameter = 400,
 
@@ -139,17 +142,21 @@ namespace Core.Arango
 
         /// <summary>Will be raised when a service contacted by ArangoDB does not respond in a timely manner.</summary>
         ErrorHttpGatewayTimeout = 504,
+
         #endregion
 
         #region HTTP processing errors
+
         /// <summary>Will be raised when a string representation of a JSON object is corrupt.</summary>
         ErrorHttpCorruptedJson = 600,
 
         /// <summary>Will be raised when the URL contains superfluous suffices.</summary>
         ErrorHttpSuperfluousSuffices = 601,
+
         #endregion
 
         #region Internal ArangoDB storage errors
+
         /// <summary>Internal error that will be raised when the datafile is not in the required state.</summary>
         ErrorArangoIllegalState = 1000,
 
@@ -173,9 +180,11 @@ namespace Core.Arango
 
         /// <summary>Will be raised when a required datafile statistics object was not found.</summary>
         ErrorArangoDatafileStatisticsNotFound = 1009,
+
         #endregion
 
         #region External ArangoDB storage errors
+
         /// <summary>Will be raised when a corruption is detected in a datafile.</summary>
         ErrorArangoCorruptedDatafile = 1100,
 
@@ -211,9 +220,11 @@ namespace Core.Arango
 
         /// <summary>Will be raised when the server waited too long for a datafile to be synced to disk.</summary>
         ErrorArangoSyncTimeout = 1111,
+
         #endregion
 
         #region General ArangoDB storage errors
+
         /// <summary>Will be raised when updating or deleting a document and a conflict has been detected.</summary>
         ErrorArangoConflict = 1200,
 
@@ -304,7 +315,10 @@ namespace Core.Arango
         /// <summary>Will be raised when an attempt to create an index has failed.</summary>
         ErrorArangoIndexCreationFailed = 1235,
 
-        /// <summary>Will be raised when the server is write-throttled and a write operation has waited too long for the server to process queued operations.</summary>
+        /// <summary>
+        ///     Will be raised when the server is write-throttled and a write operation has waited too long for the server to
+        ///     process queued operations.
+        /// </summary>
         ErrorArangoWriteThrottleTimeout = 1236,
 
         /// <summary>Will be raised when a collection has a different type from what has been expected.</summary>
@@ -318,9 +332,11 @@ namespace Core.Arango
 
         /// <summary>Will be raised by the storage engine when a read cannot be completed.</summary>
         ErrorArangoIncompleteRead = 1240,
+
         #endregion
 
         #region Checked ArangoDB storage errors
+
         /// <summary>Will be raised when the datafile reaches its limit.</summary>
         ErrorArangoDatafileFull = 1300,
 
@@ -338,9 +354,11 @@ namespace Core.Arango
 
         /// <summary>Will be raised when storage engine encounters an I/O error.</summary>
         ErrorArangoIoError = 1305,
+
         #endregion
 
         #region ArangoDB replication errors
+
         /// <summary>Will be raised when the replication applier does not receive any or an incomplete response from the master.</summary>
         ErrorReplicationNoResponse = 1400,
 
@@ -388,9 +406,11 @@ namespace Core.Arango
 
         /// <summary>Will be raised when a shard is not empty and the follower tries a shortcut</summary>
         ErrorReplicationShardNonempty = 1417,
+
         #endregion
 
         #region ArangoDB cluster errors
+
         /// <summary>Will be raised when updating the plan on collection creatio failed.</summary>
         ErrorClusterCreateCollectionPreconditionFailed = 1448,
 
@@ -400,43 +420,79 @@ namespace Core.Arango
         /// <summary>Will be raised when the number of shards for a collection is higher than allowed.</summary>
         ErrorClusterTooManyShards = 1450,
 
-        /// <summary>Will be raised when a Coordinator in a cluster tries to create a collection and the collection ID already exists.</summary>
+        /// <summary>
+        ///     Will be raised when a Coordinator in a cluster tries to create a collection and the collection ID already
+        ///     exists.
+        /// </summary>
         ErrorClusterCollectionIdExists = 1453,
 
-        /// <summary>Will be raised when a Coordinator in a cluster cannot create an entry for a new collection in the Plan hierarchy in the Agency.</summary>
+        /// <summary>
+        ///     Will be raised when a Coordinator in a cluster cannot create an entry for a new collection in the Plan
+        ///     hierarchy in the Agency.
+        /// </summary>
         ErrorClusterCouldNotCreateCollectionInPlan = 1454,
 
-        /// <summary>Will be raised when a Coordinator in a cluster notices that some DB-Servers report problems when creating shards for a new collection.</summary>
+        /// <summary>
+        ///     Will be raised when a Coordinator in a cluster notices that some DB-Servers report problems when creating
+        ///     shards for a new collection.
+        /// </summary>
         ErrorClusterCouldNotCreateCollection = 1456,
 
         /// <summary>Will be raised when a Coordinator in a cluster runs into a timeout for some cluster wide operation.</summary>
         ErrorClusterTimeout = 1457,
 
-        /// <summary>Will be raised when a Coordinator in a cluster cannot remove an entry for a collection in the Plan hierarchy in the Agency.</summary>
+        /// <summary>
+        ///     Will be raised when a Coordinator in a cluster cannot remove an entry for a collection in the Plan hierarchy
+        ///     in the Agency.
+        /// </summary>
         ErrorClusterCouldNotRemoveCollectionInPlan = 1458,
 
-        /// <summary>Will be raised when a Coordinator in a cluster cannot remove an entry for a collection in the Current hierarchy in the Agency.</summary>
+        /// <summary>
+        ///     Will be raised when a Coordinator in a cluster cannot remove an entry for a collection in the Current
+        ///     hierarchy in the Agency.
+        /// </summary>
         ErrorClusterCouldNotRemoveCollectionInCurrent = 1459,
 
-        /// <summary>Will be raised when a Coordinator in a cluster cannot create an entry for a new database in the Plan hierarchy in the Agency.</summary>
+        /// <summary>
+        ///     Will be raised when a Coordinator in a cluster cannot create an entry for a new database in the Plan hierarchy
+        ///     in the Agency.
+        /// </summary>
         ErrorClusterCouldNotCreateDatabaseInPlan = 1460,
 
-        /// <summary>Will be raised when a Coordinator in a cluster notices that some DB-Servers report problems when creating databases for a new cluster wide database.</summary>
+        /// <summary>
+        ///     Will be raised when a Coordinator in a cluster notices that some DB-Servers report problems when creating
+        ///     databases for a new cluster wide database.
+        /// </summary>
         ErrorClusterCouldNotCreateDatabase = 1461,
 
-        /// <summary>Will be raised when a Coordinator in a cluster cannot remove an entry for a database in the Plan hierarchy in the Agency.</summary>
+        /// <summary>
+        ///     Will be raised when a Coordinator in a cluster cannot remove an entry for a database in the Plan hierarchy in
+        ///     the Agency.
+        /// </summary>
         ErrorClusterCouldNotRemoveDatabaseInPlan = 1462,
 
-        /// <summary>Will be raised when a Coordinator in a cluster cannot remove an entry for a database in the Current hierarchy in the Agency.</summary>
+        /// <summary>
+        ///     Will be raised when a Coordinator in a cluster cannot remove an entry for a database in the Current hierarchy
+        ///     in the Agency.
+        /// </summary>
         ErrorClusterCouldNotRemoveDatabaseInCurrent = 1463,
 
-        /// <summary>Will be raised when a Coordinator in a cluster cannot determine the shard that is responsible for a given document.</summary>
+        /// <summary>
+        ///     Will be raised when a Coordinator in a cluster cannot determine the shard that is responsible for a given
+        ///     document.
+        /// </summary>
         ErrorClusterShardGone = 1464,
 
-        /// <summary>Will be raised when a Coordinator in a cluster loses an HTTP connection to a DB-Server in the cluster whilst transferring data.</summary>
+        /// <summary>
+        ///     Will be raised when a Coordinator in a cluster loses an HTTP connection to a DB-Server in the cluster whilst
+        ///     transferring data.
+        /// </summary>
         ErrorClusterConnectionLost = 1465,
 
-        /// <summary>Will be raised when a Coordinator in a cluster finds that the key attribute was specified in a sharded collection the uses not only key as sharding attribute.</summary>
+        /// <summary>
+        ///     Will be raised when a Coordinator in a cluster finds that the key attribute was specified in a sharded
+        ///     collection the uses not only key as sharding attribute.
+        /// </summary>
         ErrorClusterMustNotSpecifyKey = 1466,
 
         /// <summary>Will be raised if a Coordinator in a cluster gets conflicting results from different shards</summary>
@@ -448,7 +504,10 @@ namespace Core.Arango
         /// <summary>Will be raised if there is an attempt to update the value of a shard attribute.</summary>
         ErrorClusterMustNotChangeShardingAttributes = 1469,
 
-        /// <summary>Will be raised when there is an attempt to carry out an operation that is not supported in the context of a sharded collection.</summary>
+        /// <summary>
+        ///     Will be raised when there is an attempt to carry out an operation that is not supported in the context of a
+        ///     sharded collection.
+        /// </summary>
         ErrorClusterUnsupported = 1470,
 
         /// <summary>Will be raised if there is an attempt to run a Coordinator-only operation on a different type of node.</summary>
@@ -469,25 +528,43 @@ namespace Core.Arango
         /// <summary>Will be raised if a required DB-Server can’t be reached.</summary>
         ErrorClusterBackendUnavailable = 1478,
 
-        /// <summary>Will be raised if a collection needed during query execution is out of sync. This currently can only happen when using SatelliteCollections</summary>
+        /// <summary>
+        ///     Will be raised if a collection needed during query execution is out of sync. This currently can only happen
+        ///     when using SatelliteCollections
+        /// </summary>
         ErrorClusterAqlCollectionOutOfSync = 1481,
 
-        /// <summary>Will be raised when a Coordinator in a cluster cannot create an entry for a new index in the Plan hierarchy in the Agency.</summary>
+        /// <summary>
+        ///     Will be raised when a Coordinator in a cluster cannot create an entry for a new index in the Plan hierarchy in
+        ///     the Agency.
+        /// </summary>
         ErrorClusterCouldNotCreateIndexInPlan = 1482,
 
         /// <summary>Will be raised when a Coordinator in a cluster cannot remove an index from the Plan hierarchy in the Agency.</summary>
         ErrorClusterCouldNotDropIndexInPlan = 1483,
 
-        /// <summary>Will be raised if one tries to create a collection with a distributeShardsLike attribute which points to another collection that also has one.</summary>
+        /// <summary>
+        ///     Will be raised if one tries to create a collection with a distributeShardsLike attribute which points to
+        ///     another collection that also has one.
+        /// </summary>
         ErrorClusterChainOfDistributeshardslike = 1484,
 
-        /// <summary>Will be raised if one tries to drop a collection to which another collection points with its distributeShardsLike attribute.</summary>
+        /// <summary>
+        ///     Will be raised if one tries to drop a collection to which another collection points with its
+        ///     distributeShardsLike attribute.
+        /// </summary>
         ErrorClusterMustNotDropCollOtherDistributeshardslike = 1485,
 
-        /// <summary>Will be raised if one tries to create a collection which points to an unknown collection in its distributeShardsLike attribute.</summary>
+        /// <summary>
+        ///     Will be raised if one tries to create a collection which points to an unknown collection in its
+        ///     distributeShardsLike attribute.
+        /// </summary>
         ErrorClusterUnknownDistributeshardslike = 1486,
 
-        /// <summary>Will be raised if one tries to create a collection with a replicationFactor greater than the available number of DB-Servers.</summary>
+        /// <summary>
+        ///     Will be raised if one tries to create a collection with a replicationFactor greater than the available number
+        ///     of DB-Servers.
+        /// </summary>
         ErrorClusterInsufficientDbservers = 1487,
 
         /// <summary>Will be raised if a follower that ought to be dropped could not be dropped in the Agency (under Current).</summary>
@@ -511,17 +588,25 @@ namespace Core.Arango
         /// <summary>Will be raised when an operation is sent to a non-leading server.</summary>
         ErrorClusterNotLeader = 1496,
 
-        /// <summary>Will be raised when a Coordinator in a cluster cannot create an entry for a new View in the Plan hierarchy in the Agency.</summary>
+        /// <summary>
+        ///     Will be raised when a Coordinator in a cluster cannot create an entry for a new View in the Plan hierarchy in
+        ///     the Agency.
+        /// </summary>
         ErrorClusterCouldNotCreateViewInPlan = 1497,
 
         /// <summary>Will be raised when a Coordinator in a cluster tries to create a View and the View ID already exists.</summary>
         ErrorClusterViewIdExists = 1498,
 
-        /// <summary>Will be raised when a Coordinator in a cluster cannot drop a collection entry in the Plan hierarchy in the Agency.</summary>
+        /// <summary>
+        ///     Will be raised when a Coordinator in a cluster cannot drop a collection entry in the Plan hierarchy in the
+        ///     Agency.
+        /// </summary>
         ErrorClusterCouldNotDropCollection = 1499,
+
         #endregion
 
         #region ArangoDB query errors
+
         /// <summary>Will be raised when a running query is killed by an explicit admin command.</summary>
         ErrorQueryKilled = 1500,
 
@@ -573,7 +658,10 @@ namespace Core.Arango
         /// <summary>Will be raised when the structure of bind parameters passed has an unexpected format.</summary>
         ErrorQueryBindParametersInvalid = 1550,
 
-        /// <summary>Will be raised when a bind parameter was declared in the query but the query is being executed with no value for that parameter.</summary>
+        /// <summary>
+        ///     Will be raised when a bind parameter was declared in the query but the query is being executed with no value
+        ///     for that parameter.
+        /// </summary>
         ErrorQueryBindParameterMissing = 1551,
 
         /// <summary>Will be raised when a value gets specified for an undeclared bind parameter.</summary>
@@ -612,7 +700,10 @@ namespace Core.Arango
         /// <summary>Will be raised when an AQL query contains an invalid aggregate expression.</summary>
         ErrorQueryInvalidAggregateExpression = 1574,
 
-        /// <summary>Will be raised when an AQL data-modification query contains options that cannot be figured out at query compile time.</summary>
+        /// <summary>
+        ///     Will be raised when an AQL data-modification query contains options that cannot be figured out at query
+        ///     compile time.
+        /// </summary>
         ErrorQueryCompileTimeOptions = 1575,
 
         /// <summary>Will be raised when an AQL data-modification query contains an invalid options specification.</summary>
@@ -626,9 +717,11 @@ namespace Core.Arango
 
         /// <summary>Will be raised when collection data are accessed after a data-modification operation.</summary>
         ErrorQueryAccessAfterModification = 1579,
+
         #endregion
 
         #region AQL user function errors
+
         /// <summary>Will be raised when a user function with an invalid name is registered.</summary>
         ErrorQueryFunctionInvalidName = 1580,
 
@@ -640,9 +733,11 @@ namespace Core.Arango
 
         /// <summary>Will be raised when a user function throws a runtime exception.</summary>
         ErrorQueryFunctionRuntimeError = 1583,
+
         #endregion
 
         #region AQL query registry errors
+
         /// <summary>Will be raised when an HTTP API for a query got an invalid JSON object.</summary>
         ErrorQueryBadJsonPlan = 1590,
 
@@ -654,32 +749,44 @@ namespace Core.Arango
 
         /// <summary>Will be raised if and user provided expression fails to evaluate to true</summary>
         ErrorQueryUserWarn = 1594,
+
         #endregion
 
         #region ArangoDB cursor errors
+
         /// <summary>Will be raised when a cursor is requested via its id but a cursor with that id cannot be found.</summary>
         ErrorCursorNotFound = 1600,
 
         /// <summary>Will be raised when a cursor is requested via its id but a concurrent request is still using the cursor.</summary>
         ErrorCursorBusy = 1601,
+
         #endregion
 
         #region ArangoDB schema validation errors
+
         /// <summary>Will be raised when a document does not pass schema validation.</summary>
         ErrorValidationFailed = 1620,
 
         /// <summary>Will be raised when the schema description is invalid.</summary>
         ErrorValidationBadParameter = 1621,
+
         #endregion
 
         #region ArangoDB transaction errors
-        /// <summary>Will be raised when a wrong usage of transactions is detected. this is an internal error and indicates a bug in ArangoDB.</summary>
+
+        /// <summary>
+        ///     Will be raised when a wrong usage of transactions is detected. this is an internal error and indicates a bug
+        ///     in ArangoDB.
+        /// </summary>
         ErrorTransactionInternal = 1650,
 
         /// <summary>Will be raised when transactions are nested.</summary>
         ErrorTransactionNested = 1651,
 
-        /// <summary>Will be raised when a collection is used in the middle of a transaction but was not registered at transaction start.</summary>
+        /// <summary>
+        ///     Will be raised when a collection is used in the middle of a transaction but was not registered at transaction
+        ///     start.
+        /// </summary>
         ErrorTransactionUnregisteredCollection = 1652,
 
         /// <summary>Will be raised when a disallowed operation is carried out in a transaction.</summary>
@@ -690,9 +797,11 @@ namespace Core.Arango
 
         /// <summary>Will be raised when a transaction was not found.</summary>
         ErrorTransactionNotFound = 1655,
+
         #endregion
 
         #region User management errors
+
         /// <summary>Will be raised when an invalid user name is used.</summary>
         ErrorUserInvalidName = 1700,
 
@@ -704,17 +813,21 @@ namespace Core.Arango
 
         /// <summary>Will be raised when the user is authenticated by an external server.</summary>
         ErrorUserExternal = 1705,
+
         #endregion
 
         #region Service management errors (legacy)
+
         /// <summary>Will be raised when a service download from the central repository failed.</summary>
         ErrorServiceDownloadFailed = 1752,
 
         /// <summary>Will be raised when a service upload from the client to the ArangoDB server failed.</summary>
         ErrorServiceUploadFailed = 1753,
+
         #endregion
 
         #region LDAP errors
+
         /// <summary>can not init a LDAP connection</summary>
         ErrorLdapCannotInit = 1800,
 
@@ -747,9 +860,11 @@ namespace Core.Arango
 
         /// <summary>cant distinguish a valid mode for provided LDAP configuration</summary>
         ErrorLdapInvalidMode = 1820,
+
         #endregion
 
         #region Task errors
+
         /// <summary>Will be raised when a task is created with an invalid id.</summary>
         ErrorTaskInvalidId = 1850,
 
@@ -758,9 +873,11 @@ namespace Core.Arango
 
         /// <summary>Will be raised when a task with the specified id could not be found.</summary>
         ErrorTaskNotFound = 1852,
+
         #endregion
 
         #region Graph / traversal errors
+
         /// <summary>Will be raised when an invalid name is passed to the server.</summary>
         ErrorGraphInvalidGraph = 1901,
 
@@ -866,19 +983,26 @@ namespace Core.Arango
         /// <summary>the collection is used as the initial collection of this graph and is not allowed to be removed manually.</summary>
         ErrorGraphCollectionIsInitial = 1945,
 
-        /// <summary>during the graph creation process no collection could be selected as the needed initial collection. Happens if a distributeShardsLike or replicationFactor mismatch was found.</summary>
+        /// <summary>
+        ///     during the graph creation process no collection could be selected as the needed initial collection. Happens if
+        ///     a distributeShardsLike or replicationFactor mismatch was found.
+        /// </summary>
         ErrorGraphNoInitialCollection = 1946,
+
         #endregion
 
         #region Session errors
+
         /// <summary>Will be raised when an invalid/unknown session id is passed to the server.</summary>
         ErrorSessionUnknown = 1950,
 
         /// <summary>Will be raised when a session is expired.</summary>
         ErrorSessionExpired = 1951,
+
         #endregion
 
         #region Simple Client errors
+
         /// <summary>This error should not happen.</summary>
         ErrorSimpleClientUnknownError = 2000,
 
@@ -893,9 +1017,11 @@ namespace Core.Arango
 
         /// <summary>Will be raised if was erlaube?!</summary>
         ErrorWasErlaube = 2019,
+
         #endregion
 
         #region Internal AQL errors
+
         /// <summary>Internal error during AQL execution</summary>
         ErrorInternalAql = 2200,
 
@@ -913,9 +1039,11 @@ namespace Core.Arango
 
         /// <summary>An AQL block did not copy its input registers</summary>
         ErrorInputRegistersNotCopied = 2205,
+
         #endregion
 
         #region Foxx management errors
+
         /// <summary>The service manifest file is not well-formed JSON.</summary>
         ErrorMalformedManifestFile = 3000,
 
@@ -960,9 +1088,11 @@ namespace Core.Arango
 
         /// <summary>The API for managing Foxx services has been disabled on this server.</summary>
         ErrorServiceApiDisabled = 3099,
+
         #endregion
 
         #region JavaScript module loader errors
+
         /// <summary>The module path could not be resolved.</summary>
         ErrorModuleNotFound = 3100,
 
@@ -971,9 +1101,11 @@ namespace Core.Arango
 
         /// <summary>Failed to invoke the module in its context.</summary>
         ErrorModuleFailure = 3103,
+
         #endregion
 
         #region Enterprise Edition errors
+
         /// <summary>The requested collection needs to be smart</summary>
         ErrorNoSmartCollection = 4000,
 
@@ -986,7 +1118,10 @@ namespace Core.Arango
         /// <summary>In a smart vertex collection key must be prefixed with the value of the SmartGraph attribute.</summary>
         ErrorKeyMustBePrefixedWithSmartGraphAttribute = 4003,
 
-        /// <summary>The given smartGraph attribute is illegal and cannot be used for sharding. All system attributes are forbidden.</summary>
+        /// <summary>
+        ///     The given smartGraph attribute is illegal and cannot be used for sharding. All system attributes are
+        ///     forbidden.
+        /// </summary>
         ErrorIllegalSmartGraphAttribute = 4004,
 
         /// <summary>The SmartGraph attribute of the given collection does not match the SmartGraph attribute of the graph.</summary>
@@ -1006,9 +1141,11 @@ namespace Core.Arango
 
         /// <summary>Will be raised if there is an attempt to create an edge between separated graph components.</summary>
         ErrorInvalidDisjointSmartEdge = 4010,
+
         #endregion
 
         #region Cluster repair errors
+
         /// <summary>General error during cluster repairs</summary>
         ErrorClusterRepairsFailed = 5000,
 
@@ -1021,16 +1158,25 @@ namespace Core.Arango
         /// <summary>Will be raised if a collection that is fixed has some shard without DB-Servers</summary>
         ErrorClusterRepairsNoDbservers = 5003,
 
-        /// <summary>Will be raised if a shard in collection and its prototype in the corresponding distributeShardsLike collection have mismatching leaders (when they should already have been fixed)</summary>
+        /// <summary>
+        ///     Will be raised if a shard in collection and its prototype in the corresponding distributeShardsLike collection
+        ///     have mismatching leaders (when they should already have been fixed)
+        /// </summary>
         ErrorClusterRepairsMismatchingLeaders = 5004,
 
-        /// <summary>Will be raised if a shard in collection and its prototype in the corresponding distributeShardsLike collection don’t have the same followers (when they should already have been adjusted)</summary>
+        /// <summary>
+        ///     Will be raised if a shard in collection and its prototype in the corresponding distributeShardsLike collection
+        ///     don’t have the same followers (when they should already have been adjusted)
+        /// </summary>
         ErrorClusterRepairsMismatchingFollowers = 5005,
 
         /// <summary>Will be raised if a collection that is fixed does (not) have distributeShardsLike when it is expected</summary>
         ErrorClusterRepairsInconsistentAttributes = 5006,
 
-        /// <summary>Will be raised if in a collection and its distributeShardsLike prototype collection some shard and its prototype have an unequal number of DB-Servers</summary>
+        /// <summary>
+        ///     Will be raised if in a collection and its distributeShardsLike prototype collection some shard and its
+        ///     prototype have an unequal number of DB-Servers
+        /// </summary>
         ErrorClusterRepairsMismatchingShards = 5007,
 
         /// <summary>Will be raised if a move shard job in the Agency failed during cluster repairs</summary>
@@ -1041,9 +1187,11 @@ namespace Core.Arango
 
         /// <summary>Will be raised if an agency transaction failed during either sending or executing it.</summary>
         ErrorClusterRepairsOperationFailed = 5010,
+
         #endregion
 
         #region Agency errors
+
         /// <summary>The inform message in the Agency must be an object.</summary>
         ErrorAgencyInformMustBeObject = 20011,
 
@@ -1070,19 +1218,25 @@ namespace Core.Arango
 
         /// <summary>Will be raised if the readDB or the spearHead cannot be rebuilt from the replicated log.</summary>
         ErrorAgencyCannotRebuildDbs = 20021,
+
         #endregion
 
         #region Supervision errors
+
         /// <summary>General supervision failure.</summary>
         ErrorSupervisionGeneralFailure = 20501,
+
         #endregion
 
         #region Dispatcher errors
+
         /// <summary>Will be returned if a queue with this name is full.</summary>
         ErrorQueueFull = 21003,
+
         #endregion
 
         #region Maintenance errors
+
         /// <summary>This maintenance action cannot be stopped once it is started</summary>
         ErrorActionOperationUnabortable = 6002,
 
@@ -1091,9 +1245,11 @@ namespace Core.Arango
 
         /// <summary>No such maintenance action exists</summary>
         ErrorNoSuchAction = 6004,
+
         #endregion
 
         #region Backup/Restore errors
+
         /// <summary>Failed to create hot backup set</summary>
         ErrorHotBackupInternal = 7001,
 
@@ -1129,11 +1285,14 @@ namespace Core.Arango
 
         /// <summary>One or more DB-Servers could not be reached for hot backup inquiry</summary>
         ErrorHotBackupDbserversAwol = 7012,
+
         #endregion
 
         #region Plan Analyzers errors
+
         /// <summary>Plan could not be modified while creating or deleting Analyzers revision</summary>
         ErrorClusterCouldNotModifyAnalyzersInPlan = 7021,
+
         #endregion
     }
 }

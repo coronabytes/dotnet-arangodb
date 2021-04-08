@@ -9,28 +9,28 @@ namespace Core.Arango.Protocol
     public abstract class ArangoResponseBase
     {
         /// <summary>
-        ///  HTTP Status Code
+        ///     HTTP Status Code
         /// </summary>
         [JsonPropertyName("code")]
         [JsonProperty(PropertyName = "code")]
         public short Code { get; set; }
 
         /// <summary>
-        ///  Has Error?
+        ///     Has Error?
         /// </summary>
         [JsonPropertyName("error")]
         [JsonProperty(PropertyName = "error")]
         public bool Error { get; set; }
 
         /// <summary>
-        ///  Error Message
+        ///     Error Message
         /// </summary>
         [JsonPropertyName("errorMessage")]
         [JsonProperty(PropertyName = "errorMessage")]
         public string ErrorMessage { get; set; }
 
         /// <summary>
-        ///  Error Code
+        ///     Error Code
         /// </summary>
         [JsonPropertyName("errorNum")]
         [JsonProperty(PropertyName = "errorNum")]

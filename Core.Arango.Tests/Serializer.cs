@@ -23,7 +23,7 @@ namespace Core.Arango.Tests
         }
 
         public static TheoryData<IArangoSerializer, string> SerializerData =>
-            new TheoryData<IArangoSerializer, string>
+            new()
             {
                 {new ArangoNewtonsoftSerializer(new ArangoNewtonsoftDefaultContractResolver()), "Newtonsoft(Default)"},
                 {new ArangoNewtonsoftSerializer(new ArangoNewtonsoftCamelCaseContractResolver()), "Newtonsoft(Camel)"},

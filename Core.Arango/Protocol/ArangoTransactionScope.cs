@@ -5,12 +5,12 @@ using Newtonsoft.Json;
 namespace Core.Arango.Protocol
 {
     /// <summary>
-    ///  Arango Transaction Scope
+    ///     Arango Transaction Scope
     /// </summary>
     public class ArangoTransactionScope
     {
         /// <summary>
-        ///  Collections to read from
+        ///     Collections to read from
         /// </summary>
         [JsonPropertyName("read")]
         [JsonProperty(PropertyName = "read", NullValueHandling = NullValueHandling.Ignore)]
@@ -18,7 +18,7 @@ namespace Core.Arango.Protocol
         public IList<string> Read { get; set; }
 
         /// <summary>
-        ///  Collections to write to
+        ///     Collections to write to
         /// </summary>
         [JsonPropertyName("write")]
         [JsonProperty(PropertyName = "write", NullValueHandling = NullValueHandling.Ignore)]

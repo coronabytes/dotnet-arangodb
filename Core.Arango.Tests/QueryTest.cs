@@ -18,9 +18,9 @@ namespace Core.Arango.Tests
             await Arango.Collection.CreateAsync("test", "test", ArangoCollectionType.Document);
             await Arango.Document.CreateManyAsync("test", "test", new List<Entity>
             {
-                new Entity {Value = 1},
-                new Entity {Value = 2},
-                new Entity {Value = 3}
+                new() {Value = 1},
+                new() {Value = 2},
+                new() {Value = 3}
             });
 
             Guid? nullParam = null;
@@ -40,9 +40,9 @@ namespace Core.Arango.Tests
             await Arango.Collection.CreateAsync("test", "test", ArangoCollectionType.Document);
             await Arango.Document.CreateManyAsync("test", "test", new List<Entity>
             {
-                new Entity {Value = 1},
-                new Entity {Value = 2},
-                new Entity {Value = 3}
+                new() {Value = 1},
+                new() {Value = 2},
+                new() {Value = 3}
             });
 
             var select = new List<int> {1, 2};
@@ -61,9 +61,9 @@ namespace Core.Arango.Tests
             await Arango.Collection.CreateAsync("test", "test", ArangoCollectionType.Document);
             await Arango.Document.CreateManyAsync("test", "test", new List<Entity>
             {
-                new Entity {Value = 1},
-                new Entity {Value = 2},
-                new Entity {Value = 3}
+                new() {Value = 1},
+                new() {Value = 2},
+                new() {Value = 3}
             });
 
             var collection = "test";
@@ -83,9 +83,9 @@ namespace Core.Arango.Tests
             await Arango.Collection.CreateAsync("test", "test", ArangoCollectionType.Document);
             await Arango.Document.CreateManyAsync("test", "test", new List<Entity>
             {
-                new Entity {Value = 1},
-                new Entity {Value = 2},
-                new Entity {Value = 3}
+                new() {Value = 1},
+                new() {Value = 2},
+                new() {Value = 3}
             });
 
             var collection = "test";
@@ -107,9 +107,9 @@ namespace Core.Arango.Tests
             await SetupAsync(serializer);
             await Arango.Collection.CreateAsync("test", "test", ArangoCollectionType.Document);
 
-            await Arango.Document.CreateManyAsync("test", "test", 
+            await Arango.Document.CreateManyAsync("test", "test",
                 Enumerable.Range(1, 100000)
-                    .Select(x => new Entity { Value = x }));
+                    .Select(x => new Entity {Value = x}));
 
             var res = await Arango.Query.ExecuteAsync<string>("test",
                 $"FOR e IN test RETURN e._id");
@@ -126,11 +126,11 @@ namespace Core.Arango.Tests
 
             await Arango.Document.CreateManyAsync("test", "test",
                 Enumerable.Range(1, 100000)
-                    .Select(x => new Entity { Value = x }));
+                    .Select(x => new Entity {Value = x}));
 
-            int i = 0;
+            var i = 0;
 
-            await foreach (var x in Arango.Query.ExecuteStreamAsync<string>("test", 
+            await foreach (var x in Arango.Query.ExecuteStreamAsync<string>("test",
                 $"FOR e IN test RETURN e._id", batchSize: 1000))
                 ++i;
 

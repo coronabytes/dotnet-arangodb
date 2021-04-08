@@ -6,7 +6,7 @@ using Core.Arango.Protocol;
 namespace Core.Arango.Modules
 {
     /// <summary>
-    ///  Collection management
+    ///     Collection management
     /// </summary>
     public interface IArangoCollectionModule
     {

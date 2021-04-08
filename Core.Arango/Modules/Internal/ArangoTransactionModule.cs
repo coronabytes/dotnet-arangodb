@@ -1,5 +1,4 @@
-﻿using System;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
@@ -16,9 +15,6 @@ namespace Core.Arango.Modules.Internal
         public async Task<T> ExecuteAsync<T>(ArangoHandle database, ArangoTransaction request,
             CancellationToken cancellationToken = default)
         {
-            if (database.Batches != null)
-                throw new NotSupportedException("no transaction inside batch");
-
             return await SendAsync<T>(null, HttpMethod.Post,
                 ApiPath(database, "transaction"),
                 request, cancellationToken: cancellationToken);
@@ -27,9 +23,6 @@ namespace Core.Arango.Modules.Internal
         public async Task<ArangoHandle> BeginAsync(ArangoHandle database, ArangoTransaction request,
             CancellationToken cancellationToken = default)
         {
-            if (database.Batches != null)
-                throw new NotSupportedException("no transaction inside batch");
-
             var res = await SendAsync<SingleResult<TransactionResponse>>(null, HttpMethod.Post,
                 ApiPath(database, "transaction/begin"),
                 request, cancellationToken: cancellationToken);
@@ -41,9 +34,6 @@ namespace Core.Arango.Modules.Internal
         public async Task CommitAsync(ArangoHandle database,
             CancellationToken cancellationToken = default)
         {
-            if (database.Batches != null)
-                throw new NotSupportedException("no transaction inside batch");
-
             if (string.IsNullOrWhiteSpace(database.Transaction))
                 throw new ArangoException("no transaction handle");
 
@@ -54,9 +44,6 @@ namespace Core.Arango.Modules.Internal
 
         public async Task AbortAsync(ArangoHandle database, CancellationToken cancellationToken = default)
         {
-            if (database.Batches != null)
-                throw new NotSupportedException("no transaction inside batch");
-
             if (string.IsNullOrWhiteSpace(database.Transaction))
                 throw new ArangoException("no transaction handle");
 

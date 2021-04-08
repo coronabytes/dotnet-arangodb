@@ -15,7 +15,8 @@ namespace Core.Arango.Modules.Internal
         {
         }
 
-        public async Task<ICollection<ArangoFoxxService>> ListServicesAsync(ArangoHandle database, bool? excludeSystem = null,
+        public async Task<ICollection<ArangoFoxxService>> ListServicesAsync(ArangoHandle database,
+            bool? excludeSystem = null,
             CancellationToken cancellationToken = default)
         {
             var parameter = new Dictionary<string, string>();
@@ -26,26 +27,6 @@ namespace Core.Arango.Modules.Internal
             return await SendAsync<List<ArangoFoxxService>>(database, HttpMethod.Get,
                 ApiPath(database, "foxx", parameter),
                 cancellationToken: cancellationToken);
-        }
-
-        private MultipartFormDataContent PackService(ArangoFoxxSource service)
-        {
-            var content = new MultipartFormDataContent();
-
-            if (service.JavaScript != null)
-                content.Add(new StringContent(service.JavaScript, Encoding.UTF8, "application/javascript"), "source");
-            else if (service.Url != null)
-                content.Add(new StringContent(service.Url), "source");
-            else if (service.ZipArchive != null)
-            {
-                var stream = new StreamContent(service.ZipArchive);
-                stream.Headers.ContentType = new MediaTypeHeaderValue("application/zip");
-                content.Add(stream, "source");
-            }
-            else
-                throw new ArangoException("Invalid service description");
-                    
-            return content;
         }
 
         public async Task<ArangoVoid> InstallServiceAsync(ArangoHandle database,
@@ -221,7 +202,7 @@ namespace Core.Arango.Modules.Internal
                 cancellationToken: cancellationToken);
         }
 
-        public async Task<T> GetAsync<T>(ArangoHandle database, string mount, 
+        public async Task<T> GetAsync<T>(ArangoHandle database, string mount,
             IDictionary<string, string> queryParams = null,
             CancellationToken cancellationToken = default)
         {
@@ -278,15 +259,41 @@ namespace Core.Arango.Modules.Internal
             return await res.ReadAsStreamAsync();
         }
 
-        public async Task<T> RunServiceScriptAsync<T>(ArangoHandle database, string mount, string name, 
+        public async Task<T> RunServiceScriptAsync<T>(ArangoHandle database, string mount, string name,
             object body = null,
             CancellationToken cancellationToken = default)
         {
             var parameter = new Dictionary<string, string> {{"mount", mount}};
 
-           return await SendAsync<T>(database, HttpMethod.Post,
+            return await SendAsync<T>(database, HttpMethod.Post,
                 ApiPath(database, $"foxx/scripts/{UrlEncode(name)}", parameter), body,
                 cancellationToken: cancellationToken);
+        }
+
+        private MultipartFormDataContent PackService(ArangoFoxxSource service)
+        {
+            var content = new MultipartFormDataContent();
+
+            if (service.JavaScript != null)
+            {
+                content.Add(new StringContent(service.JavaScript, Encoding.UTF8, "application/javascript"), "source");
+            }
+            else if (service.Url != null)
+            {
+                content.Add(new StringContent(service.Url), "source");
+            }
+            else if (service.ZipArchive != null)
+            {
+                var stream = new StreamContent(service.ZipArchive);
+                stream.Headers.ContentType = new MediaTypeHeaderValue("application/zip");
+                content.Add(stream, "source");
+            }
+            else
+            {
+                throw new ArangoException("Invalid service description");
+            }
+
+            return content;
         }
     }
 }

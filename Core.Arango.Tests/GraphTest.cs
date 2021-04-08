@@ -1,22 +1,13 @@
-using System;
 using System.Collections.Generic;
-using System.Net;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
 using Core.Arango.Tests.Core;
-using Newtonsoft.Json.Linq;
 using Xunit;
 
 namespace Core.Arango.Tests
 {
     public class GraphTest : TestBase
     {
-        private class Vertex
-        {
-            public string Key { get; set; }
-            public string Name { get; set; }
-        }
-
         [Theory]
         [ClassData(typeof(CamelCaseData))]
         public async Task Get(string serializer)
@@ -129,7 +120,9 @@ namespace Core.Arango.Tests
                 }
             });
 
-            var transaction0 = await Arango.Transaction.BeginAsync("test", new() { Collections = new() { Write = new[] { "vertices", "edges" } } });
+            var transaction0 = await Arango.Transaction.BeginAsync("test",
+                new ArangoTransaction()
+                    {Collections = new ArangoTransactionScope {Write = new[] {"vertices", "edges"}}});
 
             await Arango.Graph.Vertex.CreateAsync(transaction0, "graph", "vertices", new
             {
@@ -163,7 +156,9 @@ namespace Core.Arango.Tests
 
             Assert.Equal(3, nodes.Count);
 
-            var transaction1 = await Arango.Transaction.BeginAsync("test", new() { Collections = new() { Write = new[] { "vertices", "edges" } } });
+            var transaction1 = await Arango.Transaction.BeginAsync("test",
+                new ArangoTransaction()
+                    {Collections = new ArangoTransactionScope {Write = new[] {"vertices", "edges"}}});
 
             await Arango.Graph.Edge.CreateAsync(transaction1, "graph", "edges", new
             {
@@ -173,7 +168,9 @@ namespace Core.Arango.Tests
                 Label = "friend"
             });
 
-            var transaction2 = await Arango.Transaction.BeginAsync("test", new() { Collections = new() { Write = new[] { "vertices", "edges" } } });
+            var transaction2 = await Arango.Transaction.BeginAsync("test",
+                new ArangoTransaction()
+                    {Collections = new ArangoTransactionScope {Write = new[] {"vertices", "edges"}}});
 
             await Arango.Graph.Edge.CreateAsync(transaction2, "graph", "edges", new
             {
@@ -221,6 +218,12 @@ namespace Core.Arango.Tests
             Assert.Equal(2, friends.Count);
 
             await Arango.Graph.DropAsync("test", "graph");
+        }
+
+        private class Vertex
+        {
+            public string Key { get; set; }
+            public string Name { get; set; }
         }
     }
 }

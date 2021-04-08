@@ -3,11 +3,11 @@
 namespace Core.Arango.Serialization.Json
 {
     /// <summary>
-    ///   System.Json.Text PascalCase Naming Policy for Arango
+    ///     System.Json.Text PascalCase Naming Policy for Arango
     /// </summary>
     public class ArangoJsonDefaultPolicy : JsonNamingPolicy
     {
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public override string ConvertName(string name)
         {
             return name switch

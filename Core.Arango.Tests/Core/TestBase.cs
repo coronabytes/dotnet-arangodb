@@ -1,7 +1,5 @@
 using System;
-using System.Diagnostics;
 using System.Threading.Tasks;
-using Core.Arango.Serialization;
 using Core.Arango.Serialization.Json;
 using Core.Arango.Serialization.Newtonsoft;
 using Xunit;
@@ -11,9 +9,23 @@ namespace Core.Arango.Tests.Core
     public abstract class TestBase : IAsyncLifetime
     {
         public IArangoContext Arango { get; protected set; }
+
         public virtual Task InitializeAsync()
         {
             return Task.CompletedTask;
+        }
+
+        public async Task DisposeAsync()
+        {
+            try
+            {
+                foreach (var db in await Arango.Database.ListAsync())
+                    await Arango.Database.DropAsync(db);
+            }
+            catch
+            {
+                //
+            }
         }
 
         public async Task SetupAsync(string serializer)
@@ -30,19 +42,6 @@ namespace Core.Arango.Tests.Core
                 }
             });
             await Arango.Database.CreateAsync("test");
-        }
-
-        public async Task DisposeAsync()
-        {
-            try
-            {
-                foreach (var db in await Arango.Database.ListAsync())
-                    await Arango.Database.DropAsync(db);
-            }
-            catch
-            {
-                //
-            }
         }
 
         protected string UniqueTestRealm()

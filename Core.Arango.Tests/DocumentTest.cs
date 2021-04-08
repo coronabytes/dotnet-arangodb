@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
-using System.Security;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
 using Core.Arango.Tests.Core;
-using Newtonsoft.Json.Linq;
 using Xunit;
 
 namespace Core.Arango.Tests
@@ -78,7 +76,8 @@ namespace Core.Arango.Tests
             Assert.Equal(res.Key, doc.Key);
             Assert.Equal(res.Revision, doc.Revision);
 
-            var obj = await Arango.Query.SingleOrDefaultAsync<Dictionary<string, string>>("test", "test", $"x._key == {"abc"}");
+            var obj = await Arango.Query.SingleOrDefaultAsync<Dictionary<string, string>>("test", "test",
+                $"x._key == {"abc"}");
 
             Assert.Equal("c", obj["Name"]);
             Assert.Equal(res.Id, obj["_id"]);
@@ -112,7 +111,8 @@ namespace Core.Arango.Tests
             Assert.Equal(createRes.Key, res.Key);
             Assert.Equal(createRes.Revision, res.OldRevision);
 
-            var obj = await Arango.Query.SingleOrDefaultAsync<Dictionary<string, string>>("test", "test", $"x._key == {"abc"}");
+            var obj = await Arango.Query.SingleOrDefaultAsync<Dictionary<string, string>>("test", "test",
+                $"x._key == {"abc"}");
 
             Assert.Equal("a", obj["Name"]);
             Assert.Equal("c", obj["Value"]);
@@ -147,7 +147,8 @@ namespace Core.Arango.Tests
             Assert.Equal(createRes.Key, res.Key);
             Assert.Equal(createRes.Revision, res.OldRevision);
 
-            var obj = await Arango.Query.SingleOrDefaultAsync<Dictionary<string, string>>("test", "test", $"x._key == {"abc"}");
+            var obj = await Arango.Query.SingleOrDefaultAsync<Dictionary<string, string>>("test", "test",
+                $"x._key == {"abc"}");
 
             Assert.DoesNotContain("Name", obj.Keys);
             Assert.Equal("c", obj["Value"]);
@@ -182,16 +183,9 @@ namespace Core.Arango.Tests
             });
 
             Assert.Contains("unique constraint", exception.Message);
-            Assert.Collection<ArangoError>(exception.Errors, 
+            Assert.Collection(exception.Errors,
                 error => Assert.Equal(ArangoErrorCode.ErrorArangoUniqueConstraintViolated, error.ErrorNumber)
             );
-        }
-
-        private class RevEntity
-        {
-            public string Key { get; set; }
-            public string Name { get; set; }
-            public string Revision { get; set; }
         }
 
         [Theory]
@@ -242,8 +236,8 @@ namespace Core.Arango.Tests
             {
                 new()
                 {
-                  Key = "1",
-                  Name = "A"
+                    Key = "1",
+                    Name = "A"
                 },
                 new()
                 {
@@ -258,9 +252,9 @@ namespace Core.Arango.Tests
                 {
                     Key = "1"
                 },
-                new 
+                new
                 {
-                    Key = "2",
+                    Key = "2"
                 }
             });
 
@@ -275,6 +269,13 @@ namespace Core.Arango.Tests
             });
 
             await Arango.Document.UpdateManyAsync("test", "test", list, ignoreRevs: true);
+        }
+
+        private class RevEntity
+        {
+            public string Key { get; set; }
+            public string Name { get; set; }
+            public string Revision { get; set; }
         }
     }
 }

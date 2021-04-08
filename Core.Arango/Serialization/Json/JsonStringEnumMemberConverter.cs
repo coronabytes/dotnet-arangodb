@@ -9,34 +9,34 @@ using System.Text.Json.Serialization;
 
 namespace Core.Arango.Serialization.Json
 {
-    #nullable enable
-    
+#nullable enable
+
     // TODO: Obsolete with .NET 6?
     /// <summary>
-    ///   System.Text.Json EnumMember support
+    ///     System.Text.Json EnumMember support
     /// </summary>
     public class JsonStringEnumMemberConverter : JsonConverterFactory
     {
-        private readonly JsonNamingPolicy? _NamingPolicy;
         private readonly bool _AllowIntegerValues;
+        private readonly JsonNamingPolicy? _NamingPolicy;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="JsonStringEnumMemberConverter"/> class.
+        ///     Initializes a new instance of the <see cref="JsonStringEnumMemberConverter" /> class.
         /// </summary>
         public JsonStringEnumMemberConverter()
-            : this(namingPolicy: null, allowIntegerValues: true)
+            : this(null)
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="JsonStringEnumMemberConverter"/> class.
+        ///     Initializes a new instance of the <see cref="JsonStringEnumMemberConverter" /> class.
         /// </summary>
         /// <param name="namingPolicy">
-        /// Optional naming policy for writing enum values.
+        ///     Optional naming policy for writing enum values.
         /// </param>
         /// <param name="allowIntegerValues">
-        /// True to allow undefined enum values. When true, if an enum value isn't
-        /// defined it will output as a number rather than a string.
+        ///     True to allow undefined enum values. When true, if an enum value isn't
+        ///     defined it will output as a number rather than a string.
         /// </param>
         public JsonStringEnumMemberConverter(JsonNamingPolicy? namingPolicy = null, bool allowIntegerValues = true)
         {
@@ -44,39 +44,39 @@ namespace Core.Arango.Serialization.Json
             _AllowIntegerValues = allowIntegerValues;
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public override bool CanConvert(Type typeToConvert)
         {
             // Don't perform a typeToConvert == null check for performance. Trust our callers will be nice.
 #pragma warning disable CA1062 // Validate arguments of public methods
             return typeToConvert.IsEnum
-                   || (typeToConvert.IsGenericType && TestNullableEnum(typeToConvert).IsNullableEnum);
+                   || typeToConvert.IsGenericType && TestNullableEnum(typeToConvert).IsNullableEnum;
 #pragma warning restore CA1062 // Validate arguments of public methods
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
         {
-            (bool IsNullableEnum, Type? UnderlyingType) = TestNullableEnum(typeToConvert);
+            (var IsNullableEnum, var UnderlyingType) = TestNullableEnum(typeToConvert);
 
             return IsNullableEnum
-                ? (JsonConverter)Activator.CreateInstance(
+                ? (JsonConverter) Activator.CreateInstance(
                     typeof(NullableEnumMemberConverter<>).MakeGenericType(UnderlyingType),
                     BindingFlags.Instance | BindingFlags.Public,
-                    binder: null,
-                    args: new object?[] { _NamingPolicy, _AllowIntegerValues },
-                    culture: null)
-                : (JsonConverter)Activator.CreateInstance(
+                    null,
+                    new object?[] {_NamingPolicy, _AllowIntegerValues},
+                    null)
+                : (JsonConverter) Activator.CreateInstance(
                     typeof(EnumMemberConverter<>).MakeGenericType(typeToConvert),
                     BindingFlags.Instance | BindingFlags.Public,
-                    binder: null,
-                    args: new object?[] { _NamingPolicy, _AllowIntegerValues },
-                    culture: null);
+                    null,
+                    new object?[] {_NamingPolicy, _AllowIntegerValues},
+                    null);
         }
 
         private static (bool IsNullableEnum, Type? UnderlyingType) TestNullableEnum(Type typeToConvert)
         {
-            Type? UnderlyingType = Nullable.GetUnderlyingType(typeToConvert);
+            var UnderlyingType = Nullable.GetUnderlyingType(typeToConvert);
 
             return (UnderlyingType?.IsEnum ?? false, UnderlyingType);
         }
@@ -90,14 +90,19 @@ namespace Core.Arango.Serialization.Json
 
             public EnumMemberConverter(JsonNamingPolicy? namingPolicy, bool allowIntegerValues)
             {
-                _JsonStringEnumMemberConverterHelper = new JsonStringEnumMemberConverterHelper<TEnum>(namingPolicy, allowIntegerValues);
+                _JsonStringEnumMemberConverterHelper =
+                    new JsonStringEnumMemberConverterHelper<TEnum>(namingPolicy, allowIntegerValues);
             }
 
             public override TEnum Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-                => _JsonStringEnumMemberConverterHelper.Read(ref reader);
+            {
+                return _JsonStringEnumMemberConverterHelper.Read(ref reader);
+            }
 
             public override void Write(Utf8JsonWriter writer, TEnum value, JsonSerializerOptions options)
-                => _JsonStringEnumMemberConverterHelper.Write(writer, value);
+            {
+                _JsonStringEnumMemberConverterHelper.Write(writer, value);
+            }
         }
 
 #pragma warning disable CA1812 // Remove class never instantiated
@@ -109,16 +114,21 @@ namespace Core.Arango.Serialization.Json
 
             public NullableEnumMemberConverter(JsonNamingPolicy? namingPolicy, bool allowIntegerValues)
             {
-                _JsonStringEnumMemberConverterHelper = new JsonStringEnumMemberConverterHelper<TEnum>(namingPolicy, allowIntegerValues);
+                _JsonStringEnumMemberConverterHelper =
+                    new JsonStringEnumMemberConverterHelper<TEnum>(namingPolicy, allowIntegerValues);
             }
 
             public override TEnum? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-                => _JsonStringEnumMemberConverterHelper.Read(ref reader);
+            {
+                return _JsonStringEnumMemberConverterHelper.Read(ref reader);
+            }
 
             public override void Write(Utf8JsonWriter writer, TEnum? value, JsonSerializerOptions options)
-                => _JsonStringEnumMemberConverterHelper.Write(writer, value!.Value);
+            {
+                _JsonStringEnumMemberConverterHelper.Write(writer, value!.Value);
+            }
         }
     }
-    
+
 #nullable restore
 }

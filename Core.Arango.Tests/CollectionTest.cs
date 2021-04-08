@@ -1,11 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.Net;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
 using Core.Arango.Tests.Core;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Schema;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -86,7 +82,7 @@ namespace Core.Arango.Tests
                         {
                             name = new {type = "string"}
                         },
-                        required = new[] { "name" }
+                        required = new[] {"name"}
                         //additionalProperties = true
                     }
                 }
@@ -94,7 +90,7 @@ namespace Core.Arango.Tests
 
             await Arango.Document.CreateAsync("test", "test", new
             {
-                name = "test",
+                name = "test"
             });
 
             var exception = await Assert.ThrowsAsync<ArangoException>(async () =>
@@ -106,22 +102,22 @@ namespace Core.Arango.Tests
                 });
             });
 
-            Assert.Collection<ArangoError>(exception.Errors, 
+            Assert.Collection(exception.Errors,
                 error => Assert.Equal(ArangoErrorCode.ErrorValidationFailed, error.ErrorNumber)
             );
 
-           await Arango.Collection.UpdateAsync("test", "test", new ArangoCollectionUpdate
-           {
-               Schema = null
-           });
+            await Arango.Collection.UpdateAsync("test", "test", new ArangoCollectionUpdate
+            {
+                Schema = null
+            });
 
-           await Task.Delay(5000);
+            await Task.Delay(5000);
 
-           await Arango.Document.CreateAsync("test", "test", new
-           {
-               name = 2,
-               name2 = "test"
-           });
+            await Arango.Document.CreateAsync("test", "test", new
+            {
+                name = 2,
+                name2 = "test"
+            });
         }
     }
 }

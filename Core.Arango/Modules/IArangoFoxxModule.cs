@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
@@ -8,12 +7,12 @@ using Core.Arango.Protocol;
 namespace Core.Arango.Modules
 {
     /// <summary>
-    ///  Foxx service management and execution
+    ///     Foxx service management and execution
     /// </summary>
     public interface IArangoFoxxModule
     {
         /// <summary>
-        ///   List installed services
+        ///     List installed services
         /// </summary>
         /// <param name="database"></param>
         /// <param name="excludeSystem">Whether or not system services should be excluded from the result.</param>
@@ -77,82 +76,82 @@ namespace Core.Arango.Modules
             CancellationToken cancellationToken = default);
 
         /// <summary>
-        ///   Get configuration options
+        ///     Get configuration options
         /// </summary>
         Task<T> GetConfigurationAsync<T>(ArangoHandle database, string mount,
             CancellationToken cancellationToken = default);
 
         /// <summary>
-        ///   Update configuration options
+        ///     Update configuration options
         /// </summary>
         Task<ArangoVoid> UpdateConfigurationAsync(ArangoHandle database, string mount,
             object configuration = null,
             CancellationToken cancellationToken = default);
 
         /// <summary>
-        ///   Replace configuration options
+        ///     Replace configuration options
         /// </summary>
         Task<ArangoVoid> ReplaceConfigurationAsync(ArangoHandle database, string mount,
             object configuration = null,
             CancellationToken cancellationToken = default);
 
         /// <summary>
-        ///   Get dependency options
+        ///     Get dependency options
         /// </summary>
         Task<T> GetDependenciesAsync<T>(ArangoHandle database, string mount,
             CancellationToken cancellationToken = default);
 
         /// <summary>
-        ///   Update dependency options
+        ///     Update dependency options
         /// </summary>
         Task<ArangoVoid> UpdateDependenciesAsync(ArangoHandle database, string mount,
             object dependencies = null,
             CancellationToken cancellationToken = default);
 
         /// <summary>
-        ///   Replace dependency options
+        ///     Replace dependency options
         /// </summary>
         Task<ArangoVoid> ReplaceDependenciesAsync(ArangoHandle database, string mount,
             object dependencies = null,
             CancellationToken cancellationToken = default);
 
         /// <summary>
-        ///   HTTP GET request to Foxx service
+        ///     HTTP GET request to Foxx service
         /// </summary>
-        Task<T> GetAsync<T>(ArangoHandle database, string path, 
+        Task<T> GetAsync<T>(ArangoHandle database, string path,
             IDictionary<string, string> queryParams = null,
             CancellationToken cancellationToken = default);
 
         /// <summary>
-        ///   HTTP POST request to Foxx service
+        ///     HTTP POST request to Foxx service
         /// </summary>
         Task<T> PostAsync<T>(ArangoHandle database, string path, object body,
             IDictionary<string, string> queryParams = null,
             CancellationToken cancellationToken = default);
 
         /// <summary>
-        ///   HTTP PUT request to Foxx service
+        ///     HTTP PUT request to Foxx service
         /// </summary>
         Task<T> PutAsync<T>(ArangoHandle database, string path, object body,
             IDictionary<string, string> queryParams = null,
             CancellationToken cancellationToken = default);
 
         /// <summary>
-        ///   HTTP PATCH request to Foxx service
+        ///     HTTP PATCH request to Foxx service
         /// </summary>
         Task<T> PatchAsync<T>(ArangoHandle database, string path, object body,
             IDictionary<string, string> queryParams = null,
             CancellationToken cancellationToken = default);
 
         /// <summary>
-        ///   HTTP DELETE request to Foxx service
+        ///     HTTP DELETE request to Foxx service
         /// </summary>
         Task<T> DeleteAsync<T>(ArangoHandle database, string path,
             IDictionary<string, string> queryParams = null,
             CancellationToken cancellationToken = default);
 
         /// <summary>
-        ///  Enable development mode
+        ///     Enable development mode
         /// </summary>
         /// <param name="database">Database the target service.</param>
         /// <param name="mount">Mount path of the installed service.</param>
@@ -162,7 +161,7 @@ namespace Core.Arango.Modules
             CancellationToken cancellationToken = default);
 
         /// <summary>
-        ///  Disable development mode
+        ///     Disable development mode
         /// </summary>
         /// <param name="database">Database the target service.</param>
         /// <param name="mount">Mount path of the installed service.</param>
@@ -172,7 +171,6 @@ namespace Core.Arango.Modules
             CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// 
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="database"></param>
@@ -183,7 +181,6 @@ namespace Core.Arango.Modules
             CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// 
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="database"></param>
@@ -192,7 +189,7 @@ namespace Core.Arango.Modules
         /// <param name="body"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<T> RunServiceScriptAsync<T>(ArangoHandle database, string mount, string name, 
+        Task<T> RunServiceScriptAsync<T>(ArangoHandle database, string mount, string name,
             object body = null,
             CancellationToken cancellationToken = default);
     }

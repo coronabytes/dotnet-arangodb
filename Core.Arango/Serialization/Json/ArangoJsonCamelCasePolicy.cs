@@ -4,11 +4,11 @@ using System.Text.Json;
 namespace Core.Arango.Serialization.Json
 {
     /// <summary>
-    ///   System.Json.Text PascalCase Naming Policy for Arango
+    ///     System.Json.Text PascalCase Naming Policy for Arango
     /// </summary>
     public class ArangoJsonCamelCasePolicy : JsonNamingPolicy
     {
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public override string ConvertName(string name)
         {
             return name switch

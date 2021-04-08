@@ -140,20 +140,22 @@ namespace Core.Arango.Protocol
 
 
         /// <summary>
-        ///     (GeoPoint) array of strings that describes the attribute path of the latitude value relative to the field for which the Analyzer is defined in the View
+        ///     (GeoPoint) array of strings that describes the attribute path of the latitude value relative to the field for which
+        ///     the Analyzer is defined in the View
         /// </summary>
         [JsonPropertyName("latitude ")]
         [JsonProperty(PropertyName = "latitude", DefaultValueHandling = DefaultValueHandling.Ignore)]
         [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public IList<string> Latitude  { get; set; }
+        public IList<string> Latitude { get; set; }
 
         /// <summary>
-        ///     (GeoPoint) array of strings that describes the attribute path of the longitude value relative to the field for which the Analyzer is defined in the View
+        ///     (GeoPoint) array of strings that describes the attribute path of the longitude value relative to the field for
+        ///     which the Analyzer is defined in the View
         /// </summary>
         [JsonPropertyName("longitude")]
         [JsonProperty(PropertyName = "longitude", DefaultValueHandling = DefaultValueHandling.Ignore)]
         [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public IList<string> Longitude  { get; set; }
+        public IList<string> Longitude { get; set; }
 
         /// <summary>
         ///     (GeoJson)  (default): index all GeoJSON geometry types (Point, Polygon etc.)
@@ -161,6 +163,6 @@ namespace Core.Arango.Protocol
         [JsonPropertyName("type")]
         [JsonProperty(PropertyName = "type", DefaultValueHandling = DefaultValueHandling.Ignore)]
         [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public ArangoAnalyzerGeoJsonType? Type  { get; set; }
+        public ArangoAnalyzerGeoJsonType? Type { get; set; }
     }
 }

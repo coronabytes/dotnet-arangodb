@@ -13,7 +13,7 @@ using Core.Arango.Protocol.Internal;
 
 namespace Core.Arango
 {
-    /// <inheritdoc/>
+    /// <inheritdoc />
     public class ArangoContext : IArangoContext
     {
         /// <summary>
@@ -35,7 +35,6 @@ namespace Core.Arango
             Analyzer = new ArangoAnalyzerModule(this);
             Function = new ArangoFunctionModule(this);
             Foxx = new ArangoFoxxModule(this);
-            Batch = new ArangoBatchModule(this);
             Backup = new ArangoBackupModule(this);
         }
 
@@ -60,7 +59,6 @@ namespace Core.Arango
             Analyzer = new ArangoAnalyzerModule(this);
             Function = new ArangoFunctionModule(this);
             Foxx = new ArangoFoxxModule(this);
-            Batch = new ArangoBatchModule(this);
             Backup = new ArangoBackupModule(this);
         }
 
@@ -105,9 +103,6 @@ namespace Core.Arango
 
         /// <inheritdoc />
         public IArangoBackupModule Backup { get; }
-
-        /// <inheritdoc />
-        public IArangoBatchModule Batch { get; }
 
         /// <inheritdoc />
         public async Task<ArangoVersion> GetVersionAsync(CancellationToken cancellationToken = default)

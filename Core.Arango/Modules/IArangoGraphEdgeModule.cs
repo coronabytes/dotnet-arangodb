@@ -5,7 +5,7 @@ using Core.Arango.Protocol;
 namespace Core.Arango.Modules
 {
     /// <summary>
-    ///  Graph edge manipulation
+    ///     Graph edge manipulation
     /// </summary>
     public interface IArangoGraphEdgeModule
     {

@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 namespace Core.Arango.Protocol
 {
     /// <summary>
-    ///  Arango Graph Description
+    ///     Arango Graph Description
     /// </summary>
     public class ArangoGraph
     {

@@ -15,18 +15,18 @@ using Newtonsoft.Json;
 namespace Core.Arango.Transport
 {
     /// <summary>
-    ///   Arango HTTP 1.1/2.0 Transport Implementation
+    ///     Arango HTTP 1.1/2.0 Transport Implementation
     /// </summary>
     public class ArangoHttpTransport : IArangoTransport
     {
-        private static readonly HttpClient DefaultHttpClient = new ();
-        private readonly HttpClient _httpClient;
+        private static readonly HttpClient DefaultHttpClient = new();
         private readonly IArangoConfiguration _configuration;
+        private readonly HttpClient _httpClient;
         private string _auth;
         private DateTime _authValidUntil = DateTime.MinValue;
 
         /// <summary>
-        ///   Arango HTTP 1.1/2.0 Transport Implementation
+        ///     Arango HTTP 1.1/2.0 Transport Implementation
         /// </summary>
         public ArangoHttpTransport(IArangoConfiguration configuration)
         {
@@ -34,9 +34,10 @@ namespace Core.Arango.Transport
             _httpClient = configuration.HttpClient ?? DefaultHttpClient;
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public async Task<T> SendAsync<T>(HttpMethod m, string url, object body = null,
-            string transaction = null, bool throwOnError = true, bool auth = true, IDictionary<string, string> headers = null,
+            string transaction = null, bool throwOnError = true, bool auth = true,
+            IDictionary<string, string> headers = null,
             CancellationToken cancellationToken = default)
         {
             await Authenticate(auth, cancellationToken);
@@ -85,54 +86,11 @@ namespace Core.Arango.Transport
             return _configuration.Serializer.Deserialize<T>(content);
         }
 
-        private void ApplyHeaders(string transaction, bool auth, HttpRequestMessage msg, IDictionary<string, string> headers)
-        {
-            msg.Headers.Add(HttpRequestHeader.KeepAlive.ToString(), "true");
-
-            if (auth)
-                msg.Headers.Add(HttpRequestHeader.Authorization.ToString(), _auth);
-
-            if (transaction != null)
-                msg.Headers.Add("x-arango-trx-id", transaction);
-
-            if (_configuration.AllowDirtyRead)
-                msg.Headers.Add("x-arango-allow-dirty-read", "true");
-
-            if (headers != null)
-                foreach (var header in headers)
-                    msg.Headers.Add(header.Key, header.Value);
-        }
-
-        /// <inheritdoc/>
-        public Task<T> WriteBatchAsync<T>(ArangoHandle handle, HttpMethod m, string url, object body = null, IDictionary<string, string> headers = null)
-        {
-            var tcs = new TaskCompletionSource<T>();
-
-            handle.Batches.Add(new ArangoBatch
-            {
-                ContentId = Guid.NewGuid(),
-                Request = $"{m.Method} {url} HTTP/1.1\r\n" + (body != null ? "\r\n" + _configuration.Serializer.Serialize(body)+ "\r\n" : string.Empty),
-                Complete = s =>
-                {
-                    try
-                    {
-                        tcs.SetResult(_configuration.Serializer.Deserialize<T>(s));
-                    }
-                    catch (Exception e)
-                    {
-                        tcs.SetException(e);
-                    }
-                },
-                Cancel = () => tcs.SetCanceled(),
-                Fail = exception => tcs.SetException(exception)
-            });
-
-            return tcs.Task;
-        }
-
-        /// <inheritdoc/>
-        public async Task<HttpContent> SendContentAsync(HttpMethod m, string url, HttpContent body = null, string transaction = null,
-            bool throwOnError = true, bool auth = true, IDictionary<string, string> headers = null, CancellationToken cancellationToken = default)
+        /// <inheritdoc />
+        public async Task<HttpContent> SendContentAsync(HttpMethod m, string url, HttpContent body = null,
+            string transaction = null,
+            bool throwOnError = true, bool auth = true, IDictionary<string, string> headers = null,
+            CancellationToken cancellationToken = default)
         {
             await Authenticate(auth, cancellationToken);
 
@@ -148,15 +106,16 @@ namespace Core.Arango.Transport
                     var errorContent = await res.Content.ReadAsStringAsync();
                     var error = _configuration.Serializer.Deserialize<ErrorResponse>(errorContent);
                     throw new ArangoException(errorContent, error.ErrorMessage,
-                        (HttpStatusCode)error.Code, (ArangoErrorCode)error.ErrorNum);
+                        (HttpStatusCode) error.Code, (ArangoErrorCode) error.ErrorNum);
                 }
 
             return res.Content;
         }
-        
-        /// <inheritdoc/>
+
+        /// <inheritdoc />
         public async Task<object> SendAsync(Type type, HttpMethod m, string url, object body = null,
-            string transaction = null, bool throwOnError = true, bool auth = true, IDictionary<string, string> headers = null,
+            string transaction = null, bool throwOnError = true, bool auth = true,
+            IDictionary<string, string> headers = null,
             CancellationToken cancellationToken = default)
         {
             await Authenticate(auth, cancellationToken);
@@ -183,6 +142,25 @@ namespace Core.Arango.Transport
                 return default;
 
             return _configuration.Serializer.Deserialize(content, type);
+        }
+
+        private void ApplyHeaders(string transaction, bool auth, HttpRequestMessage msg,
+            IDictionary<string, string> headers)
+        {
+            msg.Headers.Add(HttpRequestHeader.KeepAlive.ToString(), "true");
+
+            if (auth)
+                msg.Headers.Add(HttpRequestHeader.Authorization.ToString(), _auth);
+
+            if (transaction != null)
+                msg.Headers.Add("x-arango-trx-id", transaction);
+
+            if (_configuration.AllowDirtyRead)
+                msg.Headers.Add("x-arango-allow-dirty-read", "true");
+
+            if (headers != null)
+                foreach (var header in headers)
+                    msg.Headers.Add(header.Key, header.Value);
         }
 
         private async Task Authenticate(bool auth, CancellationToken cancellationToken)

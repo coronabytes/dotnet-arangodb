@@ -103,8 +103,8 @@ router.get('/hello-world', function (req, res) {{
         public async Task InstallZip()
         {
             await SetupAsync("system-camel");
-            
-            await Arango.Foxx.InstallServiceAsync("test", "/sample/service", 
+
+            await Arango.Foxx.InstallServiceAsync("test", "/sample/service",
                 ArangoFoxxSource.FromZip(await BuildService("world")));
 
             await Arango.Foxx.ReplaceConfigurationAsync("test", "/sample/service", new
@@ -121,7 +121,7 @@ router.get('/hello-world', function (req, res) {{
             var res = await Arango.Foxx.GetAsync<Dictionary<string, string>>("test", "/sample/service/hello-world");
             Assert.Equal("world", res["hello"]);
 
-            await Arango.Foxx.UpgradeServiceAsync("test", "/sample/service", 
+            await Arango.Foxx.UpgradeServiceAsync("test", "/sample/service",
                 ArangoFoxxSource.FromZip(await BuildService("universe")));
 
             var res2 = await Arango.Foxx.GetAsync<Dictionary<string, string>>("test", "/sample/service/hello-world");

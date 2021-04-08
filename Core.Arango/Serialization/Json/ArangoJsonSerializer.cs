@@ -4,14 +4,13 @@ using System.Text.Json;
 namespace Core.Arango.Serialization.Json
 {
     /// <summary>
-    ///   Arango Json Serializer with System.Json.Text
+    ///     Arango Json Serializer with System.Json.Text
     /// </summary>
     public class ArangoJsonSerializer : IArangoSerializer
     {
         private readonly JsonSerializerOptions _options;
-        
+
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="policy">PascalCase or camelCase policy</param>
         public ArangoJsonSerializer(JsonNamingPolicy policy)
@@ -24,19 +23,19 @@ namespace Core.Arango.Serialization.Json
             };
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public string Serialize(object value)
         {
             return JsonSerializer.Serialize(value, _options);
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public T Deserialize<T>(string value)
         {
             return JsonSerializer.Deserialize<T>(value, _options);
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         public object Deserialize(string v, Type t)
         {
             return JsonSerializer.Deserialize(v, t, _options);

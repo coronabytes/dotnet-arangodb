@@ -3,7 +3,7 @@
 namespace Core.Arango.Protocol
 {
     /// <summary>
-    ///   Foxx service installation source
+    ///     Foxx service installation source
     /// </summary>
     public class ArangoFoxxSource
     {
@@ -19,13 +19,19 @@ namespace Core.Arango.Protocol
         // public static ArangoFoxxSource FromUrl(string url) => new ArangoFoxxSource {Url = url};
 
         /// <summary>
-        ///   Foxx service from zip archive
+        ///     Foxx service from zip archive
         /// </summary>
-        public static ArangoFoxxSource FromZip(Stream zip) => new ArangoFoxxSource {ZipArchive = zip};
+        public static ArangoFoxxSource FromZip(Stream zip)
+        {
+            return new() {ZipArchive = zip};
+        }
 
         /// <summary>
-        ///    Foxx service from single javascript file
+        ///     Foxx service from single javascript file
         /// </summary>
-        public static ArangoFoxxSource FromJavaScript(string script) => new ArangoFoxxSource {JavaScript = script};
+        public static ArangoFoxxSource FromJavaScript(string script)
+        {
+            return new() {JavaScript = script};
+        }
     }
 }

@@ -1,17 +1,17 @@
 ﻿namespace Core.Arango.Protocol
 {
     /// <summary>
-    ///   Arango collection type
+    ///     Arango collection type
     /// </summary>
     public enum ArangoCollectionType
     {
         /// <summary>
-        ///  document collection
+        ///     document collection
         /// </summary>
         Document = 2,
-        
+
         /// <summary>
-        ///  edge collection
+        ///     edge collection
         /// </summary>
         Edge = 3
     }

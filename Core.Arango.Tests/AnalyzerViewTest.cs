@@ -37,11 +37,11 @@ namespace Core.Arango.Tests
                 Name = "TestView",
                 Links = new Dictionary<string, ArangoLinkProperty>
                 {
-                    ["collection"] = new ArangoLinkProperty
+                    ["collection"] = new()
                     {
                         Fields = new Dictionary<string, ArangoLinkProperty>
                         {
-                            ["Name"] = new ArangoLinkProperty
+                            ["Name"] = new()
                             {
                                 Analyzers = new List<string> {"text_de_nostem"}
                             }

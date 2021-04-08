@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
@@ -15,7 +14,8 @@ namespace Core.Arango.Modules.Internal
         {
         }
 
-        public async Task<ArangoBackup> CreateAsync(ArangoBackupRequest request, CancellationToken cancellationToken = default)
+        public async Task<ArangoBackup> CreateAsync(ArangoBackupRequest request,
+            CancellationToken cancellationToken = default)
         {
             var res = await SendAsync<SingleResult<ArangoBackup>>(null, HttpMethod.Post, "/_admin/backup/create",
                 request, cancellationToken: cancellationToken);

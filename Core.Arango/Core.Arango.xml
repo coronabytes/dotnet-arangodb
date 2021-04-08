@@ -14,43 +14,43 @@
             </summary>
         </member>
         <member name="P:Core.Arango.ArangoConfiguration.ConnectionString">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:Core.Arango.ArangoConfiguration.Realm">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:Core.Arango.ArangoConfiguration.Server">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:Core.Arango.ArangoConfiguration.User">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:Core.Arango.ArangoConfiguration.Password">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:Core.Arango.ArangoConfiguration.BatchSize">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:Core.Arango.ArangoConfiguration.Serializer">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:Core.Arango.ArangoConfiguration.Transport">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:Core.Arango.ArangoConfiguration.QueryProfile">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:Core.Arango.ArangoConfiguration.HttpClient">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:Core.Arango.ArangoConfiguration.AllowDirtyRead">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="P:Core.Arango.ArangoConfiguration.Endpoints">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="T:Core.Arango.ArangoContext">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:Core.Arango.ArangoContext.#ctor(Core.Arango.IArangoConfiguration)">
             <summary>
@@ -105,9 +105,6 @@
         <member name="P:Core.Arango.ArangoContext.Backup">
             <inheritdoc />
         </member>
-        <member name="P:Core.Arango.ArangoContext.Batch">
-            <inheritdoc />
-        </member>
         <member name="M:Core.Arango.ArangoContext.GetVersionAsync(System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
@@ -136,7 +133,7 @@
         </member>
         <member name="T:Core.Arango.ArangoErrorCode">
             <summary>
-            Arango error codes in exception
+                Arango error codes in exception
             </summary>
         </member>
         <member name="F:Core.Arango.ArangoErrorCode.ErrorNoError">
@@ -428,7 +425,10 @@
             <summary>Will be raised when an attempt to create an index has failed.</summary>
         </member>
         <member name="F:Core.Arango.ArangoErrorCode.ErrorArangoWriteThrottleTimeout">
-            <summary>Will be raised when the server is write-throttled and a write operation has waited too long for the server to process queued operations.</summary>
+            <summary>
+                Will be raised when the server is write-throttled and a write operation has waited too long for the server to
+                process queued operations.
+            </summary>
         </member>
         <member name="F:Core.Arango.ArangoErrorCode.ErrorArangoCollectionTypeMismatch">
             <summary>Will be raised when a collection has a different type from what has been expected.</summary>
@@ -518,43 +518,79 @@
             <summary>Will be raised when the number of shards for a collection is higher than allowed.</summary>
         </member>
         <member name="F:Core.Arango.ArangoErrorCode.ErrorClusterCollectionIdExists">
-            <summary>Will be raised when a Coordinator in a cluster tries to create a collection and the collection ID already exists.</summary>
+            <summary>
+                Will be raised when a Coordinator in a cluster tries to create a collection and the collection ID already
+                exists.
+            </summary>
         </member>
         <member name="F:Core.Arango.ArangoErrorCode.ErrorClusterCouldNotCreateCollectionInPlan">
-            <summary>Will be raised when a Coordinator in a cluster cannot create an entry for a new collection in the Plan hierarchy in the Agency.</summary>
+            <summary>
+                Will be raised when a Coordinator in a cluster cannot create an entry for a new collection in the Plan
+                hierarchy in the Agency.
+            </summary>
         </member>
         <member name="F:Core.Arango.ArangoErrorCode.ErrorClusterCouldNotCreateCollection">
-            <summary>Will be raised when a Coordinator in a cluster notices that some DB-Servers report problems when creating shards for a new collection.</summary>
+            <summary>
+                Will be raised when a Coordinator in a cluster notices that some DB-Servers report problems when creating
+                shards for a new collection.
+            </summary>
         </member>
         <member name="F:Core.Arango.ArangoErrorCode.ErrorClusterTimeout">
             <summary>Will be raised when a Coordinator in a cluster runs into a timeout for some cluster wide operation.</summary>
         </member>
         <member name="F:Core.Arango.ArangoErrorCode.ErrorClusterCouldNotRemoveCollectionInPlan">
-            <summary>Will be raised when a Coordinator in a cluster cannot remove an entry for a collection in the Plan hierarchy in the Agency.</summary>
+            <summary>
+                Will be raised when a Coordinator in a cluster cannot remove an entry for a collection in the Plan hierarchy
+                in the Agency.
+            </summary>
         </member>
         <member name="F:Core.Arango.ArangoErrorCode.ErrorClusterCouldNotRemoveCollectionInCurrent">
-            <summary>Will be raised when a Coordinator in a cluster cannot remove an entry for a collection in the Current hierarchy in the Agency.</summary>
+            <summary>
+                Will be raised when a Coordinator in a cluster cannot remove an entry for a collection in the Current
+                hierarchy in the Agency.
+            </summary>
         </member>
         <member name="F:Core.Arango.ArangoErrorCode.ErrorClusterCouldNotCreateDatabaseInPlan">
-            <summary>Will be raised when a Coordinator in a cluster cannot create an entry for a new database in the Plan hierarchy in the Agency.</summary>
+            <summary>
+                Will be raised when a Coordinator in a cluster cannot create an entry for a new database in the Plan hierarchy
+                in the Agency.
+            </summary>
         </member>
         <member name="F:Core.Arango.ArangoErrorCode.ErrorClusterCouldNotCreateDatabase">
-            <summary>Will be raised when a Coordinator in a cluster notices that some DB-Servers report problems when creating databases for a new cluster wide database.</summary>
+            <summary>
+                Will be raised when a Coordinator in a cluster notices that some DB-Servers report problems when creating
+                databases for a new cluster wide database.
+            </summary>
         </member>
         <member name="F:Core.Arango.ArangoErrorCode.ErrorClusterCouldNotRemoveDatabaseInPlan">
-            <summary>Will be raised when a Coordinator in a cluster cannot remove an entry for a database in the Plan hierarchy in the Agency.</summary>
+            <summary>
+                Will be raised when a Coordinator in a cluster cannot remove an entry for a database in the Plan hierarchy in
+                the Agency.
+            </summary>
         </member>
         <member name="F:Core.Arango.ArangoErrorCode.ErrorClusterCouldNotRemoveDatabaseInCurrent">
-            <summary>Will be raised when a Coordinator in a cluster cannot remove an entry for a database in the Current hierarchy in the Agency.</summary>
+            <summary>
+                Will be raised when a Coordinator in a cluster cannot remove an entry for a database in the Current hierarchy
+                in the Agency.
+            </summary>
         </member>
         <member name="F:Core.Arango.ArangoErrorCode.ErrorClusterShardGone">
-            <summary>Will be raised when a Coordinator in a cluster cannot determine the shard that is responsible for a given document.</summary>
+            <summary>
+                Will be raised when a Coordinator in a cluster cannot determine the shard that is responsible for a given
+                document.
+            </summary>
         </member>
         <member name="F:Core.Arango.ArangoErrorCode.ErrorClusterConnectionLost">
-            <summary>Will be raised when a Coordinator in a cluster loses an HTTP connection to a DB-Server in the cluster whilst transferring data.</summary>
+            <summary>
+                Will be raised when a Coordinator in a cluster loses an HTTP connection to a DB-Server in the cluster whilst
+                transferring data.
+            </summary>
         </member>
         <member name="F:Core.Arango.ArangoErrorCode.ErrorClusterMustNotSpecifyKey">
-            <summary>Will be raised when a Coordinator in a cluster finds that the key attribute was specified in a sharded collection the uses not only key as sharding attribute.</summary>
+            <summary>
+                Will be raised when a Coordinator in a cluster finds that the key attribute was specified in a sharded
+                collection the uses not only key as sharding attribute.
+            </summary>
         </member>
         <member name="F:Core.Arango.ArangoErrorCode.ErrorClusterGotContradictingAnswers">
             <summary>Will be raised if a Coordinator in a cluster gets conflicting results from different shards</summary>
@@ -566,7 +602,10 @@
             <summary>Will be raised if there is an attempt to update the value of a shard attribute.</summary>
         </member>
         <member name="F:Core.Arango.ArangoErrorCode.ErrorClusterUnsupported">
-            <summary>Will be raised when there is an attempt to carry out an operation that is not supported in the context of a sharded collection.</summary>
+            <summary>
+                Will be raised when there is an attempt to carry out an operation that is not supported in the context of a
+                sharded collection.
+            </summary>
         </member>
         <member name="F:Core.Arango.ArangoErrorCode.ErrorClusterOnlyOnCoordinator">
             <summary>Will be raised if there is an attempt to run a Coordinator-only operation on a different type of node.</summary>
@@ -587,25 +626,43 @@
             <summary>Will be raised if a required DB-Server can’t be reached.</summary>
         </member>
         <member name="F:Core.Arango.ArangoErrorCode.ErrorClusterAqlCollectionOutOfSync">
-            <summary>Will be raised if a collection needed during query execution is out of sync. This currently can only happen when using SatelliteCollections</summary>
+            <summary>
+                Will be raised if a collection needed during query execution is out of sync. This currently can only happen
+                when using SatelliteCollections
+            </summary>
         </member>
         <member name="F:Core.Arango.ArangoErrorCode.ErrorClusterCouldNotCreateIndexInPlan">
-            <summary>Will be raised when a Coordinator in a cluster cannot create an entry for a new index in the Plan hierarchy in the Agency.</summary>
+            <summary>
+                Will be raised when a Coordinator in a cluster cannot create an entry for a new index in the Plan hierarchy in
+                the Agency.
+            </summary>
         </member>
         <member name="F:Core.Arango.ArangoErrorCode.ErrorClusterCouldNotDropIndexInPlan">
             <summary>Will be raised when a Coordinator in a cluster cannot remove an index from the Plan hierarchy in the Agency.</summary>
         </member>
         <member name="F:Core.Arango.ArangoErrorCode.ErrorClusterChainOfDistributeshardslike">
-            <summary>Will be raised if one tries to create a collection with a distributeShardsLike attribute which points to another collection that also has one.</summary>
+            <summary>
+                Will be raised if one tries to create a collection with a distributeShardsLike attribute which points to
+                another collection that also has one.
+            </summary>
         </member>
         <member name="F:Core.Arango.ArangoErrorCode.ErrorClusterMustNotDropCollOtherDistributeshardslike">
-            <summary>Will be raised if one tries to drop a collection to which another collection points with its distributeShardsLike attribute.</summary>
+            <summary>
+                Will be raised if one tries to drop a collection to which another collection points with its
+                distributeShardsLike attribute.
+            </summary>
         </member>
         <member name="F:Core.Arango.ArangoErrorCode.ErrorClusterUnknownDistributeshardslike">
-            <summary>Will be raised if one tries to create a collection which points to an unknown collection in its distributeShardsLike attribute.</summary>
+            <summary>
+                Will be raised if one tries to create a collection which points to an unknown collection in its
+                distributeShardsLike attribute.
+            </summary>
         </member>
         <member name="F:Core.Arango.ArangoErrorCode.ErrorClusterInsufficientDbservers">
-            <summary>Will be raised if one tries to create a collection with a replicationFactor greater than the available number of DB-Servers.</summary>
+            <summary>
+                Will be raised if one tries to create a collection with a replicationFactor greater than the available number
+                of DB-Servers.
+            </summary>
         </member>
         <member name="F:Core.Arango.ArangoErrorCode.ErrorClusterCouldNotDropFollower">
             <summary>Will be raised if a follower that ought to be dropped could not be dropped in the Agency (under Current).</summary>
@@ -629,13 +686,19 @@
             <summary>Will be raised when an operation is sent to a non-leading server.</summary>
         </member>
         <member name="F:Core.Arango.ArangoErrorCode.ErrorClusterCouldNotCreateViewInPlan">
-            <summary>Will be raised when a Coordinator in a cluster cannot create an entry for a new View in the Plan hierarchy in the Agency.</summary>
+            <summary>
+                Will be raised when a Coordinator in a cluster cannot create an entry for a new View in the Plan hierarchy in
+                the Agency.
+            </summary>
         </member>
         <member name="F:Core.Arango.ArangoErrorCode.ErrorClusterViewIdExists">
             <summary>Will be raised when a Coordinator in a cluster tries to create a View and the View ID already exists.</summary>
         </member>
         <member name="F:Core.Arango.ArangoErrorCode.ErrorClusterCouldNotDropCollection">
-            <summary>Will be raised when a Coordinator in a cluster cannot drop a collection entry in the Plan hierarchy in the Agency.</summary>
+            <summary>
+                Will be raised when a Coordinator in a cluster cannot drop a collection entry in the Plan hierarchy in the
+                Agency.
+            </summary>
         </member>
         <member name="F:Core.Arango.ArangoErrorCode.ErrorQueryKilled">
             <summary>Will be raised when a running query is killed by an explicit admin command.</summary>
@@ -689,7 +752,10 @@
             <summary>Will be raised when the structure of bind parameters passed has an unexpected format.</summary>
         </member>
         <member name="F:Core.Arango.ArangoErrorCode.ErrorQueryBindParameterMissing">
-            <summary>Will be raised when a bind parameter was declared in the query but the query is being executed with no value for that parameter.</summary>
+            <summary>
+                Will be raised when a bind parameter was declared in the query but the query is being executed with no value
+                for that parameter.
+            </summary>
         </member>
         <member name="F:Core.Arango.ArangoErrorCode.ErrorQueryBindParameterUndeclared">
             <summary>Will be raised when a value gets specified for an undeclared bind parameter.</summary>
@@ -728,7 +794,10 @@
             <summary>Will be raised when an AQL query contains an invalid aggregate expression.</summary>
         </member>
         <member name="F:Core.Arango.ArangoErrorCode.ErrorQueryCompileTimeOptions">
-            <summary>Will be raised when an AQL data-modification query contains options that cannot be figured out at query compile time.</summary>
+            <summary>
+                Will be raised when an AQL data-modification query contains options that cannot be figured out at query
+                compile time.
+            </summary>
         </member>
         <member name="F:Core.Arango.ArangoErrorCode.ErrorQueryExceptionOptions">
             <summary>Will be raised when an AQL data-modification query contains an invalid options specification.</summary>
@@ -779,13 +848,19 @@
             <summary>Will be raised when the schema description is invalid.</summary>
         </member>
         <member name="F:Core.Arango.ArangoErrorCode.ErrorTransactionInternal">
-            <summary>Will be raised when a wrong usage of transactions is detected. this is an internal error and indicates a bug in ArangoDB.</summary>
+            <summary>
+                Will be raised when a wrong usage of transactions is detected. this is an internal error and indicates a bug
+                in ArangoDB.
+            </summary>
         </member>
         <member name="F:Core.Arango.ArangoErrorCode.ErrorTransactionNested">
             <summary>Will be raised when transactions are nested.</summary>
         </member>
         <member name="F:Core.Arango.ArangoErrorCode.ErrorTransactionUnregisteredCollection">
-            <summary>Will be raised when a collection is used in the middle of a transaction but was not registered at transaction start.</summary>
+            <summary>
+                Will be raised when a collection is used in the middle of a transaction but was not registered at transaction
+                start.
+            </summary>
         </member>
         <member name="F:Core.Arango.ArangoErrorCode.ErrorTransactionDisallowedOperation">
             <summary>Will be raised when a disallowed operation is carried out in a transaction.</summary>
@@ -962,7 +1037,10 @@
             <summary>the collection is used as the initial collection of this graph and is not allowed to be removed manually.</summary>
         </member>
         <member name="F:Core.Arango.ArangoErrorCode.ErrorGraphNoInitialCollection">
-            <summary>during the graph creation process no collection could be selected as the needed initial collection. Happens if a distributeShardsLike or replicationFactor mismatch was found.</summary>
+            <summary>
+                during the graph creation process no collection could be selected as the needed initial collection. Happens if
+                a distributeShardsLike or replicationFactor mismatch was found.
+            </summary>
         </member>
         <member name="F:Core.Arango.ArangoErrorCode.ErrorSessionUnknown">
             <summary>Will be raised when an invalid/unknown session id is passed to the server.</summary>
@@ -1070,7 +1148,10 @@
             <summary>In a smart vertex collection key must be prefixed with the value of the SmartGraph attribute.</summary>
         </member>
         <member name="F:Core.Arango.ArangoErrorCode.ErrorIllegalSmartGraphAttribute">
-            <summary>The given smartGraph attribute is illegal and cannot be used for sharding. All system attributes are forbidden.</summary>
+            <summary>
+                The given smartGraph attribute is illegal and cannot be used for sharding. All system attributes are
+                forbidden.
+            </summary>
         </member>
         <member name="F:Core.Arango.ArangoErrorCode.ErrorSmartGraphAttributeMismatch">
             <summary>The SmartGraph attribute of the given collection does not match the SmartGraph attribute of the graph.</summary>
@@ -1103,16 +1184,25 @@
             <summary>Will be raised if a collection that is fixed has some shard without DB-Servers</summary>
         </member>
         <member name="F:Core.Arango.ArangoErrorCode.ErrorClusterRepairsMismatchingLeaders">
-            <summary>Will be raised if a shard in collection and its prototype in the corresponding distributeShardsLike collection have mismatching leaders (when they should already have been fixed)</summary>
+            <summary>
+                Will be raised if a shard in collection and its prototype in the corresponding distributeShardsLike collection
+                have mismatching leaders (when they should already have been fixed)
+            </summary>
         </member>
         <member name="F:Core.Arango.ArangoErrorCode.ErrorClusterRepairsMismatchingFollowers">
-            <summary>Will be raised if a shard in collection and its prototype in the corresponding distributeShardsLike collection don’t have the same followers (when they should already have been adjusted)</summary>
+            <summary>
+                Will be raised if a shard in collection and its prototype in the corresponding distributeShardsLike collection
+                don’t have the same followers (when they should already have been adjusted)
+            </summary>
         </member>
         <member name="F:Core.Arango.ArangoErrorCode.ErrorClusterRepairsInconsistentAttributes">
             <summary>Will be raised if a collection that is fixed does (not) have distributeShardsLike when it is expected</summary>
         </member>
         <member name="F:Core.Arango.ArangoErrorCode.ErrorClusterRepairsMismatchingShards">
-            <summary>Will be raised if in a collection and its distributeShardsLike prototype collection some shard and its prototype have an unequal number of DB-Servers</summary>
+            <summary>
+                Will be raised if in a collection and its distributeShardsLike prototype collection some shard and its
+                prototype have an unequal number of DB-Servers
+            </summary>
         </member>
         <member name="F:Core.Arango.ArangoErrorCode.ErrorClusterRepairsJobFailed">
             <summary>Will be raised if a move shard job in the Agency failed during cluster repairs</summary>
@@ -1206,42 +1296,39 @@
         </member>
         <member name="T:Core.Arango.ArangoException">
             <summary>
-             Generic Arango exception
-            </summary>
-        </member>
-        <member name="P:Core.Arango.ArangoException.ErrorMessage">
-            <summary>
-            Error message
-            </summary>
-        </member>
-        <member name="P:Core.Arango.ArangoException.Code">
-            <summary>
-            HTTP status code
-            </summary>
-        </member>
-        <member name="P:Core.Arango.ArangoException.ErrorNumber">
-            <summary>
-             Arango error code
-            </summary>
-        </member>
-        <member name="P:Core.Arango.ArangoException.Errors">
-            <summary>
-             Error descriptions
+                Generic Arango exception
             </summary>
         </member>
         <member name="M:Core.Arango.ArangoException.#ctor(System.String)">
             <summary>
-            
             </summary>
         </member>
         <member name="M:Core.Arango.ArangoException.#ctor(System.String,System.String,System.Net.HttpStatusCode,Core.Arango.ArangoErrorCode)">
             <summary>
-            
             </summary>
         </member>
         <member name="M:Core.Arango.ArangoException.#ctor(System.String,System.Collections.Generic.IEnumerable{Core.Arango.Protocol.ArangoError})">
             <summary>
-            
+            </summary>
+        </member>
+        <member name="P:Core.Arango.ArangoException.ErrorMessage">
+            <summary>
+                Error message
+            </summary>
+        </member>
+        <member name="P:Core.Arango.ArangoException.Code">
+            <summary>
+                HTTP status code
+            </summary>
+        </member>
+        <member name="P:Core.Arango.ArangoException.ErrorNumber">
+            <summary>
+                Arango error code
+            </summary>
+        </member>
+        <member name="P:Core.Arango.ArangoException.Errors">
+            <summary>
+                Error descriptions
             </summary>
         </member>
         <member name="T:Core.Arango.ArangoHandle">
@@ -1264,11 +1351,6 @@
         <member name="M:Core.Arango.ArangoHandle.#ctor(Core.Arango.ArangoHandle,System.String)">
             <summary>
                 Constructs wrapping handle with transaction
-            </summary>
-        </member>
-        <member name="M:Core.Arango.ArangoHandle.#ctor(Core.Arango.ArangoHandle,System.Boolean)">
-            <summary>
-                Constructs wrapping handle with batch
             </summary>
         </member>
         <member name="M:Core.Arango.ArangoHandle.op_Implicit(System.String)~Core.Arango.ArangoHandle">
@@ -1299,17 +1381,17 @@
         </member>
         <member name="T:Core.Arango.ArangoList`1">
             <summary>
-            Generic List with fullcount extension
+                Generic List with fullcount extension
             </summary>
         </member>
         <member name="P:Core.Arango.ArangoList`1.FullCount">
             <summary>
-             Actual result count of query ignoring LIMIT clause
+                Actual result count of query ignoring LIMIT clause
             </summary>
         </member>
         <member name="T:Core.Arango.IArangoConfiguration">
             <summary>
-             Driver configuration
+                Driver configuration
             </summary>
         </member>
         <member name="P:Core.Arango.IArangoConfiguration.ConnectionString">
@@ -1362,17 +1444,17 @@
         </member>
         <member name="P:Core.Arango.IArangoConfiguration.HttpClient">
             <summary>
-              Override HttpClient
+                Override HttpClient
             </summary>
         </member>
         <member name="P:Core.Arango.IArangoConfiguration.AllowDirtyRead">
             <summary>
-              Enables read queries from followers
+                Enables read queries from followers
             </summary>
         </member>
         <member name="P:Core.Arango.IArangoConfiguration.Endpoints">
             <summary>
-             Multiple servers
+                Multiple servers
             </summary>
         </member>
         <member name="T:Core.Arango.IArangoContext">
@@ -1450,11 +1532,6 @@
                 HotBackup module (enterprise only)
             </summary>
         </member>
-        <member name="P:Core.Arango.IArangoContext.Batch">
-            <summary>
-                Batch optimization module
-            </summary>
-        </member>
         <member name="M:Core.Arango.IArangoContext.GetVersionAsync(System.Threading.CancellationToken)">
             <summary>
                 Get Arango server version and license
@@ -1467,17 +1544,17 @@
         </member>
         <member name="T:Core.Arango.Modules.IArangoAnalyzerModule">
             <summary>
-             ArangoSearch analyzer
+                ArangoSearch analyzer
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.IArangoAnalyzerModule.CreateAsync(Core.Arango.ArangoHandle,Core.Arango.Protocol.ArangoAnalyzer,System.Threading.CancellationToken)">
             <summary>
-              creates a new Analyzer based on the provided definition
+                creates a new Analyzer based on the provided definition
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.IArangoAnalyzerModule.DeleteAsync(Core.Arango.ArangoHandle,System.String,System.Boolean,System.Threading.CancellationToken)">
             <summary>
-            removes an Analyzer configuration
+                removes an Analyzer configuration
             </summary>
             <param name="database"></param>
             <param name="analyzer">The name of the Analyzer to remove.</param>
@@ -1486,52 +1563,37 @@
         </member>
         <member name="M:Core.Arango.Modules.IArangoAnalyzerModule.ListAsync(Core.Arango.ArangoHandle,System.Threading.CancellationToken)">
             <summary>
-            returns a listing of available Analyzer definitions
+                returns a listing of available Analyzer definitions
             </summary>
         </member>
         <member name="T:Core.Arango.Modules.IArangoBackupModule">
             <summary>
-              HotBackup (enterprise only)
+                HotBackup (enterprise only)
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.IArangoBackupModule.CreateAsync(Core.Arango.Protocol.ArangoBackupRequest,System.Threading.CancellationToken)">
             <summary>
-            Creates a local backup.
+                Creates a local backup.
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.IArangoBackupModule.RestoreAsync(System.String,System.Threading.CancellationToken)">
             <summary>
-            Restores from a local backup.
+                Restores from a local backup.
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.IArangoBackupModule.DeleteAsync(System.String,System.Threading.CancellationToken)">
             <summary>
-            Delete a specific local backup.
+                Delete a specific local backup.
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.IArangoBackupModule.ListAsync(System.String,System.Threading.CancellationToken)">
             <summary>
-             List all local backups.
-            </summary>
-        </member>
-        <member name="T:Core.Arango.Modules.IArangoBatchModule">
-            <summary>
-             Batches multiple operations in single HTTP request (round trip optimization)
-            </summary>
-        </member>
-        <member name="M:Core.Arango.Modules.IArangoBatchModule.Create(Core.Arango.ArangoHandle)">
-            <summary>
-             Create batch handle from database handle
-            </summary>
-        </member>
-        <member name="M:Core.Arango.Modules.IArangoBatchModule.ExecuteAsync(Core.Arango.ArangoHandle)">
-            <summary>
-             Execute batch against Arango server
+                List all local backups.
             </summary>
         </member>
         <member name="T:Core.Arango.Modules.IArangoCollectionModule">
             <summary>
-             Collection management
+                Collection management
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.IArangoCollectionModule.CreateAsync(Core.Arango.ArangoHandle,Core.Arango.Protocol.ArangoCollection,System.Threading.CancellationToken)">
@@ -1582,27 +1644,27 @@
         </member>
         <member name="T:Core.Arango.Modules.IArangoDatabaseModule">
             <summary>
-             Database management
+                Database management
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.IArangoDatabaseModule.CreateAsync(Core.Arango.ArangoHandle,System.Threading.CancellationToken)">
             <summary>
-            Creates a new database
+                Creates a new database
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.IArangoDatabaseModule.DropAsync(Core.Arango.ArangoHandle,System.Threading.CancellationToken)">
             <summary>
-             Drop an existing database
+                Drop an existing database
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.IArangoDatabaseModule.ExistAsync(Core.Arango.ArangoHandle,System.Threading.CancellationToken)">
             <summary>
-             Checks if database exists (calls ListAsync internally)
+                Checks if database exists (calls ListAsync internally)
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.IArangoDatabaseModule.ListAsync(System.Threading.CancellationToken)">
             <summary>
-            Retrieves a list of all existing databases
+                Retrieves a list of all existing databases
             </summary>
         </member>
         <member name="T:Core.Arango.Modules.IArangoDocumentModule">
@@ -1618,8 +1680,14 @@
             <param name="collection">collection</param>
             <param name="key">document key</param>
             <param name="throwOnError">when false does not throw an exception if document does not exist</param>
-            <param name="ifMatch">The document is returned, if it has the same revision as the given Etag. Otherwise a HTTP 412 is returned.</param>
-            <param name="ifNoneMatch">The document is returned, if it has a different revision than the given Etag. Otherwise an HTTP 304 is returned.</param>
+            <param name="ifMatch">
+                The document is returned, if it has the same revision as the given Etag. Otherwise a HTTP 412 is
+                returned.
+            </param>
+            <param name="ifNoneMatch">
+                The document is returned, if it has a different revision than the given Etag. Otherwise an
+                HTTP 304 is returned.
+            </param>
             <param name="cancellationToken"></param>
         </member>
         <member name="M:Core.Arango.Modules.IArangoDocumentModule.GetManyAsync``1(Core.Arango.ArangoHandle,System.String,System.Collections.Generic.IEnumerable{System.Object},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
@@ -1629,7 +1697,10 @@
             <param name="handle">database, transaction, batch handle</param>
             <param name="collection">collection</param>
             <param name="keys">list of keys with optional revision</param>
-            <param name="ignoreRevs">If a search document contains a value for the _rev field, then the document is only returned if it has the same revision value</param>
+            <param name="ignoreRevs">
+                If a search document contains a value for the _rev field, then the document is only returned
+                if it has the same revision value
+            </param>
             <param name="cancellationToken"></param>
         </member>
         <member name="M:Core.Arango.Modules.IArangoDocumentModule.CreateManyAsync``2(Core.Arango.ArangoHandle,System.String,System.Collections.Generic.IEnumerable{``0},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{Core.Arango.Protocol.ArangoOverwriteMode},System.Threading.CancellationToken)">
@@ -1714,12 +1785,12 @@
         </member>
         <member name="T:Core.Arango.Modules.IArangoFoxxModule">
             <summary>
-             Foxx service management and execution
+                Foxx service management and execution
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.IArangoFoxxModule.ListServicesAsync(Core.Arango.ArangoHandle,System.Nullable{System.Boolean},System.Threading.CancellationToken)">
             <summary>
-              List installed services
+                List installed services
             </summary>
             <param name="database"></param>
             <param name="excludeSystem">Whether or not system services should be excluded from the result.</param>
@@ -1774,62 +1845,62 @@
         </member>
         <member name="M:Core.Arango.Modules.IArangoFoxxModule.GetConfigurationAsync``1(Core.Arango.ArangoHandle,System.String,System.Threading.CancellationToken)">
             <summary>
-              Get configuration options
+                Get configuration options
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.IArangoFoxxModule.UpdateConfigurationAsync(Core.Arango.ArangoHandle,System.String,System.Object,System.Threading.CancellationToken)">
             <summary>
-              Update configuration options
+                Update configuration options
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.IArangoFoxxModule.ReplaceConfigurationAsync(Core.Arango.ArangoHandle,System.String,System.Object,System.Threading.CancellationToken)">
             <summary>
-              Replace configuration options
+                Replace configuration options
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.IArangoFoxxModule.GetDependenciesAsync``1(Core.Arango.ArangoHandle,System.String,System.Threading.CancellationToken)">
             <summary>
-              Get dependency options
+                Get dependency options
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.IArangoFoxxModule.UpdateDependenciesAsync(Core.Arango.ArangoHandle,System.String,System.Object,System.Threading.CancellationToken)">
             <summary>
-              Update dependency options
+                Update dependency options
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.IArangoFoxxModule.ReplaceDependenciesAsync(Core.Arango.ArangoHandle,System.String,System.Object,System.Threading.CancellationToken)">
             <summary>
-              Replace dependency options
+                Replace dependency options
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.IArangoFoxxModule.GetAsync``1(Core.Arango.ArangoHandle,System.String,System.Collections.Generic.IDictionary{System.String,System.String},System.Threading.CancellationToken)">
             <summary>
-              HTTP GET request to Foxx service
+                HTTP GET request to Foxx service
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.IArangoFoxxModule.PostAsync``1(Core.Arango.ArangoHandle,System.String,System.Object,System.Collections.Generic.IDictionary{System.String,System.String},System.Threading.CancellationToken)">
             <summary>
-              HTTP POST request to Foxx service
+                HTTP POST request to Foxx service
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.IArangoFoxxModule.PutAsync``1(Core.Arango.ArangoHandle,System.String,System.Object,System.Collections.Generic.IDictionary{System.String,System.String},System.Threading.CancellationToken)">
             <summary>
-              HTTP PUT request to Foxx service
+                HTTP PUT request to Foxx service
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.IArangoFoxxModule.PatchAsync``1(Core.Arango.ArangoHandle,System.String,System.Object,System.Collections.Generic.IDictionary{System.String,System.String},System.Threading.CancellationToken)">
             <summary>
-              HTTP PATCH request to Foxx service
+                HTTP PATCH request to Foxx service
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.IArangoFoxxModule.DeleteAsync``1(Core.Arango.ArangoHandle,System.String,System.Collections.Generic.IDictionary{System.String,System.String},System.Threading.CancellationToken)">
             <summary>
-              HTTP DELETE request to Foxx service
+                HTTP DELETE request to Foxx service
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.IArangoFoxxModule.EnableDevelopmentModeAsync(Core.Arango.ArangoHandle,System.String,System.Threading.CancellationToken)">
             <summary>
-             Enable development mode
+                Enable development mode
             </summary>
             <param name="database">Database the target service.</param>
             <param name="mount">Mount path of the installed service.</param>
@@ -1838,7 +1909,7 @@
         </member>
         <member name="M:Core.Arango.Modules.IArangoFoxxModule.DisableDevelopmentModeAsync(Core.Arango.ArangoHandle,System.String,System.Threading.CancellationToken)">
             <summary>
-             Disable development mode
+                Disable development mode
             </summary>
             <param name="database">Database the target service.</param>
             <param name="mount">Mount path of the installed service.</param>
@@ -1847,7 +1918,6 @@
         </member>
         <member name="M:Core.Arango.Modules.IArangoFoxxModule.DownloadServiceAsync``1(Core.Arango.ArangoHandle,System.String,System.Threading.CancellationToken)">
             <summary>
-            
             </summary>
             <typeparam name="T"></typeparam>
             <param name="database"></param>
@@ -1857,7 +1927,6 @@
         </member>
         <member name="M:Core.Arango.Modules.IArangoFoxxModule.RunServiceScriptAsync``1(Core.Arango.ArangoHandle,System.String,System.String,System.Object,System.Threading.CancellationToken)">
             <summary>
-            
             </summary>
             <typeparam name="T"></typeparam>
             <param name="database"></param>
@@ -1902,7 +1971,7 @@
         </member>
         <member name="T:Core.Arango.Modules.IArangoGraphEdgeModule">
             <summary>
-             Graph edge manipulation
+                Graph edge manipulation
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.IArangoGraphEdgeModule.GetAsync``1(Core.Arango.ArangoHandle,System.String,System.String,System.String,System.Threading.CancellationToken)">
@@ -1952,58 +2021,58 @@
         </member>
         <member name="T:Core.Arango.Modules.IArangoGraphModule">
             <summary>
-             Graph management
+                Graph management
             </summary>
         </member>
         <member name="P:Core.Arango.Modules.IArangoGraphModule.Vertex">
             <summary>
-              Vertex manipulation module.
+                Vertex manipulation module.
             </summary>
         </member>
         <member name="P:Core.Arango.Modules.IArangoGraphModule.Edge">
             <summary>
-              Edge manipulation module.
+                Edge manipulation module.
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.IArangoGraphModule.CreateAsync(Core.Arango.ArangoHandle,Core.Arango.Protocol.ArangoGraph,System.Threading.CancellationToken)">
             <summary>
-             Create a new graph in the graph module.
+                Create a new graph in the graph module.
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.IArangoGraphModule.DropAsync(Core.Arango.ArangoHandle,System.String,System.Threading.CancellationToken)">
             <summary>
-            Delete an existing graph.
+                Delete an existing graph.
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.IArangoGraphModule.ListAsync(Core.Arango.ArangoHandle,System.Threading.CancellationToken)">
             <summary>
-              Lists all graphs known to the graph module.
+                Lists all graphs known to the graph module.
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.IArangoGraphModule.AddVertexCollectionAsync(Core.Arango.ArangoHandle,System.String,Core.Arango.Protocol.ArangoVertexCollection,System.Threading.CancellationToken)">
             <summary>
-              Add an additional vertex collection to the graph.
+                Add an additional vertex collection to the graph.
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.IArangoGraphModule.AddEdgeDefinitionAsync(Core.Arango.ArangoHandle,System.String,Core.Arango.Protocol.ArangoEdgeDefinition,System.Threading.CancellationToken)">
             <summary>
-              Add a new edge definition to the graph
+                Add a new edge definition to the graph
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.IArangoGraphModule.RemoveVertexCollectionAsync(Core.Arango.ArangoHandle,System.String,System.String,System.Nullable{System.Boolean},System.Threading.CancellationToken)">
             <summary>
-              Remove a vertex collection form the graph.
+                Remove a vertex collection form the graph.
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.IArangoGraphModule.ReplaceEdgeDefinitionAsync(Core.Arango.ArangoHandle,System.String,Core.Arango.Protocol.ArangoEdgeDefinition,System.Nullable{System.Boolean},System.Threading.CancellationToken)">
             <summary>
-              Replace an existing edge definition
+                Replace an existing edge definition
             </summary>
             <returns></returns>
         </member>
         <member name="M:Core.Arango.Modules.IArangoGraphModule.RemoveEdgeDefinitionAsync(Core.Arango.ArangoHandle,System.String,System.String,System.Nullable{System.Boolean},System.Threading.CancellationToken)">
             <summary>
-              Remove an edge definition form the graph
+                Remove an edge definition form the graph
             </summary>
         </member>
         <member name="T:Core.Arango.Modules.IArangoGraphVertexModule">
@@ -2083,12 +2152,12 @@
         </member>
         <member name="T:Core.Arango.Modules.IArangoQueryModule">
             <summary>
-            Query documents
+                Query documents
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.IArangoQueryModule.FindAsync``1(Core.Arango.ArangoHandle,System.String,System.FormattableString,System.String,System.Int32,System.Threading.CancellationToken)">
             <summary>
-             Finds documents
+                Finds documents
             </summary>
             <typeparam name="T">RETURN element type</typeparam>
             <param name="database"></param>
@@ -2100,7 +2169,7 @@
         </member>
         <member name="M:Core.Arango.Modules.IArangoQueryModule.SingleOrDefaultAsync``1(Core.Arango.ArangoHandle,System.String,System.FormattableString,System.String,System.Threading.CancellationToken)">
             <summary>
-            Finds single document (and throws exception of more than one are found)
+                Finds single document (and throws exception of more than one are found)
             </summary>
             <typeparam name="T">RETURN element type</typeparam>
             <param name="database"></param>
@@ -2111,52 +2180,52 @@
         </member>
         <member name="M:Core.Arango.Modules.IArangoQueryModule.ExecuteAsync(System.Type,System.Boolean,Core.Arango.ArangoHandle,System.String,System.Collections.Generic.IDictionary{System.String,System.Object},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
             <summary>
-             Execute query (Linq provider)
+                Execute query (Linq provider)
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.IArangoQueryModule.ExecuteAsync``1(Core.Arango.ArangoHandle,System.FormattableString,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
             <summary>
-             Execute query with string interpolated bind parameters
+                Execute query with string interpolated bind parameters
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.IArangoQueryModule.ExecuteAsync``1(Core.Arango.ArangoHandle,System.String,System.Collections.Generic.IDictionary{System.String,System.Object},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
             <summary>
-             Execute query with bind parameters in dictionary
+                Execute query with bind parameters in dictionary
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.IArangoQueryModule.ExecuteStreamAsync``1(Core.Arango.ArangoHandle,System.FormattableString,System.Nullable{System.Boolean},System.Nullable{System.Int32},System.Threading.CancellationToken)">
             <summary>
-             Execute query with string interpolated bind parameters (IAsyncEnumerable)
+                Execute query with string interpolated bind parameters (IAsyncEnumerable)
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.IArangoQueryModule.ExecuteStreamAsync``1(Core.Arango.ArangoHandle,System.String,System.Collections.Generic.IDictionary{System.String,System.Object},System.Nullable{System.Boolean},System.Nullable{System.Int32},System.Threading.CancellationToken)">
             <summary>
-             Execute query with bind parameters in dictionary (IAsyncEnumerable)
+                Execute query with bind parameters in dictionary (IAsyncEnumerable)
             </summary>
         </member>
         <member name="T:Core.Arango.Modules.IArangoTransactionModule">
             <summary>
-            Stream and JavaScript transactions
+                Stream and JavaScript transactions
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.IArangoTransactionModule.BeginAsync(Core.Arango.ArangoHandle,Core.Arango.Protocol.ArangoTransaction,System.Threading.CancellationToken)">
             <summary>
-            Begin a server-side transaction
+                Begin a server-side transaction
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.IArangoTransactionModule.AbortAsync(Core.Arango.ArangoHandle,System.Threading.CancellationToken)">
             <summary>
-            Abort a server-side transaction
+                Abort a server-side transaction
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.IArangoTransactionModule.CommitAsync(Core.Arango.ArangoHandle,System.Threading.CancellationToken)">
             <summary>
-            Commit a server-side transaction
+                Commit a server-side transaction
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.IArangoTransactionModule.ExecuteAsync``1(Core.Arango.ArangoHandle,Core.Arango.Protocol.ArangoTransaction,System.Threading.CancellationToken)">
             <summary>
-            execute a server-side (script) transaction
+                execute a server-side (script) transaction
             </summary>
         </member>
         <member name="T:Core.Arango.Modules.IArangoUserModule">
@@ -2196,27 +2265,27 @@
         </member>
         <member name="T:Core.Arango.Modules.IArangoViewModule">
             <summary>
-              Arango View (ArangoSearch) management
+                Arango View (ArangoSearch) management
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.IArangoViewModule.CreateAsync(Core.Arango.ArangoHandle,Core.Arango.Protocol.ArangoView,System.Threading.CancellationToken)">
             <summary>
-               creates an ArangoSearch View
+                creates an ArangoSearch View
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.IArangoViewModule.DropAllAsync(Core.Arango.ArangoHandle,System.Threading.CancellationToken)">
             <summary>
-              Drops all Views in database
+                Drops all Views in database
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.IArangoViewModule.DropAsync(Core.Arango.ArangoHandle,System.String,System.Threading.CancellationToken)">
             <summary>
-               Drops a View
+                Drops a View
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.IArangoViewModule.ListAsync(Core.Arango.ArangoHandle,System.Threading.CancellationToken)">
             <summary>
-               Returns all Views
+                Returns all Views
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.Internal.ArangoIndexModule.DropAllAsync(Core.Arango.ArangoHandle,System.Threading.CancellationToken)">
@@ -2261,90 +2330,89 @@
         </member>
         <member name="T:Core.Arango.Protocol.ArangoAccess">
             <summary>
-              User access modes for database and collection
+                User access modes for database and collection
             </summary>
         </member>
         <member name="F:Core.Arango.Protocol.ArangoAccess.None">
             <summary>
-              No access
+                No access
             </summary>
         </member>
         <member name="F:Core.Arango.Protocol.ArangoAccess.ReadOnly">
             <summary>
-              Read access only
+                Read access only
             </summary>
         </member>
         <member name="F:Core.Arango.Protocol.ArangoAccess.ReadWrite">
             <summary>
-              Read and write access
+                Read and write access
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoAnalyzer">
             <summary>
-              ArangoSearch Analyzer
+                ArangoSearch Analyzer
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoAnalyzer.Name">
             <summary>
-               The Analyzer name.
+                The Analyzer name.
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoAnalyzer.Type">
-             <summary>
+            <summary>
                 The Analyzer type.
-             </summary>
-             <example>
-            
-             </example>
+            </summary>
+            <example>
+            </example>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoAnalyzer.Properties">
             <summary>
-               The properties used to configure the specified Analyzer type.
+                The properties used to configure the specified Analyzer type.
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoAnalyzer.Features">
             <summary>
-               The set of features to set on the Analyzer generated fields. The default value is an empty array.
+                The set of features to set on the Analyzer generated fields. The default value is an empty array.
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoAnalyzerCase">
             <summary>
-              AnalyzerType
+                AnalyzerType
             </summary>
         </member>
         <member name="F:Core.Arango.Protocol.ArangoAnalyzerCase.Lower">
             <summary>
-               To convert to all lower-case characters (default)
+                To convert to all lower-case characters (default)
             </summary>
         </member>
         <member name="F:Core.Arango.Protocol.ArangoAnalyzerCase.Upper">
             <summary>
-               To convert to all upper-case characters
+                To convert to all upper-case characters
             </summary>
         </member>
         <member name="F:Core.Arango.Protocol.ArangoAnalyzerCase.None">
             <summary>
-              To not change character case
+                To not change character case
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoAnalyzerGeoJsonType">
             <summary>
-              ArangoGeoJsonType
+                ArangoGeoJsonType
             </summary>
         </member>
         <member name="F:Core.Arango.Protocol.ArangoAnalyzerGeoJsonType.Shape">
             <summary>
-               index all GeoJSON geometry types (Point, Polygon etc.)
+                index all GeoJSON geometry types (Point, Polygon etc.)
             </summary>
         </member>
         <member name="F:Core.Arango.Protocol.ArangoAnalyzerGeoJsonType.Centroid">
             <summary>
-               compute and only index the centroid of the input geometry
+                compute and only index the centroid of the input geometry
             </summary>
         </member>
         <member name="F:Core.Arango.Protocol.ArangoAnalyzerGeoJsonType.Point">
             <summary>
-              only index GeoJSON objects of type Point, ignore all other geometry types
+                only index GeoJSON objects of type Point, ignore all other geometry types
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoAnalyzerProperties">
@@ -2438,12 +2506,14 @@
         </member>
         <member name="P:Core.Arango.Protocol.ArangoAnalyzerProperties.Latitude">
             <summary>
-                (GeoPoint) array of strings that describes the attribute path of the latitude value relative to the field for which the Analyzer is defined in the View
+                (GeoPoint) array of strings that describes the attribute path of the latitude value relative to the field for which
+                the Analyzer is defined in the View
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoAnalyzerProperties.Longitude">
             <summary>
-                (GeoPoint) array of strings that describes the attribute path of the longitude value relative to the field for which the Analyzer is defined in the View
+                (GeoPoint) array of strings that describes the attribute path of the longitude value relative to the field for
+                which the Analyzer is defined in the View
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoAnalyzerProperties.Type">
@@ -2453,436 +2523,454 @@
         </member>
         <member name="T:Core.Arango.Protocol.ArangoAnalyzerType">
             <summary>
-              AnalyzerType
+                AnalyzerType
             </summary>
         </member>
         <member name="F:Core.Arango.Protocol.ArangoAnalyzerType.Identity">
             <summary>
-               Treat value as atom (no transformation)
+                Treat value as atom (no transformation)
             </summary>
         </member>
         <member name="F:Core.Arango.Protocol.ArangoAnalyzerType.Delimiter">
             <summary>
-              Split into tokens at user-defined character
+                Split into tokens at user-defined character
             </summary>
         </member>
         <member name="F:Core.Arango.Protocol.ArangoAnalyzerType.Stem">
             <summary>
-              Apply stemming to the value as a whole
+                Apply stemming to the value as a whole
             </summary>
         </member>
         <member name="F:Core.Arango.Protocol.ArangoAnalyzerType.Norm">
             <summary>
-              Apply normalization to the value as a whole
+                Apply normalization to the value as a whole
             </summary>
         </member>
         <member name="F:Core.Arango.Protocol.ArangoAnalyzerType.Ngram">
             <summary>
-              Create n-grams from value with user-defined lengths
+                Create n-grams from value with user-defined lengths
             </summary>
         </member>
         <member name="F:Core.Arango.Protocol.ArangoAnalyzerType.Text">
             <summary>
-              Tokenize into words, optionally with stemming, normalization, stop-word filtering and edge n-gram generation
+                Tokenize into words, optionally with stemming, normalization, stop-word filtering and edge n-gram generation
             </summary>
         </member>
         <member name="F:Core.Arango.Protocol.ArangoAnalyzerType.Stopwords">
             <summary>
-               An Analyzer capable of removing specified tokens from the input.
+                An Analyzer capable of removing specified tokens from the input.
             </summary>
         </member>
         <member name="F:Core.Arango.Protocol.ArangoAnalyzerType.Pipeline">
             <summary>
-               An Analyzer capable of chaining effects of multiple Analyzers into one.
-               The pipeline is a list of Analyzers, where the output of an Analyzer is passed to the next for further processing.
-               The final token value is determined by last Analyzer in the pipeline.
+                An Analyzer capable of chaining effects of multiple Analyzers into one.
+                The pipeline is a list of Analyzers, where the output of an Analyzer is passed to the next for further processing.
+                The final token value is determined by last Analyzer in the pipeline.
             </summary>
         </member>
         <member name="F:Core.Arango.Protocol.ArangoAnalyzerType.Aql">
             <summary>
-              An Analyzer capable of running a restricted AQL query to perform data manipulation / filtering.
+                An Analyzer capable of running a restricted AQL query to perform data manipulation / filtering.
             </summary>
         </member>
         <member name="F:Core.Arango.Protocol.ArangoAnalyzerType.GeoJson">
             <summary>
-              An Analyzer capable of breaking up a GeoJSON object into a set of indexable tokens for further usage with ArangoSearch Geo functions.
+                An Analyzer capable of breaking up a GeoJSON object into a set of indexable tokens for further usage with
+                ArangoSearch Geo functions.
             </summary>
         </member>
         <member name="F:Core.Arango.Protocol.ArangoAnalyzerType.GeoPoint">
             <summary>
-              An Analyzer capable of breaking up JSON object describing a coordinate into a set of indexable tokens for further usage with ArangoSearch Geo functions.
+                An Analyzer capable of breaking up JSON object describing a coordinate into a set of indexable tokens for further
+                usage with ArangoSearch Geo functions.
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoBackup">
             <summary>
-              Arango HotBackup
+                Arango HotBackup
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoBackup.Id">
             <summary>
-              Unique identifier
+                Unique identifier
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoBackup.Version">
             <summary>
-              ArangoDB version
+                ArangoDB version
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoBackup.Keys">
             <summary>
-              Keys
+                Keys
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoBackup.SizeInBytes">
             <summary>
-               SizeInBytes
+                SizeInBytes
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoBackup.NrFiles">
             <summary>
-             Number of files
+                Number of files
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoBackup.NrDbServers">
             <summary>
-              Number of database servers
+                Number of database servers
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoBackup.Available">
             <summary>
-              is available?
+                is available?
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoBackup.NrPiecesPresent">
             <summary>
-              Number of pieces present
+                Number of pieces present
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoBackup.PotentiallyInconsistent">
             <summary>
-             Is potentially inconsistent?
+                Is potentially inconsistent?
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoBackupRequest">
             <summary>
-              Arango HotBackup request
+                Arango HotBackup request
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoBackupRequest.Label">
             <summary>
-              The label for this backup.
-              The label is used together with a timestamp string create a unique backup identifier, {timestamp}_{label}.
-              If no label is specified, the empty string is assumed and a default UUID is created for this part of the ID.
+                The label for this backup.
+                The label is used together with a timestamp string create a unique backup identifier, {timestamp}_{label}.
+                If no label is specified, the empty string is assumed and a default UUID is created for this part of the ID.
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoBackupRequest.Timeout">
             <summary>
-              The time in seconds that the operation tries to get a consistent snapshot. The default is 120 seconds.
+                The time in seconds that the operation tries to get a consistent snapshot. The default is 120 seconds.
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoBackupRequest.AllowInconsistent">
             <summary>
-              If this flag is set to true and no global transaction lock can be acquired within the given timeout, a possibly inconsistent backup is taken.
-              The default for this flag is false and in this case a timeout results in an HTTP 408 error.
+                If this flag is set to true and no global transaction lock can be acquired within the given timeout, a possibly
+                inconsistent backup is taken.
+                The default for this flag is false and in this case a timeout results in an HTTP 408 error.
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoBackupRequest.Force">
             <summary>
-              If this flag is set to true and no global transaction lock can be acquired within the given timeout, all running transactions are forcefully aborted to ensure that a consistent backup can be created.
-              This does not include JavaScript transactions.
-              It waits for the transactions to be aborted at most timeout seconds.
-              Thus using force the request timeout is doubled. To abort transactions is almost certainly not what you want for your application.
-              In the presence of intermediate commits it can even destroy the atomicity of your transactions.
-              Use at your own risk, and only if you need a consistent backup at all costs.
-              The default and recommended value is false.
-              If both allowInconsistent and force are set to true, then the latter takes precedence and transactions are aborted.
-              This is only available in the cluster.
+                If this flag is set to true and no global transaction lock can be acquired within the given timeout, all running
+                transactions are forcefully aborted to ensure that a consistent backup can be created.
+                This does not include JavaScript transactions.
+                It waits for the transactions to be aborted at most timeout seconds.
+                Thus using force the request timeout is doubled. To abort transactions is almost certainly not what you want for
+                your application.
+                In the presence of intermediate commits it can even destroy the atomicity of your transactions.
+                Use at your own risk, and only if you need a consistent backup at all costs.
+                The default and recommended value is false.
+                If both allowInconsistent and force are set to true, then the latter takes precedence and transactions are aborted.
+                This is only available in the cluster.
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoCollection">
             <summary>
-              Arango collection
+                Arango collection
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoCollection.Name">
             <summary>
-              The name of the collection.
+                The name of the collection.
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoCollection.Type">
             <summary>
-              The type of the collection to create.
+                The type of the collection to create.
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoCollection.IsSystem">
             <summary>
-             If true, create a system collection.
-             In this case collection-name should start with an underscore.
-             End users should normally create non-system collections only. API implementors may be required to create system collections in very special occasions, but normally a regular collection will do. (The default is false)
+                If true, create a system collection.
+                In this case collection-name should start with an underscore.
+                End users should normally create non-system collections only. API implementors may be required to create system
+                collections in very special occasions, but normally a regular collection will do. (The default is false)
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoCollection.NumberOfShards">
             <summary>
-              (The default is 1): in a cluster, this value determines the number of shards to create for the collection.
-              In a single server setup, this option is meaningless.
+                (The default is 1): in a cluster, this value determines the number of shards to create for the collection.
+                In a single server setup, this option is meaningless.
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoCollection.KeyOptions">
             <summary>
-              Additional options for key generation.
+                Additional options for key generation.
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoCollection.ShardKeys">
             <summary>
-              (The default is [ “_key” ]): in a cluster, this attribute determines which document attributes are used to determine the target shard for documents.
-              Documents are sent to shards based on the values of their shard key attributes.
-              The values of all shard key attributes in a document are hashed, and the hash value is used to determine the target shard. Note: Values of shard key attributes cannot be changed once set.
-              This option is meaningless in a single server setup.
+                (The default is [ “_key” ]): in a cluster, this attribute determines which document attributes are used to
+                determine the target shard for documents.
+                Documents are sent to shards based on the values of their shard key attributes.
+                The values of all shard key attributes in a document are hashed, and the hash value is used to determine the target
+                shard. Note: Values of shard key attributes cannot be changed once set.
+                This option is meaningless in a single server setup.
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoCollection.ReplicationFactor">
             <summary>
-              (The default is 1): in a cluster, this attribute determines how many copies of each shard are kept on different DB-Servers.
-              The value 1 means that only one copy (no synchronous replication) is kept.
-              A value of k means that k-1 replicas are kept.
-              It can also be the string "satellite" for a SatelliteCollection, where the replication factor is matched to the number of DB-Servers (Enterprise Edition only).
+                (The default is 1): in a cluster, this attribute determines how many copies of each shard are kept on different
+                DB-Servers.
+                The value 1 means that only one copy (no synchronous replication) is kept.
+                A value of k means that k-1 replicas are kept.
+                It can also be the string "satellite" for a SatelliteCollection, where the replication factor is matched to the
+                number of DB-Servers (Enterprise Edition only).
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoCollection.ShardingStrategy">
             <summary>
-              This attribute specifies the name of the sharding strategy to use for the collection.
-              Since ArangoDB 3.4 there are different sharding strategies to select from when creating a new collection. The selected shardingStrategy value will remain fixed for the collection and cannot be changed afterwards.
-              This is important to make the collection keep its sharding settings and always find documents already distributed to shards using the same initial sharding algorithm.
-              community-compat, enterprise-compat, enterprise-smart-edge-compat, hash, enterprise-hash-smart-edge
+                This attribute specifies the name of the sharding strategy to use for the collection.
+                Since ArangoDB 3.4 there are different sharding strategies to select from when creating a new collection. The
+                selected shardingStrategy value will remain fixed for the collection and cannot be changed afterwards.
+                This is important to make the collection keep its sharding settings and always find documents already distributed
+                to shards using the same initial sharding algorithm.
+                community-compat, enterprise-compat, enterprise-smart-edge-compat, hash, enterprise-hash-smart-edge
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoCollection.DistributeShardsLike">
             <summary>
-              (The default is ”“): in an Enterprise Edition cluster, this attribute binds the specifics of sharding for the newly created collection to follow that of a specified existing collection.
-              Note: Using this parameter has consequences for the prototype collection.
-              It can no longer be dropped, before the sharding-imitating collections are dropped.
-              Equally, backups and restores of imitating collections alone will generate warnings (which can be overridden) about missing sharding prototype.
+                (The default is ”“): in an Enterprise Edition cluster, this attribute binds the specifics of sharding for the newly
+                created collection to follow that of a specified existing collection.
+                Note: Using this parameter has consequences for the prototype collection.
+                It can no longer be dropped, before the sharding-imitating collections are dropped.
+                Equally, backups and restores of imitating collections alone will generate warnings (which can be overridden) about
+                missing sharding prototype.
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoCollection.WriteConcern">
             <summary>
-              Write concern for this collection (default: 1).
-              It determines how many copies of each shard are required to be in sync on the different DB-Servers.
-              If there are less then these many copies in the cluster a shard will refuse to write.
-              Writes to shards with enough up-to-date copies will succeed at the same time however.
-              The value of writeConcern can not be larger than replicationFactor. (cluster only)
+                Write concern for this collection (default: 1).
+                It determines how many copies of each shard are required to be in sync on the different DB-Servers.
+                If there are less then these many copies in the cluster a shard will refuse to write.
+                Writes to shards with enough up-to-date copies will succeed at the same time however.
+                The value of writeConcern can not be larger than replicationFactor. (cluster only)
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoCollection.SmartJoinAttribute">
             <summary>
-              In an Enterprise Edition cluster, this attribute determines an attribute of the collection that must contain the shard key value of the referred-to SmartJoin collection.
-              Additionally, the shard key for a document in this collection must contain the value of this attribute, followed by a colon, followed by the actual primary key of the document.
+                In an Enterprise Edition cluster, this attribute determines an attribute of the collection that must contain the
+                shard key value of the referred-to SmartJoin collection.
+                Additionally, the shard key for a document in this collection must contain the value of this attribute, followed by
+                a colon, followed by the actual primary key of the document.
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoCollectionType">
             <summary>
-              Arango collection type
+                Arango collection type
             </summary>
         </member>
         <member name="F:Core.Arango.Protocol.ArangoCollectionType.Document">
             <summary>
-             document collection
+                document collection
             </summary>
         </member>
         <member name="F:Core.Arango.Protocol.ArangoCollectionType.Edge">
             <summary>
-             edge collection
+                edge collection
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoCollectionUpdate">
             <summary>
-              Arango collections updatable properties
+                Arango collections updatable properties
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoCollectionUpdate.WaitForSync">
             <summary>
-               If true then the data is synchronized to disk before returning from a document create, update, replace or removal operation. (default: false)
+                If true then the data is synchronized to disk before returning from a document create, update, replace or removal
+                operation. (default: false)
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoCollectionUpdate.Schema">
             <summary>
-               Optional object that specifies the collection level schema for documents.
-               When updating collection this needs to contain existing schema or schema will be removed
+                Optional object that specifies the collection level schema for documents.
+                When updating collection this needs to contain existing schema or schema will be removed
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoEdgeDefinition">
             <summary>
-              Edge definition
+                Edge definition
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoEdgeDefinition.Collection">
             <summary>
-               The name of the edge collection to be used.
+                The name of the edge collection to be used.
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoEdgeDefinition.From">
             <summary>
-               One or many vertex collections that can contain source vertices.
+                One or many vertex collections that can contain source vertices.
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoEdgeDefinition.To">
             <summary>
-               One or many vertex collections that can contain target vertices.
+                One or many vertex collections that can contain target vertices.
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoEdgeNgram">
             <summary>
-               N-grams for substring matching
+                N-grams for substring matching
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoEdgeNgram.Min">
             <summary>
-              (Ngram) unsigned integer for the minimum n-gram length
+                (Ngram) unsigned integer for the minimum n-gram length
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoEdgeNgram.Max">
             <summary>
-               (Ngram) unsigned integer for the maximum n-gram length
+                (Ngram) unsigned integer for the maximum n-gram length
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoEdgeNgram.PreserveOriginal">
             <summary>
-               (Ngram) to include the original value as well (true) or to produce the n-grams based on min and max only (false)
+                (Ngram) to include the original value as well (true) or to produce the n-grams based on min and max only (false)
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoEdgeNgram.StartMarker">
             <summary>
-               (Ngram) This value will be prepended to n-grams which include the beginning of the input.
-               Can be used for matching prefixes.
-               Choose a character or sequence as marker which does not occur in the input.
+                (Ngram) This value will be prepended to n-grams which include the beginning of the input.
+                Can be used for matching prefixes.
+                Choose a character or sequence as marker which does not occur in the input.
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoEdgeNgram.EndMarker">
             <summary>
-              (Ngram)  this value will be appended to n-grams which include the end of the input.
-              Can be used for matching suffixes.
-              Choose a character or sequence as marker which does not occur in the input.
+                (Ngram)  this value will be appended to n-grams which include the end of the input.
+                Can be used for matching suffixes.
+                Choose a character or sequence as marker which does not occur in the input.
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoEdgeNgram.StreamType">
             <summary>
-              (Ngram) type of the input stream
+                (Ngram) type of the input stream
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoEdgeResponse`1">
             <summary>
-              Arango Graph Edge Response
+                Arango Graph Edge Response
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoEdgeResponse`1.Edge">
             <summary>
-             Edge
+                Edge
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoEdgeResponse`1.New">
             <summary>
-             New version
+                New version
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoEdgeResponse`1.Old">
             <summary>
-             Old version
+                Old version
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoEdgeResponse`1.Removed">
             <summary>
-             When Removed
+                When Removed
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoError">
             <summary>
-             Arango Error Description
+                Arango Error Description
             </summary>
         </member>
         <member name="M:Core.Arango.Protocol.ArangoError.#ctor(System.String,Core.Arango.ArangoErrorCode)">
-             Arango Error Description
+            Arango Error Description
             <param name="errorMessage">message</param>
             <param name="errorNumber">code</param>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoError.ErrorMessage">
             <summary>
-             Message
+                Message
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoError.ErrorNumber">
             <summary>
-             Code
+                Code
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoFoxxService">
             <summary>
-             Foxx Service Description
+                Foxx Service Description
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoFoxxService.Mount">
             <summary>
-               the mount path of the service
+                the mount path of the service
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoFoxxService.Development">
             <summary>
-             true if the service is running in development mode
+                true if the service is running in development mode
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoFoxxService.Legacy">
             <summary>
-             true if the service is running in 2.8 legacy compatibility mode
+                true if the service is running in 2.8 legacy compatibility mode
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoFoxxService.Name">
             <summary>
-             a string identifying the service type
+                a string identifying the service type
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoFoxxService.Version">
             <summary>
-             a semver-compatible version string
+                a semver-compatible version string
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoFoxxSource">
             <summary>
-              Foxx service installation source
+                Foxx service installation source
             </summary>
         </member>
         <member name="M:Core.Arango.Protocol.ArangoFoxxSource.FromZip(System.IO.Stream)">
             <summary>
-              Foxx service from zip archive
+                Foxx service from zip archive
             </summary>
         </member>
         <member name="M:Core.Arango.Protocol.ArangoFoxxSource.FromJavaScript(System.String)">
             <summary>
-               Foxx service from single javascript file
+                Foxx service from single javascript file
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoFunctionDefinition">
             <summary>
-             Arango User Functions
+                Arango User Functions
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoFunctionDefinition.Name">
             <summary>
-             The fully qualified name of the user functions.
+                The fully qualified name of the user functions.
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoFunctionDefinition.Code">
             <summary>
-             A string representation of the function body.
+                A string representation of the function body.
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoFunctionDefinition.IsDeterministic">
             <summary>
-             An optional boolean value to indicate whether the function results are fully deterministic (function return value solely depends on the input value and return value is the same for repeated calls with same input).
-             The isDeterministic attribute is currently not used but may be used later for optimizations.
+                An optional boolean value to indicate whether the function results are fully deterministic (function return value
+                solely depends on the input value and return value is the same for repeated calls with same input).
+                The isDeterministic attribute is currently not used but may be used later for optimizations.
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoGraph">
             <summary>
-             Arango Graph Description
+                Arango Graph Description
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoGraph.Name">
@@ -2917,7 +3005,7 @@
         </member>
         <member name="T:Core.Arango.Protocol.ArangoGraphOptions">
             <summary>
-             Arango Graph Options
+                Arango Graph Options
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoGraphOptions.SmartGraphAttribute">
@@ -2949,199 +3037,210 @@
         </member>
         <member name="T:Core.Arango.Protocol.ArangoIndex">
             <summary>
-              Arango index
+                Arango index
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoIndex.Id">
             <summary>
-              The identifier of the index
+                The identifier of the index
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoIndex.Name">
             <summary>
-              Name of the index or null for auto generation
+                Name of the index or null for auto generation
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoIndex.Type">
             <summary>
-              Type of the index
+                Type of the index
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoIndex.Fields">
             <summary>
-              (Hash | Skiplist) An array of attribute paths.
-              (TTL | Fulltext) An array with exactly one attribute path.
-              (Geo) An array with one or two attribute paths.
-                If it is an array with one attribute path location, then a geo-spatial index on all documents is created using location as path to the coordinates.
+                (Hash | Skiplist) An array of attribute paths.
+                (TTL | Fulltext) An array with exactly one attribute path.
+                (Geo) An array with one or two attribute paths.
+                If it is an array with one attribute path location, then a geo-spatial index on all documents is created using
+                location as path to the coordinates.
                 The value of the attribute must be an array with at least two double values.
                 The array must contain the latitude (first value) and the longitude (second value).
                 All documents, which do not have the attribute path or with value that are not suitable, are ignored.
-                If it is an array with two attribute paths latitude and longitude, then a geo-spatial index on all documents is created using latitude and longitude as paths the latitude and the longitude.
+                If it is an array with two attribute paths latitude and longitude, then a geo-spatial index on all documents is
+                created using latitude and longitude as paths the latitude and the longitude.
                 The value of the attribute latitude and of the attribute longitude must a double.
                 All documents, which do not have the attribute paths or which values are not suitable, are ignored.
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoIndex.MinLength">
             <summary>
-              (Fulltext)  Minimum character length of words to index.
-              Will default to a server-defined value if unspecified.
-              It is thus recommended to set this value explicitly when creating the index.
+                (Fulltext)  Minimum character length of words to index.
+                Will default to a server-defined value if unspecified.
+                It is thus recommended to set this value explicitly when creating the index.
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoIndex.GeoJson">
             <summary>
-              (Geo) If a geo-spatial index on a location is constructed and geoJson is true, then the order within the array is longitude followed by latitude.
-              This corresponds to the format described in http://geojson.org/geojson-spec.html#positions
+                (Geo) If a geo-spatial index on a location is constructed and geoJson is true, then the order within the array is
+                longitude followed by latitude.
+                This corresponds to the format described in http://geojson.org/geojson-spec.html#positions
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoIndex.Sparse">
             <summary>
-              (Hash | SkipList)
+                (Hash | SkipList)
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoIndex.Unique">
             <summary>
-              (Hash | SkipList) Note: Unique indexes on non-shard keys are not supported in a cluster.
+                (Hash | SkipList) Note: Unique indexes on non-shard keys are not supported in a cluster.
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoIndex.InBackground">
             <summary>
-              Indexes can also be created in “background”, not using an exclusive lock during the entire index creation.
-              Background index creation might be slower than the “foreground” index creation and require more RAM.
+                Indexes can also be created in “background”, not using an exclusive lock during the entire index creation.
+                Background index creation might be slower than the “foreground” index creation and require more RAM.
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoIndex.Deduplicate">
             <summary>
-              (Hash | SkipList) Controls whether inserting duplicate index values from the same document into a unique array index will lead to a unique constraint error or not.
-              The default value is true, so only a single instance of each non-unique index value will be inserted into the index per document.
-              Trying to insert a value into the index that already exists in the index will always fail, regardless of the value of this attribute.
+                (Hash | SkipList) Controls whether inserting duplicate index values from the same document into a unique array
+                index will lead to a unique constraint error or not.
+                The default value is true, so only a single instance of each non-unique index value will be inserted into the index
+                per document.
+                Trying to insert a value into the index that already exists in the index will always fail, regardless of the value
+                of this attribute.
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoIndex.Estimate">
             <summary>
-              (Hash | SkipList) Doc?
+                (Hash | SkipList) Doc?
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoIndex.ExpireAfter">
             <summary>
-              (TTL) The time (in seconds) after a document’s creation after which the documents count as “expired”.
+                (TTL) The time (in seconds) after a document’s creation after which the documents count as “expired”.
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoIndexType">
             <summary>
-             Arango Index Type
+                Arango Index Type
             </summary>
         </member>
         <member name="F:Core.Arango.Protocol.ArangoIndexType.Hash">
             <summary>
-              Hash - for exact matches
+                Hash - for exact matches
             </summary>
         </member>
         <member name="F:Core.Arango.Protocol.ArangoIndexType.Skiplist">
             <summary>
-             Skiplist index - for number/date/string range matches
+                Skiplist index - for number/date/string range matches
             </summary>
         </member>
         <member name="F:Core.Arango.Protocol.ArangoIndexType.Ttl">
             <summary>
-            Time to Live index
+                Time to Live index
             </summary>
         </member>
         <member name="F:Core.Arango.Protocol.ArangoIndexType.Geo">
             <summary>
-             Geo-spatial index
+                Geo-spatial index
             </summary>
         </member>
         <member name="F:Core.Arango.Protocol.ArangoIndexType.Fulltext">
             <summary>
-              Fulltext index - Better use ArangoSearch Views
+                Fulltext index - Better use ArangoSearch Views
             </summary>
         </member>
         <member name="F:Core.Arango.Protocol.ArangoIndexType.Edge">
             <summary>
-             (System) Edge Index
+                (System) Edge Index
             </summary>
         </member>
         <member name="F:Core.Arango.Protocol.ArangoIndexType.Primary">
             <summary>
-             (System) Primary Index
+                (System) Primary Index
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoKeyOptions">
             <summary>
-             Arango collection key generating options
+                Arango collection key generating options
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoKeyOptions.Type">
             <summary>
-              Specifies the type of the key generator.
+                Specifies the type of the key generator.
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoKeyOptions.AllowUserKeys">
             <summary>
-              If set to true, then it is allowed to supply own key values in the _key attribute of a document.
-              If set to false, then the key generator will solely be responsible for generating keys and supplying own key values in the _key attribute of documents is considered an error.
+                If set to true, then it is allowed to supply own key values in the _key attribute of a document.
+                If set to false, then the key generator will solely be responsible for generating keys and supplying own key values
+                in the _key attribute of documents is considered an error.
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoKeyOptions.Increment">
             <summary>
-              increment value for autoincrement key generator. Not used for other key generator types.
+                increment value for autoincrement key generator. Not used for other key generator types.
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoKeyOptions.Offset">
             <summary>
-              Initial offset value for autoincrement key generator. Not used for other key generator types.
+                Initial offset value for autoincrement key generator. Not used for other key generator types.
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoKeyType">
             <summary>
-              Arango key generation type
+                Arango key generation type
             </summary>
         </member>
         <member name="F:Core.Arango.Protocol.ArangoKeyType.Traditional">
             <summary>
-              The traditional key generator generates numerical keys in ascending order. 
+                The traditional key generator generates numerical keys in ascending order.
             </summary>
         </member>
         <member name="F:Core.Arango.Protocol.ArangoKeyType.Autoincrement">
             <summary>
-             The autoincrement key generator generates numerical keys in ascending order, the initial offset and the spacing can be configured
+                The autoincrement key generator generates numerical keys in ascending order, the initial offset and the spacing can
+                be configured
             </summary>
         </member>
         <member name="F:Core.Arango.Protocol.ArangoKeyType.Uuid">
             <summary>
-             The uuid key generator generates universally unique 128 bit keys, which are stored in hexadecimal human-readable format.
-             This key generator can be used in a single-server or cluster to generate “seemingly random” keys.
-             The keys produced by this key generator are not lexicographically sorted.
+                The uuid key generator generates universally unique 128 bit keys, which are stored in hexadecimal human-readable
+                format.
+                This key generator can be used in a single-server or cluster to generate “seemingly random” keys.
+                The keys produced by this key generator are not lexicographically sorted.
             </summary>
         </member>
         <member name="F:Core.Arango.Protocol.ArangoKeyType.Padded">
             <summary>
-              The padded key generator generates keys of a fixed length (16 bytes) in ascending lexicographical sort order.
-              This is ideal for usage with the RocksDB engine, which will slightly benefit keys that are inserted in lexicographically ascending order.
-              The key generator can be used in a single-server or cluster
+                The padded key generator generates keys of a fixed length (16 bytes) in ascending lexicographical sort order.
+                This is ideal for usage with the RocksDB engine, which will slightly benefit keys that are inserted in
+                lexicographically ascending order.
+                The key generator can be used in a single-server or cluster
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoLinkProperty">
             <summary>
-             Arango View Link Property
+                Arango View Link Property
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoLinkProperty.Analyzers">
             <summary>
-               A list of Analyzers, by name as defined via the Analyzers, that should be applied to values of processed document attributes.
-               default: [ "identity" ]
+                A list of Analyzers, by name as defined via the Analyzers, that should be applied to values of processed document
+                attributes.
+                default: [ "identity" ]
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoLinkProperty.IncludeAllFields">
             <summary>
-               If set to true, then process all document attributes. Otherwise, only consider attributes mentioned in fields.
-               Attributes not explicitly specified in fields will be processed with default link properties, i.e. {}.
+                If set to true, then process all document attributes. Otherwise, only consider attributes mentioned in fields.
+                Attributes not explicitly specified in fields will be processed with default link properties, i.e. {}.
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoLinkProperty.TrackListPositions">
             <summary>
-               If set to true, then for array values track the value position in arrays.
+                If set to true, then for array values track the value position in arrays.
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoLinkProperty.StoreValues">
@@ -3152,25 +3251,25 @@
         </member>
         <member name="P:Core.Arango.Protocol.ArangoLinkProperty.Fields">
             <summary>
-               An object of fields that should be processed at each level of the document.
-               Each key specifies the document attribute to be processed.
-               Note that the value of includeAllFields is also consulted when selecting fields to be processed.
-               It is a recursive data structure.
+                An object of fields that should be processed at each level of the document.
+                Each key specifies the document attribute to be processed.
+                Note that the value of includeAllFields is also consulted when selecting fields to be processed.
+                It is a recursive data structure.
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoNgramStreamType">
             <summary>
-              N-gram stream type
+                N-gram stream type
             </summary>
         </member>
         <member name="F:Core.Arango.Protocol.ArangoNgramStreamType.Binary">
             <summary>
-               One byte is considered as one character (default)
+                One byte is considered as one character (default)
             </summary>
         </member>
         <member name="F:Core.Arango.Protocol.ArangoNgramStreamType.Utf8">
             <summary>
-               one Unicode codepoint is treated as one character
+                one Unicode codepoint is treated as one character
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoOverwriteMode">
@@ -3211,47 +3310,47 @@
         </member>
         <member name="T:Core.Arango.Protocol.ArangoQueryStatistic">
             <summary>
-               Arango Query Statistic
+                Arango Query Statistic
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoQueryStatistic.ScannedFull">
             <summary>
-              Documents processed with a full collection scan
+                Documents processed with a full collection scan
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoQueryStatistic.ScannedIndex">
             <summary>
-              Documents processed with a index scan
+                Documents processed with a index scan
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoQueryStatistic.WritesExecuted">
             <summary>
-              Documents which have been written
+                Documents which have been written
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoQueryStatistic.PeakMemoryUsage">
             <summary>
-              Memory usage in bytes
+                Memory usage in bytes
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoQueryStatistic.ExecutionTime">
             <summary>
-              Execution time in ms
+                Execution time in ms
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoQueryStatistic.FullCount">
             <summary>
-             Result size ignoring LIMIT clause
+                Result size ignoring LIMIT clause
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoQueryStatistic.WritesIgnored">
             <summary>
-             Document writes ignored
+                Document writes ignored
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoQueryStatistic.Filtered">
             <summary>
-             Filtered documents
+                Filtered documents
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoResponseBase">
@@ -3261,39 +3360,39 @@
         </member>
         <member name="P:Core.Arango.Protocol.ArangoResponseBase.Code">
             <summary>
-             HTTP Status Code
+                HTTP Status Code
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoResponseBase.Error">
             <summary>
-             Has Error?
+                Has Error?
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoResponseBase.ErrorMessage">
             <summary>
-             Error Message
+                Error Message
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoResponseBase.ErrorNum">
             <summary>
-             Error Code
+                Error Code
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoSchema">
             <summary>
-              Schema Validation
+                Schema Validation
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoSchema.Rule">
             <summary>
-              The rule attribute must contain the JSON Schema description.
+                The rule attribute must contain the JSON Schema description.
             </summary>
             <example>
-             {
-               properties: { nums: { type: "array", items: { type: "number", maximum: 6 } } }, 
-               additionalProperties: { type: "string" },
-               required: ["nums"]
-             }
+                {
+                properties: { nums: { type: "array", items: { type: "number", maximum: 6 } } },
+                additionalProperties: { type: "string" },
+                required: ["nums"]
+                }
             </example>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoSchema.Level">
@@ -3303,53 +3402,55 @@
         </member>
         <member name="P:Core.Arango.Protocol.ArangoSchema.Message">
             <summary>
-               sets the message that will be used when validation fails.
+                sets the message that will be used when validation fails.
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoSchemaLevel">
             <summary>
-              Arango schema validation level
+                Arango schema validation level
             </summary>
         </member>
         <member name="F:Core.Arango.Protocol.ArangoSchemaLevel.None">
             <summary>
-              The rule is inactive and validation thus turned off.
+                The rule is inactive and validation thus turned off.
             </summary>
         </member>
         <member name="F:Core.Arango.Protocol.ArangoSchemaLevel.New">
             <summary>
-              Only newly inserted documents are validated.
+                Only newly inserted documents are validated.
             </summary>
         </member>
         <member name="F:Core.Arango.Protocol.ArangoSchemaLevel.Moderate">
             <summary>
-              New and modified documents must pass validation, except for modified documents where the OLD value did not pass validation already.
-              This level is useful if you have documents which do not match your target structure, but you want to stop the insertion of more invalid documents and prohibit that valid documents are changed to invalid documents.
+                New and modified documents must pass validation, except for modified documents where the OLD value did not pass
+                validation already.
+                This level is useful if you have documents which do not match your target structure, but you want to stop the
+                insertion of more invalid documents and prohibit that valid documents are changed to invalid documents.
             </summary>
         </member>
         <member name="F:Core.Arango.Protocol.ArangoSchemaLevel.Strict">
             <summary>
-              All new and modified document must strictly pass validation. No exceptions are made (default).
+                All new and modified document must strictly pass validation. No exceptions are made (default).
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoSort">
             <summary>
-             ArangoView Sort description
+                ArangoView Sort description
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoSort.Field">
             <summary>
-             Attribute to sort by
+                Attribute to sort by
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoSort.Direction">
             <summary>
-             Sort direction
+                Sort direction
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoTransaction">
             <summary>
-             Arango JavaScript transaction
+                Arango JavaScript transaction
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoTransaction.AllowImplicit">
@@ -3402,301 +3503,315 @@
         </member>
         <member name="T:Core.Arango.Protocol.ArangoTransactionScope">
             <summary>
-             Arango Transaction Scope
+                Arango Transaction Scope
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoTransactionScope.Read">
             <summary>
-             Collections to read from
+                Collections to read from
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoTransactionScope.Write">
             <summary>
-             Collections to write to
+                Collections to write to
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoUpdateResult`1">
             <summary>
-             Arango document update result
+                Arango document update result
             </summary>
             <typeparam name="T"></typeparam>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoUpdateResult`1.Id">
             <summary>
-             Id
+                Id
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoUpdateResult`1.Key">
             <summary>
-             Key
+                Key
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoUpdateResult`1.Revision">
             <summary>
-              Revision
+                Revision
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoUpdateResult`1.OldRevision">
             <summary>
-             Old Revision
+                Old Revision
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoUpdateResult`1.Old">
             <summary>
-             Old document
+                Old document
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoUpdateResult`1.New">
             <summary>
-             New document
+                New document
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoUser">
             <summary>
-             Arango User
+                Arango User
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoUser.Name">
             <summary>
-             The name of the user as a string. This is mandatory.
+                The name of the user as a string. This is mandatory.
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoUser.Password">
             <summary>
-             The user password as a string. If no password is specified, the empty string will be used. 
+                The user password as a string. If no password is specified, the empty string will be used.
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoUser.Active">
             <summary>
-             An optional flag that specifies whether the user is active. If not specified, this will default to true
+                An optional flag that specifies whether the user is active. If not specified, this will default to true
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoUser.Extra">
             <summary>
-             An optional JSON object with arbitrary extra data about the user.
+                An optional JSON object with arbitrary extra data about the user.
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoVersion">
             <summary>
-             Arango Server Version and License Information
+                Arango Server Version and License Information
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoVersion.Version">
             <summary>
-             Raw version string
+                Raw version string
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoVersion.License">
             <summary>
-            license string
+                license string
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoVersion.SemanticVersion">
             <summary>
-             Parsed (comparable) version
+                Parsed (comparable) version
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoVertexCollection">
             <summary>
-             Arango Vertex Collection
+                Arango Vertex Collection
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoVertexCollection.Collection">
             <summary>
-             Collection name
+                Collection name
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoVertexResponse`1">
             <summary>
-              Arango Graph Vertex Response
+                Arango Graph Vertex Response
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoVertexResponse`1.Vertex">
             <summary>
-             Vertex
+                Vertex
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoVertexResponse`1.New">
             <summary>
-             New version
+                New version
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoVertexResponse`1.Old">
             <summary>
-             Old version
+                Old version
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoVertexResponse`1.Removed">
             <summary>
-             When Removed
+                When Removed
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoView">
             <summary>
-              ArangoSearch View
+                ArangoSearch View
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoView.Name">
             <summary>
-              The name of the View.
+                The name of the View.
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoView.Type">
             <summary>
-              The type of the View. Must be equal to “arangosearch”. This option is immutable.
+                The type of the View. Must be equal to “arangosearch”. This option is immutable.
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoView.Links">
             <summary>
-              Expects an object with the attribute keys being names of to be linked collections, and the link properties as attribute values.
+                Expects an object with the attribute keys being names of to be linked collections, and the link properties as
+                attribute values.
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoView.PrimarySort">
             <summary>
-              A primary sort order can be defined to enable an AQL optimization.
-              If a query iterates over all documents of a View, wants to sort them by attribute values and the (left-most) fields to sort by as well as their sorting direction match with the primarySort definition, then the SORT operation is optimized away.
-              This option is immutable.
+                A primary sort order can be defined to enable an AQL optimization.
+                If a query iterates over all documents of a View, wants to sort them by attribute values and the (left-most) fields
+                to sort by as well as their sorting direction match with the primarySort definition, then the SORT operation is
+                optimized away.
+                This option is immutable.
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoView.PrimarySortCompression">
             <summary>
-              Defines how to compress the primary sort data (introduced in v3.7.1). ArangoDB v3.5 and v3.6 always compress the index using LZ4.
-              This option is immutable.
+                Defines how to compress the primary sort data (introduced in v3.7.1). ArangoDB v3.5 and v3.6 always compress the
+                index using LZ4.
+                This option is immutable.
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoView.StoredValues">
             <summary>
-              An array of objects to describe which document attributes to store in the View index (introduced in v3.7.1).
-              It can then cover search queries, which means the data can be taken from the index directly and accessing the storage engine can be avoided.
+                An array of objects to describe which document attributes to store in the View index (introduced in v3.7.1).
+                It can then cover search queries, which means the data can be taken from the index directly and accessing the
+                storage engine can be avoided.
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoView.CleanupIntervalStep">
             <summary>
-              Wait at least this many commits between removing unused files in the ArangoSearch data directory (default: 2, to disable use: 0).
+                Wait at least this many commits between removing unused files in the ArangoSearch data directory (default: 2, to
+                disable use: 0).
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoView.CommitIntervalMsec">
             <summary>
-              Wait at least this many milliseconds between committing View data store changes and making documents visible to queries (default: 1000, to disable use: 0)
+                Wait at least this many milliseconds between committing View data store changes and making documents visible to
+                queries (default: 1000, to disable use: 0)
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoView.ConsolidationPolicy">
             <summary>
-             The consolidation policy to apply for selecting which segments should be merged
+                The consolidation policy to apply for selecting which segments should be merged
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoView.ConsolidationIntervalMsec">
             <summary>
-              Wait at least this many milliseconds between applying ‘consolidationPolicy’ to consolidate View data store and possibly release space on the filesystem (default: 10000, to disable use: 0).
+                Wait at least this many milliseconds between applying ‘consolidationPolicy’ to consolidate View data store and
+                possibly release space on the filesystem (default: 10000, to disable use: 0).
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoView.WritebufferIdle">
             <summary>
-              Maximum number of writers (segments) cached in the pool (default: 64, use 0 to disable, immutable)
+                Maximum number of writers (segments) cached in the pool (default: 64, use 0 to disable, immutable)
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoView.WritebufferActive">
             <summary>
-              Maximum number of concurrent active writers (segments) that perform a transaction. Other writers (segments) wait till current active writers (segments) finish (default: 0, use 0 to disable, immutable)
+                Maximum number of concurrent active writers (segments) that perform a transaction. Other writers (segments) wait
+                till current active writers (segments) finish (default: 0, use 0 to disable, immutable)
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoView.WritebufferSizeMax">
             <summary>
-              Maximum memory byte size per writer (segment) before a writer (segment) flush is triggered.
-              0 value turns off this limit for any writer (buffer) and data will be flushed periodically based on the value defined for the flush thread (ArangoDB server startup option).
-              0 value should be used carefully due to high potential memory consumption (default: 33554432, use 0 to disable, immutable)
+                Maximum memory byte size per writer (segment) before a writer (segment) flush is triggered.
+                0 value turns off this limit for any writer (buffer) and data will be flushed periodically based on the value
+                defined for the flush thread (ArangoDB server startup option).
+                0 value should be used carefully due to high potential memory consumption (default: 33554432, use 0 to disable,
+                immutable)
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoViewCompressionType">
             <summary>
-             Arango View Compression
+                Arango View Compression
             </summary>
         </member>
         <member name="F:Core.Arango.Protocol.ArangoViewCompressionType.Lz4">
             <summary>
-               LZ4
+                LZ4
             </summary>
         </member>
         <member name="F:Core.Arango.Protocol.ArangoViewCompressionType.None">
             <summary>
-               None
+                None
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoViewConsolidationPolicy">
             <summary>
-              Arango View Consolidation Policy
+                Arango View Consolidation Policy
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoViewConsolidationPolicy.Type">
             <summary>
-              The segment candidates for the “consolidation” operation are selected based upon several possible configurable formulas as defined by their types.
+                The segment candidates for the “consolidation” operation are selected based upon several possible configurable
+                formulas as defined by their types.
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoViewConsolidationPolicy.Threshold">
             <summary>
-              value in the range [0.0, 1.0]
+                value in the range [0.0, 1.0]
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoViewConsolidationPolicy.SegmentsBytesFloor">
             <summary>
-              Defines the value (in bytes) to treat all smaller segments as equal for consolidation selection (default: 2097152)
+                Defines the value (in bytes) to treat all smaller segments as equal for consolidation selection (default: 2097152)
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoViewConsolidationPolicy.SegmentsBytesMax">
             <summary>
-              Maximum allowed size of all consolidated segments in bytes (default: 5368709120)
+                Maximum allowed size of all consolidated segments in bytes (default: 5368709120)
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoViewConsolidationPolicy.SegmentsMax">
             <summary>
-              The maximum number of segments that will be evaluated as candidates for consolidation (default: 10)
+                The maximum number of segments that will be evaluated as candidates for consolidation (default: 10)
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoViewConsolidationPolicy.SegmentsMin">
             <summary>
-              The minimum number of segments that will be evaluated as candidates for consolidation (default: 1)
+                The minimum number of segments that will be evaluated as candidates for consolidation (default: 1)
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoViewConsolidationPolicy.MinScore">
             <summary>
-              ?
+                ?
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoViewConsolidationType">
             <summary>
-              Arango View Consolidation Type
+                Arango View Consolidation Type
             </summary>
         </member>
         <member name="F:Core.Arango.Protocol.ArangoViewConsolidationType.Tier">
             <summary>
-              (default): consolidate based on segment byte size and live document count as dictated by the customization attributes.
-              If this type is used, then below segments* and minScore properties are available.
+                (default): consolidate based on segment byte size and live document count as dictated by the customization
+                attributes.
+                If this type is used, then below segments* and minScore properties are available.
             </summary>
         </member>
         <member name="F:Core.Arango.Protocol.ArangoViewConsolidationType.BytesAccum">
             <summary>
-              Consolidate if and only if {threshold} > (segment_bytes + sum_of_merge_candidate_segment_bytes) / all_segment_bytes i.e. the sum of all candidate segment byte size is less than the total segment byte size multiplied by the {threshold}.
-              If this type is used, then below threshold property is available.
+                Consolidate if and only if {threshold} > (segment_bytes + sum_of_merge_candidate_segment_bytes) / all_segment_bytes
+                i.e. the sum of all candidate segment byte size is less than the total segment byte size multiplied by the
+                {threshold}.
+                If this type is used, then below threshold property is available.
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoViewStoredValue">
             <summary>
-              
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoViewStoredValue.Fields">
             <summary>
-              Attribute paths to store
+                Attribute paths to store
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoViewStoredValue.Compression">
             <summary>
-             Compression
+                Compression
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoVoid">
             <summary>
-             Something to deserialize to when no response needed
+                Something to deserialize to when no response needed
             </summary>
         </member>
         <member name="T:Core.Arango.Serialization.IArangoFormattable">
@@ -3706,210 +3821,203 @@
         </member>
         <member name="T:Core.Arango.Serialization.IArangoSerializer">
             <summary>
-             Arango Serializer Interface
+                Arango Serializer Interface
             </summary>
         </member>
         <member name="M:Core.Arango.Serialization.IArangoSerializer.Serialize(System.Object)">
             <summary>
-              Convert object to string
+                Convert object to string
             </summary>
         </member>
         <member name="M:Core.Arango.Serialization.IArangoSerializer.Deserialize``1(System.String)">
             <summary>
-              Convert string to object
+                Convert string to object
             </summary>
         </member>
         <member name="M:Core.Arango.Serialization.IArangoSerializer.Deserialize(System.String,System.Type)">
             <summary>
-              Convert string to object
+                Convert string to object
             </summary>
         </member>
         <member name="T:Core.Arango.Serialization.Json.ArangoJsonCamelCasePolicy">
             <summary>
-              System.Json.Text PascalCase Naming Policy for Arango
+                System.Json.Text PascalCase Naming Policy for Arango
             </summary>
         </member>
         <member name="M:Core.Arango.Serialization.Json.ArangoJsonCamelCasePolicy.ConvertName(System.String)">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="T:Core.Arango.Serialization.Json.ArangoJsonDefaultPolicy">
             <summary>
-              System.Json.Text PascalCase Naming Policy for Arango
+                System.Json.Text PascalCase Naming Policy for Arango
             </summary>
         </member>
         <member name="M:Core.Arango.Serialization.Json.ArangoJsonDefaultPolicy.ConvertName(System.String)">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="T:Core.Arango.Serialization.Json.ArangoJsonSerializer">
             <summary>
-              Arango Json Serializer with System.Json.Text
+                Arango Json Serializer with System.Json.Text
             </summary>
         </member>
         <member name="M:Core.Arango.Serialization.Json.ArangoJsonSerializer.#ctor(System.Text.Json.JsonNamingPolicy)">
             <summary>
-            
             </summary>
             <param name="policy">PascalCase or camelCase policy</param>
         </member>
         <member name="M:Core.Arango.Serialization.Json.ArangoJsonSerializer.Serialize(System.Object)">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:Core.Arango.Serialization.Json.ArangoJsonSerializer.Deserialize``1(System.String)">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:Core.Arango.Serialization.Json.ArangoJsonSerializer.Deserialize(System.String,System.Type)">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="T:Core.Arango.Serialization.Json.JsonStringEnumMemberConverter">
             <summary>
-              System.Text.Json EnumMember support
+                System.Text.Json EnumMember support
             </summary>
         </member>
         <member name="M:Core.Arango.Serialization.Json.JsonStringEnumMemberConverter.#ctor">
             <summary>
-            Initializes a new instance of the <see cref="T:Core.Arango.Serialization.Json.JsonStringEnumMemberConverter"/> class.
+                Initializes a new instance of the <see cref="T:Core.Arango.Serialization.Json.JsonStringEnumMemberConverter" /> class.
             </summary>
         </member>
         <member name="M:Core.Arango.Serialization.Json.JsonStringEnumMemberConverter.#ctor(System.Text.Json.JsonNamingPolicy,System.Boolean)">
             <summary>
-            Initializes a new instance of the <see cref="T:Core.Arango.Serialization.Json.JsonStringEnumMemberConverter"/> class.
+                Initializes a new instance of the <see cref="T:Core.Arango.Serialization.Json.JsonStringEnumMemberConverter" /> class.
             </summary>
             <param name="namingPolicy">
-            Optional naming policy for writing enum values.
+                Optional naming policy for writing enum values.
             </param>
             <param name="allowIntegerValues">
-            True to allow undefined enum values. When true, if an enum value isn't
-            defined it will output as a number rather than a string.
+                True to allow undefined enum values. When true, if an enum value isn't
+                defined it will output as a number rather than a string.
             </param>
         </member>
         <member name="M:Core.Arango.Serialization.Json.JsonStringEnumMemberConverter.CanConvert(System.Type)">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:Core.Arango.Serialization.Json.JsonStringEnumMemberConverter.CreateConverter(System.Type,System.Text.Json.JsonSerializerOptions)">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:Core.Arango.Serialization.Json.JsonStringEnumMemberConverterHelper`1.GenerateJsonException(System.Type)">
             <summary>
-            Generate a <see cref="T:System.Text.Json.JsonException"/> using the internal
-            <c>JsonException.AppendPathInformation</c> property that will
-            eventually include the JSON path, line number, and byte position in
-            line.
-            <para>
-            The final message of the exception looks like: The JSON value could
-            not be converted to {0}. Path: $.{JSONPath} | LineNumber:
-            {LineNumber} | BytePositionInLine: {BytePositionInLine}.
-            </para>
+                Generate a <see cref="T:System.Text.Json.JsonException" /> using the internal
+                <c>JsonException.AppendPathInformation</c> property that will
+                eventually include the JSON path, line number, and byte position in
+                line.
+                <para>
+                    The final message of the exception looks like: The JSON value could
+                    not be converted to {0}. Path: $.{JSONPath} | LineNumber:
+                    {LineNumber} | BytePositionInLine: {BytePositionInLine}.
+                </para>
             </summary>
             <param name="propertyType">Property type.</param>
-            <returns><see cref="T:System.Text.Json.JsonException"/>.</returns>
+            <returns><see cref="T:System.Text.Json.JsonException" />.</returns>
         </member>
         <member name="M:Core.Arango.Serialization.Json.JsonStringEnumMemberConverterHelper`1.GenerateJsonException(System.Type,System.String,System.Exception)">
             <summary>
-            Generate a <see cref="T:System.Text.Json.JsonException"/> using the internal
-            <c>JsonException.AppendPathInformation</c> property that will
-            eventually include the JSON path, line number, and byte position in
-            line.
-            <para>
-            The final message of the exception looks like: The JSON value '{1}'
-            could not be converted to {0}. Path: $.{JSONPath} | LineNumber:
-            {LineNumber} | BytePositionInLine: {BytePositionInLine}.
-            </para>
+                Generate a <see cref="T:System.Text.Json.JsonException" /> using the internal
+                <c>JsonException.AppendPathInformation</c> property that will
+                eventually include the JSON path, line number, and byte position in
+                line.
+                <para>
+                    The final message of the exception looks like: The JSON value '{1}'
+                    could not be converted to {0}. Path: $.{JSONPath} | LineNumber:
+                    {LineNumber} | BytePositionInLine: {BytePositionInLine}.
+                </para>
             </summary>
             <param name="propertyType">Property type.</param>
-            <param name="propertyValue">Value that could not be parsed into
-            property type.</param>
-            <param name="innerException">Optional inner <see cref="T:System.Exception"/>.</param>
-            <returns><see cref="T:System.Text.Json.JsonException"/>.</returns>
+            <param name="propertyValue">
+                Value that could not be parsed into
+                property type.
+            </param>
+            <param name="innerException">Optional inner <see cref="T:System.Exception" />.</param>
+            <returns><see cref="T:System.Text.Json.JsonException" />.</returns>
         </member>
         <member name="T:Core.Arango.Serialization.Newtonsoft.ArangoNewtonsoftCamelCaseContractResolver">
             <summary>
-              Newtonsoft camelCase Naming Policy for Arango
+                Newtonsoft camelCase Naming Policy for Arango
             </summary>
         </member>
         <member name="M:Core.Arango.Serialization.Newtonsoft.ArangoNewtonsoftCamelCaseContractResolver.#ctor">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:Core.Arango.Serialization.Newtonsoft.ArangoNewtonsoftCamelCaseContractResolver.CreateProperty(System.Reflection.MemberInfo,Newtonsoft.Json.MemberSerialization)">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="T:Core.Arango.Serialization.Newtonsoft.ArangoNewtonsoftDefaultContractResolver">
             <summary>
-              System.Json.Text PascalCase Naming Policy for Arango
+                System.Json.Text PascalCase Naming Policy for Arango
             </summary>
         </member>
         <member name="M:Core.Arango.Serialization.Newtonsoft.ArangoNewtonsoftDefaultContractResolver.#ctor">
             <summary>
-              System.Json.Text PascalCase Naming Policy for Arango
+                System.Json.Text PascalCase Naming Policy for Arango
             </summary>
         </member>
         <member name="M:Core.Arango.Serialization.Newtonsoft.ArangoNewtonsoftDefaultContractResolver.CreateProperty(System.Reflection.MemberInfo,Newtonsoft.Json.MemberSerialization)">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="T:Core.Arango.Serialization.Newtonsoft.ArangoNewtonsoftSerializer">
             <summary>
-              Arango Json Serializer with Newtonsoft
+                Arango Json Serializer with Newtonsoft
             </summary>
         </member>
         <member name="M:Core.Arango.Serialization.Newtonsoft.ArangoNewtonsoftSerializer.#ctor(Newtonsoft.Json.Serialization.IContractResolver)">
             <summary>
-              Arango Json Serializer with Newtonsoft
+                Arango Json Serializer with Newtonsoft
             </summary>
             <param name="resolver">PascalCase or camelCaseResolver</param>
         </member>
         <member name="M:Core.Arango.Serialization.Newtonsoft.ArangoNewtonsoftSerializer.Serialize(System.Object)">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:Core.Arango.Serialization.Newtonsoft.ArangoNewtonsoftSerializer.Deserialize``1(System.String)">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:Core.Arango.Serialization.Newtonsoft.ArangoNewtonsoftSerializer.Deserialize(System.String,System.Type)">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="T:Core.Arango.Transport.ArangoHttpTransport">
             <summary>
-              Arango HTTP 1.1/2.0 Transport Implementation
+                Arango HTTP 1.1/2.0 Transport Implementation
             </summary>
         </member>
         <member name="M:Core.Arango.Transport.ArangoHttpTransport.#ctor(Core.Arango.IArangoConfiguration)">
             <summary>
-              Arango HTTP 1.1/2.0 Transport Implementation
+                Arango HTTP 1.1/2.0 Transport Implementation
             </summary>
         </member>
         <member name="M:Core.Arango.Transport.ArangoHttpTransport.SendAsync``1(System.Net.Http.HttpMethod,System.String,System.Object,System.String,System.Boolean,System.Boolean,System.Collections.Generic.IDictionary{System.String,System.String},System.Threading.CancellationToken)">
-            <inheritdoc/>
-        </member>
-        <member name="M:Core.Arango.Transport.ArangoHttpTransport.WriteBatchAsync``1(Core.Arango.ArangoHandle,System.Net.Http.HttpMethod,System.String,System.Object,System.Collections.Generic.IDictionary{System.String,System.String})">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:Core.Arango.Transport.ArangoHttpTransport.SendContentAsync(System.Net.Http.HttpMethod,System.String,System.Net.Http.HttpContent,System.String,System.Boolean,System.Boolean,System.Collections.Generic.IDictionary{System.String,System.String},System.Threading.CancellationToken)">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="M:Core.Arango.Transport.ArangoHttpTransport.SendAsync(System.Type,System.Net.Http.HttpMethod,System.String,System.Object,System.String,System.Boolean,System.Boolean,System.Collections.Generic.IDictionary{System.String,System.String},System.Threading.CancellationToken)">
-            <inheritdoc/>
+            <inheritdoc />
         </member>
         <member name="T:Core.Arango.Transport.IArangoTransport">
             <summary>
-             Arango Transport Interface
+                Arango Transport Interface
             </summary>
         </member>
         <member name="M:Core.Arango.Transport.IArangoTransport.SendAsync(System.Type,System.Net.Http.HttpMethod,System.String,System.Object,System.String,System.Boolean,System.Boolean,System.Collections.Generic.IDictionary{System.String,System.String},System.Threading.CancellationToken)">
             <summary>
-             Send request to ArangoDB
+                Send request to ArangoDB
             </summary>
         </member>
         <member name="M:Core.Arango.Transport.IArangoTransport.SendAsync``1(System.Net.Http.HttpMethod,System.String,System.Object,System.String,System.Boolean,System.Boolean,System.Collections.Generic.IDictionary{System.String,System.String},System.Threading.CancellationToken)">
             <summary>
-             Send request to ArangoDB
+                Send request to ArangoDB
             </summary>
         </member>
         <member name="M:Core.Arango.Transport.IArangoTransport.SendContentAsync(System.Net.Http.HttpMethod,System.String,System.Net.Http.HttpContent,System.String,System.Boolean,System.Boolean,System.Collections.Generic.IDictionary{System.String,System.String},System.Threading.CancellationToken)">
             <summary>
-             Send raw HTTP content request to ArangoDB
-            </summary>
-        </member>
-        <member name="M:Core.Arango.Transport.IArangoTransport.WriteBatchAsync``1(Core.Arango.ArangoHandle,System.Net.Http.HttpMethod,System.String,System.Object,System.Collections.Generic.IDictionary{System.String,System.String})">
-            <summary>
-             Send request to batch to be later send to ArangoDB
+                Send raw HTTP content request to ArangoDB
             </summary>
         </member>
     </members>

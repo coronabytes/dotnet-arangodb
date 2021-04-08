@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Core.Arango.Protocol;
 using Core.Arango.Tests.Core;
 using Xunit;
-using Xunit.Priority;
 
 namespace Core.Arango.Tests
 {

@@ -1,24 +1,25 @@
 ﻿using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 using Core.Arango.Serialization.Json;
 using Newtonsoft.Json.Converters;
 
 namespace Core.Arango.Protocol
 {
     /// <summary>
-    ///  Arango View Compression
+    ///     Arango View Compression
     /// </summary>
-    [System.Text.Json.Serialization.JsonConverter(typeof(JsonStringEnumMemberConverter))]
+    [JsonConverter(typeof(JsonStringEnumMemberConverter))]
     [Newtonsoft.Json.JsonConverter(typeof(StringEnumConverter))]
     public enum ArangoViewCompressionType
     {
         /// <summary>
-        ///    LZ4
+        ///     LZ4
         /// </summary>
         [EnumMember(Value = "lz4")] Lz4,
-        
+
         /// <summary>
-        ///    None
+        ///     None
         /// </summary>
-        [EnumMember(Value = "none")] None,
+        [EnumMember(Value = "none")] None
     }
 }

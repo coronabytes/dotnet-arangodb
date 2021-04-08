@@ -5,19 +5,19 @@ using Newtonsoft.Json.Serialization;
 namespace Core.Arango.Serialization.Newtonsoft
 {
     /// <summary>
-    ///   System.Json.Text PascalCase Naming Policy for Arango
+    ///     System.Json.Text PascalCase Naming Policy for Arango
     /// </summary>
     public class ArangoNewtonsoftDefaultContractResolver : DefaultContractResolver
     {
         /// <summary>
-        ///   System.Json.Text PascalCase Naming Policy for Arango
+        ///     System.Json.Text PascalCase Naming Policy for Arango
         /// </summary>
         public ArangoNewtonsoftDefaultContractResolver()
         {
             NamingStrategy = new DefaultNamingStrategy();
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
         {
             var property = base.CreateProperty(member, memberSerialization);

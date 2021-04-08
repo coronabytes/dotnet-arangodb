@@ -21,7 +21,7 @@ namespace Core.Arango.Modules.Internal
                 new
                 {
                     name = RealmPrefix(name)
-                }, throwOnError: false, cancellationToken: cancellationToken);
+                }, false, cancellationToken: cancellationToken);
 
             return res != null;
         }
@@ -51,7 +51,7 @@ namespace Core.Arango.Modules.Internal
         {
             await SendAsync<ArangoVoid>(name, HttpMethod.Delete,
                 ApiPath("_system", $"database/{RealmPrefix(name)}"), null,
-                throwOnError: false, cancellationToken: cancellationToken);
+                false, cancellationToken: cancellationToken);
         }
     }
 }

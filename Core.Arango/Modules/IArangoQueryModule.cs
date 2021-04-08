@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 namespace Core.Arango.Modules
 {
     /// <summary>
-    /// Query documents
+    ///     Query documents
     /// </summary>
     public interface IArangoQueryModule
     {
         /// <summary>
-        ///  Finds documents
+        ///     Finds documents
         /// </summary>
         /// <typeparam name="T">RETURN element type</typeparam>
         /// <param name="database"></param>
@@ -24,7 +24,7 @@ namespace Core.Arango.Modules
             string projection = null, int limit = 1000, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Finds single document (and throws exception of more than one are found)
+        ///     Finds single document (and throws exception of more than one are found)
         /// </summary>
         /// <typeparam name="T">RETURN element type</typeparam>
         /// <param name="database"></param>
@@ -36,37 +36,35 @@ namespace Core.Arango.Modules
             string projection = null, CancellationToken cancellationToken = default);
 
         /// <summary>
-        ///  Execute query (Linq provider)
+        ///     Execute query (Linq provider)
         /// </summary>
         Task<object> ExecuteAsync(Type type, bool isEnumerable, ArangoHandle database, string query,
             IDictionary<string, object> bindVars, bool? cache = null, bool? fullCount = null,
             CancellationToken cancellationToken = default);
 
         /// <summary>
-        ///  Execute query with string interpolated bind parameters
+        ///     Execute query with string interpolated bind parameters
         /// </summary>
         Task<ArangoList<T>> ExecuteAsync<T>(ArangoHandle database, FormattableString query, bool? cache = null,
             bool? fullCount = null, CancellationToken cancellationToken = default);
 
         /// <summary>
-        ///  Execute query with bind parameters in dictionary
+        ///     Execute query with bind parameters in dictionary
         /// </summary>
         Task<ArangoList<T>> ExecuteAsync<T>(ArangoHandle database, string query, IDictionary<string, object> bindVars,
             bool? cache = null, bool? fullCount = null, CancellationToken cancellationToken = default);
 
         /// <summary>
-        ///  Execute query with string interpolated bind parameters (IAsyncEnumerable)
+        ///     Execute query with string interpolated bind parameters (IAsyncEnumerable)
         /// </summary>
         IAsyncEnumerable<T> ExecuteStreamAsync<T>(ArangoHandle database, FormattableString query, bool? cache = null,
             int? batchSize = null, CancellationToken cancellationToken = default);
 
         /// <summary>
-        ///  Execute query with bind parameters in dictionary (IAsyncEnumerable)
+        ///     Execute query with bind parameters in dictionary (IAsyncEnumerable)
         /// </summary>
         IAsyncEnumerable<T> ExecuteStreamAsync<T>(ArangoHandle database, string query,
             IDictionary<string, object> bindVars, bool? cache = null, int? batchSize = null,
             CancellationToken cancellationToken = default);
-
-      
     }
 }

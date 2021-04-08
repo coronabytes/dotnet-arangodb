@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Core.Arango
 {
@@ -8,7 +7,6 @@ namespace Core.Arango
     /// </summary>
     public sealed class ArangoHandle
     {
-        internal readonly List<ArangoBatch> Batches;
         internal readonly string Name;
         internal readonly string Transaction;
 
@@ -20,7 +18,6 @@ namespace Core.Arango
         {
             Name = name;
             Transaction = null;
-            Batches = null;
         }
 
         /// <summary>
@@ -31,7 +28,6 @@ namespace Core.Arango
         {
             Name = name.ToString("D");
             Transaction = null;
-            Batches = null;
         }
 
         /// <summary>
@@ -41,17 +37,6 @@ namespace Core.Arango
         {
             Name = other.Name;
             Transaction = transaction;
-            Batches = null;
-        }
-
-        /// <summary>
-        ///     Constructs wrapping handle with batch
-        /// </summary>
-        public ArangoHandle(ArangoHandle other, bool batch)
-        {
-            Name = other.Name;
-            Transaction = other.Transaction;
-            Batches = new List<ArangoBatch>();
         }
 
         /// <summary>
@@ -60,7 +45,7 @@ namespace Core.Arango
         /// <param name="x"></param>
         public static implicit operator ArangoHandle(string x)
         {
-            return new ArangoHandle(x);
+            return new(x);
         }
 
         /// <summary>
@@ -68,7 +53,7 @@ namespace Core.Arango
         /// </summary>
         public static implicit operator ArangoHandle(Guid x)
         {
-            return new ArangoHandle(x);
+            return new(x);
         }
 
         /// <summary>
