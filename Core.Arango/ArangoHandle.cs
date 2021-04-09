@@ -3,7 +3,7 @@
 namespace Core.Arango
 {
     /// <summary>
-    ///     Arango database / transaction / batch handle
+    ///     Arango database / transaction handle
     /// </summary>
     public sealed class ArangoHandle
     {

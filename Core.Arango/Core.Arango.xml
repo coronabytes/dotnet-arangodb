@@ -1333,7 +1333,7 @@
         </member>
         <member name="T:Core.Arango.ArangoHandle">
             <summary>
-                Arango database / transaction / batch handle
+                Arango database / transaction handle
             </summary>
         </member>
         <member name="M:Core.Arango.ArangoHandle.#ctor(System.String)">

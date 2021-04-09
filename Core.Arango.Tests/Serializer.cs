@@ -78,26 +78,5 @@ namespace Core.Arango.Tests
 
             _output.WriteLine($"{name}: {sw.Elapsed.TotalMilliseconds}");
         }
-
-        [Fact]
-        public void Bla()
-        {
-            var m = new MultipartFormDataContent("SomeBoundaryValue");
-            var s1 = new StringContent("GET /_api/collection/products/figures HTTP/1.1}\r\n");
-            s1.Headers.ContentType = new MediaTypeHeaderValue("application/x-arango-batchpart");
-            s1.Headers.Add("Content-Id", Guid.NewGuid().ToString("D"));
-            m.Add(s1, "a");
-            s1.Headers.Remove("Content-Disposition");
-
-            var s2 = new StringContent("POST /_api/collection/products HTTP/1.1\r\n\r\n{\"name\": \"products\" }\r\n");
-            s2.Headers.ContentType = new MediaTypeHeaderValue("application/x-arango-batchpart");
-            s2.Headers.Add("Content-Id", Guid.NewGuid().ToString("D"));
-            m.Add(s2, "b");
-            s2.Headers.Remove("Content-Disposition");
-
-            var res = m.ReadAsStringAsync().Result;
-
-            _output.WriteLine(res);
-        }
     }
 }
