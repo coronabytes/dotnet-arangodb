@@ -23,13 +23,21 @@ namespace Core.Arango.Modules.Internal
                 cancellationToken: cancellationToken);
         }
 
-        public async Task<IReadOnlyCollection<ArangoView>> ListAsync(ArangoHandle database,
+        public async Task<IReadOnlyCollection<ArangoViewInformation>> ListAsync(ArangoHandle database,
             CancellationToken cancellationToken = default)
         {
-            var res = await SendAsync<QueryResponse<ArangoView>>(database, HttpMethod.Get,
+            var res = await SendAsync<QueryResponse<ArangoViewInformation>>(database, HttpMethod.Get,
                 ApiPath(database, "view"),
                 cancellationToken: cancellationToken);
             return res.Result;
+        }
+
+        public async Task<ArangoView> GetPropertiesAsync(ArangoHandle database, string view, CancellationToken cancellationToken = default)
+        {
+            var res = await SendAsync<ArangoView>(database, HttpMethod.Get,
+                ApiPath(database, $"view/{UrlEncode(view)}/properties"),
+                cancellationToken: cancellationToken);
+            return res;
         }
 
         public async Task DropAsync(ArangoHandle database,

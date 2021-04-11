@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using Newtonsoft.Json;
 
 namespace Core.Arango.Protocol
@@ -46,5 +47,12 @@ namespace Core.Arango.Protocol
         [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         [JsonProperty(PropertyName = "writeConcern", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public int? WriteConcern { get; set; }
+
+        /// <summary>
+        ///  Overflow properties
+        /// </summary>
+        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public Dictionary<string, object> ExtensionData { get; set; }
     }
 }

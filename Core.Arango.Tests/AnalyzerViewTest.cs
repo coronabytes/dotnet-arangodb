@@ -13,7 +13,6 @@ namespace Core.Arango.Tests
         public async Task AnalyzersViews(string serializer)
         {
             await SetupAsync(serializer);
-            var analyzers = await Arango.Analyzer.ListAsync("test");
 
             await Arango.Analyzer.CreateAsync("test", new ArangoAnalyzer
             {
@@ -49,6 +48,21 @@ namespace Core.Arango.Tests
                     }
                 }
             });
+
+
+            var analyzers = await Arango.Analyzer.ListAsync("test");
+
+            foreach (var analyzer in analyzers)
+            {
+                var def = await Arango.Analyzer.GetDefinitionAsync("test", analyzer.Name);
+            }
+
+            var views = await Arango.View.ListAsync("test");
+
+            foreach (var view in views)
+            {
+                var props = await Arango.View.GetPropertiesAsync("test", view.Name);
+            }
 
             await Arango.View.DropAllAsync("test");
 

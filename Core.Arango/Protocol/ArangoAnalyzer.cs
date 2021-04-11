@@ -41,5 +41,12 @@ namespace Core.Arango.Protocol
         [JsonProperty(PropertyName = "features")]
         [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public IList<string> Features { get; set; }
+
+        /// <summary>
+        ///  Overflow properties
+        /// </summary>
+        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public Dictionary<string, object> ExtensionData { get; set; }
     }
 }

@@ -21,9 +21,16 @@ namespace Core.Arango.Modules.Internal
         public async Task<IReadOnlyCollection<ArangoGraph>> ListAsync(ArangoHandle database,
             CancellationToken cancellationToken = default)
         {
-            var res = await SendAsync<GraphResponse<ArangoGraph>>(database, HttpMethod.Get,
+            var res = await SendAsync<GraphsResponse<ArangoGraph>>(database, HttpMethod.Get,
                 ApiPath(database, "gharial"), cancellationToken: cancellationToken);
             return res.Graphs;
+        }
+
+        public async Task<ArangoGraph> GetAsync(ArangoHandle database, string graph, CancellationToken cancellationToken = default)
+        {
+            var res = await SendAsync<GraphResponse<ArangoGraph>>(database, HttpMethod.Get,
+                ApiPath(database, $"gharial/{UrlEncode(graph)}"), cancellationToken: cancellationToken).ConfigureAwait(false);
+            return res.Graph;
         }
 
         public IArangoGraphVertexModule Vertex { get; }

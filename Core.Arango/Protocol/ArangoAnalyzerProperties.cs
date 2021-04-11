@@ -164,5 +164,12 @@ namespace Core.Arango.Protocol
         [JsonProperty(PropertyName = "type", DefaultValueHandling = DefaultValueHandling.Ignore)]
         [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public ArangoAnalyzerGeoJsonType? Type { get; set; }
+
+        /// <summary>
+        ///  Overflow properties
+        /// </summary>
+        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public Dictionary<string, object> ExtensionData { get; set; }
     }
 }

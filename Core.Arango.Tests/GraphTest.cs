@@ -30,6 +30,13 @@ namespace Core.Arango.Tests
                 }
             });
 
+            var list = await Arango.Graph.ListAsync("test");
+
+            foreach (var graph in list)
+            {
+                var def = await Arango.Graph.GetAsync("test", graph.Name);
+            }
+
             await Arango.Graph.Vertex.CreateAsync("test", "graph", "vertices", new
             {
                 Key = "alice",

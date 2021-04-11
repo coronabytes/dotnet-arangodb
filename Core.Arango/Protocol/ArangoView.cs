@@ -5,6 +5,40 @@ using Newtonsoft.Json;
 namespace Core.Arango.Protocol
 {
     /// <summary>
+    ///   Arango View Information
+    /// </summary>
+    public class ArangoViewInformation
+    {
+        /// <summary>
+        ///     The name of the View.
+        /// </summary>
+        [JsonPropertyName("name")]
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [JsonPropertyName("globallyUniqueId")]
+        [JsonProperty(PropertyName = "globallyUniqueId")]
+        public string GloballyUniqueId { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [JsonPropertyName("id")]
+        [JsonProperty(PropertyName = "id")]
+        public string Id{ get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [JsonPropertyName("type")]
+        [JsonProperty(PropertyName = "type")]
+        public string Type { get; set; }
+    }
+
+    /// <summary>
     ///     ArangoSearch View
     /// </summary>
     public class ArangoView
@@ -29,7 +63,7 @@ namespace Core.Arango.Protocol
         /// </summary>
         [JsonPropertyName("links")]
         [JsonProperty(PropertyName = "links")]
-        public IDictionary<string, ArangoLinkProperty> Links { get; set; }
+        public Dictionary<string, ArangoLinkProperty> Links { get; set; }
 
         /// <summary>
         ///     A primary sort order can be defined to enable an AQL optimization.
@@ -126,5 +160,12 @@ namespace Core.Arango.Protocol
         [JsonProperty(PropertyName = "writebufferSizeMax", NullValueHandling = NullValueHandling.Ignore)]
         [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public int? WritebufferSizeMax { get; set; }
+
+        /// <summary>
+        ///  Overflow properties
+        /// </summary>
+        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public Dictionary<string, object> ExtensionData { get; set; }
     }
 }

@@ -1566,6 +1566,11 @@
                 returns a listing of available Analyzer definitions
             </summary>
         </member>
+        <member name="M:Core.Arango.Modules.IArangoAnalyzerModule.GetDefinitionAsync(Core.Arango.ArangoHandle,System.String,System.Threading.CancellationToken)">
+            <summary>
+             returns an Analyzer definition
+            </summary>
+        </member>
         <member name="T:Core.Arango.Modules.IArangoBackupModule">
             <summary>
                 HotBackup (enterprise only)
@@ -2049,6 +2054,11 @@
                 Lists all graphs known to the graph module.
             </summary>
         </member>
+        <member name="M:Core.Arango.Modules.IArangoGraphModule.GetAsync(Core.Arango.ArangoHandle,System.String,System.Threading.CancellationToken)">
+            <summary>
+                Get a graph from the graph module.
+            </summary>
+        </member>
         <member name="M:Core.Arango.Modules.IArangoGraphModule.AddVertexCollectionAsync(Core.Arango.ArangoHandle,System.String,Core.Arango.Protocol.ArangoVertexCollection,System.Threading.CancellationToken)">
             <summary>
                 Add an additional vertex collection to the graph.
@@ -2288,6 +2298,15 @@
                 Returns all Views
             </summary>
         </member>
+        <member name="M:Core.Arango.Modules.IArangoViewModule.GetPropertiesAsync(Core.Arango.ArangoHandle,System.String,System.Threading.CancellationToken)">
+            <summary>
+             Get properties of view
+            </summary>
+            <param name="database"></param>
+            <param name="view"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
         <member name="M:Core.Arango.Modules.Internal.ArangoIndexModule.DropAllAsync(Core.Arango.ArangoHandle,System.Threading.CancellationToken)">
             <summary>
                 Drops all user created indices over all collections in database
@@ -2373,6 +2392,11 @@
         <member name="P:Core.Arango.Protocol.ArangoAnalyzer.Features">
             <summary>
                 The set of features to set on the Analyzer generated fields. The default value is an empty array.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoAnalyzer.ExtensionData">
+            <summary>
+             Overflow properties
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoAnalyzerCase">
@@ -2519,6 +2543,11 @@
         <member name="P:Core.Arango.Protocol.ArangoAnalyzerProperties.Type">
             <summary>
                 (GeoJson)  (default): index all GeoJSON geometry types (Point, Polygon etc.)
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoAnalyzerProperties.ExtensionData">
+            <summary>
+             Overflow properties
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoAnalyzerType">
@@ -3038,6 +3067,11 @@
                 sync on the different DB-Servers. If there are less then these many copies in the cluster a shard will refuse to
                 write. Writes to shards with enough up-to-date copies will succeed at the same time however. The value of
                 writeConcern can not be larger than replicationFactor. (cluster only)
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoGraphOptions.ExtensionData">
+            <summary>
+             Overflow properties
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoIndex">
@@ -3637,6 +3671,31 @@
                 When Removed
             </summary>
         </member>
+        <member name="T:Core.Arango.Protocol.ArangoViewInformation">
+            <summary>
+              Arango View Information
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoViewInformation.Name">
+            <summary>
+                The name of the View.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoViewInformation.GloballyUniqueId">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoViewInformation.Id">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoViewInformation.Type">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="T:Core.Arango.Protocol.ArangoView">
             <summary>
                 ArangoSearch View
@@ -3724,6 +3783,11 @@
                 immutable)
             </summary>
         </member>
+        <member name="P:Core.Arango.Protocol.ArangoView.ExtensionData">
+            <summary>
+             Overflow properties
+            </summary>
+        </member>
         <member name="T:Core.Arango.Protocol.ArangoViewCompressionType">
             <summary>
                 Arango View Compression
@@ -3778,6 +3842,11 @@
         <member name="P:Core.Arango.Protocol.ArangoViewConsolidationPolicy.MinScore">
             <summary>
                 ?
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoViewConsolidationPolicy.ExtensionData">
+            <summary>
+             Overflow properties
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoViewConsolidationType">
