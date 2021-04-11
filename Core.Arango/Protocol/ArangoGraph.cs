@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Core.Arango.Protocol
 {
@@ -54,5 +55,12 @@ namespace Core.Arango.Protocol
         [JsonProperty(PropertyName = "options", DefaultValueHandling = DefaultValueHandling.Ignore)]
         [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public ArangoGraphOptions Options { get; set; }
+
+        /// <summary>
+        ///  Overflow properties
+        /// </summary>
+        [Newtonsoft.Json.JsonExtensionData]
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public Dictionary<string, object> ExtensionData { get; set; }
     }
 }

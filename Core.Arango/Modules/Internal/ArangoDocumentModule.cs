@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
@@ -357,55 +358,38 @@ namespace Core.Arango.Modules.Internal
             return res.SingleOrDefault();
         }
 
-
         public async IAsyncEnumerable<List<T>> ExportAsync<T>(ArangoHandle database,
             string collection, bool? flush = null, int? flushWait = null, int? batchSize = null, int? ttl = null,
             [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
-            var parameter = new Dictionary<string, string>
-            {
-                ["collection"] = collection
-            };
-
-            var query = AddQueryString(
-                ApiPath(database, "export"), parameter);
+            var query = $"FOR x IN {collection} RETURN x";
 
             var firstResult = await SendAsync<QueryResponse<T>>(database, HttpMethod.Post,
-                query,
-                new ExportRequest
+                ApiPath(database, "cursor"),
+                new QueryRequest
                 {
-                    Flush = flush,
-                    FlushWait = flushWait,
+                    Query = query,
+                    BindVars = new Dictionary<string, object>(),
                     BatchSize = batchSize ?? Context.Configuration.BatchSize,
-                    Ttl = ttl
+                    Cache = false
                 }, cancellationToken: cancellationToken);
 
             yield return firstResult.Result;
 
-            if (firstResult.HasMore)
-            {
-                while (true)
-                {
-                    var res = await SendAsync<QueryResponse<T>>(database, HttpMethod.Put,
-                        ApiPath(database, $"cursor/{firstResult.Id}"),
-                        cancellationToken: cancellationToken);
+            if (!firstResult.HasMore)
+                yield break;
 
+            while (true)
+            {
+                var res = await SendAsync<QueryResponse<T>>(database, HttpMethod.Put,
+                    ApiPath(database, $"/cursor/{firstResult.Id}"),
+                    cancellationToken: cancellationToken);
+
+                if (res.Result?.Any() == true)
                     yield return res.Result;
 
-                    if (!res.HasMore)
-                        break;
-                }
-
-                try
-                {
-                    await SendAsync<ArangoVoid>(database, HttpMethod.Delete,
-                        ApiPath(database, $"cursor/{firstResult.Id}"),
-                        cancellationToken: cancellationToken);
-                }
-                catch
-                {
-                    //
-                }
+                if (!res.HasMore)
+                    break;
             }
         }
     }

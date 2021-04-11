@@ -31,17 +31,17 @@ namespace Core.Arango.Modules.Internal
 
             foreach (var col in collections)
             {
-                var indices = await ListAsync(database, col, cancellationToken);
+                var indices = await ListAsync(database, col.Name, cancellationToken);
 
                 foreach (var idx in indices)
-                    await DropAsync(database, idx, cancellationToken);
+                    await DropAsync(database, idx.Id, cancellationToken);
             }
         }
 
         /// <summary>
         ///     Ignores primary and edge indices
         /// </summary>
-        public async Task<List<string>> ListAsync(ArangoHandle database, string collection,
+        public async Task<IReadOnlyCollection<ArangoIndex>> ListAsync(ArangoHandle database, string collection,
             CancellationToken cancellationToken = default)
         {
             var res = await SendAsync<IndexResponse>(database, HttpMethod.Get,
@@ -52,8 +52,7 @@ namespace Core.Arango.Modules.Internal
                 {
                     var type = x.Type;
                     return type != ArangoIndexType.Primary && type != ArangoIndexType.Edge;
-                })
-                .Select(x => x.Id).ToList();
+                }).ToList();
         }
 
         public async Task DropAsync(ArangoHandle database, string index,

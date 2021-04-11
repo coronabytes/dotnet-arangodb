@@ -33,7 +33,7 @@ namespace Core.Arango.Modules
         /// <summary>
         ///     Lists all graphs known to the graph module.
         /// </summary>
-        Task<List<string>> ListAsync(ArangoHandle database, CancellationToken cancellationToken = default);
+        Task<IReadOnlyCollection<ArangoGraph>> ListAsync(ArangoHandle database, CancellationToken cancellationToken = default);
 
         /// <summary>
         ///     Add an additional vertex collection to the graph.

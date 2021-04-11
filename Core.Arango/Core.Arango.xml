@@ -1735,7 +1735,7 @@
         </member>
         <member name="M:Core.Arango.Modules.IArangoDocumentModule.ExportAsync``1(Core.Arango.ArangoHandle,System.String,System.Nullable{System.Boolean},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
             <summary>
-                Note: this API is currently not supported on cluster coordinators.
+               Export all documents in batches from a collection (Query.ExecuteStreamAsync)
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.IArangoDocumentModule.ImportAsync``1(Core.Arango.ArangoHandle,System.String,System.Collections.Generic.IEnumerable{``0},System.Boolean,System.Threading.CancellationToken)">
@@ -2137,7 +2137,7 @@
         </member>
         <member name="M:Core.Arango.Modules.IArangoIndexModule.DropAllAsync(Core.Arango.ArangoHandle,System.Threading.CancellationToken)">
             <summary>
-                Drops all indexes of a collection
+                Drops all indices of a database
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.IArangoIndexModule.DropAsync(Core.Arango.ArangoHandle,System.String,System.Threading.CancellationToken)">
@@ -3001,6 +3001,11 @@
         <member name="P:Core.Arango.Protocol.ArangoGraph.Options">
             <summary>
                 JSON object to define options for creating collections within this graph. It can contain the following attributes:
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoGraph.ExtensionData">
+            <summary>
+             Overflow properties
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoGraphOptions">

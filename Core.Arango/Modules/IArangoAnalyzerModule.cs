@@ -28,6 +28,6 @@ namespace Core.Arango.Modules
         /// <summary>
         ///     returns a listing of available Analyzer definitions
         /// </summary>
-        Task<List<ArangoAnalyzer>> ListAsync(ArangoHandle database, CancellationToken cancellationToken = default);
+        Task<IReadOnlyCollection<ArangoAnalyzer>> ListAsync(ArangoHandle database, CancellationToken cancellationToken = default);
     }
 }

@@ -28,6 +28,6 @@ namespace Core.Arango.Modules
         /// <summary>
         ///     Returns all Views
         /// </summary>
-        Task<List<string>> ListAsync(ArangoHandle database, CancellationToken cancellationToken = default);
+        Task<IReadOnlyCollection<ArangoView>> ListAsync(ArangoHandle database, CancellationToken cancellationToken = default);
     }
 }

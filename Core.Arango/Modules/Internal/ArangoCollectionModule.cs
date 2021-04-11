@@ -43,13 +43,13 @@ namespace Core.Arango.Modules.Internal
                 cancellationToken: cancellationToken);
         }
 
-        public async Task<List<string>> ListAsync(ArangoHandle database,
+        public async Task<IReadOnlyCollection<ArangoCollection>> ListAsync(ArangoHandle database,
             CancellationToken cancellationToken = default)
         {
             var res = await SendAsync<QueryResponse<ArangoCollection>>(database, HttpMethod.Get,
                 ApiPath(database, "collection?excludeSystem=true"),
                 cancellationToken: cancellationToken);
-            return res.Result.Select(x => x.Name).ToList();
+            return res.Result;
         }
 
         public async Task UpdateAsync(ArangoHandle database, string collection, ArangoCollectionUpdate update,
@@ -78,7 +78,7 @@ namespace Core.Arango.Modules.Internal
         {
             var collections = await ListAsync(database, cancellationToken);
 
-            return collections.Contains(collection);
+            return collections.Any(x=>x.Name.Equals(collection));
         }
 
         public async Task<ArangoCollection> GetAsync(ArangoHandle database, string collection,

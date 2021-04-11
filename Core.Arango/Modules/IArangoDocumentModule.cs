@@ -124,7 +124,7 @@ namespace Core.Arango.Modules
             CancellationToken cancellationToken = default);
 
         /// <summary>
-        ///     Note: this API is currently not supported on cluster coordinators.
+        ///    Export all documents in batches from a collection (Query.ExecuteStreamAsync)
         /// </summary>
         IAsyncEnumerable<List<T>> ExportAsync<T>(ArangoHandle database, string collection, bool? flush = null,
             int? flushWait = null, int? batchSize = null, int? ttl = null,

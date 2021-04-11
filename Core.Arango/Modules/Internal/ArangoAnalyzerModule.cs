@@ -13,7 +13,7 @@ namespace Core.Arango.Modules.Internal
         {
         }
 
-        public async Task<List<ArangoAnalyzer>> ListAsync(ArangoHandle database,
+        public async Task<IReadOnlyCollection<ArangoAnalyzer>> ListAsync(ArangoHandle database,
             CancellationToken cancellationToken = default)
         {
             return (await SendAsync<QueryResponse<ArangoAnalyzer>>(database, HttpMethod.Get,

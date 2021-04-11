@@ -25,7 +25,7 @@ namespace Core.Arango.Modules
         /// <summary>
         ///     Returns all collections
         /// </summary>
-        Task<List<string>> ListAsync(ArangoHandle database, CancellationToken cancellationToken = default);
+        Task<IReadOnlyCollection<ArangoCollection>> ListAsync(ArangoHandle database, CancellationToken cancellationToken = default);
 
         /// <summary>
         ///     Renames a collection (not in cluster)

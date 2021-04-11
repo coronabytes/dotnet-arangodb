@@ -23,13 +23,13 @@ namespace Core.Arango.Modules.Internal
                 cancellationToken: cancellationToken);
         }
 
-        public async Task<List<string>> ListAsync(ArangoHandle database,
+        public async Task<IReadOnlyCollection<ArangoView>> ListAsync(ArangoHandle database,
             CancellationToken cancellationToken = default)
         {
             var res = await SendAsync<QueryResponse<ArangoView>>(database, HttpMethod.Get,
                 ApiPath(database, "view"),
                 cancellationToken: cancellationToken);
-            return res.Result.Select(x => x.Name).ToList();
+            return res.Result;
         }
 
         public async Task DropAsync(ArangoHandle database,
@@ -46,7 +46,7 @@ namespace Core.Arango.Modules.Internal
             var views = await ListAsync(database, cancellationToken);
 
             foreach (var view in views)
-                await DropAsync(database, view, cancellationToken);
+                await DropAsync(database, view.Name, cancellationToken);
         }
     }
 }

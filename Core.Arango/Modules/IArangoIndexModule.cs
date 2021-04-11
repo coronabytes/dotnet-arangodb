@@ -17,7 +17,7 @@ namespace Core.Arango.Modules
             CancellationToken cancellationToken = default);
 
         /// <summary>
-        ///     Drops all indexes of a collection
+        ///     Drops all indices of a database
         /// </summary>
         Task DropAllAsync(ArangoHandle database, CancellationToken cancellationToken = default);
 
@@ -29,7 +29,7 @@ namespace Core.Arango.Modules
         /// <summary>
         ///     Returns all indexes of a collection
         /// </summary>
-        Task<List<string>> ListAsync(ArangoHandle database, string collection,
+        Task<IReadOnlyCollection<ArangoIndex>> ListAsync(ArangoHandle database, string collection,
             CancellationToken cancellationToken = default);
     }
 }

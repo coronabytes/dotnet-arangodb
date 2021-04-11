@@ -18,12 +18,12 @@ namespace Core.Arango.Modules.Internal
             Edge = new ArangoGraphEdgeModule(context);
         }
 
-        public async Task<List<string>> ListAsync(ArangoHandle database,
+        public async Task<IReadOnlyCollection<ArangoGraph>> ListAsync(ArangoHandle database,
             CancellationToken cancellationToken = default)
         {
-            var res = await SendAsync<GraphResponse<GraphRes>>(database, HttpMethod.Get,
+            var res = await SendAsync<GraphResponse<ArangoGraph>>(database, HttpMethod.Get,
                 ApiPath(database, "gharial"), cancellationToken: cancellationToken);
-            return res.Graphs.Select(x => x.Key).ToList();
+            return res.Graphs;
         }
 
         public IArangoGraphVertexModule Vertex { get; }
