@@ -3487,6 +3487,11 @@
                 Sort direction
             </summary>
         </member>
+        <member name="P:Core.Arango.Protocol.ArangoSort.ExtensionData">
+            <summary>
+             Overflow properties
+            </summary>
+        </member>
         <member name="T:Core.Arango.Protocol.ArangoTransaction">
             <summary>
                 Arango JavaScript transaction
@@ -3671,31 +3676,6 @@
                 When Removed
             </summary>
         </member>
-        <member name="T:Core.Arango.Protocol.ArangoViewInformation">
-            <summary>
-              Arango View Information
-            </summary>
-        </member>
-        <member name="P:Core.Arango.Protocol.ArangoViewInformation.Name">
-            <summary>
-                The name of the View.
-            </summary>
-        </member>
-        <member name="P:Core.Arango.Protocol.ArangoViewInformation.GloballyUniqueId">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="P:Core.Arango.Protocol.ArangoViewInformation.Id">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="P:Core.Arango.Protocol.ArangoViewInformation.Type">
-            <summary>
-            
-            </summary>
-        </member>
         <member name="T:Core.Arango.Protocol.ArangoView">
             <summary>
                 ArangoSearch View
@@ -3867,6 +3847,31 @@
                 i.e. the sum of all candidate segment byte size is less than the total segment byte size multiplied by the
                 {threshold}.
                 If this type is used, then below threshold property is available.
+            </summary>
+        </member>
+        <member name="T:Core.Arango.Protocol.ArangoViewInformation">
+            <summary>
+              Arango View Information
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoViewInformation.Name">
+            <summary>
+                The name of the View.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoViewInformation.GloballyUniqueId">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoViewInformation.Id">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoViewInformation.Type">
+            <summary>
+            
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoViewStoredValue">
