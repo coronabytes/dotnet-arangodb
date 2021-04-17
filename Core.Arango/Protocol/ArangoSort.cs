@@ -21,7 +21,7 @@ namespace Core.Arango.Protocol
         /// </summary>
         [JsonPropertyName("direction")]
         [JsonProperty(PropertyName = "direction")]
-        public string Direction { get; set; }
+        public ArangoSortDirection Direction { get; set; }
 
         /// <summary>
         ///  Overflow properties

@@ -3783,6 +3783,21 @@
                 None
             </summary>
         </member>
+        <member name="T:Core.Arango.Protocol.ArangoSortDirection">
+            <summary>
+                Arango View Compression
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoSortDirection.Asc">
+            <summary>
+                Ascending
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoSortDirection.Desc">
+            <summary>
+                Descending
+            </summary>
+        </member>
         <member name="T:Core.Arango.Protocol.ArangoViewConsolidationPolicy">
             <summary>
                 Arango View Consolidation Policy

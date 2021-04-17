@@ -22,4 +22,22 @@ namespace Core.Arango.Protocol
         /// </summary>
         [EnumMember(Value = "none")] None
     }
+
+    /// <summary>
+    ///     Arango View Compression
+    /// </summary>
+    [JsonConverter(typeof(JsonStringEnumMemberConverter))]
+    [Newtonsoft.Json.JsonConverter(typeof(StringEnumConverter))]
+    public enum ArangoSortDirection
+    {
+        /// <summary>
+        ///     Ascending
+        /// </summary>
+        [EnumMember(Value = "asc")] Asc,
+
+        /// <summary>
+        ///     Descending
+        /// </summary>
+        [EnumMember(Value = "desc")] Desc
+    }
 }
