@@ -2,21 +2,25 @@
 [![Nuget](https://img.shields.io/nuget/v/Core.Arango)](https://www.nuget.org/packages/Core.Arango)
 [![Nuget](https://img.shields.io/nuget/dt/Core.Arango)](https://www.nuget.org/packages/Core.Arango)
 
-# .NET driver for ArangoDB
-- .NET Standard 2.1 / .NET 5.0 driver for ArangoDB 3.6, 3.7, 3.8+
-- Nuget [Core.ArangoDB](https://www.nuget.org/packages/Core.Arango)
-- The key difference to any other available driver is the ability to switch databases on a per request basis, which allows for easy database per tenant deployments
-- Id, Key, Revision, From, To properties will always be translated to their respective arango form (_id, _key, _rev, _from, _to), which allows to construct updates from anonymous types
-- First parameter of any method in most cases is an ArangoHandle which has implicit conversion from string and GUID
-  - e.g. "master" and "logs" database and GUID for each tenant
+```
+dotnet add package Core.Arango
+```
 
-# Changes in 3.0
-- Optional support for System.Text.Json serializer which in some cases is twice as fast as Newtonsoft
-- Still netstandard 2.1 however dependencies have been updated to 5.0.0 - required for new json serializer - should still work with 3.1
-- Collections schema management is now functional
+# .NET driver for ArangoDB
+- .NET Standard 2.1 and .NET 5.0 driver for ArangoDB 3.7 and 3.8+
+- Newtonsoft and System.Text.Json serialization support with PascalCase and camelCase options
+- Updates from anymous types supported as (Id, Key, Revision, From, To) properties will always be translated to their respective arango form (_id, _key, _rev, _from, _to)
 
 # Extensions
-This driver has some [extensions](https://github.com/coronabytes/dotnet-arangodb-extensions) for LINQ, DevExtreme, Serilog and DataProtection available.
+This driver has various [extensions](https://github.com/coronabytes/dotnet-arangodb-extensions) available.
+
+| Extension   | Nuget        |
+| :---        | :---    |
+| [Core.Arango.Migration](https://www.nuget.org/packages/Core.Arango.Migration) | ![Nuget](https://img.shields.io/nuget/v/Core.Arango.Migration) ![Nuget](https://img.shields.io/nuget/dt/Core.Arango.Migration) |
+| [Core.Arango.DataProtection](https://www.nuget.org/packages/Core.Arango.DataProtection) | ![Nuget](https://img.shields.io/nuget/v/Core.Arango.DataProtection) ![Nuget](https://img.shields.io/nuget/dt/Core.Arango.DataProtection) |
+| [Core.Arango.DevExtreme](https://www.nuget.org/packages/Core.Arango.DevExtreme) | ![Nuget](https://img.shields.io/nuget/v/Core.Arango.DevExtreme) ![Nuget](https://img.shields.io/nuget/dt/Core.Arango.DevExtreme) |
+| [Core.Arango.Linq](https://www.nuget.org/packages/Core.Arango.Linq) | ![Nuget](https://img.shields.io/nuget/v/Core.Arango.Linq) ![Nuget](https://img.shields.io/nuget/dt/Core.Arango.Linq) |
+| [Core.Arango.Serilog](https://www.nuget.org/packages/Core.Arango.Serilog) | ![Nuget](https://img.shields.io/nuget/v/Core.Arango.Serilog) ![Nuget](https://img.shields.io/nuget/dt/Core.Arango.Serilog) |
 
 # Common Snippets
 
@@ -183,7 +187,7 @@ await arango.Analyzer.CreateAsync("database", new ArangoAnalyzer
     Properties = new ArangoAnalyzerProperties
     {
         Locale = "de.utf-8",
-        Case = "lower",
+        Case = ArangoAnalyzerCase.Lower,
         Accent = false,
         Stopwords = new List<string>(),
         Stemming = false
@@ -218,7 +222,7 @@ await arango.View.CreateAsync("database", new ArangoView
         new ArangoSort
         {
             Field = "SomeProperty",
-            Direction = "asc"
+            Direction = ArangoSortDirection.Asc
         }
     }
 });
@@ -231,16 +235,16 @@ await Arango.Collection.CreateAsync("database", "edges", ArangoCollectionType.Ed
 
 await Arango.Graph.CreateAsync("database", new ArangoGraph
 {
-	Name = "graph",
-	EdgeDefinitions = new List<ArangoEdgeDefinition>
-	{
-		new()
-		{
-			Collection = "edges",
-			From = new List<string> {"vertices"},
-			To = new List<string> {"vertices"}
-		}
-	}
+    Name = "graph",
+    EdgeDefinitions = new List<ArangoEdgeDefinition>
+    {
+        new()
+        {
+          Collection = "edges",
+          From = new List<string> {"vertices"},
+          To = new List<string> {"vertices"}
+        }
+    }
 });
 ```
 
@@ -248,27 +252,27 @@ await Arango.Graph.CreateAsync("database", new ArangoGraph
 ```csharp
 await arango.Graph.Vertex.CreateAsync("database", "graph", "vertices", new
 {
-	Key = "alice",
-	Name = "Alice"
+    Key = "alice",
+    Name = "Alice"
 });
 
 await arango.Graph.Vertex.CreateAsync("database", "graph", "vertices", new
 {
-	Key = "bob",
-	Name = "Bob"
+    Key = "bob",
+    Name = "Bob"
 });
 
 await arango.Graph.Edge.CreateAsync("database", "graph", "edges", new
 {
-	Key = "ab",
-	From = "vertices/alice",
-	To = "vertices/bob",
-	Label = "friend"
+    Key = "ab",
+    From = "vertices/alice",
+    To = "vertices/bob",
+    Label = "friend"
 });
 
 await arango.Graph.Edge.UpdateAsync("database", "graph", "edges", "ab", new
 {
-	Label = "foe"
+    Label = "foe"
 });
 
 await arango.Graph.Vertex.RemoveAsync("database", "graph", "vertices", "bob");
@@ -278,9 +282,9 @@ await arango.Graph.Vertex.RemoveAsync("database", "graph", "vertices", "bob");
 ```csharp
 await arango.Function.CreateAsync("database", new ArangoFunctionDefinition
 {
-    Name = "CUSTOM::TIMES10",
-    Code = "function (a) { return a * 10; }",
-    IsDeterministic = true
+  Name = "CUSTOM::TIMES10",
+  Code = "function (a) { return a * 10; }",
+  IsDeterministic = true
 });
 ```
 
@@ -307,33 +311,6 @@ await arango.Document.CreateAsync(transaction, "collection", new
 });
 
 await arango.Transaction.CommitAsync(transaction);
-```
-
-## Batch requests
-For performance optimization multiple requests can be batched together into a single HTTP request.
-Query and export cursors will only return the first 'page' though.
-
-No transaction support for now: (https://github.com/arangodb/arangodb/issues/13552)
-
-```csharp
-var batch = Arango.Batch.Create("database");
-var r1 = Arango.Document.CreateAsync(batch, "test", new Entity
-{
-	Key = "1",
-	Name = "a"
-});
-
-var r2 = Arango.Document.CreateAsync(batch, "test", new Entity
-{
-	Key = "2",
-	Name = "b"
-});
-
-await Arango.Batch.ExecuteAsync(batch);
-
-// For demonstation purposes
-// The tasks will finish instantly or throw an exception if the underyling operation failed
-await Task.WhenAll(r1, r2);
 ```
 
 ## Foxx services
