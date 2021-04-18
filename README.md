@@ -9,7 +9,8 @@ dotnet add package Core.Arango
 # .NET driver for ArangoDB
 - .NET Standard 2.1 and .NET 5.0 driver for ArangoDB 3.7 and 3.8+
 - Newtonsoft and System.Text.Json serialization support with PascalCase and camelCase options
-- Updates from anymous types supported as (Id, Key, Revision, From, To) properties will always be translated to their respective arango form (_id, _key, _rev, _from, _to)
+- Updates from anonymous types supported as (Id, Key, Revision, From, To) properties are translated to (_id, _key, _rev, _from, _to)
+  - This means these property names are reserved and cannot be used for something else (e.g. "To" property in email collection) 
 
 # Extensions
 This driver has various [extensions](https://github.com/coronabytes/dotnet-arangodb-extensions) available.
