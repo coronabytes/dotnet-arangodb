@@ -132,12 +132,12 @@ namespace Core.Arango.Linq.Query
             else if (fromClause.FromExpression.Type.Name == "ArangoQueryable`1")
             {
                 var fromName = LinqUtility.ResolveCollectionName(Db, fromClause.ItemType);
-                QueryText.AppendFormat(" for {0} in {1} ", LinqUtility.ResolvePropertyName(fromClause.ItemName),
+                QueryText.AppendFormat(" FOR {0} IN {1} ", LinqUtility.ResolvePropertyName(fromClause.ItemName),
                     fromName);
             }
             else
             {
-                QueryText.AppendFormat(" for {0} in ", LinqUtility.ResolvePropertyName(fromClause.ItemName));
+                QueryText.AppendFormat(" FOR {0} IN ", LinqUtility.ResolvePropertyName(fromClause.ItemName));
                 GetAqlExpression(fromClause.FromExpression, queryModel);
             }
         }
@@ -170,18 +170,18 @@ namespace Core.Arango.Linq.Query
                 if (fromClause.FromExpression.Type.Name == "ArangoQueryable`1" ||
                     fromClause.FromExpression.Type.Name == "IGrouping`2")
                 {
-                    QueryText.AppendFormat(" for {0} in {1} ", LinqUtility.ResolvePropertyName(fromClause.ItemName),
+                    QueryText.AppendFormat(" FOR {0} IN {1} ", LinqUtility.ResolvePropertyName(fromClause.ItemName),
                         fromName);
                 }
                 else
                 {
-                    QueryText.AppendFormat(" for {0} in ", LinqUtility.ResolvePropertyName(fromClause.ItemName));
+                    QueryText.AppendFormat(" FOR {0} IN ", LinqUtility.ResolvePropertyName(fromClause.ItemName));
                     GetAqlExpression(fromClause.FromExpression, queryModel);
                 }
             }
             else
             {
-                QueryText.AppendFormat(" for {0} in ", LinqUtility.ResolvePropertyName(fromClause.ItemName));
+                QueryText.AppendFormat(" FOR {0} IN ", LinqUtility.ResolvePropertyName(fromClause.ItemName));
                 GetAqlExpression(fromClause.FromExpression, queryModel);
             }
 
@@ -190,7 +190,7 @@ namespace Core.Arango.Linq.Query
 
         public void VisitLetClause(LetClause letClause, QueryModel queryModel, Type lhsType)
         {
-            QueryText.AppendFormat(" let {0} = ", LinqUtility.ResolvePropertyName(letClause.ItemName));
+            QueryText.AppendFormat(" LET {0} = ", LinqUtility.ResolvePropertyName(letClause.ItemName));
             GetAqlExpression(letClause.LetExpression, queryModel);
 
             var subQuery = letClause.SubqueryExpression as SubQueryExpression;
@@ -203,22 +203,22 @@ namespace Core.Arango.Linq.Query
 
         public override void VisitSelectClause(SelectClause selectClause, QueryModel queryModel)
         {
-            QueryText.AppendFormat(" return {0} ", DistinctResult ? "distinct" : string.Empty);
+            QueryText.AppendFormat(" RETURN {0} ", DistinctResult ? "DISTINCT" : string.Empty);
             GetAqlExpression(selectClause.Selector, queryModel);
         }
 
         public void VisitUpsertClause(UpsertClause upsertClause, QueryModel queryModel)
         {
-            QueryText.Append(" upsert ");
+            QueryText.Append(" UPSERT ");
             GetAqlExpression(upsertClause.SearchSelector, queryModel);
 
-            QueryText.Append(" insert ");
+            QueryText.Append(" INSERT ");
             GetAqlExpression(upsertClause.InsertSelector, queryModel);
 
-            QueryText.Append(" update ");
+            QueryText.Append(" UPDATE ");
             GetAqlExpression(upsertClause.UpdateSelector, queryModel);
 
-            QueryText.AppendFormat(" in {0} ", LinqUtility.ResolveCollectionName(Db, upsertClause.CollectionType));
+            QueryText.AppendFormat(" IN {0} ", LinqUtility.ResolveCollectionName(Db, upsertClause.CollectionType));
         }
 
         public void VisitUpdateReplaceClause(UpdateReplaceClause updateReplaceClause, QueryModel queryModel)
@@ -229,17 +229,17 @@ namespace Core.Arango.Linq.Query
 
                 GetAqlExpression(updateReplaceClause.KeySelector, queryModel);
 
-                QueryText.AppendFormat(" with ");
+                QueryText.AppendFormat(" WITH ");
             }
             else
             {
-                QueryText.AppendFormat(" {0} {1} with ", updateReplaceClause.Command,
+                QueryText.AppendFormat(" {0} {1} WITH ", updateReplaceClause.Command,
                     LinqUtility.ResolvePropertyName(updateReplaceClause.ItemName));
             }
 
             GetAqlExpression(updateReplaceClause.WithSelector, queryModel);
 
-            QueryText.AppendFormat(" in {0} ",
+            QueryText.AppendFormat(" IN {0} ",
                 LinqUtility.ResolveCollectionName(Db, updateReplaceClause.CollectionType));
         }
 
@@ -247,37 +247,37 @@ namespace Core.Arango.Linq.Query
         {
             if (insertClause.WithSelector != null)
             {
-                QueryText.Append(" insert ");
+                QueryText.Append(" INSERT ");
 
                 GetAqlExpression(insertClause.WithSelector, queryModel);
             }
             else
             {
-                QueryText.AppendFormat(" insert {0} ", LinqUtility.ResolvePropertyName(insertClause.ItemName));
+                QueryText.AppendFormat(" INSERT {0} ", LinqUtility.ResolvePropertyName(insertClause.ItemName));
             }
 
-            QueryText.AppendFormat(" in {0} ", LinqUtility.ResolveCollectionName(Db, insertClause.CollectionType));
+            QueryText.AppendFormat(" IN {0} ", LinqUtility.ResolveCollectionName(Db, insertClause.CollectionType));
         }
 
         public void VisitRemoveClause(RemoveClause removeClause, QueryModel queryModel)
         {
             if (removeClause.KeySelector != null)
             {
-                QueryText.Append(" remove ");
+                QueryText.Append(" REMOVE ");
 
                 GetAqlExpression(removeClause.KeySelector, queryModel);
             }
             else
             {
-                QueryText.AppendFormat(" remove {0} ", LinqUtility.ResolvePropertyName(removeClause.ItemName));
+                QueryText.AppendFormat(" REMOVE {0} ", LinqUtility.ResolvePropertyName(removeClause.ItemName));
             }
 
-            QueryText.AppendFormat(" in {0} ", LinqUtility.ResolveCollectionName(Db, removeClause.CollectionType));
+            QueryText.AppendFormat(" IN {0} ", LinqUtility.ResolveCollectionName(Db, removeClause.CollectionType));
         }
 
         public void VisitFilterClause(FilterClause filterClause, QueryModel queryModel, int index)
         {
-            QueryText.Append(" filter ");
+            QueryText.Append(" FILTER ");
             GetAqlExpression(filterClause.Predicate, queryModel);
         }
 
@@ -287,7 +287,7 @@ namespace Core.Arango.Linq.Query
                 throw new InvalidOperationException(
                     "in limit[skip & take functions] count[take function] should be specified");
 
-            QueryText.AppendFormat("  limit ");
+            QueryText.AppendFormat("  LIMIT ");
             if (skipTakeClause != null && skipTakeClause.SkipCount != null)
             {
                 GetAqlExpression(skipTakeClause.SkipCount, queryModel);
@@ -302,11 +302,11 @@ namespace Core.Arango.Linq.Query
             var prefix = LinqUtility.MemberNameFromMap(traversalClause.Identifier, "graph", this);
 
             if (traversalClause.TargetVertex != null)
-                QueryText.AppendFormat(" for {0}, {1} in ",
+                QueryText.AppendFormat(" FOR {0}, {1} IN ",
                     LinqUtility.ResolvePropertyName($"{prefix}_Vertex"),
                     LinqUtility.ResolvePropertyName($"{prefix}_Edge"));
             else
-                QueryText.AppendFormat(" for {0}, {1}, {2} in ",
+                QueryText.AppendFormat(" FOR {0}, {1}, {2} IN ",
                     LinqUtility.ResolvePropertyName($"{prefix}_Vertex"),
                     LinqUtility.ResolvePropertyName($"{prefix}_Edge"),
                     LinqUtility.ResolvePropertyName($"{prefix}_Path"));
@@ -322,7 +322,7 @@ namespace Core.Arango.Linq.Query
             {
                 QueryText.Append(" shortest_path ");
                 GetAqlExpression(traversalClause.StartVertex, queryModel);
-                QueryText.Append(" to ");
+                QueryText.Append(" TO ");
                 GetAqlExpression(traversalClause.TargetVertex, queryModel);
             }
             else
@@ -332,7 +332,7 @@ namespace Core.Arango.Linq.Query
 
             if (string.IsNullOrEmpty(traversalClause.GraphName) == false)
             {
-                QueryText.AppendFormat("  graph \"{0}\" ", traversalClause.GraphName);
+                QueryText.AppendFormat("  GRAPH \"{0}\" ", traversalClause.GraphName);
             }
             else
             {
@@ -363,7 +363,7 @@ namespace Core.Arango.Linq.Query
 
         public override void VisitWhereClause(WhereClause whereClause, QueryModel queryModel, int index)
         {
-            QueryText.Append(" filter ");
+            QueryText.Append(" FILTER ");
             GetAqlExpression(whereClause.Predicate, queryModel);
         }
 
@@ -375,7 +375,7 @@ namespace Core.Arango.Linq.Query
             groupByClause.FuncIntoName = Db.TranslateGroupByIntoName;
             groupByClause.FromParameterName = queryModel.MainFromClause.ItemName;
 
-            QueryText.Append(" collect ");
+            QueryText.Append(" COLLECT ");
 
             if (groupByClause.Selector.NodeType != ExpressionType.New)
             {
@@ -385,14 +385,14 @@ namespace Core.Arango.Linq.Query
 
             GetAqlExpression(groupByClause.Selector, queryModel, true);
 
-            QueryText.AppendFormat(" into {0} ", LinqUtility.ResolvePropertyName(groupByClause.TranslateIntoName()));
+            QueryText.AppendFormat(" INTO {0} ", LinqUtility.ResolvePropertyName(groupByClause.TranslateIntoName()));
 
             groupByClause.Visited = true;
         }
 
         public override void VisitOrderByClause(OrderByClause orderByClause, QueryModel queryModel, int index)
         {
-            QueryText.Append(" sort ");
+            QueryText.Append(" SORT ");
             for (var i = 0; i < orderByClause.Orderings.Count; i++)
             {
                 GetAqlExpression(orderByClause.Orderings[i].Expression, queryModel);

@@ -12,6 +12,14 @@ namespace Core.Arango.Linq
     {
         private static Exception E => new NotImplementedException();
 
+        /// <summary>
+        ///  SPECIAL: Force return type
+        /// </summary>
+        public static T As<T>(object v)
+        {
+            throw E;
+        }
+
         [AqlFunction("NEW", true)]
         public static T New<T>()
         {

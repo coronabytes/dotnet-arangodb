@@ -23,13 +23,22 @@ namespace Core.Arango.Tests.Core
         public int Value { get; set; }
     }
 
+    public class Client
+    {
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
+        [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Key { get; set; }
+        public string Name { get; set; }
+    }
+
     public class Project
     {
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
         [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string Key { get; set; }
         public string Name { get; set; }
-        public Guid? ParentKey { get; set; }
+        public string ClientKey { get; set; }
+        public string ParentKey { get; set; }
     }
 
     public class Activity

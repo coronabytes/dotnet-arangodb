@@ -32,7 +32,7 @@ namespace Core.Arango.Linq.Query
 
         protected override Expression VisitMethodCall(MethodCallExpression expression)
         {
-            if (expression.Method.Name == "As")
+            if (expression.Method.Name == "As" && expression.Method.DeclaringType == typeof(Aql))
             {
                 Visit(expression.Arguments[0]);
                 return expression;

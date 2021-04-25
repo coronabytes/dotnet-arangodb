@@ -1571,6 +1571,11 @@
             Built-on AQL functions
             </summary>
         </member>
+        <member name="M:Core.Arango.Linq.Aql.As``1(System.Object)">
+            <summary>
+             SPECIAL: Force return type
+            </summary>
+        </member>
         <member name="M:Core.Arango.Linq.Aql.Distance(System.Double,System.Double,System.Double,System.Double)">
             <summary>
                 Calculate the distance between two arbitrary coordinates in meters (as birds would fly). The value is computed
