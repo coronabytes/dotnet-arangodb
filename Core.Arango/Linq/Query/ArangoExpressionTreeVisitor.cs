@@ -47,18 +47,29 @@ namespace Core.Arango.Linq.Query
                 return expression;
             }
 
+            string methodName = expression.Method.Name;
+            bool prop = false;
+
+            if (expression.Method.DeclaringType == typeof(Math))
+            {
+                if (MathMethods.TryGetValue(expression.Method.Name, out var m))
+                    methodName = m;
+                else
+                    throw new InvalidOperationException($"Method {expression.Method.Name} is not supported in ArangoLinqProvider");
+            }
+            else
+            {
+                var aqlFunction = expression.Method.GetCustomAttribute<AqlFunctionAttribute>();
+
+                if (aqlFunction == null)
+                    throw new InvalidOperationException($"Method {expression.Method.Name} is not supported in ArangoLinqProvider");
+
+                methodName = aqlFunction.Name;
+                prop = aqlFunction.IsProperty;
+            }
             
-
-            var aqlFunction = expression.Method.GetCustomAttribute<AqlFunctionAttribute>();
-
-            if (aqlFunction == null)
-                throw new InvalidOperationException(
-                    $"Method {expression.Method.Name} is not supported in ArangoLinqProvider");
-
-            string methodName = aqlFunction.Name;
-
             string argumentSeprator = null;
-            var noParenthesis = methodsWithNoParenthesis.TryGetValue(methodName, out argumentSeprator) || aqlFunction.IsProperty;
+            var noParenthesis = MethodsWithNoParenthesis.TryGetValue(methodName, out argumentSeprator) || prop;
 
             if (!noParenthesis)
             {
@@ -67,14 +78,14 @@ namespace Core.Arango.Linq.Query
             }
 
             Type[] genericArguments = null;
-            if (methodsWithFirstGenericArgument.Contains(methodName))
+            if (MethodsWithFirstGenericArgument.Contains(methodName))
             {
                 genericArguments = expression.Method.GetGenericArguments();
                 var collection = LinqUtility.ResolveCollectionName(ModelVisitor.Db, genericArguments[0]);
                 ModelVisitor.QueryText.AppendFormat(" {0}{1}", collection, argumentSeprator);
             }
 
-            if (methodsWithSecondGenericArgument.Contains(methodName))
+            if (MethodsWithSecondGenericArgument.Contains(methodName))
             {
                 var collection = LinqUtility.ResolveCollectionName(ModelVisitor.Db, genericArguments[1]);
                 ModelVisitor.QueryText.AppendFormat(" {0}{1}", collection, argumentSeprator);

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -63,6 +64,21 @@ namespace Core.Arango.Tests
                 {
                     Parent = x.Key,
                     Max = x.Max(y=>y.Budget)
+                });
+
+            _output.WriteLine(q.ToAql().aql);
+            _output.WriteLine("");
+            //_output.WriteLine(JsonConvert.SerializeObject(await q.ToListAsync(), Formatting.Indented));
+        }
+
+        [Fact]
+        public async Task MathAbs()
+        {
+            var q = Arango.Query<Project>("test")
+                .Select(x => new
+                {
+                    x.Key,
+                    Budget = Math.Abs(x.Budget)
                 });
 
             _output.WriteLine(q.ToAql().aql);
