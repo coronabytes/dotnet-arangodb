@@ -75,5 +75,20 @@ namespace Core.Arango
         ///     Multiple servers
         /// </summary>
         public IReadOnlyList<string> Endpoints { get; set; }
+
+        /// <summary>
+        ///  LINQ: resolve property name
+        /// </summary>
+        public Func<Type, string, string> ResolveProperty { get; set; }
+
+        /// <summary>
+        ///  LINQ: resolve type to collection name
+        /// </summary>
+        public Func<Type, string> ResolveCollection { get; set; }
+
+        /// <summary>
+        ///  LINQ: resolve group names
+        /// </summary>
+        public Func<string, string> ResolveGroupBy { get; set; }
     }
 }

@@ -49,6 +49,15 @@
         <member name="P:Core.Arango.ArangoConfiguration.Endpoints">
             <inheritdoc />
         </member>
+        <member name="P:Core.Arango.ArangoConfiguration.ResolveProperty">
+            <inheritdoc />
+        </member>
+        <member name="P:Core.Arango.ArangoConfiguration.ResolveCollection">
+            <inheritdoc />
+        </member>
+        <member name="P:Core.Arango.ArangoConfiguration.ResolveGroupBy">
+            <inheritdoc />
+        </member>
         <member name="T:Core.Arango.ArangoContext">
             <inheritdoc />
         </member>
@@ -1457,6 +1466,21 @@
                 Multiple servers
             </summary>
         </member>
+        <member name="P:Core.Arango.IArangoConfiguration.ResolveProperty">
+            <summary>
+             LINQ: resolve property name
+            </summary>
+        </member>
+        <member name="P:Core.Arango.IArangoConfiguration.ResolveCollection">
+            <summary>
+             LINQ: resolve type to collection name
+            </summary>
+        </member>
+        <member name="P:Core.Arango.IArangoConfiguration.ResolveGroupBy">
+            <summary>
+             LINQ: resolve group names
+            </summary>
+        </member>
         <member name="T:Core.Arango.IArangoContext">
             <summary>
                 Arango connection to server or cluster
@@ -1541,6 +1565,499 @@
             <summary>
                 Get Arango cluster endpoints
             </summary>
+        </member>
+        <member name="T:Core.Arango.Linq.Aql">
+            <summary>
+            Built-on AQL functions
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Distance(System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+                Calculate the distance between two arbitrary coordinates in meters (as birds would fly). The value is computed
+                using the haversine formula, which is based on a spherical Earth model. It’s fast to compute and is accurate to
+                around 0.3%, which is sufficient for most use cases such as location-aware services.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.GeoContains(System.Object,System.Object)">
+            <summary>
+                Checks whether the GeoJSON object geoJsonA fully contains geoJsonB (Every point in B is also in A). The object
+                geoJsonA has to be of type Polygon or MultiPolygon, other types are not supported because containment is ill
+                defined. This function can be optimized by a S2 based geospatial index.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.GeoDistance(System.Object,System.Object)">
+            <summary>
+                Return the distance between two GeoJSON objects, measured from the centroid of each shape.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.GeoDistance(System.Object,System.Object,System.String)">
+            <summary>
+                Return the distance between two GeoJSON objects, measured from the centroid of each shape.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.GeoArea(System.Object)">
+            <summary>
+                Return the area for a polygon or multi-polygon on a sphere with the average Earth radius, or an ellipsoid.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.GeoArea(System.Object,System.String)">
+            <summary>
+                Return the area for a polygon or multi-polygon on a sphere with the average Earth radius, or an ellipsoid.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.GeoEquals(System.Object,System.Object)">
+            <summary>
+                Checks whether two GeoJSON objects are equal or not.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.GeoIntersects(System.Object,System.Object)">
+            <summary>
+                Checks whether the GeoJSON object geoJsonA intersects with geoJsonB (i.e. at least one point in B is also A or
+                vice-versa). This function can be optimized by a S2 based geospatial index.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.GeoInRange(System.Object,System.Object,System.Double,System.Double)">
+            <summary>
+                Checks whether the distance between two GeoJSON objects lies within a given interval. The distance is measured from
+                the centroid of each shape.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.GeoInRange(System.Object,System.Object,System.Double,System.Double,System.Boolean,System.Boolean)">
+            <summary>
+                Checks whether the distance between two GeoJSON objects lies within a given interval. The distance is measured from
+                the centroid of each shape.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.GeoLineString(System.Object[])">
+            <summary>
+                Construct a GeoJSON LineString. Needs at least two longitude/latitude pairs.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.GeoMultiLineString(System.Object[])">
+            <summary>
+                Construct a GeoJSON MultiLineString. Needs at least two elements consisting valid LineStrings coordinate arrays.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.GeoMultiPoint(System.Object[])">
+            <summary>
+                Construct a GeoJSON LineString. Needs at least two longitude/latitude pairs.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.GeoPoint(System.Double,System.Double)">
+            <summary>
+                Construct a valid GeoJSON Point.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.GeoPolygon(System.Object[])">
+            <summary>
+                Construct a GeoJSON Polygon. Needs at least one array representing a loop. Each loop consists of an array with at
+                least three longitude/latitude pairs. The first loop must be the outermost, while any subsequent loops will be
+                interpreted as holes.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.GeoMultiPolygon(System.Object[])">
+            <summary>
+                Construct a GeoJSON MultiPolygon. Needs at least two Polygons inside.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.NotNull``1(System.Object[])">
+            <summary>
+                Return the first element that is not null, and null if all alternatives are null themselves. It is also known as
+                COALESCE() in SQL.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.FirstList``1(System.Object[])">
+            <summary>
+                Return the first alternative that is an array, and null if none of the alternatives is an array.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.FirstDocument``1(System.Object[])">
+            <summary>
+                Return the first alternative that is a document, and null if none of the alternatives is a document.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Collections``1">
+            <summary>
+                Return an array of collections.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.CurrentUser">
+            <summary>
+                Return the name of the current user.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.DecodeRev(System.String)">
+            <summary>
+                Decompose the specified revision string into its components.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Document``1(System.String,System.Object)">
+            <summary>
+                Return the document which is uniquely identified by its id.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Document``1(System.String)">
+            <summary>
+                Return the document which is uniquely identified by its id.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Document``1(System.String,System.Object[])">
+            <summary>
+                Return the document which is uniquely identified by its id.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Document``1(System.String[])">
+            <summary>
+                Return the document which is uniquely identified by its id.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Length(System.Object)">
+            <summary>
+                Determine the amount of documents in a collection. LENGTH() can also determine the number of elements in an array,
+                the number of attribute keys of an object / document and the character length of a string.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Hash(System.Object)">
+            <summary>
+                Calculate a hash value for value.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Apply``1(System.String,System.Object[])">
+            <summary>
+                Dynamically call the function funcName with the arguments specified. Arguments are given as array and are passed as
+                separate parameters to the called function.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Call``1(System.String,System.Object[])">
+            <summary>
+                Dynamically call the function funcName with the arguments specified. Arguments are given as multiple parameters and
+                passed as separate parameters to the called function.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Assert(System.Boolean,System.String)">
+            <summary>
+                if the expression evaluates to false ASSERT will throw an error.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Warn(System.Boolean,System.String)">
+            <summary>
+                If the expression evaluates to false WARN will issue a warning.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.InRange``1(``0,``0,``0,System.Boolean,System.Boolean)">
+            <summary>
+                Returns true if value is greater than (or equal to) low and less than (or equal to) high. The values can be of
+                different types. They are compared as described in Type and value order and is thus identical to the comparison
+                operators &lt;, &lt;=, &gt; and &gt;= in behavior.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.PregelResult``1(System.String,System.Boolean)">
+            <summary>
+                Allows to access results of a Pregel job that are only held in memory.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Abs(System.Double)">
+            <summary>
+                Return the absolute part of value.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Acos(System.Double)">
+            <summary>
+                Return the arccosine of value.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Asin(System.Double)">
+            <summary>
+                Return the arcsine of value.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Atan(System.Double)">
+            <summary>
+                Return the arctangent of value.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Atan2(System.Double,System.Double)">
+            <summary>
+                Return the arctangent of the quotient of y and x.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Average(System.Double[])">
+            <summary>
+                Return the average (arithmetic mean) of the values in array.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Avg(System.Double[])">
+            <summary>
+                This is an alias for AVERAGE().
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Ceil(System.Double)">
+            <summary>
+                Return the integer closest but not less than value.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Cos(System.Double)">
+            <summary>
+                Return the cosine of value.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Degrees(System.Double)">
+            <summary>
+                Return the angle converted from radians to degrees.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Exp(System.Double)">
+            <summary>
+                Return Euler’s constant raised to the power of value.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Exp2(System.Double)">
+            <summary>
+                Return 2 raised to the power of value.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Floor(System.Double)">
+            <summary>
+                Return the integer closest but not greater than value.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Log(System.Double)">
+            <summary>
+                Return the natural logarithm of value
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Log2(System.Double)">
+            <summary>
+                Return the base 2 logarithm of value.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Log10(System.Double)">
+            <summary>
+                Return the base 10 logarithm of value.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Max``1(``0[])">
+            <summary>
+                Return the greatest element of anyArray. The array is not limited to numbers. Also see type and value order.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Median(System.Double[])">
+            <summary>
+                Return the median value of the values in array.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Min``1(``0[])">
+            <summary>
+                Return the smallest element of anyArray. The array is not limited to numbers.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Percentile(System.Double[],System.Double,System.String)">
+            <summary>
+                Return the nth percentile of the values in numArray.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Pi">
+            <summary>
+                Return pi.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Round(System.Double,System.Double)">
+            <summary>
+                Return the base to the exponent exp.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Product(System.Double[])">
+            <summary>
+                Return the product of the values in array.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Radians(System.Double[])">
+            <summary>
+                Return the angle converted from degrees to radians.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Rand">
+            <summary>
+                Return a pseudo-random number between 0 and 1.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Range(System.Double,System.Double,System.Double)">
+            <summary>
+                Return an array of numbers in the specified range, optionally with increments other than 1. The start and stop
+                arguments are truncated to integers unless a step argument is provided.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Range(System.Int64,System.Int64)">
+            <summary>
+                Return an array of numbers in the specified range, optionally with increments other than 1. The start and stop
+                arguments are truncated to integers unless a step argument is provided.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Round(System.Double)">
+            <summary>
+                Return the integer closest to value.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Sin(System.Double)">
+            <summary>
+                Return the sine of value.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Sqrt(System.Double)">
+            <summary>
+                Return the square root of value.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.StdDevPopulation(System.Double[])">
+            <summary>
+                Return the population standard deviation of the values in array.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.StdDevSample(System.Double[])">
+            <summary>
+                Return the sample standard deviation of the values in array.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.StdDev(System.Double[])">
+            <summary>
+                This is an alias for STDDEV_POPULATION().
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Sum(System.Double[])">
+            <summary>
+                Return the sum of the values in array.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Tan(System.Double)">
+            <summary>
+                Return the tangent of value.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.VariancePopulation(System.Double[])">
+            <summary>
+                Return the population variance of the values in array.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.VarianceSample(System.Double[])">
+            <summary>
+                Return the sample variance of the values in array.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Variance(System.Double[])">
+            <summary>
+                This is an alias for VARIANCE_POPULATION().
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.ToBool(System.Object)">
+            <summary>
+                Take an input value of any type and convert it into the appropriate boolean value.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.ToNumber(System.Object)">
+            <summary>
+                Take an input value of any type and convert it into a numeric value.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.ToString(System.Object)">
+            <summary>
+                Take an input value of any type and convert it into a string value.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.ToArray``1(``0)">
+            <summary>
+                Take an input value of any type and convert it into an array value.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.ToList``1(``0)">
+            <summary>
+                This is an alias for TO_ARRAY().
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.IsNull(System.Object)">
+            <summary>
+                Check whether value is null.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.IsBool(System.Object)">
+            <summary>
+                Check whether value is a boolean value
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.IsNumber(System.Object)">
+            <summary>
+                Check whether value is a number
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.IsString(System.Object)">
+            <summary>
+                Check whether value is a string
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.IsArray(System.Object)">
+            <summary>
+                Check whether value is an array / list
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.IsList(System.Object)">
+            <summary>
+                This is an alias for IS_ARRAY()
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.IsObject(System.Object)">
+            <summary>
+                Check whether value is an object / document
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.IsDocument(System.Object)">
+            <summary>
+                This is an alias for IS_OBJECT()
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.IsDateString(System.Object)">
+            <summary>
+                Check whether value is a string that can be used in a date function. This includes partial dates such as “2015” or
+                “2015-10” and strings containing properly formatted but invalid dates such as “2015-02-31”.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.IsKey(System.Object)">
+            <summary>
+                Check whether value is a string that can be used as a document key.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.IsIpV4(System.Object)">
+            <summary>
+                Check if an arbitrary string is suitable for interpretation as an IPv4 address.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Typename(System.Object)">
+            <summary>
+                Return the data type name of value.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Query.ArangoQueryProvider.#ctor(System.Type,Remotion.Linq.Parsing.Structure.IQueryParser,Remotion.Linq.IQueryExecutor,Core.Arango.Linq.Interface.IArangoLinq)">
+            <summary>
+                Initializes a new instance of <see cref="T:Core.Arango.Linq.Query.ArangoQueryProvider" /> using a custom <see cref="T:Remotion.Linq.Parsing.Structure.IQueryParser" />.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Linq.Query.ArangoQueryProvider.QueryableType">
+            <summary>
+                Gets the type of queryable created by this provider. This is the generic type definition of an implementation of
+                <see cref="T:System.Linq.IQueryable`1" />
+                (usually a subclass of <see cref="T:Remotion.Linq.QueryableBase`1" />) with exactly one type argument.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Query.ArangoQueryProvider.CreateQuery``1(System.Linq.Expressions.Expression)">
+            <summary>
+                Creates a new <see cref="T:System.Linq.IQueryable" /> (of type <see cref="P:Core.Arango.Linq.Query.ArangoQueryProvider.QueryableType" /> with <typeparamref name="T" /> as its
+                generic argument) that
+                represents the query defined by <paramref name="expression" /> and is able to enumerate its results.
+            </summary>
+            <typeparam name="T">The type of the data items returned by the query.</typeparam>
+            <param name="expression">
+                An expression representing the query for which a <see cref="T:System.Linq.IQueryable`1" /> should be
+                created.
+            </param>
+            <returns>An <see cref="T:System.Linq.IQueryable`1" /> that represents the query defined by <paramref name="expression" />.</returns>
         </member>
         <member name="T:Core.Arango.Modules.IArangoAnalyzerModule">
             <summary>
