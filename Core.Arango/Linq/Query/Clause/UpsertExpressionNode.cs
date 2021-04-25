@@ -11,7 +11,7 @@ namespace Core.Arango.Linq.Query.Clause
         public static readonly MethodInfo[] SupportedMethods =
         {
             LinqUtility.GetSupportedMethod(() =>
-                QueryableExtensions.InternalUpsert<object, object>(null, o => null, o => null, (o, old) => null, null))
+                ArangoQueryableExtensions.InternalUpsert<object, object>(null, o => null, o => null, (o, old) => null, null))
         };
 
         private readonly ResolvedExpressionCache<Expression> _cachedInsertSelector;

@@ -41,18 +41,54 @@ namespace Core.Arango.Tests
         }
 
         [Fact]
+        public async Task FirstOrDefault()
+        {
+            var p = await Arango.Query<Project>("test")
+                .FirstOrDefaultAsync(x=>x.Name == "Project A");
+
+            Assert.Equal("Project A", p.Name);
+        }
+
+        [Fact]
+        public async Task SingleOrDefault()
+        {
+            var p = await Arango.Query<Project>("test")
+                .SingleOrDefaultAsync(x => x.Name == "Project A");
+
+            Assert.Equal("Project A", p.Name);
+        }
+
+        [Fact]
+        public async Task SingleException()
+        {
+            await Assert.ThrowsAsync<InvalidOperationException>(async () =>
+            {
+                await Arango.Query<Project>("test")
+                    .SingleAsync(x => x.Name == "Nope");
+            });
+        }
+
+        [Fact]
         public async Task MultiFilter()
         {
             var q = Arango.Query<Project>("test")
                 .Where(x => x.Name == "Project A")
-                .Sort(x => x.Name)
+                .OrderBy(x => x.Name)
                 .Where(x => x.Name == "Project B")
-                .SortDescending(x => x.Name)
+                .OrderByDescending(x => x.Name)
                 .Skip(0).Take(1);
 
-            _output.WriteLine(q.ToAql().aql);
-            _output.WriteLine("");
-            //_output.WriteLine(JsonConvert.SerializeObject(await q.ToListAsync(), Formatting.Indented));
+            Assert.Equal("FOR `x` IN `Project`  FILTER  (  `x`.`Name`  ==  @P1  )  SORT  `x`.`Name`  ASC   FILTER  (  `x`.`Name`  ==  @P2  )  SORT  `x`.`Name`  DESC    LIMIT  @P3   ,  @P4  RETURN   `x`", q.ToAql().aql.Trim());
+        }
+
+
+        [Fact]
+        public async Task FilterOrder()
+        {
+            var q = Arango.Query<Project>("test")
+                .Where(x => (x.Name == "Project A" || x.Name == "Project B") && x.Budget <= 0);
+
+            Assert.Equal("FOR `x` IN `Project`  FILTER  (  (  (  `x`.`Name`  ==  @P1  )  OR  (  `x`.`Name`  ==  @P2  )  )  AND  (  `x`.`Budget`  <=  @P3  )  )  RETURN   `x`", q.ToAql().aql.Trim());
         }
 
         [Fact]

@@ -10,7 +10,7 @@ namespace Core.Arango.Linq.Query.Clause
     {
         public static readonly MethodInfo[] SupportedMethods =
         {
-            LinqUtility.GetSupportedMethod(() => QueryableExtensions.In<object>(null))
+            LinqUtility.GetSupportedMethod(() => ArangoQueryableExtensions.In<object>(null))
         };
 
         public Type CollectionToModify;

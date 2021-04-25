@@ -14,8 +14,8 @@ namespace Core.Arango.Linq.Query.Clause
     {
         public static readonly MethodInfo[] SupportedMethods =
         {
-            LinqUtility.GetSupportedMethod(() => TraversalQueryableExtensions.Traversal<object, object>(null, "")),
-            LinqUtility.GetSupportedMethod(() => TraversalQueryableExtensions.Traversal<object, object>(null, () => ""))
+            LinqUtility.GetSupportedMethod(() => ArangoTraversalExtensions.Traversal<object, object>(null, "")),
+            LinqUtility.GetSupportedMethod(() => ArangoTraversalExtensions.Traversal<object, object>(null, () => ""))
         };
 
         private readonly ResolvedExpressionCache<Expression> _resolvedAdaptedSelector;

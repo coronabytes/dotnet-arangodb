@@ -11,7 +11,7 @@ namespace Core.Arango.Linq.Query.Clause
     {
         public static readonly MethodInfo[] SupportedMethods =
         {
-            LinqUtility.GetSupportedMethod(() => QueryableExtensions.Select<object, object>(null, (x, y) => null))
+            LinqUtility.GetSupportedMethod(() => ArangoQueryableExtensions.Select<object, object>(null, (x, y) => null))
         };
 
         private readonly ResolvedExpressionCache<Expression> _cachedSelector;

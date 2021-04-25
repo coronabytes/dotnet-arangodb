@@ -16,7 +16,7 @@ namespace Core.Arango.Linq.Query.Clause
             LinqUtility.GetSupportedMethod(() => Queryable.Select<object, object>(null, o => null)),
             LinqUtility.GetSupportedMethod(() => Enumerable.Select<object, object>(null, o => null)),
             //GetSupportedMethod (() => QueryableExtensions.Let<object, object> (null, o => null)),
-            LinqUtility.GetSupportedMethod(() => QueryableExtensions.Return<object, object>(null, o => null))
+            LinqUtility.GetSupportedMethod(() => ArangoQueryableExtensions.Return<object, object>(null, o => null))
         };
 
         private readonly NewExpression _letConstruction;

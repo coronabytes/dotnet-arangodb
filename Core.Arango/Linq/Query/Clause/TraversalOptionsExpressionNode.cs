@@ -10,8 +10,8 @@ namespace Core.Arango.Linq.Query.Clause
     {
         public static readonly MethodInfo[] SupportedMethods =
         {
-            LinqUtility.GetSupportedMethod(() => TraversalQueryableExtensions.Options<object, object>(null, null)),
-            LinqUtility.GetSupportedMethod(() => ShortestPathQueryableExtensions.Options<object, object>(null, null))
+            LinqUtility.GetSupportedMethod(() => ArangoTraversalExtensions.Options<object, object>(null, null)),
+            LinqUtility.GetSupportedMethod(() => ArangoShortestPathExtensions.Options<object, object>(null, null))
         };
 
         public TraversalOptionsExpressionNode(MethodCallExpressionParseInfo parseInfo, ConstantExpression options)

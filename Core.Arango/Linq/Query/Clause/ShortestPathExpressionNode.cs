@@ -15,9 +15,9 @@ namespace Core.Arango.Linq.Query.Clause
         public static readonly MethodInfo[] SupportedMethods =
         {
             LinqUtility.GetSupportedMethod(() =>
-                ShortestPathQueryableExtensions.ShortestPath<object, object>(null, "", "")),
+                ArangoShortestPathExtensions.ShortestPath<object, object>(null, "", "")),
             LinqUtility.GetSupportedMethod(() =>
-                ShortestPathQueryableExtensions.ShortestPath<object, object>(null, () => "", () => ""))
+                ArangoShortestPathExtensions.ShortestPath<object, object>(null, () => "", () => ""))
         };
 
         private readonly ResolvedExpressionCache<Expression> _resolvedAdaptedSelector;

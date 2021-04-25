@@ -28,12 +28,12 @@ namespace Core.Arango.Linq
 
         public Func<string, string> TranslateGroupByIntoName => _context.Configuration.ResolveGroupBy;
 
-        public IAsyncEnumerable<T> ExecAsyncEnum<T>(string query, IDictionary<string, object> bindVars)
+        public IAsyncEnumerable<T> StreamAsync<T>(string query, IDictionary<string, object> bindVars)
         {
             return _context.Query.ExecuteStreamAsync<T>(_handle, query, bindVars);
         }
 
-        public async Task<ArangoList<T>> ExecAsync<T>(string query, IDictionary<string, object> bindVars)
+        public async Task<ArangoList<T>> ExecuteAsync<T>(string query, IDictionary<string, object> bindVars)
         {
             return await _context.Query.ExecuteAsync<T>(_handle, query, bindVars).ConfigureAwait(false);
         }

@@ -31,23 +31,35 @@ namespace Core.Arango.Linq.Query
         public async Task<List<T>> ToListAsync()
         {
             var data = GetQueryData();
-            return await db.ExecAsync<T>(data.Query, data.BindVars).ConfigureAwait(false);
+            return await db.ExecuteAsync<T>(data.Query, data.BindVars).ConfigureAwait(false);
         }
 
         public async Task<T> SingleOrDefaultAsync()
         {
             var data = GetQueryData();
-            // TODO: limit 2
-            var list = await db.ExecAsync<T>(data.Query, data.BindVars).ConfigureAwait(false);
+            var list = await db.ExecuteAsync<T>(data.Query, data.BindVars).ConfigureAwait(false);
             return list.SingleOrDefault();
+        }
+
+        public async Task<T> SingleAsync()
+        {
+            var data = GetQueryData();
+            var list = await db.ExecuteAsync<T>(data.Query, data.BindVars).ConfigureAwait(false);
+            return list.Single();
         }
 
         public async Task<T> FirstOrDefaultAsync()
         {
-            // TODO: limit 1
             var data = GetQueryData();
-            var list = await db.ExecAsync<T>(data.Query, data.BindVars).ConfigureAwait(false);
+            var list = await db.ExecuteAsync<T>(data.Query, data.BindVars).ConfigureAwait(false);
             return list.FirstOrDefault();
+        }
+
+        public async Task<T> FirstAsync()
+        {
+            var data = GetQueryData();
+            var list = await db.ExecuteAsync<T>(data.Query, data.BindVars).ConfigureAwait(false);
+            return list.First();
         }
 
         public QueryData GetQueryData()

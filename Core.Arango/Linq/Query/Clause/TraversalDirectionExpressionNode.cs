@@ -12,12 +12,12 @@ namespace Core.Arango.Linq.Query.Clause
     {
         public static readonly MethodInfo[] SupportedMethods =
         {
-            LinqUtility.GetSupportedMethod(() => TraversalQueryableExtensions.InBound<object, object>(null)),
-            LinqUtility.GetSupportedMethod(() => TraversalQueryableExtensions.OutBound<object, object>(null)),
-            LinqUtility.GetSupportedMethod(() => TraversalQueryableExtensions.AnyDirection<object, object>(null)),
-            LinqUtility.GetSupportedMethod(() => ShortestPathQueryableExtensions.InBound<object, object>(null)),
-            LinqUtility.GetSupportedMethod(() => ShortestPathQueryableExtensions.OutBound<object, object>(null)),
-            LinqUtility.GetSupportedMethod(() => ShortestPathQueryableExtensions.AnyDirection<object, object>(null))
+            LinqUtility.GetSupportedMethod(() => ArangoTraversalExtensions.InBound<object, object>(null)),
+            LinqUtility.GetSupportedMethod(() => ArangoTraversalExtensions.OutBound<object, object>(null)),
+            LinqUtility.GetSupportedMethod(() => ArangoTraversalExtensions.AnyDirection<object, object>(null)),
+            LinqUtility.GetSupportedMethod(() => ArangoShortestPathExtensions.InBound<object, object>(null)),
+            LinqUtility.GetSupportedMethod(() => ArangoShortestPathExtensions.OutBound<object, object>(null)),
+            LinqUtility.GetSupportedMethod(() => ArangoShortestPathExtensions.AnyDirection<object, object>(null))
         };
 
         public TraversalDirectionExpressionNode(MethodCallExpressionParseInfo parseInfo,
@@ -26,13 +26,13 @@ namespace Core.Arango.Linq.Query.Clause
         {
             switch (parseInfo.ParsedExpression.Method.Name)
             {
-                case nameof(TraversalQueryableExtensions.InBound):
+                case nameof(ArangoTraversalExtensions.InBound):
                     Direction = Expression.Constant(Utils.EdgeDirectionToString(EdgeDirection.Inbound));
                     break;
-                case nameof(TraversalQueryableExtensions.OutBound):
+                case nameof(ArangoTraversalExtensions.OutBound):
                     Direction = Expression.Constant(Utils.EdgeDirectionToString(EdgeDirection.Outbound));
                     break;
-                case nameof(TraversalQueryableExtensions.AnyDirection):
+                case nameof(ArangoTraversalExtensions.AnyDirection):
                     Direction = Expression.Constant(Utils.EdgeDirectionToString(EdgeDirection.Any));
                     break;
             }

@@ -10,7 +10,7 @@ namespace Core.Arango.Linq.Query.Clause
     {
         public static readonly MethodInfo[] SupportedMethods =
         {
-            LinqUtility.GetSupportedMethod(() => TraversalQueryableExtensions.Depth<object, object>(null, 0, 0))
+            LinqUtility.GetSupportedMethod(() => ArangoTraversalExtensions.Depth<object, object>(null, 0, 0))
         };
 
         public TraversalDepthExpressionNode(MethodCallExpressionParseInfo parseInfo,

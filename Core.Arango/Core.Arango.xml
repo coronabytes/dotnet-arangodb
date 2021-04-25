@@ -2239,6 +2239,31 @@
                 Return the data type name of value.
             </summary>
         </member>
+        <member name="T:Core.Arango.Linq.ArangoContextExtension">
+            <summary>
+            LINQ Extensions
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.ArangoContextExtension.Query``1(Core.Arango.IArangoContext)">
+            <summary>
+             LINQ in sub-expression
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.ArangoContextExtension.Query``1(Core.Arango.IArangoContext,Core.Arango.ArangoHandle)">
+            <summary>
+             LINQ on database
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.ArangoContextExtension.Query(Core.Arango.IArangoContext)">
+            <summary>
+             LINQ in sub-expression
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.ArangoContextExtension.Query(Core.Arango.IArangoContext,Core.Arango.ArangoHandle)">
+            <summary>
+             LINQ on database
+            </summary>
+        </member>
         <member name="M:Core.Arango.Linq.Query.ArangoQueryProvider.#ctor(System.Type,Core.Arango.Relinq.Parsing.Structure.IQueryParser,Core.Arango.Relinq.IQueryExecutor,Core.Arango.Linq.Interface.IArangoLinq)">
             <summary>
                 Initializes a new instance of <see cref="T:Core.Arango.Linq.Query.ArangoQueryProvider" /> using a custom <see cref="T:Core.Arango.Relinq.Parsing.Structure.IQueryParser" />.

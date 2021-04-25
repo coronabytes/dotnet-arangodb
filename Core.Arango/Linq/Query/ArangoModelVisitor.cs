@@ -90,7 +90,7 @@ namespace Core.Arango.Linq.Query
 
             // do not need to apply distinct since it has a single result
             if (string.IsNullOrEmpty(aggregateFunction) == false)
-                QueryText.AppendFormat(" return {0} (( ", aggregateFunction);
+                QueryText.AppendFormat(" RETURN {0} (( ", aggregateFunction);
 
             if (!IgnoreFromClause && queryModel.MainFromClause.ItemType != typeof(Aql))
                 queryModel.MainFromClause.Accept(this, queryModel);

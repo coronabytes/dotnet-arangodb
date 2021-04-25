@@ -9,7 +9,7 @@ namespace Core.Arango.Linq.Query.Clause
     {
         public static readonly MethodInfo[] SupportedMethods =
         {
-            LinqUtility.GetSupportedMethod(() => QueryableExtensions.IgnoreModificationSelect<object>(null))
+            LinqUtility.GetSupportedMethod(() => ArangoQueryableExtensions.IgnoreModificationSelect<object>(null))
         };
 
         public IgnoreModificationSelectExpressionNode(MethodCallExpressionParseInfo parseInfo)

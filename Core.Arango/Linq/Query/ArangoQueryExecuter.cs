@@ -32,7 +32,7 @@ namespace Core.Arango.Linq.Query
             visitor.VisitQueryModel(queryModel);
             visitor.QueryData.Query = visitor.QueryText.ToString();
 
-            return db.ExecAsync<T>(visitor.QueryData.Query, visitor.QueryData.BindVars).Result.AsEnumerable();
+            return db.ExecuteAsync<T>(visitor.QueryData.Query, visitor.QueryData.BindVars).Result.AsEnumerable();
         }
     }
 }

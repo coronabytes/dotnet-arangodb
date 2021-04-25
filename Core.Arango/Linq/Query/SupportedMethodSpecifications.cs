@@ -11,7 +11,7 @@ namespace Core.Arango.Linq.Query
     {
         public static ReadOnlyCollection<MethodInfo> EnumerableAndQueryableMethods { get; } = new(
             typeof(Enumerable).GetRuntimeMethods()
-                .Concat(typeof(QueryableExtensions).GetRuntimeMethods())
+                .Concat(typeof(ArangoQueryableExtensions).GetRuntimeMethods())
                 .Concat(typeof(Queryable).GetRuntimeMethods()).ToList());
 
         public static IEnumerable<MethodInfo> WhereNameMatches(this IEnumerable<MethodInfo> input, string name)

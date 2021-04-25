@@ -19,14 +19,14 @@ namespace Core.Arango.Linq.Query
         {
             LinqUtility.GetSupportedMethod(() => Queryable.OrderBy<object, object>(null, null)),
             LinqUtility.GetSupportedMethod(() => Enumerable.OrderBy<object, object>(null, null)),
-            LinqUtility.GetSupportedMethod(() => QueryableExtensions.Sort<object, object>(null, null))
+            LinqUtility.GetSupportedMethod(() => ArangoQueryableExtensions.Sort<object, object>(null, null))
         };
 
         internal static readonly MethodInfo[] OrderByDescendingSupportedMethods =
         {
             LinqUtility.GetSupportedMethod(() => Queryable.OrderByDescending<object, object>(null, null)),
             LinqUtility.GetSupportedMethod(() => Enumerable.OrderByDescending<object, object>(null, null)),
-            LinqUtility.GetSupportedMethod(() => QueryableExtensions.SortDescending<object, object>(null, null))
+            LinqUtility.GetSupportedMethod(() => ArangoQueryableExtensions.SortDescending<object, object>(null, null))
         };
 
         public static readonly MethodInfo[] SelectManySupportedMethods =
@@ -40,7 +40,7 @@ namespace Core.Arango.Linq.Query
             LinqUtility.GetSupportedMethod(
                 () => Enumerable.SelectMany<object, object[]>(null, o => null)),
             LinqUtility.GetSupportedMethod(
-                () => QueryableExtensions.For<object, object>(null, o => null))
+                () => ArangoQueryableExtensions.For<object, object>(null, o => null))
         };
 
         private readonly IArangoLinq db;

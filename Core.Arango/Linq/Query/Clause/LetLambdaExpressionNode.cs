@@ -12,7 +12,7 @@ namespace Core.Arango.Linq.Query.Clause
         public static readonly MethodInfo[] SupportedMethods =
         {
             LinqUtility.GetSupportedMethod(() =>
-                QueryableExtensions.Let<object, object, object>(null, o => null, (x, y) => null))
+                ArangoQueryableExtensions.Let<object, object, object>(null, o => null, (x, y) => null))
             //GetSupportedMethod(()=>QueryableExtensions.Let<object,object,object>(null, o => null,(x)=>null))
         };
 

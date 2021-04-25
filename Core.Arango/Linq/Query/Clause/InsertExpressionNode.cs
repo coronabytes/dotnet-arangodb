@@ -10,7 +10,7 @@ namespace Core.Arango.Linq.Query.Clause
     {
         public static readonly MethodInfo[] SupportedMethods =
         {
-            LinqUtility.GetSupportedMethod(() => QueryableExtensions.Insert<object>(null, o => null, null))
+            LinqUtility.GetSupportedMethod(() => ArangoQueryableExtensions.Insert<object>(null, o => null, null))
         };
 
         private readonly ResolvedExpressionCache<Expression> _cachedWithSelector;
