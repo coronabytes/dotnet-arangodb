@@ -225,7 +225,7 @@ namespace Core.Arango.Linq.Query
         {
             if (updateReplaceClause.KeySelector != null)
             {
-                QueryText.AppendFormat(" {0} ", updateReplaceClause.Command);
+                QueryText.AppendFormat(" {0} ", updateReplaceClause.Command.ToUpperInvariant());
 
                 GetAqlExpression(updateReplaceClause.KeySelector, queryModel);
 
@@ -233,7 +233,7 @@ namespace Core.Arango.Linq.Query
             }
             else
             {
-                QueryText.AppendFormat(" {0} {1} WITH ", updateReplaceClause.Command,
+                QueryText.AppendFormat(" {0} {1} WITH ", updateReplaceClause.Command.ToUpperInvariant(),
                     LinqUtility.ResolvePropertyName(updateReplaceClause.ItemName));
             }
 
@@ -397,7 +397,7 @@ namespace Core.Arango.Linq.Query
             {
                 GetAqlExpression(orderByClause.Orderings[i].Expression, queryModel);
                 QueryText.AppendFormat(" {0} {1} ",
-                    orderByClause.Orderings[i].OrderingDirection == OrderingDirection.Asc ? "asc" : "desc",
+                    orderByClause.Orderings[i].OrderingDirection == OrderingDirection.Asc ? "ASC" : "DESC",
                     i != orderByClause.Orderings.Count - 1 ? " , " : string.Empty);
             }
 

@@ -39,6 +39,8 @@ namespace Core.Arango.Tests.Core
         public string Name { get; set; }
         public string ClientKey { get; set; }
         public string ParentKey { get; set; }
+
+        public double Budget { get; set; }
     }
 
     public class Activity

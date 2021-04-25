@@ -23,7 +23,7 @@ namespace Core.Arango.Tests
         }
 
         [Fact]
-        public async Task Test1()
+        public async Task SelectDocument()
         {
             var q = Arango.Query<Project>("test")
                 .Where(x => x.Name == "Project A")
@@ -40,7 +40,54 @@ namespace Core.Arango.Tests
         }
 
         [Fact]
-        public async Task Test2()
+        public async Task MultiFilter()
+        {
+            var q = Arango.Query<Project>("test")
+                .Where(x => x.Name == "Project A")
+                .Sort(x => x.Name)
+                .Where(x => x.Name == "Project B")
+                .SortDescending(x => x.Name)
+                .Skip(0).Take(1);
+
+            _output.WriteLine(q.ToAql().aql);
+            _output.WriteLine("");
+            //_output.WriteLine(JsonConvert.SerializeObject(await q.ToListAsync(), Formatting.Indented));
+        }
+
+        [Fact]
+        public async Task GroupBy()
+        {
+            var q = Arango.Query<Project>("test")
+                .GroupBy(y => y.ParentKey)
+                .Select(x => new
+                {
+                    Parent = x.Key,
+                    Max = x.Max(y=>y.Budget)
+                });
+
+            _output.WriteLine(q.ToAql().aql);
+            _output.WriteLine("");
+            //_output.WriteLine(JsonConvert.SerializeObject(await q.ToListAsync(), Formatting.Indented));
+        }
+
+        [Fact]
+        public async Task Update()
+        {
+            var q = Arango.Query<Project>("test")
+                .Where(x => x.Name == "Project A")
+                .Update(x => new
+                {
+                    x.Key,
+                    Name = Aql.Concat(x.Name, "2")
+                }, x=>x.Key);
+
+            _output.WriteLine(q.ToAql().aql);
+            _output.WriteLine("");
+            _output.WriteLine(JsonConvert.SerializeObject(await q.ToListAsync(), Formatting.Indented));
+        }
+
+        [Fact]
+        public async Task Let()
         {
             var q =
                 from p in Arango.Query<Project>("test")

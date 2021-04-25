@@ -158,7 +158,9 @@ namespace Core.Arango.Linq
                     Expression.Quote(keySelector)));
         }
 
-        [ExtentionIdentifier("Limit")]
+        // TODO: Limit Broken?
+
+        /*[ExtentionIdentifier("Limit")]
         public static IQueryable<TSource> Limit<TSource>(this IQueryable<TSource> source, int offset, int count)
         {
             return source.Provider.CreateQuery<TSource>(
@@ -172,7 +174,7 @@ namespace Core.Arango.Linq
         public static IQueryable<TSource> Limit<TSource>(this IQueryable<TSource> source, int count)
         {
             return Limit(source, 0, count);
-        }
+        }*/
 
         public static IAqlModifiable<TSource> Update<TSource>(this IQueryable<TSource> source,
             Expression<Func<TSource, object>> withSelector)
