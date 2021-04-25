@@ -7,8 +7,8 @@ using System.Reflection;
 using Core.Arango.Linq.Interface;
 using Core.Arango.Linq.Query.Clause;
 using Core.Arango.Linq.Utility;
-using Remotion.Linq.Clauses;
-using Remotion.Linq.Parsing.Structure.NodeTypeProviders;
+using Core.Arango.Relinq.Clauses;
+using Core.Arango.Relinq.Parsing.Structure.NodeTypeProviders;
 
 namespace Core.Arango.Linq.Query
 {

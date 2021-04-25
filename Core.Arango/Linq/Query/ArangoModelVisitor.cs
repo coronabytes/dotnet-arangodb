@@ -8,10 +8,10 @@ using Core.Arango.Linq.Data;
 using Core.Arango.Linq.Interface;
 using Core.Arango.Linq.Query.Clause;
 using Core.Arango.Linq.Utility;
-using Remotion.Linq;
-using Remotion.Linq.Clauses;
-using Remotion.Linq.Clauses.Expressions;
-using Remotion.Linq.Clauses.ResultOperators;
+using Core.Arango.Relinq;
+using Core.Arango.Relinq.Clauses;
+using Core.Arango.Relinq.Clauses.Expressions;
+using Core.Arango.Relinq.Clauses.ResultOperators;
 
 namespace Core.Arango.Linq.Query
 {

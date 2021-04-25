@@ -2,11 +2,11 @@
 using System.Reflection;
 using Core.Arango.Linq.Interface;
 using Core.Arango.Linq.Query.Clause;
-using Remotion.Linq;
-using Remotion.Linq.Parsing.ExpressionVisitors.Transformation;
-using Remotion.Linq.Parsing.Structure;
-using Remotion.Linq.Parsing.Structure.IntermediateModel;
-using Remotion.Linq.Parsing.Structure.NodeTypeProviders;
+using Core.Arango.Relinq;
+using Core.Arango.Relinq.Parsing.ExpressionVisitors.Transformation;
+using Core.Arango.Relinq.Parsing.Structure;
+using Core.Arango.Relinq.Parsing.Structure.IntermediateModel;
+using Core.Arango.Relinq.Parsing.Structure.NodeTypeProviders;
 using GroupByExpressionNode = Core.Arango.Linq.Query.Clause.GroupByExpressionNode;
 using SkipExpressionNode = Core.Arango.Linq.Query.Clause.SkipExpressionNode;
 using TakeExpressionNode = Core.Arango.Linq.Query.Clause.TakeExpressionNode;

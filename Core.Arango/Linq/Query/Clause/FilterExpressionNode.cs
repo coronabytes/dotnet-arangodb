@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
-using Remotion.Linq;
-using Remotion.Linq.Parsing.Structure.IntermediateModel;
+using Core.Arango.Relinq;
+using Core.Arango.Relinq.Parsing.Structure.IntermediateModel;
 
 namespace Core.Arango.Linq.Query.Clause
 {

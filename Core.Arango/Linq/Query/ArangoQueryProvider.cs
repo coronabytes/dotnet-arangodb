@@ -4,8 +4,8 @@ using System.Linq.Expressions;
 using System.Reflection;
 using Core.Arango.Linq.Data;
 using Core.Arango.Linq.Interface;
-using Remotion.Linq;
-using Remotion.Linq.Parsing.Structure;
+using Core.Arango.Relinq;
+using Core.Arango.Relinq.Parsing.Structure;
 
 namespace Core.Arango.Linq.Query
 {

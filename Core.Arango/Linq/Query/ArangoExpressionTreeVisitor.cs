@@ -3,10 +3,10 @@ using System.Collections;
 using System.Linq.Expressions;
 using System.Reflection;
 using Core.Arango.Linq.Attributes;
-using Remotion.Linq;
-using Remotion.Linq.Clauses;
-using Remotion.Linq.Clauses.Expressions;
-using Remotion.Linq.Parsing;
+using Core.Arango.Relinq;
+using Core.Arango.Relinq.Clauses;
+using Core.Arango.Relinq.Clauses.Expressions;
+using Core.Arango.Relinq.Parsing;
 
 namespace Core.Arango.Linq.Query
 {
@@ -142,7 +142,7 @@ namespace Core.Arango.Linq.Query
             return expression;
         }
 
-        protected override Expression VisitQuerySourceReference(QuerySourceReferenceExpression expression)
+        protected internal override Expression VisitQuerySourceReference(QuerySourceReferenceExpression expression)
         {
             ModelVisitor.QueryText.AppendFormat(" {0}",
                 LinqUtility.ResolvePropertyName(expression.ReferencedQuerySource.ItemName));
@@ -427,7 +427,7 @@ namespace Core.Arango.Linq.Query
             return e;
         }
 
-        protected override Expression VisitSubQuery(SubQueryExpression expression)
+        protected internal override Expression VisitSubQuery(SubQueryExpression expression)
         {
             if (!HandleJoin && !HandleLet)
                 ModelVisitor.QueryText.Append(" ( ");

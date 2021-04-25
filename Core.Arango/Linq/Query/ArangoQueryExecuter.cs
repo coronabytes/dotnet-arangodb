@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Core.Arango.Linq.Interface;
-using Remotion.Linq;
+using Core.Arango.Relinq;
 
 namespace Core.Arango.Linq.Query
 {

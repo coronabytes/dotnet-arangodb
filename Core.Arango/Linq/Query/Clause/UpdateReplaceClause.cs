@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
-using Remotion.Linq;
-using Remotion.Linq.Clauses;
+using Core.Arango.Relinq;
+using Core.Arango.Relinq.Clauses;
 
 namespace Core.Arango.Linq.Query.Clause
 {
