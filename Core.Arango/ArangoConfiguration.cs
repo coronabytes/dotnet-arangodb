@@ -24,9 +24,29 @@ namespace Core.Arango
             BatchSize = 500;
             Serializer = new ArangoNewtonsoftSerializer(new ArangoNewtonsoftDefaultContractResolver());
             Transport = new ArangoHttpTransport(this);
+            ResolveCollection = type => type.Name;
+            ResolveProperty = (type, name) =>
+            {
+                switch (name)
+                {
+                    case "Key":
+                        return "_key";
+                    case "Id":
+                        return "_id";
+                    case "Revision":
+                        return "_rev";
+                    case "From":
+                        return "_from";
+                    case "To":
+                        return "_to";
+                }
+
+                // TODO: camelCase
+                return name;
+            };
+            ResolveGroupBy = s => s;
         }
-
-
+        
         /// <inheritdoc />
         public string ConnectionString
         {
@@ -100,5 +120,11 @@ namespace Core.Arango
 
         /// <inheritdoc />
         public IReadOnlyList<string> Endpoints { get; set; }
+        /// <inheritdoc />
+        public Func<Type, string,  string> ResolveProperty { get; set; }
+        /// <inheritdoc />
+        public Func<Type, string> ResolveCollection { get; set; }
+        /// <inheritdoc />
+        public Func<string, string> ResolveGroupBy { get; set; }
     }
 }
