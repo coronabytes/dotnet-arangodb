@@ -1571,9 +1571,209 @@
             Built-on AQL functions
             </summary>
         </member>
+        <member name="M:Core.Arango.Linq.Aql.Append``1(``0[],``0[])">
+            <summary>
+                Add all elements of an array to another array. All values are added at the end of the array (right side).
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Append``1(``0[],``0[],System.Boolean)">
+            <summary>
+                Add all elements of an array to another array. All values are added at the end of the array (right side).
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.CountDistinct``1(``0[])">
+            <summary>
+                Get the number of distinct elements in an array.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.CountUnique``1(``0[])">
+            <summary>
+                This is an alias for COUNT_DISTINCT().
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.First``1(``0[])">
+            <summary>
+                Get the first element of an array. It is the same as anyArray[0].
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Flatten``1(System.Object)">
+            <summary>
+                Turn an array of arrays into a flat array.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Flatten``1(System.Object,System.Int32)">
+            <summary>
+                Turn an array of arrays into a flat array.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Interleave``1(``0[])">
+            <summary>
+                Accepts an arbitrary number of arrays and produces a new array with the elements interleaved.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Intersection``1(``0[])">
+            <summary>
+                Return the intersection of all arrays specified.
+            </summary>
+        </member>
         <member name="M:Core.Arango.Linq.Aql.As``1(System.Object)">
             <summary>
              SPECIAL: Force return type
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.DateNow">
+            <summary>
+                Get the current unix time as numeric timestamp.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.DateIso8601(System.Int64)">
+            <summary>
+                Return an ISO 8601 date time string from date.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.DateTimestamp(System.DateTime)">
+            <summary>
+                Create a timestamp value from date.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.DateDayOfWeek(System.DateTime)">
+            <summary>
+                Return the weekday number of date.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.DateYear(System.DateTime)">
+            <summary>
+                Return the year of date.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.DateMonth(System.DateTime)">
+            <summary>
+                Return the month of date.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.DateDay(System.DateTime)">
+            <summary>
+                Return the day of date.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.DateHour(System.DateTime)">
+            <summary>
+                Return the hour of date.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.DateMinute(System.DateTime)">
+            <summary>
+                Return the minute of date.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.DateSecond(System.DateTime)">
+            <summary>
+                Return the second of date.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.DateMillisecond(System.DateTime)">
+            <summary>
+                Return the millisecond of date.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.DATE_DAYOFYEAR(System.DateTime)">
+            <summary>
+                Return the day of year of date.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.DateIsoWeek(System.DateTime)">
+            <summary>
+                Return the week date of date according to ISO 8601.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.DateLeapYear(System.DateTime)">
+            <summary>
+                Return whether date is in a leap year.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.DateQuarter(System.DateTime)">
+            <summary>
+                Return which quarter date belongs to.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.DateDaysInMonth(System.DateTime)">
+            <summary>
+                Return the number of days in the month of date.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.DateTrunc(System.DateTime,System.String)">
+            <summary>
+                Truncates the given date after unit and returns the modified date.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.DateRound(System.DateTime,System.Int32,System.String)">
+            <summary>
+                Bin a date/time into a set of equal-distance buckets, to be used for grouping.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.DateFormat(System.DateTime,System.String)">
+            <summary>
+                Format a date according to the given format string.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.DateAdd(System.DateTime,System.Int32,System.String)">
+            <summary>
+                Add amount given in unit to date and return the calculated date.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.DateAdd(System.DateTime,System.String)">
+            <summary>
+                Add amount given in unit to date and return the calculated date.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.DateSubtract(System.DateTime,System.Int32,System.String)">
+            <summary>
+                Subtract amount given in unit from date and return the calculated date.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.DateSubtract(System.DateTime,System.String)">
+            <summary>
+                Subtract amount given in unit from date and return the calculated date.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.DateDiff(System.DateTime,System.DateTime)">
+            <summary>
+                Calculate the difference between two dates in given time unit, optionally with decimal places.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.DateDiff(System.DateTime,System.DateTime,System.Boolean)">
+            <summary>
+                Calculate the difference between two dates in given time unit, optionally with decimal places.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.DateCompare(System.DateTime,System.DateTime,System.String)">
+            <summary>
+                Check if two partial dates match.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.DateCompare(System.DateTime,System.DateTime,System.String,System.String)">
+            <summary>
+                Check if two partial dates match.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.DateUtcToLocal(System.DateTime,System.String)">
+            <summary>
+                Converts date assumed in Zulu time (UTC) to local timezone.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.DateLocalToUtc(System.DateTime,System.String)">
+            <summary>
+                Converts date assumed in local timezone to Zulu time (UTC).
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.DateTimeZone">
+            <summary>
+                Returns system timezone ArangoDB is running on.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.DateTimeZones">
+            <summary>
+                Returns all valid timezone names.
             </summary>
         </member>
         <member name="M:Core.Arango.Linq.Aql.Distance(System.Double,System.Double,System.Double,System.Double)">
