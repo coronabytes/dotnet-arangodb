@@ -168,6 +168,52 @@ await foreach (var x in Arango.Query.ExecuteStreamAsync<string>("database", $"FO
 }
 ```
 
+# Linq
+- LINQ support has been adapted from https://github.com/ra0o0f/arangoclient.net
+  - Internalized re-motion relinq since their nuget is quite outdated
+- work in progress as some things are deprecated or need to be modernized
+- configurable property / collection / group naming for camelCase support
+
+## Simple query with DOCUMENT() lookup
+```csharp
+var q = Arango.Query<Project>("test")
+.Where(x => x.Name == "Project A")
+.Select(x => new
+{
+    x.Key,
+    x.Name,
+    ClientName = Aql.Document<Client>("Client", x.ClientKey).Name
+});
+
+// Execute
+await q.ToListAsync();
+
+// Debug
+var (aql, bindVars) = q.ToAql();
+```
+
+## Let clauses for subqueries
+- Note: database/transaction is only specified on the root expression, not on the inner one
+```csharp
+var q = from p in Arango.Query<Project>("test")
+let clients = (from c in Arango.Query<Client>() select c.Key)
+select new {p.Name, Clients = Aql.As<string[]>(clients) };
+
+await q.ToListAsync();
+```
+
+## Update
+```csharp
+var q = Arango.Query<Project>("test")
+  .Where(x => x.Name == "Project A")
+  .Update(x => new
+  {
+    Name = Aql.Concat(x.Name, "2")
+  }, x => x.Key);
+		
+await q.ToListAsync();
+```
+
 # Snippets for Advanced Use Cases
 
 ## Create index
