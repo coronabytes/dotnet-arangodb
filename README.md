@@ -8,6 +8,7 @@ dotnet add package Core.Arango
 
 # .NET driver for ArangoDB
 - .NET Standard 2.1 and .NET 5.0 driver for ArangoDB 3.7 and 3.8+
+- LINQ support (WIP)
 - Newtonsoft and System.Text.Json serialization support with PascalCase and camelCase options
 - Updates from anonymous types supported as (Id, Key, Revision, From, To) properties are translated to (_id, _key, _rev, _from, _to)
   - This means these property names are reserved and cannot be used for something else (e.g. "To" property in email collection) 
@@ -20,7 +21,6 @@ This driver has various [extensions](https://github.com/coronabytes/dotnet-arang
 | [Core.Arango.Migration](https://www.nuget.org/packages/Core.Arango.Migration) | ![Nuget](https://img.shields.io/nuget/v/Core.Arango.Migration) ![Nuget](https://img.shields.io/nuget/dt/Core.Arango.Migration) | dotnet add package Core.Arango.Migration  |
 | [Core.Arango.DataProtection](https://www.nuget.org/packages/Core.Arango.DataProtection) | ![Nuget](https://img.shields.io/nuget/v/Core.Arango.DataProtection) ![Nuget](https://img.shields.io/nuget/dt/Core.Arango.DataProtection) | dotnet add package Core.Arango.DataProtection |
 | [Core.Arango.DevExtreme](https://www.nuget.org/packages/Core.Arango.DevExtreme) | ![Nuget](https://img.shields.io/nuget/v/Core.Arango.DevExtreme) ![Nuget](https://img.shields.io/nuget/dt/Core.Arango.DevExtreme) | dotnet add package Core.Arango.DevExtreme |
-| [Core.Arango.Linq](https://www.nuget.org/packages/Core.Arango.Linq) | ![Nuget](https://img.shields.io/nuget/v/Core.Arango.Linq) ![Nuget](https://img.shields.io/nuget/dt/Core.Arango.Linq) | dotnet add package Core.Arango.Linq |
 | [Core.Arango.Serilog](https://www.nuget.org/packages/Core.Arango.Serilog) | ![Nuget](https://img.shields.io/nuget/v/Core.Arango.Serilog) ![Nuget](https://img.shields.io/nuget/dt/Core.Arango.Serilog) | dotnet add package Core.Arango.Serilog |
 
 # Common Snippets
