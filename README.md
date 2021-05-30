@@ -172,6 +172,7 @@ await foreach (var x in Arango.Query.ExecuteStreamAsync<string>("database", $"FO
 - LINQ support has been adapted from https://github.com/ra0o0f/arangoclient.net
   - Internalized re-motion relinq since their nuget is quite outdated
 - work in progress as some things are deprecated or need to be modernized
+- there is also development done on a driver without relinq and aggregate support
 - configurable property / collection / group naming for camelCase support
 
 ## Simple query with DOCUMENT() lookup
