@@ -18,11 +18,10 @@ jobs:
       fail-fast: false
       matrix:
         dotnet:
-          - 5.0.202
+          - 5.0.300
         arango: 
-          - "arangodb:3.6.11"
           - "arangodb:3.7.10"
-          - "arangodb/arangodb-preview:3.8.0-alpha.1"
+          - "arangodb/arangodb-preview:3.8.0-rc.1"
 #         - "arangodb/enterprise:3.7.7"
         topology:
           - single
