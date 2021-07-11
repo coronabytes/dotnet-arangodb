@@ -28,7 +28,7 @@ namespace Core.Arango.Tests.Core
             }
         }
 
-        public async Task SetupAsync(string serializer)
+        public async Task SetupAsync(string serializer, string createDatabase = "test")
         {
             Arango = new ArangoContext(UniqueTestRealm(), new ArangoConfiguration
             {
@@ -41,7 +41,9 @@ namespace Core.Arango.Tests.Core
                     _ => new ArangoNewtonsoftSerializer(new ArangoNewtonsoftDefaultContractResolver())
                 }
             });
-            await Arango.Database.CreateAsync("test");
+
+            if (!string.IsNullOrEmpty(createDatabase))
+                await Arango.Database.CreateAsync("test");
         }
 
         protected string UniqueTestRealm()

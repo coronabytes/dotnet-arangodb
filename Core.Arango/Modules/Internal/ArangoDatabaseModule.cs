@@ -16,14 +16,33 @@ namespace Core.Arango.Modules.Internal
 
         public async Task<bool> CreateAsync(ArangoHandle name, CancellationToken cancellationToken = default)
         {
-            var res = await SendAsync<ArangoVoid>(name, HttpMethod.Post,
+            var res = await SendAsync<ArangoVoid>(null, HttpMethod.Post,
                 ApiPath("_system", "database"),
-                new
+                new ArangoDatabase
                 {
-                    name = RealmPrefix(name)
+                    Name = RealmPrefix(name)
                 }, false, cancellationToken: cancellationToken);
 
             return res != null;
+        }
+
+        public async Task<bool> CreateAsync(ArangoDatabase database, CancellationToken cancellationToken = default)
+        {
+            database.Name = RealmPrefix(database.Name);
+
+            var res = await SendAsync<ArangoVoid>(null, HttpMethod.Post,
+                ApiPath("_system", "database"),
+                database, false, cancellationToken: cancellationToken);
+
+            return res != null;
+        }
+
+        public async Task<ArangoDatabaseInfo> GetAsync(ArangoHandle handle, CancellationToken cancellationToken = default)
+        {
+            var res = await SendAsync<SingleResult<ArangoDatabaseInfo>>(null, HttpMethod.Get,
+                ApiPath(handle, "database/current"), null, false, cancellationToken: cancellationToken);
+
+            return res?.Result;
         }
 
         public async Task<List<string>> ListAsync(CancellationToken cancellationToken = default)
@@ -41,10 +60,10 @@ namespace Core.Arango.Modules.Internal
                 .ToList();
         }
 
-        public async Task<bool> ExistAsync(ArangoHandle name, CancellationToken cancellationToken = default)
+        public async Task<bool> ExistAsync(ArangoHandle handle, CancellationToken cancellationToken = default)
         {
-            var dbs = await ListAsync(cancellationToken);
-            return dbs.Contains(name);
+            var db = await GetAsync(handle, cancellationToken);
+            return db != null;
         }
 
         public async Task DropAsync(ArangoHandle name, CancellationToken cancellationToken = default)

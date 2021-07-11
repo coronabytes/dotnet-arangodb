@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Core.Arango.Protocol;
 
 namespace Core.Arango.Modules
 {
@@ -15,12 +16,22 @@ namespace Core.Arango.Modules
         Task<bool> CreateAsync(ArangoHandle name, CancellationToken cancellationToken = default);
 
         /// <summary>
+        ///     Creates a new database with options
+        /// </summary>
+        Task<bool> CreateAsync(ArangoDatabase database, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        ///   Retrieves information about the current database
+        /// </summary>
+        Task<ArangoDatabaseInfo> GetAsync(ArangoHandle handle, CancellationToken cancellationToken = default);
+
+        /// <summary>
         ///     Drop an existing database
         /// </summary>
         Task DropAsync(ArangoHandle name, CancellationToken cancellationToken = default);
 
         /// <summary>
-        ///     Checks if database exists (calls ListAsync internally)
+        ///     Checks if database exists
         /// </summary>
         Task<bool> ExistAsync(ArangoHandle name, CancellationToken cancellationToken = default);
 

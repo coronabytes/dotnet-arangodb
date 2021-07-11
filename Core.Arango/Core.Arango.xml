@@ -2404,6 +2404,16 @@
                 Creates a new database
             </summary>
         </member>
+        <member name="M:Core.Arango.Modules.IArangoDatabaseModule.CreateAsync(Core.Arango.Protocol.ArangoDatabase,System.Threading.CancellationToken)">
+            <summary>
+                Creates a new database with options
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoDatabaseModule.GetAsync(Core.Arango.ArangoHandle,System.Threading.CancellationToken)">
+            <summary>
+              Retrieves information about the current database
+            </summary>
+        </member>
         <member name="M:Core.Arango.Modules.IArangoDatabaseModule.DropAsync(Core.Arango.ArangoHandle,System.Threading.CancellationToken)">
             <summary>
                 Drop an existing database
@@ -2411,7 +2421,7 @@
         </member>
         <member name="M:Core.Arango.Modules.IArangoDatabaseModule.ExistAsync(Core.Arango.ArangoHandle,System.Threading.CancellationToken)">
             <summary>
-                Checks if database exists (calls ListAsync internally)
+                Checks if database exists
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.IArangoDatabaseModule.ListAsync(System.Threading.CancellationToken)">
@@ -3571,6 +3581,93 @@
             <summary>
                 Optional object that specifies the collection level schema for documents.
                 When updating collection this needs to contain existing schema or schema will be removed
+            </summary>
+        </member>
+        <member name="T:Core.Arango.Protocol.ArangoDatabase">
+            <summary>
+              Arango Database
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoDatabase.Name">
+            <summary>
+              Has to contain a valid database name.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoDatabase.Options">
+            <summary>
+            Database Options
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoDatabase.Users">
+            <summary>
+            Has to be an array of user objects to initially create for the new database. User information will not be changed for users that already exist. If users is not specified or does not contain any users, a default user root will be created with an empty string password. This ensures that the new database will be accessible after it is created.
+            </summary>
+        </member>
+        <member name="T:Core.Arango.Protocol.ArangoDatabaseInfo">
+            <summary>
+             Arango Database Information
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoDatabaseInfo.Name">
+            <summary>
+              the name of the current database
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoDatabaseInfo.Id">
+            <summary>
+               the id of the current database
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoDatabaseInfo.Path">
+            <summary>
+              the filesystem path of the current database
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoDatabaseInfo.IsSystem">
+            <summary>
+              whether or not the current database is the _system database
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoDatabaseInfo.Sharding">
+            <summary>
+              the default sharding method for collections created in this database
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoDatabaseInfo.ReplicationFactor">
+            <summary>
+              the default replication factor for collections in this database
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoDatabaseInfo.WriteConcern">
+            <summary>
+              the default write concern for collections in this database
+            </summary>
+        </member>
+        <member name="T:Core.Arango.Protocol.ArangoDatabaseOptions">
+            <summary>
+              Arango Database Options
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoDatabaseOptions.Sharding">
+            <summary>
+            The sharding method to use for new collections in this database.
+            Valid values are: “”, “flexible”, or “single”.
+            The first two are equivalent. (cluster only)
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoDatabaseOptions.ReplicationFactor">
+            <summary>
+            Default replication factor for new collections created in this database.
+            Special values include “satellite”, which will replicate the collection to every DB-Server (Enterprise Edition only), and 1, which disables replication. (cluster only)
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoDatabaseOptions.WriteConcern">
+            <summary>
+            Default write concern for new collections created in this database.
+            It determines how many copies of each shard are required to be in sync on the different DB-Servers.
+            If there are less then these many copies in the cluster a shard will refuse to write.
+            Writes to shards with enough up-to-date copies will succeed at the same time however.
+            The value of writeConcern can not be larger than replicationFactor. (cluster only)
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoEdgeDefinition">
