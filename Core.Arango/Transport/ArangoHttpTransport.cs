@@ -149,7 +149,7 @@ namespace Core.Arango.Transport
         {
             msg.Headers.Add(HttpRequestHeader.KeepAlive.ToString(), "true");
 
-            if (auth)
+            if (auth && !string.IsNullOrWhiteSpace(_auth))
                 msg.Headers.Add(HttpRequestHeader.Authorization.ToString(), _auth);
 
             if (transaction != null)
@@ -165,6 +165,9 @@ namespace Core.Arango.Transport
 
         private async Task Authenticate(bool auth, CancellationToken cancellationToken)
         {
+            if (string.IsNullOrWhiteSpace(_configuration.User))
+                return;
+
             if (auth && (_auth == null || _authValidUntil < DateTime.UtcNow.AddMinutes(-10)))
             {
                 var authResponse = await SendAsync<AuthResponse>(HttpMethod.Post,

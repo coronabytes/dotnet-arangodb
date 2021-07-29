@@ -73,9 +73,6 @@ namespace Core.Arango
                 if (string.IsNullOrWhiteSpace(server))
                     throw new ArgumentException("Server invalid");
 
-                if (string.IsNullOrWhiteSpace(user))
-                    throw new ArgumentException("User invalid");
-
                 Realm = realm;
                 Server = server;
                 User = user;
