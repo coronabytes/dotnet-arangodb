@@ -32,6 +32,9 @@ This driver has various [extensions](https://github.com/coronabytes/dotnet-arang
 // from connection string
 var arango = new ArangoContext("Server=http://localhost:8529;Realm=myproject;User=root;Password=;");
 
+// from connection string - NO_AUTH
+var arango = new ArangoContext("Server=http://localhost:8529;");
+
 // from connection string with camelCase serialization
 var arango = new ArangoContext("Server=http://localhost:8529;Realm=myproject;User=root;Password=;",
 new ArangoConfiguration
