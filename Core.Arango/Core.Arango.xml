@@ -2960,14 +2960,19 @@
                 Execute query with bind parameters in dictionary
             </summary>
         </member>
-        <member name="M:Core.Arango.Modules.IArangoQueryModule.ExecuteStreamAsync``1(Core.Arango.ArangoHandle,System.FormattableString,System.Nullable{System.Boolean},System.Nullable{System.Int32},System.Threading.CancellationToken)">
+        <member name="M:Core.Arango.Modules.IArangoQueryModule.ExecuteStreamAsync``1(Core.Arango.ArangoHandle,System.FormattableString,System.Nullable{System.Boolean},System.Nullable{System.Int32},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Int64},System.Threading.CancellationToken)">
             <summary>
                 Execute query with string interpolated bind parameters (IAsyncEnumerable)
             </summary>
         </member>
-        <member name="M:Core.Arango.Modules.IArangoQueryModule.ExecuteStreamAsync``1(Core.Arango.ArangoHandle,System.String,System.Collections.Generic.IDictionary{System.String,System.Object},System.Nullable{System.Boolean},System.Nullable{System.Int32},System.Threading.CancellationToken)">
+        <member name="M:Core.Arango.Modules.IArangoQueryModule.ExecuteStreamAsync``1(Core.Arango.ArangoHandle,System.String,System.Collections.Generic.IDictionary{System.String,System.Object},System.Nullable{System.Boolean},System.Nullable{System.Int32},System.Nullable{System.Double},System.Nullable{System.Int64},Core.Arango.Protocol.ArangoQueryOptions,System.Threading.CancellationToken)">
             <summary>
                 Execute query with bind parameters in dictionary (IAsyncEnumerable)
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoQueryModule.ExecuteStreamAsync``1(Core.Arango.ArangoHandle,Core.Arango.Protocol.ArangoCursor,System.Threading.CancellationToken)">
+            <summary>
+                Execute query (IAsyncEnumerable)
             </summary>
         </member>
         <member name="T:Core.Arango.Modules.IArangoTransactionModule">
@@ -3583,6 +3588,62 @@
                 When updating collection this needs to contain existing schema or schema will be removed
             </summary>
         </member>
+        <member name="T:Core.Arango.Protocol.ArangoCursor">
+            <summary>
+                Object describing the query and query parameters.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoCursor.Query">
+            <summary>
+                contains the query string to be executed
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoCursor.BindVars">
+            <summary>
+                key/value pairs representing the bind parameters.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoCursor.Count">
+            <summary>
+                indicates whether the number of documents in the result set should be returned in the “count” attribute of the
+                result. Calculating the “count” attribute might have a performance impact for some queries in the future so this
+                option is turned off by default, and “count” is only returned when requested.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoCursor.BatchSize">
+            <summary>
+                maximum number of result documents to be transferred from the server to the client in one roundtrip. If this
+                attribute is not set, a server-controlled default value will be used. A batchSize value of 0 is disallowed.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoCursor.MemoryLimit">
+            <summary>
+                the maximum number of memory (measured in bytes) that the query is allowed to use. If set, then the query will fail
+                with error “resource limit exceeded” in case it allocates too much memory. A value of 0 indicates that there is no
+                memory limit.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoCursor.TTL">
+            <summary>
+                The time-to-live for the cursor (in seconds). If the result set is small enough (less than or equal to batchSize)
+                then results are returned right away. Otherwise they are stored in memory and will be accessible via the cursor
+                with respect to the ttl. The cursor will be removed on the server automatically after the specified amount of time.
+                This is useful to ensure garbage collection of cursors that are not fully fetched by clients. If not set, a
+                server-defined value will be used (default: 30 seconds).
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoCursor.Cache">
+            <summary>
+                flag to determine whether the AQL query results cache shall be used. If set to false, then any query cache lookup
+                will be skipped for the query. If set to true, it will lead to the query cache being checked for the query if the
+                query cache mode is either on or demand.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoCursor.Options">
+            <summary>
+                key/value object with extra options for the query.
+            </summary>
+        </member>
         <member name="T:Core.Arango.Protocol.ArangoDatabase">
             <summary>
               Arango Database
@@ -4189,6 +4250,107 @@
                 insert operation fails.
                 This is also the default behavior in case the overwrite mode is not set, and the overwrite flag is false or not set
                 either.
+            </summary>
+        </member>
+        <member name="T:Core.Arango.Protocol.ArangoQueryOptimizer">
+            <summary>
+                Optimizer options
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoQueryOptimizer.Rules">
+            <summary>
+                A list of to-be-included or to-be-excluded optimizer rules can be put into this attribute, telling the optimizer to
+                include or exclude specific rules. To disable a rule, prefix its name with a -, to enable a rule, prefix it with a
+                +. There is also a pseudo-rule all, which matches all optimizer rules. -all disables all rules.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoQueryOptimizer.Profile">
+            <summary>
+                If set to true or 1, then the additional query profiling information will be returned in the sub-attribute profile
+                of the extra return attribute, if the query result is not served from the query cache. Set to 2 the query will
+                include execution stats per query plan node in sub-attribute stats.nodes of the extra return attribute.
+                Additionally the query plan is returned in the sub-attribute extra.plan.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoQueryOptimizer.SatelliteSyncWait">
+            <summary>
+                This Enterprise Edition parameter allows to configure how long a DB-Server will have time to bring the
+                SatelliteCollections involved in the query into sync. The default value is 60.0 (seconds). When the max time has
+                been reached the query will be stopped.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoQueryOptimizer.MaxRuntime">
+            <summary>
+                The query has to be executed within the given runtime or it will be killed. The value is specified in seconds. The
+                default value is 0.0 (no timeout).
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoQueryOptimizer.MaxTransactionSize">
+            <summary>
+                Transaction size limit in bytes. Honored by the RocksDB storage engine only.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoQueryOptimizer.IntermediateCommitSize">
+            <summary>
+                Maximum total size of operations after which an intermediate commit is performed automatically. Honored by the
+                RocksDB storage engine only.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoQueryOptimizer.IntermediateCommitCount">
+            <summary>
+                Maximum number of operations after which an intermediate commit is performed automatically. Honored by the RocksDB
+                storage engine only.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoQueryOptimizer.SkipInaccessibleCollections">
+            <summary>
+                AQL queries (especially graph traversals) will treat collection to which a user has no access rights as if these
+                collections were empty.
+                Instead of returning a forbidden access error, your queries will execute normally.
+                This is intended to help with certain use-cases: A graph contains several collections and different users execute
+                AQL queries on that graph.
+                You can now naturally limit the accessible results by changing the access rights of users on collections.
+                This feature is only available in the Enterprise Edition.
+            </summary>
+        </member>
+        <member name="T:Core.Arango.Protocol.ArangoQueryOptions">
+            <summary>
+             Arango Query Options
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoQueryOptions.FullCount">
+            <summary>
+            if set to true and the query contains a LIMIT clause, then the result will have an extra attribute with the sub-attributes stats and fullCount
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoQueryOptions.FillBlockCache">
+            <summary>
+              if set to true or not specified, this will make the query store the data it reads via the RocksDB storage engine in the RocksDB block cache
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoQueryOptions.MaxPlans">
+            <summary>
+             Limits the maximum number of plans that are created by the AQL query optimizer.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoQueryOptions.MaxWarningCount">
+            <summary>
+              Limits the maximum number of warnings a query will return. The number of warnings a query will return is limited to 10 by default, but that number can be increased or decreased by setting this attribute.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoQueryOptions.FailOnWarning">
+            <summary>
+            When set to true, the query will throw an exception and abort instead of producing a warning
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoQueryOptions.Stream">
+            <summary>
+            Can be enabled to execute the query lazily. If set to true, then the query is executed as long as necessary to produce up to batchSize results. These results are returned immediately and the query is suspended until the client asks for the next batch (if there are more results).
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoQueryOptions.Optimizer">
+            <summary>
+            Options related to the query optimizer.
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoQueryStatistic">

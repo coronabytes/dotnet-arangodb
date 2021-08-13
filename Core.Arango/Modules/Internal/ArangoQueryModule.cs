@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
+using Core.Arango.Protocol;
 using Core.Arango.Protocol.Internal;
 
 namespace Core.Arango.Modules.Internal
@@ -54,13 +55,13 @@ namespace Core.Arango.Modules.Internal
             {
                 var firstResult = await SendAsync<QueryResponse<T>>(database, HttpMethod.Post,
                     ApiPath(database, "cursor"),
-                    new QueryRequest
+                    new ArangoCursor
                     {
                         Query = query,
                         BindVars = bindVars,
                         BatchSize = Context.Configuration.BatchSize,
                         Cache = cache,
-                        Options = new QueryRequestOptions
+                        Options = new ArangoQueryOptions
                         {
                             FullCount = fullCount
                         }
@@ -108,13 +109,13 @@ namespace Core.Arango.Modules.Internal
             var responseType = typeof(QueryResponse<>);
             var constructedResponseType = responseType.MakeGenericType(type);
 
-            var body = new QueryRequest
+            var body = new ArangoCursor
             {
                 Query = query,
                 BindVars = bindVars,
                 BatchSize = Context.Configuration.BatchSize,
                 Cache = cache,
-                Options = new QueryRequestOptions
+                Options = new ArangoQueryOptions
                 {
                     FullCount = fullCount
                 }
@@ -139,31 +140,45 @@ namespace Core.Arango.Modules.Internal
             return listResult.GetType().GetProperty("Item").GetValue(listResult, new object[] {0});
         }
 
-        public IAsyncEnumerable<T> ExecuteStreamAsync<T>(ArangoHandle database, FormattableString query,
-            bool? cache = null,
-            int? batchSize = null, CancellationToken cancellationToken = default)
+        public IAsyncEnumerable<T> ExecuteStreamAsync<T>(ArangoHandle database, FormattableString query, bool? cache = null,
+            int? batchSize = null,
+            bool? lazy = null, bool? fillBlockCache = null, long? memoryLimit = null, CancellationToken cancellationToken = default)
         {
             var queryExp = Parameterize(query, out var parameter);
-            return ExecuteStreamAsync<T>(database, queryExp, parameter, cache, batchSize, cancellationToken);
+            return ExecuteStreamAsync<T>(database, queryExp, parameter, cache, batchSize, null, memoryLimit, new ArangoQueryOptions
+            {
+                Stream = lazy,
+                FillBlockCache = fillBlockCache
+            }, cancellationToken);
         }
 
-        public async IAsyncEnumerable<T> ExecuteStreamAsync<T>(ArangoHandle database, string query,
+        public IAsyncEnumerable<T> ExecuteStreamAsync<T>(ArangoHandle database, string query,
             IDictionary<string, object> bindVars, bool? cache = null, int? batchSize = null,
-            [EnumeratorCancellation] CancellationToken cancellationToken = default)
+            double? ttl = null, long? memoryLimit = null,
+            ArangoQueryOptions options = null,
+            CancellationToken cancellationToken = default)
         {
             query = query.Trim();
 
+            return ExecuteStreamAsync<T>(database, new ArangoCursor
+            {
+                Query = query,
+                BindVars = bindVars,
+                BatchSize = batchSize ?? Context.Configuration.BatchSize,
+                TTL = ttl,
+                MemoryLimit = memoryLimit,
+                Cache = cache
+            }, cancellationToken);
+        }
+
+        public async IAsyncEnumerable<T> ExecuteStreamAsync<T>(ArangoHandle database, ArangoCursor cursor,
+            [EnumeratorCancellation] CancellationToken cancellationToken = default)
+        {
             var firstResult = await SendAsync<QueryResponse<T>>(database, HttpMethod.Post,
                 ApiPath(database, "cursor"),
-                new QueryRequest
-                {
-                    Query = query,
-                    BindVars = bindVars,
-                    BatchSize = batchSize ?? Context.Configuration.BatchSize,
-                    Cache = cache
-                }, cancellationToken: cancellationToken);
+                cursor, cancellationToken: cancellationToken);
 
-            Context.Configuration.QueryProfile?.Invoke(query, bindVars, firstResult.Extra.Statistic);
+            Context.Configuration.QueryProfile?.Invoke(cursor.Query, cursor.BindVars, firstResult.Extra.Statistic);
 
             foreach (var result in firstResult.Result)
                 yield return result;

@@ -366,7 +366,7 @@ namespace Core.Arango.Modules.Internal
 
             var firstResult = await SendAsync<QueryResponse<T>>(database, HttpMethod.Post,
                 ApiPath(database, "cursor"),
-                new QueryRequest
+                new ArangoCursor
                 {
                     Query = query,
                     BindVars = new Dictionary<string, object>(),

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Core.Arango.Protocol;
 
 namespace Core.Arango.Modules
 {
@@ -58,13 +59,23 @@ namespace Core.Arango.Modules
         ///     Execute query with string interpolated bind parameters (IAsyncEnumerable)
         /// </summary>
         IAsyncEnumerable<T> ExecuteStreamAsync<T>(ArangoHandle database, FormattableString query, bool? cache = null,
-            int? batchSize = null, CancellationToken cancellationToken = default);
+            int? batchSize = null,
+            bool? lazy = null, bool? fillBlockCache = null, long? memoryLimit = null,
+            CancellationToken cancellationToken = default);
 
         /// <summary>
         ///     Execute query with bind parameters in dictionary (IAsyncEnumerable)
         /// </summary>
         IAsyncEnumerable<T> ExecuteStreamAsync<T>(ArangoHandle database, string query,
             IDictionary<string, object> bindVars, bool? cache = null, int? batchSize = null,
+            double? ttl = null, long? memoryLimit = null,
+            ArangoQueryOptions options = null,
+            CancellationToken cancellationToken = default);
+
+        /// <summary>
+        ///     Execute query (IAsyncEnumerable)
+        /// </summary>
+        IAsyncEnumerable<T> ExecuteStreamAsync<T>(ArangoHandle database, ArangoCursor cursor,
             CancellationToken cancellationToken = default);
     }
 }
