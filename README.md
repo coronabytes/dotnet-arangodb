@@ -126,6 +126,34 @@ await arango.Document.UpdateAsync("database", "collection", new
     SomeValue = 2
 });
 ```
+## Update ignore some properties
+```csharp
+
+// depending on serializer
+using System.Text.Json.Serialization;
+// or
+using Newtonsoft.Json;
+
+class ComplexEntity
+{
+    public string Key { get; set; }
+    public string Name { get; set; }
+    
+    // Will never be read or written from or to arangodb
+    [JsonIgnore]
+    public object Data { get; set; }
+    
+    // Newtonsoft only
+    // Will only be read from query, on write will be ignored
+    [ArangoIgnore]
+    public object CalculatedProperty { get; set; }
+}
+
+await arango.Document.UpdateAsync("database", "collection", new ComplexEntity {
+    Key = "123",
+    Name = "SomeName"
+});
+```
 
 ## Query with bind vars through string interpolation
 ```csharp
