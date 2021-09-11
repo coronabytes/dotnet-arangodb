@@ -79,7 +79,7 @@ namespace Core.Arango.Modules.Internal
 
                 while (true)
                 {
-                    var res = await SendAsync<QueryResponse<T>>(database, HttpMethod.Put,
+                    var res = await SendAsync<QueryResponse<T>>(database, HttpMethod.Post,
                         ApiPath(database, $"/cursor/{firstResult.Id}"),
                         cancellationToken: cancellationToken);
 
@@ -188,7 +188,7 @@ namespace Core.Arango.Modules.Internal
 
             while (true)
             {
-                var res = await SendAsync<QueryResponse<T>>(database, HttpMethod.Put,
+                var res = await SendAsync<QueryResponse<T>>(database, HttpMethod.Post,
                     ApiPath(database, $"/cursor/{firstResult.Id}"),
                     cancellationToken: cancellationToken);
 
