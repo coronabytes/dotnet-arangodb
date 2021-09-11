@@ -83,6 +83,11 @@ namespace Core.Arango
         IArangoBackupModule Backup { get; }
 
         /// <summary>
+        ///  Pregel Module
+        /// </summary>
+        IArangoPregelModule Pregel { get; }
+
+        /// <summary>
         ///     Get Arango server version and license
         /// </summary>
         Task<ArangoVersion> GetVersionAsync(CancellationToken cancellationToken = default);

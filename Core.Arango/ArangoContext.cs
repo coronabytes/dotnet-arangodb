@@ -36,6 +36,7 @@ namespace Core.Arango
             Function = new ArangoFunctionModule(this);
             Foxx = new ArangoFoxxModule(this);
             Backup = new ArangoBackupModule(this);
+            Pregel = new ArangoPregelModule(this);
         }
 
         /// <summary>
@@ -60,6 +61,7 @@ namespace Core.Arango
             Function = new ArangoFunctionModule(this);
             Foxx = new ArangoFoxxModule(this);
             Backup = new ArangoBackupModule(this);
+            Pregel = new ArangoPregelModule(this);
         }
 
         /// <inheritdoc />
@@ -103,6 +105,9 @@ namespace Core.Arango
 
         /// <inheritdoc />
         public IArangoBackupModule Backup { get; }
+
+        /// <inheritdoc />
+        public IArangoPregelModule Pregel { get; }
 
         /// <inheritdoc />
         public async Task<ArangoVersion> GetVersionAsync(CancellationToken cancellationToken = default)
