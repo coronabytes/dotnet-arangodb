@@ -1576,7 +1576,7 @@
         </member>
         <member name="T:Core.Arango.Linq.Aql">
             <summary>
-            Built-on AQL functions
+                Built-on AQL functions
             </summary>
         </member>
         <member name="M:Core.Arango.Linq.Aql.Append``1(``0[],``0[])">
@@ -1626,7 +1626,22 @@
         </member>
         <member name="M:Core.Arango.Linq.Aql.As``1(System.Object)">
             <summary>
-             SPECIAL: Force return type
+                Force return type (not an actual function)
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.New``1">
+            <summary>
+                Access to new document version
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Old``1">
+            <summary>
+                Access to old document version
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Fnv64(System.Object)">
+            <summary>
+                Calculate the FNV-1A 64 bit hash for text and return it in a hexadecimal string representation.
             </summary>
         </member>
         <member name="M:Core.Arango.Linq.Aql.DateNow">
@@ -2161,6 +2176,158 @@
                 This is an alias for VARIANCE_POPULATION().
             </summary>
         </member>
+        <member name="M:Core.Arango.Linq.Aql.Concat(System.String[])">
+            <summary>
+                Concatenate the values passed as value1 to valueN.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.ConcatSeparator(System.String,System.String[])">
+            <summary>
+                Concatenate the strings passed as arguments value1 to valueN using the separator string.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.CharLength(System.String)">
+            <summary>
+                Return the number of characters in value (not byte length).
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Lower(System.String)">
+            <summary>
+                Convert upper-case letters in value to their lower-case counterparts. All other characters are returned unchanged.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Upper(System.String)">
+            <summary>
+                Convert lower-case letters in value to their upper-case counterparts. All other characters are returned unchanged.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Substitute(System.String,System.String,System.String)">
+            <summary>
+                Replace search values in the string value.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Substitute(System.String,System.String,System.String,System.Int32)">
+            <summary>
+                Replace search values in the string value.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Substring(System.String,System.Int32)">
+            <summary>
+                Return a substring of value.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Substring(System.String,System.Int32,System.Int32)">
+            <summary>
+                Return a substring of value.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Left(System.String,System.Int32)">
+            <summary>
+                Return the n leftmost characters of the string value.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Right(System.String,System.Int32)">
+            <summary>
+                Return the length rightmost characters of the string value.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Trim(System.String)">
+            <summary>
+                Return the string value with whitespace stripped from the start and/or end.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Trim(System.String,System.Int32)">
+            <summary>
+                Return the string value with whitespace stripped from the start and/or end.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Trim(System.String,System.String)">
+            <summary>
+                Return the string value with whitespace stripped from the start and/or end.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.LTrim(System.String)">
+            <summary>
+                Return the string value with whitespace stripped from the start only.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.LTrim(System.String,System.String)">
+            <summary>
+                Return the string value with whitespace stripped from the start only.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.RTrim(System.String)">
+            <summary>
+                RTRIM(value, chars) → strippedString
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.RTrim(System.String,System.String)">
+            <summary>
+                RTRIM(value, chars) → strippedString
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Split(System.String)">
+            <summary>
+                Split the given string value into a list of strings, using the separator.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Split(System.String,System.String)">
+            <summary>
+                Split the given string value into a list of strings, using the separator.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Split(System.String,System.String,System.Int32)">
+            <summary>
+                Split the given string value into a list of strings, using the separator.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Reverse(System.String)">
+            <summary>
+                Return the reverse of the string value.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Contains(System.String,System.String)">
+            <summary>
+                Check whether the string search is contained in the string text. The string matching performed by CONTAINS is
+                case-sensitive.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Contains(System.String,System.String,System.Boolean)">
+            <summary>
+                Check whether the string search is contained in the string text. The string matching performed by CONTAINS is
+                case-sensitive.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.FindFirst(System.String,System.String)">
+            <summary>
+                Return the position of the first occurrence of the string search inside the string text. Positions start at 0.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.FindFirst(System.String,System.String,System.Int32,System.Int32)">
+            <summary>
+                Return the position of the first occurrence of the string search inside the string text. Positions start at 0.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.FindLast(System.String,System.String)">
+            <summary>
+                Return the position of the last occurrence of the string search inside the string text. Positions start at 0.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.FindLast(System.String,System.String,System.Int32,System.Int32)">
+            <summary>
+                Return the position of the last occurrence of the string search inside the string text. Positions start at 0.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Like(System.String,System.String)">
+            <summary>
+                Check whether the pattern search is contained in the string text, using wildcard matching.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Like(System.String,System.String,System.Boolean)">
+            <summary>
+                Check whether the pattern search is contained in the string text, using wildcard matching.
+            </summary>
+        </member>
         <member name="M:Core.Arango.Linq.Aql.ToBool(System.Object)">
             <summary>
                 Take an input value of any type and convert it into the appropriate boolean value.
@@ -2270,6 +2437,31 @@
         <member name="M:Core.Arango.Linq.ArangoContextExtension.Query(Core.Arango.IArangoContext,Core.Arango.ArangoHandle)">
             <summary>
              LINQ on database
+            </summary>
+        </member>
+        <member name="T:Core.Arango.Linq.Attributes.AqlFunctionAttribute">
+            <summary>
+             LINQ Arango Function
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Attributes.AqlFunctionAttribute.#ctor(System.String)">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Attributes.AqlFunctionAttribute.#ctor(System.String,System.Boolean)">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Linq.Attributes.AqlFunctionAttribute.Name">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Linq.Attributes.AqlFunctionAttribute.IsProperty">
+            <summary>
+            
             </summary>
         </member>
         <member name="M:Core.Arango.Linq.Query.ArangoQueryProvider.#ctor(System.Type,Core.Arango.Relinq.Parsing.Structure.IQueryParser,Core.Arango.Relinq.IQueryExecutor,Core.Arango.Linq.Interface.IArangoLinq)">
@@ -2925,161 +3117,22 @@
                 Returns all indexes of a collection
             </summary>
         </member>
-        <member name="P:Core.Arango.Modules.ArangoPregel.Algorithm">
-            <summary>
-                Name of the algorithm
-            </summary>
-        </member>
-        <member name="P:Core.Arango.Modules.ArangoPregel.GraphName">
-            <summary>
-                Name of a graph. Either this or the parameters vertexCollections and edgeCollections are required. Please note that
-                there are special sharding requirements for graphs in order to be used with Pregel.
-            </summary>
-        </member>
-        <member name="P:Core.Arango.Modules.ArangoPregel.VertexCollections">
-            <summary>
-                List of vertex collection names. Please note that there are special sharding requirements for collections in order
-                to be used with Pregel.
-            </summary>
-        </member>
-        <member name="P:Core.Arango.Modules.ArangoPregel.EdgeCollections">
-            <summary>
-                List of edge collection names. Please note that there are special sharding requirements for collections in order to
-                be used with Pregel.
-            </summary>
-        </member>
-        <member name="P:Core.Arango.Modules.ArangoPregel.Params">
-            <summary>
-                General as well as algorithm-specific options.
-            </summary>
-        </member>
-        <member name="T:Core.Arango.Modules.ArangoPregelState">
-            <summary>
-                Pregel State
-            </summary>
-        </member>
-        <member name="F:Core.Arango.Modules.ArangoPregelState.Running">
-            <summary>
-                Algorithm is executing normally.
-            </summary>
-        </member>
-        <member name="F:Core.Arango.Modules.ArangoPregelState.Storing">
-            <summary>
-                The algorithm finished, but the results are still being written back into the collections. Occurs only if the store
-                parameter is set to true.
-            </summary>
-        </member>
-        <member name="F:Core.Arango.Modules.ArangoPregelState.Done">
-            <summary>
-                The execution is done. In version 3.7.1 and later, this means that storing is also done. In earlier versions, the
-                results may not be written back into the collections yet. This event is announced in the server log (requires at
-                least info log level for the pregel log topic).
-            </summary>
-        </member>
-        <member name="F:Core.Arango.Modules.ArangoPregelState.Canceled">
-            <summary>
-                The execution was permanently canceled, either by the user or by an error.
-            </summary>
-        </member>
-        <member name="F:Core.Arango.Modules.ArangoPregelState.FatalError">
-            <summary>
-                The execution has failed and cannot recover.
-            </summary>
-        </member>
-        <member name="F:Core.Arango.Modules.ArangoPregelState.InError">
-            <summary>
-                The execution is in an error state. This can be caused by DB-Servers being not reachable or being non responsive.
-                The execution might recover later, or switch to "canceled" if it was not able to recover successfully.
-            </summary>
-        </member>
-        <member name="F:Core.Arango.Modules.ArangoPregelState.Recovering">
-            <summary>
-                The execution is actively recovering, will switch back to running if the recovery was successful.
-            </summary>
-        </member>
-        <member name="P:Core.Arango.Modules.ArangoPregelStatus.State">
-            <summary>
-                State of the execution.
-            </summary>
-        </member>
-        <member name="P:Core.Arango.Modules.ArangoPregelStatus.Gss">
-            <summary>
-                The number of global supersteps executed.
-            </summary>
-        </member>
-        <member name="P:Core.Arango.Modules.ArangoPregelStatus.TotalRuntime">
-            <summary>
-                Total runtime of the execution up to now (if the execution is still ongoing).
-            </summary>
-        </member>
-        <member name="P:Core.Arango.Modules.ArangoPregelStatus.StartupTime">
-            <summary>
-                Startup runtime of the execution. The startup time includes the data loading time and can be substantial. The
-                startup time will be reported as 0 if the startup is still ongoing.
-            </summary>
-        </member>
-        <member name="P:Core.Arango.Modules.ArangoPregelStatus.ComputationTime">
-            <summary>
-                Algorithm execution time. The computation time will be reported as 0 if the computation still ongoing.
-            </summary>
-        </member>
-        <member name="P:Core.Arango.Modules.ArangoPregelStatus.StorageTime">
-            <summary>
-                Time for storing the results if the job includes results storage. The storage time be reported as 0 if storing the
-                results is still ongoing.
-            </summary>
-        </member>
-        <member name="P:Core.Arango.Modules.ArangoPregelStatus.Aggregators">
-            <summary>
-                ?
-            </summary>
-        </member>
-        <member name="P:Core.Arango.Modules.ArangoPregelStatus.SendCount">
-            <summary>
-                ?
-            </summary>
-        </member>
-        <member name="P:Core.Arango.Modules.ArangoPregelStatus.ReceivedCount">
-            <summary>
-                ?
-            </summary>
-        </member>
-        <member name="P:Core.Arango.Modules.ArangoPregelStatus.VertexCount">
-            <summary>
-                Total number of vertices processed.
-            </summary>
-        </member>
-        <member name="P:Core.Arango.Modules.ArangoPregelStatus.EdgeCount">
-            <summary>
-                Total number of edges processed.
-            </summary>
-        </member>
-        <member name="P:Core.Arango.Modules.ArangoPregelStatus.Reports">
-            <summary>
-                Statistics about the Pregel execution. The value will only be populated once the algorithm has finished.
-            </summary>
-        </member>
-        <member name="P:Core.Arango.Modules.ArangoPregelStatus.Parallelism">
-            <summary>
-                ?
-            </summary>
-        </member>
         <member name="T:Core.Arango.Modules.IArangoPregelModule">
             <summary>
                 Arango Pregel Control
             </summary>
         </member>
-        <member name="M:Core.Arango.Modules.IArangoPregelModule.StartJobAsync(Core.Arango.ArangoHandle,Core.Arango.Modules.ArangoPregel)">
+        <member name="M:Core.Arango.Modules.IArangoPregelModule.StartJobAsync(Core.Arango.ArangoHandle,Core.Arango.Protocol.ArangoPregel,System.Threading.CancellationToken)">
             <summary>
                 Start the execution of a Pregel algorithm
             </summary>
         </member>
-        <member name="M:Core.Arango.Modules.IArangoPregelModule.GetJobStatusAsync(Core.Arango.ArangoHandle,System.Int64)">
+        <member name="M:Core.Arango.Modules.IArangoPregelModule.GetJobStatusAsync(Core.Arango.ArangoHandle,System.String,System.Threading.CancellationToken)">
             <summary>
                 Get the status of a Pregel execution
             </summary>
         </member>
-        <member name="M:Core.Arango.Modules.IArangoPregelModule.DeleteJobAsync(Core.Arango.ArangoHandle,System.Int64)">
+        <member name="M:Core.Arango.Modules.IArangoPregelModule.DeleteJobAsync(Core.Arango.ArangoHandle,System.String,System.Threading.CancellationToken)">
             <summary>
                 Cancel an ongoing Pregel execution
             </summary>
@@ -3274,6 +3327,73 @@
         <member name="M:Core.Arango.Modules.Internal.ArangoUserModule.DeleteAsync(System.String,System.Threading.CancellationToken)">
             <summary>
                 Delete a user permanently.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoPregelStatus.State">
+            <summary>
+                State of the execution.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoPregelStatus.Gss">
+            <summary>
+                The number of global supersteps executed.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoPregelStatus.TotalRuntime">
+            <summary>
+                Total runtime of the execution up to now (if the execution is still ongoing).
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoPregelStatus.StartupTime">
+            <summary>
+                Startup runtime of the execution. The startup time includes the data loading time and can be substantial. The
+                startup time will be reported as 0 if the startup is still ongoing.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoPregelStatus.ComputationTime">
+            <summary>
+                Algorithm execution time. The computation time will be reported as 0 if the computation still ongoing.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoPregelStatus.StorageTime">
+            <summary>
+                Time for storing the results if the job includes results storage. The storage time be reported as 0 if storing the
+                results is still ongoing.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoPregelStatus.Aggregators">
+            <summary>
+                ?
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoPregelStatus.SendCount">
+            <summary>
+                ?
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoPregelStatus.ReceivedCount">
+            <summary>
+                ?
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoPregelStatus.VertexCount">
+            <summary>
+                Total number of vertices processed.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoPregelStatus.EdgeCount">
+            <summary>
+                Total number of edges processed.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoPregelStatus.Reports">
+            <summary>
+                Statistics about the Pregel execution. The value will only be populated once the algorithm has finished.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoPregelStatus.Parallelism">
+            <summary>
+                ?
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoAccess">
@@ -4437,6 +4557,83 @@
                 insert operation fails.
                 This is also the default behavior in case the overwrite mode is not set, and the overwrite flag is false or not set
                 either.
+            </summary>
+        </member>
+        <member name="T:Core.Arango.Protocol.ArangoPregel">
+            <summary>
+                Pregel Job
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoPregel.Algorithm">
+            <summary>
+                Name of the algorithm
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoPregel.GraphName">
+            <summary>
+                Name of a graph. Either this or the parameters vertexCollections and edgeCollections are required. Please note that
+                there are special sharding requirements for graphs in order to be used with Pregel.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoPregel.VertexCollections">
+            <summary>
+                List of vertex collection names. Please note that there are special sharding requirements for collections in order
+                to be used with Pregel.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoPregel.EdgeCollections">
+            <summary>
+                List of edge collection names. Please note that there are special sharding requirements for collections in order to
+                be used with Pregel.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoPregel.Params">
+            <summary>
+                General as well as algorithm-specific options.
+            </summary>
+        </member>
+        <member name="T:Core.Arango.Protocol.ArangoPregelState">
+            <summary>
+                Pregel State
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoPregelState.Running">
+            <summary>
+                Algorithm is executing normally.
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoPregelState.Storing">
+            <summary>
+                The algorithm finished, but the results are still being written back into the collections. Occurs only if the store
+                parameter is set to true.
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoPregelState.Done">
+            <summary>
+                The execution is done. In version 3.7.1 and later, this means that storing is also done. In earlier versions, the
+                results may not be written back into the collections yet. This event is announced in the server log (requires at
+                least info log level for the pregel log topic).
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoPregelState.Canceled">
+            <summary>
+                The execution was permanently canceled, either by the user or by an error.
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoPregelState.FatalError">
+            <summary>
+                The execution has failed and cannot recover.
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoPregelState.InError">
+            <summary>
+                The execution is in an error state. This can be caused by DB-Servers being not reachable or being non responsive.
+                The execution might recover later, or switch to "canceled" if it was not able to recover successfully.
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoPregelState.Recovering">
+            <summary>
+                The execution is actively recovering, will switch back to running if the recovery was successful.
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoQueryOptimizer">

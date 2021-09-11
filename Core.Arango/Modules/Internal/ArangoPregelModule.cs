@@ -1,10 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
-using Core.Arango.Protocol.Internal;
 
 namespace Core.Arango.Modules.Internal
 {
@@ -14,19 +11,27 @@ namespace Core.Arango.Modules.Internal
         {
         }
 
-        public Task<long> StartJobAsync(ArangoHandle database, ArangoPregel job)
+        public async Task<string> StartJobAsync(ArangoHandle database, ArangoPregel job,
+            CancellationToken cancellationToken = default)
         {
-            throw new System.NotImplementedException();
+            return await SendAsync<string>(database, HttpMethod.Post,
+                ApiPath(database, "control_pregel"),
+                job, cancellationToken: cancellationToken);
         }
 
-        public Task<ArangoPregelStatus> GetJobStatusAsync(ArangoHandle database, long id)
+        public async Task<ArangoPregelStatus> GetJobStatusAsync(ArangoHandle database, string id,
+            CancellationToken cancellationToken = default)
         {
-            throw new System.NotImplementedException();
+            return await SendAsync<ArangoPregelStatus>(database, HttpMethod.Get,
+                ApiPath(database, $"control_pregel/{id}"),
+                cancellationToken: cancellationToken);
         }
 
-        public Task DeleteJobAsync(ArangoHandle database, long id)
+        public async Task DeleteJobAsync(ArangoHandle database, string id, CancellationToken cancellationToken = default)
         {
-            throw new System.NotImplementedException();
+            await SendAsync<ArangoVoid>(database, HttpMethod.Delete,
+                ApiPath(database, $"control_pregel/{id}"),
+                cancellationToken: cancellationToken);
         }
     }
 }
