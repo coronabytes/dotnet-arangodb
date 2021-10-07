@@ -88,7 +88,7 @@ namespace Core.Arango.Modules.Internal
 
             await SendAsync<ArangoVoid>(database, HttpMethod.Put,
                 ApiPath(database, $"gharial/{UrlEncode(graph)}/edge/{UrlEncode(edgeDefinition.Collection)}", parameter),
-                cancellationToken: cancellationToken);
+                edgeDefinition, cancellationToken: cancellationToken);
         }
 
         public async Task RemoveEdgeDefinitionAsync(ArangoHandle database, string graph, string edgeDefinition,

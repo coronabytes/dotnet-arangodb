@@ -1,7 +1,8 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Core.Arango.Protocol;
 using Core.Arango.Tests.Core;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Core.Arango.Tests
@@ -129,7 +130,7 @@ namespace Core.Arango.Tests
 
             var transaction0 = await Arango.Transaction.BeginAsync("test",
                 new ArangoTransaction()
-                    {Collections = new ArangoTransactionScope {Write = new[] {"vertices", "edges"}}});
+                { Collections = new ArangoTransactionScope { Write = new[] { "vertices", "edges" } } });
 
             await Arango.Graph.Vertex.CreateAsync(transaction0, "graph", "vertices", new
             {
@@ -165,7 +166,7 @@ namespace Core.Arango.Tests
 
             var transaction1 = await Arango.Transaction.BeginAsync("test",
                 new ArangoTransaction()
-                    {Collections = new ArangoTransactionScope {Write = new[] {"vertices", "edges"}}});
+                { Collections = new ArangoTransactionScope { Write = new[] { "vertices", "edges" } } });
 
             await Arango.Graph.Edge.CreateAsync(transaction1, "graph", "edges", new
             {
@@ -177,7 +178,7 @@ namespace Core.Arango.Tests
 
             var transaction2 = await Arango.Transaction.BeginAsync("test",
                 new ArangoTransaction()
-                    {Collections = new ArangoTransactionScope {Write = new[] {"vertices", "edges"}}});
+                { Collections = new ArangoTransactionScope { Write = new[] { "vertices", "edges" } } });
 
             await Arango.Graph.Edge.CreateAsync(transaction2, "graph", "edges", new
             {
@@ -225,6 +226,54 @@ namespace Core.Arango.Tests
             Assert.Equal(2, friends.Count);
 
             await Arango.Graph.DropAsync("test", "graph");
+        }
+
+        [Theory]
+        [ClassData(typeof(CamelCaseData))]
+        public async Task ReplaceEdgeDefinition(string serializer)
+        {
+            await SetupAsync(serializer);
+            await Arango.Collection.CreateAsync("test", "vertices1", ArangoCollectionType.Document);
+            await Arango.Collection.CreateAsync("test", "vertices2", ArangoCollectionType.Document);
+            await Arango.Collection.CreateAsync("test", "edges", ArangoCollectionType.Edge);
+
+            await Arango.Graph.CreateAsync("test", new ArangoGraph
+            {
+                Name = "graph",
+                EdgeDefinitions = new List<ArangoEdgeDefinition>
+                {
+                    new()
+                    {
+                        Collection = "edges",
+                        From = new List<string> {"vertices1"},
+                        To = new List<string> {"vertices1"}
+                    }
+                }
+            });
+
+            var newDef = new ArangoEdgeDefinition
+            {
+                Collection = "edges",
+                From = new List<string> { "vertices1" },
+                To = new List<string> { "vertices2" }
+            };
+
+            await Arango.Graph.ReplaceEdgeDefinitionAsync("test", "graph", newDef);
+
+            var graphs = await Arango.Graph.ListAsync("test");
+            foreach (var graph in graphs)
+            {
+                Assert.Single(graph.EdgeDefinitions);
+
+                var def = graph.EdgeDefinitions.Single();
+
+                Assert.Equal("edges", def.Collection);
+                Assert.Single(def.From);
+                Assert.Single(def.To);
+
+                Assert.Contains("vertices1", def.From);
+                Assert.Contains("vertices2", def.To);
+            }
         }
 
         private class Vertex
