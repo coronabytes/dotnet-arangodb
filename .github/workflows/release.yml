@@ -23,11 +23,12 @@ jobs:
       run: echo "::set-output name=VERSION::<Version>${GITHUB_REF#refs/tags/}</Version>"
       
     - name: Apply Version
-      uses: jacobtomlinson/gha-find-replace@0.1.2
+      uses: jacobtomlinson/gha-find-replace@v2
       with:
         find: "<Version>.*<\\/Version>"
         replace: "${{ steps.vars.outputs.VERSION }}"
-        include: ".*\\.csproj"
+        include: "**/Core.Arango.csproj"
+        regex: true
     
     - name: Build
       run: dotnet build --configuration Release
