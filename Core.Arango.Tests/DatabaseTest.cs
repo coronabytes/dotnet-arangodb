@@ -36,5 +36,20 @@ namespace Core.Arango.Tests
             var info = await Arango.Database.GetAsync("test");
             Assert.EndsWith("-test",info.Name);
         }
+
+        [Theory]
+        [ClassData(typeof(PascalCaseData))]
+        public async Task Drop(string serializer)
+        {
+            await SetupAsync(serializer, null);
+
+            await Arango.Database.CreateAsync("test");
+            await Arango.Database.DropAsync("test");
+
+            var ex = await Assert.ThrowsAsync<ArangoException>(async () =>
+            {
+                await Arango.Database.DropAsync("test2");
+            });
+        }
     }
 }

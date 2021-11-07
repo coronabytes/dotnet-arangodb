@@ -70,7 +70,7 @@ namespace Core.Arango.Modules.Internal
         {
             await SendAsync<ArangoVoid>(name, HttpMethod.Delete,
                 ApiPath("_system", $"database/{RealmPrefix(name)}"), null,
-                false, cancellationToken: cancellationToken);
+                true, cancellationToken: cancellationToken);
         }
     }
 }
