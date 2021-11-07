@@ -23,7 +23,7 @@ jobs:
       run: echo "::set-output name=VERSION::<Version>${GITHUB_REF#refs/tags/}</Version>"
       
     - name: Apply Version
-      uses: jacobtomlinson/gha-find-replace@master
+      uses: jacobtomlinson/gha-find-replace@0.1.2
       with:
         find: "<Version>.*<\\/Version>"
         replace: "${{ steps.vars.outputs.VERSION }}"
