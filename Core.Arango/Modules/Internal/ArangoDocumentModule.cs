@@ -105,7 +105,7 @@ namespace Core.Arango.Modules.Internal
                 mergeObjects,
                 returnOld, returnNew, silent, overwriteMode, cancellationToken);
 
-            return res.SingleOrDefault();
+            return res?.SingleOrDefault();
         }
 
         public async Task<ArangoUpdateResult<ArangoVoid>> CreateAsync<T>(ArangoHandle database, string collection,
@@ -118,7 +118,7 @@ namespace Core.Arango.Modules.Internal
                 keepNull, mergeObjects,
                 returnOld, returnNew, silent, overwriteMode, cancellationToken);
 
-            return res.SingleOrDefault();
+            return res?.SingleOrDefault();
         }
 
         public async Task ImportAsync<T>(ArangoHandle database, string collection, IEnumerable<T> docs,
@@ -286,7 +286,7 @@ namespace Core.Arango.Modules.Internal
                 new List<T> {doc}, waitForSync, keepNull, mergeObjects,
                 returnOld, returnNew, silent, ignoreRevs, cancellationToken);
 
-            return res.SingleOrDefault();
+            return res?.SingleOrDefault();
         }
 
         public async Task<List<ArangoUpdateResult<TR>>> ReplaceManyAsync<T, TR>(ArangoHandle database,
@@ -341,7 +341,7 @@ namespace Core.Arango.Modules.Internal
             var res = await ReplaceManyAsync<T, TR>(database, collection, new List<T> {doc},
                 waitForSync, returnOld, returnNew, ignoreRevs, cancellationToken);
 
-            return res.SingleOrDefault();
+            return res?.SingleOrDefault();
         }
 
         public async Task<ArangoUpdateResult<ArangoVoid>> ReplaceAsync<T>(ArangoHandle database, string collection,
@@ -355,7 +355,7 @@ namespace Core.Arango.Modules.Internal
             var res = await ReplaceManyAsync<T, ArangoVoid>(database, collection, new List<T> {doc},
                 waitForSync, returnOld, returnNew, ignoreRevs, cancellationToken);
 
-            return res.SingleOrDefault();
+            return res?.SingleOrDefault();
         }
 
         public async IAsyncEnumerable<List<T>> ExportAsync<T>(ArangoHandle database,

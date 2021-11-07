@@ -159,6 +159,44 @@ namespace Core.Arango.Tests
 
         [Theory]
         [ClassData(typeof(PascalCaseData))]
+        public async Task CreateSilent(string serializer)
+        {
+            await SetupAsync(serializer);
+
+            await Arango.Collection.CreateAsync("test", "test", ArangoCollectionType.Document);
+
+             await Arango.Document.CreateAsync("test", "test", new
+            {
+                Key = "abc",
+                Name = "a"
+            }, silent: true);
+        }
+
+        [Theory]
+        [ClassData(typeof(PascalCaseData))]
+        public async Task CreateManySilent(string serializer)
+        {
+            await SetupAsync(serializer);
+
+            await Arango.Collection.CreateAsync("test", "test", ArangoCollectionType.Document);
+
+            await Arango.Document.CreateManyAsync("test", "test", new List<object>
+            {
+                new
+                {
+                    Key = "abc",
+                    Name = "a"
+                },
+                new
+                {
+                    Key = "abc2",
+                    Name = "b"
+                }
+            }, silent: true);
+        }
+
+        [Theory]
+        [ClassData(typeof(PascalCaseData))]
         public async Task CreateConflictMode(string serializer)
         {
             await SetupAsync(serializer);
