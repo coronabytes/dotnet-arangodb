@@ -197,6 +197,48 @@ namespace Core.Arango.Tests
 
         [Theory]
         [ClassData(typeof(PascalCaseData))]
+        public async Task DeleteMany(string serializer)
+        {
+            await SetupAsync(serializer);
+
+            await Arango.Collection.CreateAsync("test", "test", ArangoCollectionType.Document);
+
+            await Arango.Document.CreateManyAsync("test", "test", new List<object>
+            {
+                new
+                {
+                    Key = "abc",
+                    Name = "a"
+                },
+                new
+                {
+                    Key = "abc2",
+                    Name = "b"
+                }
+            });
+
+            var keys = new List<object>
+            {
+                new
+                {
+                    Key = "abc",
+                },
+                new
+                {
+                    Key = "abc2",
+                }
+            };
+
+            var list1 = await Arango.Document.GetManyAsync<ArangoVoid>("test", "test", keys);
+            Assert.Equal(2, list1.Count);
+            await Arango.Document.DeleteManyAsync<object, ArangoVoid>("test", "test", keys);
+            var list2 = await Arango.Query.FindAsync<ArangoVoid>("test", "test", $"true");
+
+            Assert.Empty(list2);
+        }
+
+        [Theory]
+        [ClassData(typeof(PascalCaseData))]
         public async Task CreateConflictMode(string serializer)
         {
             await SetupAsync(serializer);
