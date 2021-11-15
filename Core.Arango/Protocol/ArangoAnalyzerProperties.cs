@@ -166,6 +166,14 @@ namespace Core.Arango.Protocol
         public ArangoAnalyzerGeoJsonType? Type { get; set; }
 
         /// <summary>
+        ///     (Segmentation) (default): return tokens composed of alphanumeric characters only
+        /// </summary>
+        [JsonPropertyName("break")]
+        [JsonProperty(PropertyName = "break", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public ArangoAnalyzerBreakType? Break { get; set; }
+
+        /// <summary>
         ///  Overflow properties
         /// </summary>
         [Newtonsoft.Json.JsonExtensionData]

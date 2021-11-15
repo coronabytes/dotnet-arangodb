@@ -43,9 +43,15 @@ namespace Core.Arango.Protocol
         [EnumMember(Value = "text")] Text,
 
         /// <summary>
-        ///     An Analyzer capable of removing specified tokens from the input.
+        ///    An Analyzer capable of converting the input into a set of language-specific tokens. 
+        ///    This makes comparisons follow the rules of the respective language, most notable in range queries against Views.
         /// </summary>
-        [EnumMember(Value = "stopwords")] Stopwords,
+        [EnumMember(Value = "collation")] Collation,
+
+        /// <summary>
+        ///     An Analyzer capable of running a restricted AQL query to perform data manipulation / filtering.
+        /// </summary>
+        [EnumMember(Value = "aql")] Aql,
 
         /// <summary>
         ///     An Analyzer capable of chaining effects of multiple Analyzers into one.
@@ -55,9 +61,15 @@ namespace Core.Arango.Protocol
         [EnumMember(Value = "pipeline")] Pipeline,
 
         /// <summary>
-        ///     An Analyzer capable of running a restricted AQL query to perform data manipulation / filtering.
+        ///     An Analyzer capable of removing specified tokens from the input.
         /// </summary>
-        [EnumMember(Value = "aql")] Aql,
+        [EnumMember(Value = "stopwords")] Stopwords,
+
+        /// <summary>
+        ///     An Analyzer capable of breaking up the input text into tokens in a language-agnostic manner as per Unicode Standard Annex #29, making it suitable for mixed language strings. 
+        ///     It can optionally preserve all non-whitespace or all characters instead of keeping alphanumeric characters only, as well as apply case conversion.
+        /// </summary>
+        [EnumMember(Value = "segmentation")] Segmentation,
 
         /// <summary>
         ///     An Analyzer capable of breaking up a GeoJSON object into a set of indexable tokens for further usage with

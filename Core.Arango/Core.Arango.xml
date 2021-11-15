@@ -3448,6 +3448,26 @@
              Overflow properties
             </summary>
         </member>
+        <member name="T:Core.Arango.Protocol.ArangoAnalyzerBreakType">
+            <summary>
+                ArangoGeoJsonType
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoAnalyzerBreakType.All">
+            <summary>
+                return all tokens
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoAnalyzerBreakType.Alpha">
+            <summary>
+                 return tokens composed of alphanumeric characters only (default)
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoAnalyzerBreakType.Graphic">
+            <summary>
+                return tokens composed of non-whitespace characters only. Note that the list of whitespace characters does not include line breaks:
+            </summary>
+        </member>
         <member name="T:Core.Arango.Protocol.ArangoAnalyzerCase">
             <summary>
                 AnalyzerType
@@ -3594,6 +3614,11 @@
                 (GeoJson)  (default): index all GeoJSON geometry types (Point, Polygon etc.)
             </summary>
         </member>
+        <member name="P:Core.Arango.Protocol.ArangoAnalyzerProperties.Break">
+            <summary>
+                (Segmentation) (default): return tokens composed of alphanumeric characters only
+            </summary>
+        </member>
         <member name="P:Core.Arango.Protocol.ArangoAnalyzerProperties.ExtensionData">
             <summary>
              Overflow properties
@@ -3634,9 +3659,15 @@
                 Tokenize into words, optionally with stemming, normalization, stop-word filtering and edge n-gram generation
             </summary>
         </member>
-        <member name="F:Core.Arango.Protocol.ArangoAnalyzerType.Stopwords">
+        <member name="F:Core.Arango.Protocol.ArangoAnalyzerType.Collation">
             <summary>
-                An Analyzer capable of removing specified tokens from the input.
+               An Analyzer capable of converting the input into a set of language-specific tokens. 
+               This makes comparisons follow the rules of the respective language, most notable in range queries against Views.
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoAnalyzerType.Aql">
+            <summary>
+                An Analyzer capable of running a restricted AQL query to perform data manipulation / filtering.
             </summary>
         </member>
         <member name="F:Core.Arango.Protocol.ArangoAnalyzerType.Pipeline">
@@ -3646,9 +3677,15 @@
                 The final token value is determined by last Analyzer in the pipeline.
             </summary>
         </member>
-        <member name="F:Core.Arango.Protocol.ArangoAnalyzerType.Aql">
+        <member name="F:Core.Arango.Protocol.ArangoAnalyzerType.Stopwords">
             <summary>
-                An Analyzer capable of running a restricted AQL query to perform data manipulation / filtering.
+                An Analyzer capable of removing specified tokens from the input.
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoAnalyzerType.Segmentation">
+            <summary>
+                An Analyzer capable of breaking up the input text into tokens in a language-agnostic manner as per Unicode Standard Annex #29, making it suitable for mixed language strings. 
+                It can optionally preserve all non-whitespace or all characters instead of keeping alphanumeric characters only, as well as apply case conversion.
             </summary>
         </member>
         <member name="F:Core.Arango.Protocol.ArangoAnalyzerType.GeoJson">
