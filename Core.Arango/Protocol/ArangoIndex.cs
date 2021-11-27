@@ -33,7 +33,7 @@ namespace Core.Arango.Protocol
         public ArangoIndexType Type { get; set; }
 
         /// <summary>
-        ///     (Hash | Skiplist) An array of attribute paths.
+        ///     (Hash | Skiplist | MultiDimensional) An array of attribute paths.
         ///     (TTL | Fulltext) An array with exactly one attribute path.
         ///     (Geo) An array with one or two attribute paths.
         ///     If it is an array with one attribute path location, then a geo-spatial index on all documents is created using
@@ -80,7 +80,7 @@ namespace Core.Arango.Protocol
         public bool? Sparse { get; set; }
 
         /// <summary>
-        ///     (Hash | SkipList) Note: Unique indexes on non-shard keys are not supported in a cluster.
+        ///     (Hash | SkipList | MultiDimensional) Note: Unique indexes on non-shard keys are not supported in a cluster.
         /// </summary>
         [JsonPropertyName("unique")]
         [JsonProperty(PropertyName = "unique", NullValueHandling = NullValueHandling.Ignore)]
@@ -124,5 +124,13 @@ namespace Core.Arango.Protocol
         [JsonProperty(PropertyName = "expireAfter", NullValueHandling = NullValueHandling.Ignore)]
         [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public int? ExpireAfter { get; set; }
+
+        /// <summary>
+        ///     (MultiDimensional) must be equal to “double”. Currently only doubles are supported as values.
+        /// </summary>
+        [JsonPropertyName("fieldValueTypes")]
+        [JsonProperty(PropertyName = "fieldValueTypes", NullValueHandling = NullValueHandling.Ignore)]
+        [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string FieldValueTypes { get; set; }
     }
 }

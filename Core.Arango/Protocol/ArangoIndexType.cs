@@ -52,6 +52,11 @@ namespace Core.Arango.Protocol
         [EnumMember(Value = "fulltext")] Fulltext,
 
         /// <summary>
+        /// 
+        /// </summary>
+        [EnumMember(Value = "zkd")] MultiDimensional,
+
+        /// <summary>
         ///     An edge index is automatically created for edge collections.
         ///     It contains connections between vertex documents and is invoked when the connecting edges of a vertex are queried.
         ///     There is no way to explicitly create or delete edge indexes.

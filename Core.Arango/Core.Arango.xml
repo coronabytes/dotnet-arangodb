@@ -4325,7 +4325,7 @@
         </member>
         <member name="P:Core.Arango.Protocol.ArangoIndex.Fields">
             <summary>
-                (Hash | Skiplist) An array of attribute paths.
+                (Hash | Skiplist | MultiDimensional) An array of attribute paths.
                 (TTL | Fulltext) An array with exactly one attribute path.
                 (Geo) An array with one or two attribute paths.
                 If it is an array with one attribute path location, then a geo-spatial index on all documents is created using
@@ -4360,7 +4360,7 @@
         </member>
         <member name="P:Core.Arango.Protocol.ArangoIndex.Unique">
             <summary>
-                (Hash | SkipList) Note: Unique indexes on non-shard keys are not supported in a cluster.
+                (Hash | SkipList | MultiDimensional) Note: Unique indexes on non-shard keys are not supported in a cluster.
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoIndex.InBackground">
@@ -4387,6 +4387,11 @@
         <member name="P:Core.Arango.Protocol.ArangoIndex.ExpireAfter">
             <summary>
                 (TTL) The time (in seconds) after a document’s creation after which the documents count as “expired”.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoIndex.FieldValueTypes">
+            <summary>
+                (MultiDimensional) must be equal to “double”. Currently only doubles are supported as values.
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoIndexType">
@@ -4431,6 +4436,11 @@
                 analysis provided by libicu, which is taking into account the selected language provided at server start. Words are
                 indexed in their lower-cased form.
                 The index supports complete match queries (full words) and prefix queries.
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoIndexType.MultiDimensional">
+            <summary>
+            
             </summary>
         </member>
         <member name="F:Core.Arango.Protocol.ArangoIndexType.Edge">

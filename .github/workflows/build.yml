@@ -21,7 +21,7 @@ jobs:
           - 6.0.100
         arango: 
           - "arangodb:3.7.15"
-          - "arangodb:3.8.2"
+          - "arangodb:3.8.3"
 #         - "arangodb/enterprise:3.7.15"
         topology:
           - single
