@@ -123,6 +123,21 @@ namespace Core.Arango.Tests
         }
 
         [Fact]
+        public async Task Ternary()
+        {
+            var q = Arango.Query<Project>("test")
+                .Select(x => new
+                {
+                    x.Key,
+                    Name = x.Name == "Test" ? "-" : x.Name
+                });
+
+            _output.WriteLine(q.ToAql().aql);
+            _output.WriteLine("");
+            //_output.WriteLine(JsonConvert.SerializeObject(await q.ToListAsync(), Formatting.Indented));
+        }
+
+        [Fact]
         public async Task Update()
         {
             var q = Arango.Query<Project>("test")

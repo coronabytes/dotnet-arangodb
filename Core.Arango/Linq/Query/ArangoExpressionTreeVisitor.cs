@@ -448,5 +448,15 @@ namespace Core.Arango.Linq.Query
 
             return expression;
         }
+
+        protected override Expression VisitConditional(ConditionalExpression expression)
+        {
+            VisitBinary(expression.Test as BinaryExpression);
+            ModelVisitor.QueryText.Append(" ? ");
+            Visit(expression.IfTrue);
+            ModelVisitor.QueryText.Append(" : ");
+            Visit(expression.IfFalse);
+            return expression;
+        }
     }
 }
