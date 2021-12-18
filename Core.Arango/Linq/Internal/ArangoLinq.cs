@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Core.Arango.Linq.Interface;
 
@@ -28,14 +29,14 @@ namespace Core.Arango.Linq
 
         public Func<string, string> TranslateGroupByIntoName => _context.Configuration.ResolveGroupBy;
 
-        public IAsyncEnumerable<T> StreamAsync<T>(string query, IDictionary<string, object> bindVars)
+        public IAsyncEnumerable<T> StreamAsync<T>(string query, IDictionary<string, object> bindVars, CancellationToken cancellationToken = default)
         {
-            return _context.Query.ExecuteStreamAsync<T>(_handle, query, bindVars);
+            return _context.Query.ExecuteStreamAsync<T>(_handle, query, bindVars, cancellationToken: cancellationToken);
         }
 
-        public async Task<ArangoList<T>> ExecuteAsync<T>(string query, IDictionary<string, object> bindVars)
+        public async Task<ArangoList<T>> ExecuteAsync<T>(string query, IDictionary<string, object> bindVars, CancellationToken cancellationToken = default)
         {
-            return await _context.Query.ExecuteAsync<T>(_handle, query, bindVars).ConfigureAwait(false);
+            return await _context.Query.ExecuteAsync<T>(_handle, query, bindVars, cancellationToken: cancellationToken).ConfigureAwait(false);
         }
     }
 }

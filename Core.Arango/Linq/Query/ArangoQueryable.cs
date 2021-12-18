@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading;
 using System.Threading.Tasks;
 using Core.Arango.Linq.Data;
 using Core.Arango.Linq.Interface;
@@ -28,37 +29,37 @@ namespace Core.Arango.Linq.Query
             this.db = db;
         }
 
-        public async Task<List<T>> ToListAsync()
+        public async Task<List<T>> ToListAsync(CancellationToken cancellationToken = default)
         {
             var data = GetQueryData();
-            return await db.ExecuteAsync<T>(data.Query, data.BindVars).ConfigureAwait(false);
+            return await db.ExecuteAsync<T>(data.Query, data.BindVars, cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<T> SingleOrDefaultAsync()
+        public async Task<T> SingleOrDefaultAsync(CancellationToken cancellationToken = default)
         {
             var data = GetQueryData();
-            var list = await db.ExecuteAsync<T>(data.Query, data.BindVars).ConfigureAwait(false);
+            var list = await db.ExecuteAsync<T>(data.Query, data.BindVars, cancellationToken).ConfigureAwait(false);
             return list.SingleOrDefault();
         }
 
-        public async Task<T> SingleAsync()
+        public async Task<T> SingleAsync(CancellationToken cancellationToken = default)
         {
             var data = GetQueryData();
-            var list = await db.ExecuteAsync<T>(data.Query, data.BindVars).ConfigureAwait(false);
+            var list = await db.ExecuteAsync<T>(data.Query, data.BindVars, cancellationToken).ConfigureAwait(false);
             return list.Single();
         }
 
-        public async Task<T> FirstOrDefaultAsync()
+        public async Task<T> FirstOrDefaultAsync(CancellationToken cancellationToken = default)
         {
             var data = GetQueryData();
-            var list = await db.ExecuteAsync<T>(data.Query, data.BindVars).ConfigureAwait(false);
+            var list = await db.ExecuteAsync<T>(data.Query, data.BindVars, cancellationToken).ConfigureAwait(false);
             return list.FirstOrDefault();
         }
 
-        public async Task<T> FirstAsync()
+        public async Task<T> FirstAsync(CancellationToken cancellationToken = default)
         {
             var data = GetQueryData();
-            var list = await db.ExecuteAsync<T>(data.Query, data.BindVars).ConfigureAwait(false);
+            var list = await db.ExecuteAsync<T>(data.Query, data.BindVars, cancellationToken).ConfigureAwait(false);
             return list.First();
         }
 

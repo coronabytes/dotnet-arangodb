@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using Core.Arango.Linq.Interface;
 using Core.Arango.Linq.Query;
@@ -50,77 +51,77 @@ namespace Core.Arango.Linq
             return (data.Query.Trim(), data.BindVars);
         }
 
-        public static Task<TSource> FirstAsync<TSource>(this IQueryable<TSource> source)
+        public static Task<TSource> FirstAsync<TSource>(this IQueryable<TSource> source, CancellationToken cancellationToken = default)
         {
-            return FirstOrDefaultAsync(source, false, null);
+            return FirstOrDefaultAsync(source, false, null, cancellationToken);
         }
 
         public static Task<TSource> FirstAsync<TSource>(this IQueryable<TSource> source,
-            Expression<Func<TSource, bool>> predicate)
+            Expression<Func<TSource, bool>> predicate, CancellationToken cancellationToken = default)
         {
-            return FirstOrDefaultAsync(source, false, predicate);
+            return FirstOrDefaultAsync(source, false, predicate, cancellationToken);
         }
 
-        public static Task<TSource> FirstOrDefaultAsync<TSource>(this IQueryable<TSource> source)
+        public static Task<TSource> FirstOrDefaultAsync<TSource>(this IQueryable<TSource> source, CancellationToken cancellationToken = default)
         {
-            return FirstOrDefaultAsync(source, true, null);
+            return FirstOrDefaultAsync(source, true, null, cancellationToken);
         }
 
         public static Task<TSource> FirstOrDefaultAsync<TSource>(this IQueryable<TSource> source,
-            Expression<Func<TSource, bool>> predicate)
+            Expression<Func<TSource, bool>> predicate, CancellationToken cancellationToken = default)
         {
-            return FirstOrDefaultAsync(source, true, predicate);
+            return FirstOrDefaultAsync(source, true, predicate, cancellationToken);
         }
 
         private static Task<T> FirstOrDefaultAsync<T>(this IQueryable<T> source, bool returnDefaultWhenEmpty,
-            Expression<Func<T, bool>> predicate)
+            Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default)
         {
             if (predicate != null)
                 source = source.Where(predicate);
 
             source = source.Take(1);
 
-            return returnDefaultWhenEmpty ? source.AsArangoQueryable().FirstOrDefaultAsync()
-                : source.AsArangoQueryable().FirstAsync();
+            return returnDefaultWhenEmpty ? source.AsArangoQueryable().FirstOrDefaultAsync(cancellationToken)
+                : source.AsArangoQueryable().FirstAsync(cancellationToken);
         }
 
-        public static Task<TSource> SingleAsync<TSource>(this IQueryable<TSource> source)
+        public static Task<TSource> SingleAsync<TSource>(this IQueryable<TSource> source, CancellationToken cancellationToken = default)
         {
-            return SingleOrDefaultAsync(source, false, null);
+            return SingleOrDefaultAsync(source, false, null, cancellationToken);
         }
 
         public static Task<TSource> SingleAsync<TSource>(this IQueryable<TSource> source,
-            Expression<Func<TSource, bool>> predicate)
+            Expression<Func<TSource, bool>> predicate, CancellationToken cancellationToken = default)
         {
-            return SingleOrDefaultAsync(source, false, predicate);
+            return SingleOrDefaultAsync(source, false, predicate, cancellationToken);
         }
 
-        public static Task<TSource> SingleOrDefaultAsync<TSource>(this IQueryable<TSource> source)
+        public static Task<TSource> SingleOrDefaultAsync<TSource>(this IQueryable<TSource> source, CancellationToken cancellationToken = default)
         {
-            return SingleOrDefaultAsync(source, true, null);
+            return SingleOrDefaultAsync(source, true, null, cancellationToken);
         }
 
         public static Task<TSource> SingleOrDefaultAsync<TSource>(this IQueryable<TSource> source,
-            Expression<Func<TSource, bool>> predicate)
+            Expression<Func<TSource, bool>> predicate, CancellationToken cancellationToken = default)
         {
-            return SingleOrDefaultAsync(source, true, predicate);
+            return SingleOrDefaultAsync(source, true, predicate, cancellationToken);
         }
 
         private static Task<T> SingleOrDefaultAsync<T>(this IQueryable<T> source, bool returnDefaultWhenEmpty,
-            Expression<Func<T, bool>> predicate)
+            Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default)
         {
             if (predicate != null)
                 source = source.Where(predicate);
 
             source = source.Take(2);
 
-            return returnDefaultWhenEmpty ? source.AsArangoQueryable().SingleOrDefaultAsync() 
-                : source.AsArangoQueryable().SingleAsync();
+            return returnDefaultWhenEmpty ? source.AsArangoQueryable().SingleOrDefaultAsync(cancellationToken) 
+                : source.AsArangoQueryable().SingleAsync(cancellationToken);
         }
 
-        public static Task<List<T>> ToListAsync<T>(this IQueryable<T> source)
+        public static Task<List<T>> ToListAsync<T>(this IQueryable<T> source, CancellationToken cancellationToken = default)
         {
-            return source.AsArangoQueryable().ToListAsync();
+            return source.AsArangoQueryable().ToListAsync(cancellationToken);
         }
 
         internal static MethodInfo FindExtention(string identifier, params Type[] arguments)
