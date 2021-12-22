@@ -1624,6 +1624,16 @@
                 Return the intersection of all arrays specified.
             </summary>
         </member>
+        <member name="M:Core.Arango.Linq.Aql.Position``1(``0[],``0)">
+            <summary>
+                Return whether search is contained in array.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Position``1(System.Collections.Generic.IEnumerable{``0},``0,System.Boolean)">
+            <summary>
+                Return whether search is contained in array. Optionally return the position.
+            </summary>
+        </member>
         <member name="M:Core.Arango.Linq.Aql.As``1(System.Object)">
             <summary>
                 Force return type (not an actual function)

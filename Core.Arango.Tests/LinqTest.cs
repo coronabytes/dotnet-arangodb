@@ -166,6 +166,22 @@ namespace Core.Arango.Tests
             _output.WriteLine(JsonConvert.SerializeObject(await q.ToListAsync(), Formatting.Indented));
         }
 
+        [Fact]
+        public async Task ListContains()
+        {
+            var list = new List<string> { "CA", "CB" }.ToArray();
+
+            //var q = Arango.Query<Project>("test")
+            //    .Where(x => list.Contains(x.ClientKey));
+
+            var q = Arango.Query<Project>("test")
+                .Where(x => Aql.Position(list, x.ClientKey));
+
+            _output.WriteLine(q.ToAql().aql);
+            _output.WriteLine("");
+            _output.WriteLine(JsonConvert.SerializeObject(await q.ToListAsync(), Formatting.Indented));
+        }
+
         public override async Task InitializeAsync()
         {
             Arango = new ArangoContext(UniqueTestRealm());

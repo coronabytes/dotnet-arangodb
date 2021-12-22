@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using Core.Arango.Linq.Attributes;
 
 namespace Core.Arango.Linq
@@ -84,6 +85,24 @@ namespace Core.Arango.Linq
         /// </summary>
         [AqlFunction("INTERSECTION")]
         public static T[] Intersection<T>(params T[] arrays)
+        {
+            throw E;
+        }
+
+        /// <summary>
+        ///     Return whether search is contained in array.
+        /// </summary>
+        [AqlFunction("POSITION")]
+        public static bool Position<T>(T[] array, T search)
+        {
+            throw E;
+        }
+
+        /// <summary>
+        ///     Return whether search is contained in array. Optionally return the position.
+        /// </summary>
+        [AqlFunction("POSITION")]
+        public static int Position<T>(IEnumerable<T> array, T search, bool returnIndex)
         {
             throw E;
         }
