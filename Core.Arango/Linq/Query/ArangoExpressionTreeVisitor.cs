@@ -49,6 +49,7 @@ namespace Core.Arango.Linq.Query
 
             string methodName = expression.Method.Name;
             bool prop = false;
+            bool pushObjectAsArgument = false;
 
             if (expression.Method.DeclaringType == typeof(Math))
             {
@@ -56,6 +57,12 @@ namespace Core.Arango.Linq.Query
                     methodName = m;
                 else
                     throw new InvalidOperationException($"Method {expression.Method.Name} is not supported in ArangoLinqProvider");
+            }
+            else if (expression.Method.DeclaringType == typeof(string))
+            {
+                // TODO: map methods
+                methodName = expression.Method.Name;
+                pushObjectAsArgument = true;
             }
             else
             {
@@ -89,6 +96,14 @@ namespace Core.Arango.Linq.Query
             {
                 var collection = LinqUtility.ResolveCollectionName(ModelVisitor.Db, genericArguments[1]);
                 ModelVisitor.QueryText.AppendFormat(" {0}{1}", collection, argumentSeprator);
+            }
+
+            if (pushObjectAsArgument)
+            {
+                Visit(expression.Object);
+
+                if (expression.Arguments.Count >= 1)
+                    ModelVisitor.QueryText.Append(argumentSeprator);
             }
 
             for (var i = 0; i < expression.Arguments.Count; i++)
