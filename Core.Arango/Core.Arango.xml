@@ -9963,6 +9963,11 @@
                 Arango Json Serializer with System.Json.Text
             </summary>
         </member>
+        <member name="P:Core.Arango.Serialization.Json.ArangoJsonSerializer.UseTimestamps">
+            <summary>
+             Use unix timestamps for DateTime
+            </summary>
+        </member>
         <member name="M:Core.Arango.Serialization.Json.ArangoJsonSerializer.#ctor(System.Text.Json.JsonNamingPolicy)">
             <summary>
             </summary>

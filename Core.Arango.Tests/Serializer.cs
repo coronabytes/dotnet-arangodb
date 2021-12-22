@@ -78,5 +78,31 @@ namespace Core.Arango.Tests
 
             _output.WriteLine($"{name}: {sw.Elapsed.TotalMilliseconds}");
         }
+
+        private class DateEntity
+        {
+            public DateTime A { get; set; }
+            public DateTime B { get; set; }
+
+        }
+
+        [Fact]
+        public void UnixTimeStamps()
+        {
+            var s1 = new ArangoJsonSerializer(new ArangoJsonDefaultPolicy())
+            {
+                UseTimestamps = true
+            };
+
+            var x = s1.Serialize(new DateEntity
+            {
+                A = DateTime.UtcNow,
+                B = DateTime.Now
+            });
+
+            var y = s1.Deserialize<DateEntity>(x);
+
+            y.ToString();
+        }
     }
 }
