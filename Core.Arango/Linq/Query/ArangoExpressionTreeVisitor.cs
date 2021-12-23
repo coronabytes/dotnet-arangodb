@@ -61,8 +61,6 @@ namespace Core.Arango.Linq.Query
             else if (expression.Method.DeclaringType == typeof(string))
             {
                 // TODO: map methods
-                methodName = expression.Method.Name;
-
                 methodName = expression.Method.Name switch
                 {
                     "Contains" => "Contains",
