@@ -62,6 +62,14 @@ namespace Core.Arango.Linq.Query
             {
                 // TODO: map methods
                 methodName = expression.Method.Name;
+
+                methodName = expression.Method.Name switch
+                {
+                    "Contains" => "Contains",
+                    "Concat" => "Concat",
+                    "" => expression.Method.Name // TODO : this should probably throw like in the 'else' case (so first check on 'AqlFunctionAttribute'?)
+                };
+
                 pushObjectAsArgument = true;
             }
             else
