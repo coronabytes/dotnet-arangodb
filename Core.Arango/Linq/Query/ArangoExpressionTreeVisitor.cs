@@ -63,8 +63,14 @@ namespace Core.Arango.Linq.Query
                 // TODO: map methods
                 methodName = expression.Method.Name switch
                 {
-                    "Contains" => "Contains",
-                    "Concat" => "Concat",
+                    "Contains" => "CONTAINS",
+                    "Concat" => "CONCAT",
+                    "Trim" => "TRIM",
+                    "TrimStart" => "LTRIM",
+                    "TrimEnd" => "RTRIM",
+                    "Length" => "LENGTH",
+                    "Count" => "LENGTH",
+                    "Split" => "SPLIT",
                     "" => expression.Method.Name // TODO : this should probably throw like in the 'else' case (so first check on 'AqlFunctionAttribute'?)
                 };
 

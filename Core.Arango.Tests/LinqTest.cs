@@ -219,16 +219,6 @@ namespace Core.Arango.Tests
                     ClientKey = "CB"
                 }
             });
-
-        }
-
-        [Fact]
-        public async Task StringContains()
-        {
-            var q = Arango.Query<Project>("test").Where(x => x.Name.Contains("abc"));
-            _output.WriteLine(q.ToAql().aql);
-            _output.WriteLine("");
-            //_output.WriteLine(JsonConvert.SerializeObject(await q.ToListAsync(), Formatting.Indented));
         }
     }
 }
