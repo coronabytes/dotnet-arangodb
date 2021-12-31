@@ -226,9 +226,18 @@ namespace Core.Arango.Tests
         public async Task StringContains()
         {
             var q = Arango.Query<Project>("test").Where(x => x.Name.Contains("abc"));
-            _output.WriteLine(q.ToAql().aql);
-            _output.WriteLine("");
-            //_output.WriteLine(JsonConvert.SerializeObject(await q.ToListAsync(), Formatting.Indented));
+            var aql = q.ToAql().aql.Trim();
+
+            Assert.Equal("FOR `x` IN `Project`  FILTER  CONTAINS(  `x`.`Name`  ,  @P1  )  RETURN   `x`", aql);
+        }
+
+        [Fact]
+        public async Task StringConcat()
+        {
+            var q = Arango.Query<Project>("test").Where(x => string.Concat(x.Name, "Suffix") == "TestSuffix");
+            var aql = q.ToAql().aql.Trim();
+
+            Assert.Equal("FOR `x` IN `Project`  FILTER  (  CONCAT(  `x`.`Name`  ,  @P1  )  ==  @P2  )  RETURN   `x`", aql);
         }
     }
 }
