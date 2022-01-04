@@ -25,11 +25,13 @@ namespace Core.Arango.Tests
         [Fact]
         public async Task StringConcat()
         {
-            var project1 = "Project";
-            var project2 = " A";
+            var project1 = "Project A";
+            var project2 = "PA";
 
-            var p = await Arango.Query<Project>("test").Where(x => x.Name == String.Concat(project1, project2)).FirstOrDefaultAsync();
+            var p = await Arango.Query<Project>("test").Where(x => x.Name.Concat(x.Key) == String.Concat(project1, project2)).FirstOrDefaultAsync();
+            var q = Arango.Query<Project>("test").Where(x => x.Name == String.Concat(project1, project2));
             Assert.Equal("Project A", p.Name);
+            _output.WriteLine(q.ToAql().aql);
         }
 
         [Fact]
@@ -91,11 +93,12 @@ namespace Core.Arango.Tests
             var p = await Arango.Query<Project>("test").Where(x => x.Name.Length == "Project A".Length).FirstOrDefaultAsync();
             //var q = Arango.Query<Project>("test").Where(x => x.Name.Length == "Project A".Length); //Doesn't work at the moment
             var q = Arango.Query<Project>("test").Where(x => x.Name.Count() == "Project A".Count()); //Doesn't work at the moment
-            //Assert.Equal("Project A", p.Name);
-            _output.WriteLine(q.ToAql().aql);
+            Assert.Equal("Project A", p.Name);
+            //_output.WriteLine(q.ToAql().aql);
             //_output.WriteLine((await q.FirstOrDefaultAsync()).Name);
         }
 
+        [Fact]
         //TODO: Here we would use the CONTAINS() AQL method using the optional bool parameter. Need to check how to do that.
         public async Task StringIndexOf()
         {
@@ -104,6 +107,60 @@ namespace Core.Arango.Tests
             //Assert.Equal("Project A", p.Name);
             //_output.WriteLine(q.ToAql().aql);
         }
+
+        [Fact]
+        public async Task StringSplit()
+        {
+            //var p = await Arango.Query<Project>("test").Where(x => x.Name.Split(' ').First() == "A").FirstOrDefaultAsync(); //TODO: Check how to handle optional parameters
+            //Assert.Equal("Project A", p.Name);
+            //_output.WriteLine(q.ToAql().aql);
+        }
+
+        [Fact]
+        public async Task StringReplace()
+        {
+            var p = await Arango.Query<Project>("test").Where(x => x.Name.Replace('A', 'C') == "Project C").FirstOrDefaultAsync();
+            Assert.Equal("Project A", p.Name);
+        }
+
+        [Fact]
+        public async Task StringSubstring()
+        {
+            var p1 = await Arango.Query<Project>("test").Where(x => x.Name.Substring(8) == "A").FirstOrDefaultAsync();
+            var p2 = await Arango.Query<Project>("test").Where(x => x.Name.Substring(1, 8) == "roject A").FirstOrDefaultAsync();
+            Assert.Equal("Project A", p1.Name);
+            Assert.Equal("Project A", p2.Name);
+        }
+
+        [Fact]
+        public async Task StringToLower()
+        {
+            var p = await Arango.Query<Project>("test").Where(x => x.Name.ToLower() == "project a").FirstOrDefaultAsync();
+            Assert.Equal("Project A", p.Name);
+        }
+
+        [Fact]
+        public async Task StringToUpper()
+        {
+            var p = await Arango.Query<Project>("test").Where(x => x.Name.ToUpper() == "PROJECT A").FirstOrDefaultAsync();
+            Assert.Equal("Project A", p.Name);
+        }
+
+        [Fact]
+        public async Task Temp()
+        {
+            var keys = new List<string>
+            {
+                "PA",
+                "PC"
+            };
+
+            var arrKeys = keys.ToArray();
+
+            var p = await Arango.Query<Project>("test").Where(x => Aql.Position(arrKeys, x.Key)).ToListAsync();
+
+        }
+
 
         public override async Task InitializeAsync()
         {

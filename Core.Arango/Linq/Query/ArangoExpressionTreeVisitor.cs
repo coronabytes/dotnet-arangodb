@@ -63,14 +63,29 @@ namespace Core.Arango.Linq.Query
                 // TODO: map methods
                 methodName = expression.Method.Name switch
                 {
-                    "Contains" => "CONTAINS",
-                    "Concat" => "CONCAT",
+                    "Contains" => "CONTAINS", //TODO: We can also use the contains method for the String.IndexOf()
+                    "Concat" => "concat",
                     "Trim" => "TRIM",
                     "TrimStart" => "LTRIM",
                     "TrimEnd" => "RTRIM",
                     "Length" => "LENGTH",
                     "Count" => "LENGTH",
                     "Split" => "SPLIT",
+                    "Replace" => "SUBSTITUTE",
+                    "Substring" => "SUBSTRING",
+                    "ToLower" => "LOWER",
+                    "ToUpper" => "UPPER",
+                    "" => expression.Method.Name // TODO : this should probably throw like in the 'else' case (so first check on 'AqlFunctionAttribute'?)
+                };
+
+                pushObjectAsArgument = true;
+            }
+            else if (typeof(IEnumerable).IsAssignableFrom(expression.Method.DeclaringType))
+            {
+                // TODO: map methods
+                methodName = expression.Method.Name switch
+                {
+                    "Contains" => "POSITION", //TODO: We can also use the contains method for the String.IndexOf()
                     "" => expression.Method.Name // TODO : this should probably throw like in the 'else' case (so first check on 'AqlFunctionAttribute'?)
                 };
 
