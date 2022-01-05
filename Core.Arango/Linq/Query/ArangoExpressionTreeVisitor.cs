@@ -58,13 +58,36 @@ namespace Core.Arango.Linq.Query
                 else
                     throw new InvalidOperationException($"Method {expression.Method.Name} is not supported in ArangoLinqProvider");
             }
+            else if(expression.Method.Name == "Equals")
+            {
+                ModelVisitor.QueryText.Append(" ( ");
+
+                Visit(expression.Object);
+
+                string argumentSeprator1 = "== ";
+
+                if (expression.Arguments.Count >= 1)
+                    ModelVisitor.QueryText.Append(argumentSeprator1);
+
+                for (var i = 0; i < expression.Arguments.Count; i++)
+                {
+                    Visit(expression.Arguments[i]);
+
+                    if (i != expression.Arguments.Count - 1)
+                        ModelVisitor.QueryText.Append(argumentSeprator1);
+                }
+
+                ModelVisitor.QueryText.Append(" ) ");
+
+                return expression;
+            }
             else if (expression.Method.DeclaringType == typeof(string))
             {
                 // TODO: map methods
                 methodName = expression.Method.Name switch
                 {
                     "Contains" => "CONTAINS", //TODO: We can also use the contains method for the String.IndexOf()
-                    "Concat" => "concat",
+                    //"Concat" => "CONCAT",
                     "Trim" => "TRIM",
                     "TrimStart" => "LTRIM",
                     "TrimEnd" => "RTRIM",

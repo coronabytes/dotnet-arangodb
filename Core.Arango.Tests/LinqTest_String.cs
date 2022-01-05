@@ -25,11 +25,11 @@ namespace Core.Arango.Tests
         [Fact]
         public async Task StringConcat()
         {
-            var project1 = "Project A";
-            var project2 = "PA";
+            var project1 = "Project";
+            var project2 = " A";
 
-            var p = await Arango.Query<Project>("test").Where(x => x.Name.Concat(x.Key) == String.Concat(project1, project2)).FirstOrDefaultAsync();
-            var q = Arango.Query<Project>("test").Where(x => x.Name == String.Concat(project1, project2));
+            var p = await Arango.Query<Project>("test").Where(x => x.Name == string.Concat(project1, project2)).FirstOrDefaultAsync();
+            var q = Arango.Query<Project>("test").Where(x => x.Name.Concat(" 10") == "Project A 10");
             Assert.Equal("Project A", p.Name);
             _output.WriteLine(q.ToAql().aql);
         }
@@ -149,15 +149,25 @@ namespace Core.Arango.Tests
         [Fact]
         public async Task Temp()
         {
-            var keys = new List<string>
-            {
-                "PA",
-                "PC"
-            };
+            //var keys = new List<string>
+            //{
+            //    "PA",
+            //    "PC"
+            //};
 
-            var arrKeys = keys.ToArray();
+            //var arrKeys = keys.ToArray();
 
-            var p = await Arango.Query<Project>("test").Where(x => Aql.Position(arrKeys, x.Key)).ToListAsync();
+            //var p = await Arango.Query<Project>("test").Where(x => keys.Contains()).ToListAsync();
+            var p = Arango.Query<Project>("test").Where(x => x.Name.Equals("Project A"));
+            var q = p.ToAql();
+
+            var p2 = Arango.Query<Project>("test").Where(x => x.Name == "abc");
+            var q2 = p2.ToAql();
+
+            var a = await p.FirstOrDefaultAsync();
+            _output.WriteLine(a.Name);
+            _output.WriteLine(q.aql);
+            _output.WriteLine(q2.aql);  
 
         }
 
