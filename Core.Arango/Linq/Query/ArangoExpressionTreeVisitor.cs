@@ -83,11 +83,10 @@ namespace Core.Arango.Linq.Query
             }
             else if (expression.Method.DeclaringType == typeof(string))
             {
-                // TODO: map methods
                 methodName = expression.Method.Name switch
                 {
                     "Contains" => "CONTAINS", //TODO: We can also use the contains method for the String.IndexOf()
-                    //"Concat" => "CONCAT",
+                    "Concat" => "CONCAT",
                     "Trim" => "TRIM",
                     "TrimStart" => "LTRIM",
                     "TrimEnd" => "RTRIM",
@@ -103,7 +102,17 @@ namespace Core.Arango.Linq.Query
 
                 pushObjectAsArgument = true;
             }
-            else if (typeof(IEnumerable).IsAssignableFrom(expression.Method.DeclaringType))
+            else if (expression.Method.DeclaringType == typeof(DateTime))
+            {
+                methodName = expression.Method.Name switch
+                {
+                    "AddYears" => "DATE_ADD", //TODO: We can also use the contains method for the String.IndexOf()
+                    "" => expression.Method.Name // TODO : this should probably throw like in the 'else' case (so first check on 'AqlFunctionAttribute'?)
+                };
+
+                pushObjectAsArgument = true;
+            }
+            else if (expression.Method.DeclaringType.IsArray)
             {
                 // TODO: map methods
                 methodName = expression.Method.Name switch
@@ -162,6 +171,27 @@ namespace Core.Arango.Linq.Query
 
                 if (i != expression.Arguments.Count - 1)
                     ModelVisitor.QueryText.Append(argumentSeprator);
+            }
+
+            if(expression.Method.DeclaringType == typeof(DateTime) && methodName == "DATE_ADD")
+            {
+                ModelVisitor.QueryText.Append(argumentSeprator);
+
+                string parameter = null;
+
+                parameter = expression.Method.Name switch
+                {
+                    "AddYears" => " \"y\" ",
+                    "AddMonths" => " \"m\" ",
+                    "AddDays" => " \"d\" ",
+                    "AddHours" => " \"h\" ",
+                    "AddMinutes" => " \"i\" ",
+                    "AddSeconds" => " \"s\" ",
+                    "AddMilliseconds" => " \"f\" ",
+                    "" => expression.Method.Name
+                };
+
+                ModelVisitor.QueryText.Append(parameter);
             }
 
             if (!noParenthesis)

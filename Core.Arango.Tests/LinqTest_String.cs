@@ -108,10 +108,11 @@ namespace Core.Arango.Tests
             //_output.WriteLine(q.ToAql().aql);
         }
 
+        //TODO: Check how to handle optional parameters
         [Fact]
         public async Task StringSplit()
         {
-            //var p = await Arango.Query<Project>("test").Where(x => x.Name.Split(' ').First() == "A").FirstOrDefaultAsync(); //TODO: Check how to handle optional parameters
+            //var p = await Arango.Query<Project>("test").Where(x => x.Name.Split(' ').First() == "A").FirstOrDefaultAsync(); 
             //Assert.Equal("Project A", p.Name);
             //_output.WriteLine(q.ToAql().aql);
         }
@@ -149,25 +150,36 @@ namespace Core.Arango.Tests
         [Fact]
         public async Task Temp()
         {
-            //var keys = new List<string>
-            //{
-            //    "PA",
-            //    "PC"
-            //};
+            String[] keys = { "PA", "PB" };
 
-            //var arrKeys = keys.ToArray();
+            var arrKeys = keys.ToArray();
 
-            //var p = await Arango.Query<Project>("test").Where(x => keys.Contains()).ToListAsync();
-            var p = Arango.Query<Project>("test").Where(x => x.Name.Equals("Project A"));
-            var q = p.ToAql();
+            //var p = Arango.Query<Project>("test");
+            //var q = p.Where(x => Aql.Position(keys, x.Name));
+            //var q = p.Where(x => keys.Contains(x.Key));
+            //var qq = q.ToAql().aql;
 
-            var p2 = Arango.Query<Project>("test").Where(x => x.Name == "abc");
-            var q2 = p2.ToAql();
+            //var p1 = Arango.Query<Project>("test");
+            //var q1 = p1.Where(x => x.Name.ToUpper() == "Project A");
+            //var qq1 = q1.ToAql().aql;
 
-            var a = await p.FirstOrDefaultAsync();
-            _output.WriteLine(a.Name);
-            _output.WriteLine(q.aql);
-            _output.WriteLine(q2.aql);  
+            //var p = Arango.Query<Project>("test").Where(x => x.Name.Equals("Project A"));
+            //var q = p.ToAql();
+
+            //var p2 = Arango.Query<Project>("test").Where(x => x.Name == "abc");
+            //var q2 = p2.ToAql();
+
+            //var a = await p.FirstOrDefaultAsync();
+            //_output.WriteLine(a.Name);
+            //_output.WriteLine(q.aql);
+            //_output.WriteLine(q2.aql);
+
+            //Math functions seem to be working
+            var q = Arango.Query<Project>("test")
+                //.Where(x => Math.Floor(x.Budget) == 10)
+                .Where(x => Math.Abs(x.Budget) == 10)
+                ;
+            _output.WriteLine(q.ToAql().aql);
 
         }
 
@@ -200,13 +212,15 @@ namespace Core.Arango.Tests
                 {
                     Key = "PA",
                     Name = "Project A",
-                    ClientKey = "CA"
+                    ClientKey = "CA",
+                    Budget = 10.1
                 },
                 new ()
                 {
                     Key = "PB",
                     Name = "Project B",
-                    ClientKey = "CB"
+                    ClientKey = "CB",
+                    Budget = 11.2
                 }
             });
         }
