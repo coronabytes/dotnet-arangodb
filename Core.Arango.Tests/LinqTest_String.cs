@@ -22,14 +22,13 @@ namespace Core.Arango.Tests
             _output = output;
         }
 
+        //Concat doesn't seems to be picked up by the ArangoExpressionTreeVisitor. Comment the Assert line and check the AQL generated.
         [Fact]
         public async Task StringConcat()
         {
-            var project1 = "Project";
-            var project2 = " A";
-
-            var p = await Arango.Query<Project>("test").Where(x => x.Name == string.Concat(project1, project2)).FirstOrDefaultAsync();
-            var q = Arango.Query<Project>("test").Where(x => x.Name.Concat(" 10") == "Project A 10");
+            var q = Arango.Query<Project>("test").Where(x => (string)x.Name.Concat(" 10") == "Project A 10");
+            var p = await q.FirstOrDefaultAsync();
+            
             Assert.Equal("Project A", p.Name);
             _output.WriteLine(q.ToAql().aql);
         }
@@ -37,74 +36,136 @@ namespace Core.Arango.Tests
         [Fact]
         public async Task StringContains()
         {
-            var p = await Arango.Query<Project>("test").Where(x => x.Name.Contains("A")).FirstOrDefaultAsync();
+            var q = Arango.Query<Project>("test").Where(x => x.Name.Contains("A"));
+            var p = await q.FirstOrDefaultAsync();
+
             Assert.Equal("Project A", p.Name);
+            //_output.WriteLine(q.ToAql().aql);
         }
 
+        //Not working at the moment. Check the comment on the second Assert.
         [Fact]
         public async Task StringTrim()
         {
-            var project1 = " Project A ";
-            var project2 = "-||Project A||-";
+            await Arango.Document.CreateManyAsync(D, nameof(Project), new List<Project>
+            {
+                new ()
+                {
+                    Key = "PC",
+                    Name = " Project C ",
+                    ClientKey = "CA"
+                },
+                new ()
+                {
+                    Key = "PD",
+                    Name = "-||Project D||-",
+                    ClientKey = "CB"
+                }
+            });
 
             char[] charsToDelete = { '|', '-' };
 
-            var p1 = await Arango.Query<Project>("test").Where(x => project1.Trim() == "Project A").FirstOrDefaultAsync();
-            var p2 = await Arango.Query<Project>("test").Where(x => project2.Trim(charsToDelete) == "Project A").FirstOrDefaultAsync();
+            var q1 = Arango.Query<Project>("test").Where(x => x.Name.Trim() == "Project C");
+            var q2 = Arango.Query<Project>("test").Where(x => x.Name.Trim(charsToDelete) == "Project D");
 
-            Assert.Equal("Project A", p1.Name);
-            Assert.Equal("Project A", p2.Name);
+            var p1 = await q1.FirstOrDefaultAsync();
+            var p2 = await q2.FirstOrDefaultAsync();
+
+            Assert.Equal(" Project C ", p1.Name);
+            Assert.Equal("-||Project D||-", p2.Name); //This isn't working right now, because for some reason, AQL LTRIM and RTRIM accepts arrays of chars for deletion, but TRIM doesn't
+            //So it's an issue with AQL itself. https://github.com/arangodb/arangodb/issues/15500
+            //It could be fixed by doing some logic inside the ArangoExpressionTreeVistor, but as I said, it's an issue with AQL, so I'll wait your call on this.
+
+            //_output.WriteLine(q1.ToAql().aql);
+            //_output.WriteLine(q2.ToAql().aql);
         }
 
         [Fact]
         public async Task StringTrimStart()
         {
-            var project1 = " Project A";
-            var project2 = "-||Project A";
+            await Arango.Document.CreateManyAsync(D, nameof(Project), new List<Project>
+            {
+                new ()
+                {
+                    Key = "PC",
+                    Name = " Project C",
+                    ClientKey = "CA"
+                },
+                new ()
+                {
+                    Key = "PD",
+                    Name = "-||Project D",
+                    ClientKey = "CB"
+                }
+            });
 
             char[] charsToDelete = { '|', '-' };
 
-            var p1 = await Arango.Query<Project>("test").Where(x => project1.TrimStart() == "Project A").FirstOrDefaultAsync();
-            var p2 = await Arango.Query<Project>("test").Where(x => project2.TrimStart(charsToDelete) == "Project A").FirstOrDefaultAsync();
+            var q1 = Arango.Query<Project>("test").Where(x => x.Name.TrimStart() == "Project C");
+            var q2 = Arango.Query<Project>("test").Where(x => x.Name.TrimStart(charsToDelete) == "Project D");
 
-            Assert.Equal("Project A", p1.Name);
-            Assert.Equal("Project A", p2.Name);
+            var p1 = await q1.FirstOrDefaultAsync();
+            var p2 = await q2.FirstOrDefaultAsync();
+
+            Assert.Equal(" Project C", p1.Name);
+            Assert.Equal("-||Project D", p2.Name);
+
+            //_output.WriteLine(q1.ToAql().aql);
+            //_output.WriteLine(q2.ToAql().aql);
         }
 
         [Fact]
         public async Task StringTrimEnd()
         {
-            var project1 = "Project A ";
-            var project2 = "Project A||-";
+            await Arango.Document.CreateManyAsync(D, nameof(Project), new List<Project>
+            {
+                new ()
+                {
+                    Key = "PC",
+                    Name = "Project C ",
+                    ClientKey = "CA"
+                },
+                new ()
+                {
+                    Key = "PD",
+                    Name = "Project D||-",
+                    ClientKey = "CB"
+                }
+            });
 
             char[] charsToDelete = { '|', '-' };
 
-            var p1 = await Arango.Query<Project>("test").Where(x => project1.TrimEnd() == "Project A").FirstOrDefaultAsync();
-            var p2 = await Arango.Query<Project>("test").Where(x => project2.TrimEnd(charsToDelete) == "Project A").FirstOrDefaultAsync();
+            var q1 = Arango.Query<Project>("test").Where(x => x.Name.TrimEnd() == "Project C");
+            var q2 = Arango.Query<Project>("test").Where(x => x.Name.TrimEnd(charsToDelete) == "Project D");
 
-            Assert.Equal("Project A", p1.Name);
-            Assert.Equal("Project A", p2.Name);
+            var p1 = await q1.FirstOrDefaultAsync();
+            var p2 = await q2.FirstOrDefaultAsync();
+
+            Assert.Equal("Project C ", p1.Name);
+            Assert.Equal("Project D||-", p2.Name);
+
+            //_output.WriteLine(q1.ToAql().aql);
+            //_output.WriteLine(q2.ToAql().aql);
         }
 
         //TODO: Handle cases when properties can be translated as functions in AQL
         [Fact]
         public async Task StringLen()
         {
-            var p = await Arango.Query<Project>("test").Where(x => x.Name.Length == "Project A".Length).FirstOrDefaultAsync();
-            //var q = Arango.Query<Project>("test").Where(x => x.Name.Length == "Project A".Length); //Doesn't work at the moment
-            var q = Arango.Query<Project>("test").Where(x => x.Name.Count() == "Project A".Count()); //Doesn't work at the moment
+            var q = Arango.Query<Project>("test").Where(x => x.Name.Length == "Project A".Length);
+            var p = await q.FirstOrDefaultAsync();
+
             Assert.Equal("Project A", p.Name);
             //_output.WriteLine(q.ToAql().aql);
-            //_output.WriteLine((await q.FirstOrDefaultAsync()).Name);
         }
 
         [Fact]
-        //TODO: Here we would use the CONTAINS() AQL method using the optional bool parameter. Need to check how to do that.
         public async Task StringIndexOf()
         {
-            //var p = await Arango.Query<Project>("test").Where(x => x.Name.IndexOf("A") == "Project A".IndexOf("A")).FirstOrDefaultAsync();
-            //var q = Arango.Query<Project>("test").Where(x => x.Name.IndexOf("A") == "Project A".IndexOf("A"));
-            //Assert.Equal("Project A", p.Name);
+            var q = Arango.Query<Project>("test").Where(x => x.Name.IndexOf("A") == "Project A".IndexOf("A"));
+            var p = await q.FirstOrDefaultAsync();
+            
+            Assert.Equal("Project A", p.Name);
             //_output.WriteLine(q.ToAql().aql);
         }
 
@@ -112,77 +173,60 @@ namespace Core.Arango.Tests
         [Fact]
         public async Task StringSplit()
         {
-            //var p = await Arango.Query<Project>("test").Where(x => x.Name.Split(' ').First() == "A").FirstOrDefaultAsync(); 
-            //Assert.Equal("Project A", p.Name);
+            char[] splitChars = { ' ' };
+
+            var q = Arango.Query<Project>("test").Where(x => x.Name.Split(splitChars) == ("Project A").Split(splitChars));
+            var p = await q.FirstOrDefaultAsync();
+
+            Assert.Equal("Project A", p.Name);
             //_output.WriteLine(q.ToAql().aql);
         }
 
         [Fact]
         public async Task StringReplace()
         {
-            var p = await Arango.Query<Project>("test").Where(x => x.Name.Replace('A', 'C') == "Project C").FirstOrDefaultAsync();
+            var q = Arango.Query<Project>("test").Where(x => x.Name.Replace('A', 'C') == "Project C");
+            var p = await q.FirstOrDefaultAsync();
+
             Assert.Equal("Project A", p.Name);
+            //_output.WriteLine(q.ToAql().aql);
         }
 
         [Fact]
         public async Task StringSubstring()
         {
-            var p1 = await Arango.Query<Project>("test").Where(x => x.Name.Substring(8) == "A").FirstOrDefaultAsync();
-            var p2 = await Arango.Query<Project>("test").Where(x => x.Name.Substring(1, 8) == "roject A").FirstOrDefaultAsync();
+            var q1 = Arango.Query<Project>("test").Where(x => x.Name.Substring(8) == "A");
+            var q2 = Arango.Query<Project>("test").Where(x => x.Name.Substring(1, 8) == "roject A");
+
+            var p1 = await q1.FirstOrDefaultAsync();
+            var p2 = await q2.FirstOrDefaultAsync();
+
             Assert.Equal("Project A", p1.Name);
             Assert.Equal("Project A", p2.Name);
+
+            _output.WriteLine(q1.ToAql().aql);
+            _output.WriteLine(q2.ToAql().aql);
         }
 
         [Fact]
         public async Task StringToLower()
         {
-            var p = await Arango.Query<Project>("test").Where(x => x.Name.ToLower() == "project a").FirstOrDefaultAsync();
+            var q = Arango.Query<Project>("test").Where(x => x.Name.ToLower() == "project a");
+            var p = await q.FirstOrDefaultAsync();
+
             Assert.Equal("Project A", p.Name);
+            _output.WriteLine(q.ToAql().aql);
         }
 
         [Fact]
         public async Task StringToUpper()
         {
-            var p = await Arango.Query<Project>("test").Where(x => x.Name.ToUpper() == "PROJECT A").FirstOrDefaultAsync();
+            var q = Arango.Query<Project>("test").Where(x => x.Name.ToUpper() == "PROJECT A");
+            var p = await q.FirstOrDefaultAsync();
+
             Assert.Equal("Project A", p.Name);
-        }
-
-        [Fact]
-        public async Task Temp()
-        {
-            String[] keys = { "PA", "PB" };
-
-            var arrKeys = keys.ToArray();
-
-            //var p = Arango.Query<Project>("test");
-            //var q = p.Where(x => Aql.Position(keys, x.Name));
-            //var q = p.Where(x => keys.Contains(x.Key));
-            //var qq = q.ToAql().aql;
-
-            //var p1 = Arango.Query<Project>("test");
-            //var q1 = p1.Where(x => x.Name.ToUpper() == "Project A");
-            //var qq1 = q1.ToAql().aql;
-
-            //var p = Arango.Query<Project>("test").Where(x => x.Name.Equals("Project A"));
-            //var q = p.ToAql();
-
-            //var p2 = Arango.Query<Project>("test").Where(x => x.Name == "abc");
-            //var q2 = p2.ToAql();
-
-            //var a = await p.FirstOrDefaultAsync();
-            //_output.WriteLine(a.Name);
-            //_output.WriteLine(q.aql);
-            //_output.WriteLine(q2.aql);
-
-            //Math functions seem to be working
-            var q = Arango.Query<Project>("test")
-                //.Where(x => Math.Floor(x.Budget) == 10)
-                .Where(x => Math.Abs(x.Budget) == 10)
-                ;
             _output.WriteLine(q.ToAql().aql);
-
         }
-
 
         public override async Task InitializeAsync()
         {
@@ -212,15 +256,13 @@ namespace Core.Arango.Tests
                 {
                     Key = "PA",
                     Name = "Project A",
-                    ClientKey = "CA",
-                    Budget = 10.1
+                    ClientKey = "CA"
                 },
                 new ()
                 {
                     Key = "PB",
                     Name = "Project B",
-                    ClientKey = "CB",
-                    Budget = 11.2
+                    ClientKey = "CB"
                 }
             });
         }

@@ -85,12 +85,13 @@ namespace Core.Arango.Linq.Query
             {
                 methodName = expression.Method.Name switch
                 {
-                    "Contains" => "CONTAINS", //TODO: We can also use the contains method for the String.IndexOf()
+                    "Contains" => "CONTAINS",
+                    "IndexOf" => "CONTAINS",
                     "Concat" => "CONCAT",
                     "Trim" => "TRIM",
                     "TrimStart" => "LTRIM",
                     "TrimEnd" => "RTRIM",
-                    "Length" => "LENGTH",
+                    "Length" => "LENGTH", //We need to check if an object property can be translated as a method.
                     "Count" => "LENGTH",
                     "Split" => "SPLIT",
                     "Replace" => "SUBSTITUTE",
@@ -190,6 +191,14 @@ namespace Core.Arango.Linq.Query
                     "AddMilliseconds" => " \"f\" ",
                     "" => expression.Method.Name
                 };
+
+                ModelVisitor.QueryText.Append(parameter);
+            }
+            else if (expression.Method.DeclaringType == typeof(string) && expression.Method.Name == "IndexOf")
+            {
+                ModelVisitor.QueryText.Append(argumentSeprator);
+
+                string parameter = " true ";
 
                 ModelVisitor.QueryText.Append(parameter);
             }

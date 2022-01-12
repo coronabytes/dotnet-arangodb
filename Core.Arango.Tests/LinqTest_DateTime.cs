@@ -38,14 +38,15 @@ namespace Core.Arango.Tests
         public async Task Add()
         {
             var time = new DateTime(2021, 1, 30);
-            time = time.ToUniversalTime();
             var time2 = time.AddYears(1);
-            var q = Arango.Query<Activity>("test").Where(x => x.Start.AddYears(1) == time2);
-            var q2 = Arango.Query<Activity>("test").Where(x => x.Start == time);
+            //time = time.ToUniversalTime();
+            //var time2 = time.AddYears(1);
+            //var q = Arango.Query<Activity>("test").Where(x => x.Start.AddYears(1) == time2);
+            var q2 = Arango.Query<Activity>("test").Where(x => x.Start.AddYears(1) == time2);
 
             var a = await q2.FirstOrDefaultAsync();
             Assert.Equal("AA", a.Key);
-            _output.WriteLine(q.ToAql().aql);
+            //_output.WriteLine(q.ToAql().aql);
             _output.WriteLine(q2.ToAql().aql);
         }
 
@@ -66,8 +67,8 @@ namespace Core.Arango.Tests
                 new()
                 {
                     Key = "AB",
-                    Start = new DateTime(2000, 5, 15),
-                    End = new DateTime(2010, 10, 3)
+                    Start = new DateTime(2022, 5, 15),
+                    End = new DateTime(2050, 10, 3)
                 }
             });
         }
