@@ -103,27 +103,6 @@ namespace Core.Arango.Linq.Query
                 if(methodName != "CONCAT")
                     pushObjectAsArgument = true;
             }
-            else if (expression.Method.DeclaringType == typeof(DateTime))
-            {
-                methodName = expression.Method.Name switch
-                {
-                    "AddYears" => "DATE_ADD", //TODO: We can also use the contains method for the String.IndexOf()
-                    "" => expression.Method.Name // TODO : this should probably throw like in the 'else' case (so first check on 'AqlFunctionAttribute'?)
-                };
-
-                pushObjectAsArgument = true;
-            }
-            else if (expression.Method.DeclaringType.IsArray)
-            {
-                // TODO: map methods
-                methodName = expression.Method.Name switch
-                {
-                    "Contains" => "POSITION", //TODO: We can also use the contains method for the String.IndexOf()
-                    "" => expression.Method.Name // TODO : this should probably throw like in the 'else' case (so first check on 'AqlFunctionAttribute'?)
-                };
-
-                pushObjectAsArgument = true;
-            }
             else
             {
                 var aqlFunction = expression.Method.GetCustomAttribute<AqlFunctionAttribute>();
@@ -174,27 +153,7 @@ namespace Core.Arango.Linq.Query
                     ModelVisitor.QueryText.Append(argumentSeprator);
             }
 
-            if(expression.Method.DeclaringType == typeof(DateTime) && methodName == "DATE_ADD")
-            {
-                ModelVisitor.QueryText.Append(argumentSeprator);
-
-                string parameter = null;
-
-                parameter = expression.Method.Name switch
-                {
-                    "AddYears" => " \"y\" ",
-                    "AddMonths" => " \"m\" ",
-                    "AddDays" => " \"d\" ",
-                    "AddHours" => " \"h\" ",
-                    "AddMinutes" => " \"i\" ",
-                    "AddSeconds" => " \"s\" ",
-                    "AddMilliseconds" => " \"f\" ",
-                    "" => expression.Method.Name
-                };
-
-                ModelVisitor.QueryText.Append(parameter);
-            }
-            else if (expression.Method.DeclaringType == typeof(string) && expression.Method.Name == "IndexOf")
+            if (expression.Method.DeclaringType == typeof(string) && expression.Method.Name == "IndexOf")
             {
                 ModelVisitor.QueryText.Append(argumentSeprator);
 
