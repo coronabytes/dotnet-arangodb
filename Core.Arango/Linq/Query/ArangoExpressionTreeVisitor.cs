@@ -100,8 +100,8 @@ namespace Core.Arango.Linq.Query
                     "ToUpper" => "UPPER",
                     "" => expression.Method.Name // TODO : this should probably throw like in the 'else' case (so first check on 'AqlFunctionAttribute'?)
                 };
-
-                pushObjectAsArgument = true;
+                if(methodName != "CONCAT")
+                    pushObjectAsArgument = true;
             }
             else if (expression.Method.DeclaringType == typeof(DateTime))
             {
@@ -351,6 +351,18 @@ namespace Core.Arango.Linq.Query
 
                 ModelVisitor.QueryText.AppendFormat(
                     LinqUtility.ResolvePropertyName($"{prefix}_{expression.Member.Name}"));
+            }
+            else if (expression.Type.Name == "Int32" && member.Type.Name == "String")
+            {
+                var lenMember = expression as MemberExpression;
+                var lenMemberName = lenMember.Member.Name;
+                if(lenMemberName == "Length")
+                {
+                    ModelVisitor.QueryText.AppendFormat(" {0}( ", lenMemberName.ToUpper());
+                    Visit(member);
+                    ModelVisitor.QueryText.Append(" ) ");
+                }
+
             }
             else
             {
