@@ -169,17 +169,31 @@ namespace Core.Arango.Tests
         [Fact]
         public async Task ListContains()
         {
-            var list = new List<string> { "CA", "CB" }.ToArray();
-
-            //var q = Arango.Query<Project>("test")
-            //    .Where(x => list.Contains(x.ClientKey));
+            var list = new List<string> { "CB" }.ToArray();
 
             var q = Arango.Query<Project>("test")
-                .Where(x => Aql.Position(list, x.ClientKey));
+                .Where(x => list.Contains(x.ClientKey));
+
+            //var q = Arango.Query<Project>("test")
+            //    .Where(x => Aql.Position(list, x.ClientKey));
 
             _output.WriteLine(q.ToAql().aql);
             _output.WriteLine("");
-            _output.WriteLine(JsonConvert.SerializeObject(await q.ToListAsync(), Formatting.Indented));
+
+            var output = await q.ToListAsync();
+            _output.WriteLine(JsonConvert.SerializeObject(output, Formatting.Indented));
+
+            Assert.Single(output);
+        }
+
+        [Fact]
+        public async Task QueryableContains()
+        {
+            var q = Arango.Query<Project>("test")
+                .Select(x => x.ClientKey)
+                .Contains("CB");
+
+            Assert.True(q);
         }
 
         public override async Task InitializeAsync()

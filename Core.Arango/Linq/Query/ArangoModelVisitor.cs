@@ -88,6 +88,12 @@ namespace Core.Arango.Linq.Query
             if (queryModel.ResultOperators.Count(x => x is DistinctResultOperator) != 0)
                 DistinctResult = true;
 
+            if (queryModel.ResultOperators.Any(x => x is ContainsResultOperator))
+                QueryText.AppendFormat(" RETURN {0} (( ", "POSITION");
+
+            if (queryModel.ResultOperators.Any(x => x is AnyResultOperator))
+                QueryText.AppendFormat(" RETURN LENGTH (");
+
             // do not need to apply distinct since it has a single result
             if (string.IsNullOrEmpty(aggregateFunction) == false)
                 QueryText.AppendFormat(" RETURN {0} (( ", aggregateFunction);
@@ -107,6 +113,17 @@ namespace Core.Arango.Linq.Query
 
             if (aggregateFunction != null)
                 QueryText.Append(" )) ");
+
+            if (queryModel.ResultOperators.Any(x => x is ContainsResultOperator))
+            {
+                QueryText.Append(" ), ");
+                var op = queryModel.ResultOperators.First(x => x is ContainsResultOperator) as ContainsResultOperator;
+                op.Accept(this, queryModel, 0); // TODO : Index ??
+                QueryText.Append(") ");
+            }
+
+            if (queryModel.ResultOperators.Any(x => x is AnyResultOperator))
+                QueryText.AppendFormat(") > 0");
         }
 
         public override void VisitResultOperator(ResultOperatorBase resultOperator, QueryModel queryModel, int index)
@@ -116,6 +133,13 @@ namespace Core.Arango.Linq.Query
 
             if (resultOperator as TakeResultOperator != null)
                 throw new NotSupportedException("TakeResultOperator");
+
+            if (resultOperator is ContainsResultOperator contains)
+            {
+                // Do something
+                var expr = contains.Item;
+                GetAqlExpression(expr, queryModel);
+            }
 
             base.VisitResultOperator(resultOperator, queryModel, index);
         }
