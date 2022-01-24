@@ -22,15 +22,14 @@ namespace Core.Arango.Tests
             _output = output;
         }
 
-        //Concat doesn't seems to be picked up by the ArangoExpressionTreeVisitor. Comment the Assert line and check the AQL generated.
         [Fact]
         public async Task StringConcat()
         {
-            var q = Arango.Query<Project>("test").Where(x => (string)x.Name.Concat(" 10") == "Project A 10");
+            var q = Arango.Query<Project>("test").Where(x => String.Concat(x.Name, " 10") == "Project A 10");
             var p = await q.FirstOrDefaultAsync();
             
             Assert.Equal("Project A", p.Name);
-            _output.WriteLine(q.ToAql().aql);
+            //_output.WriteLine(q.ToAql().aql);
         }
 
         [Fact]
@@ -148,7 +147,6 @@ namespace Core.Arango.Tests
             //_output.WriteLine(q2.ToAql().aql);
         }
 
-        //TODO: Handle cases when properties can be translated as functions in AQL
         [Fact]
         public async Task StringLen()
         {
@@ -169,7 +167,6 @@ namespace Core.Arango.Tests
             //_output.WriteLine(q.ToAql().aql);
         }
 
-        //TODO: Check how to handle optional parameters
         [Fact]
         public async Task StringSplit()
         {

@@ -83,46 +83,32 @@ namespace Core.Arango.Linq.Query
             }
             else if (expression.Method.DeclaringType == typeof(string))
             {
-                methodName = expression.Method.Name switch
+
+                pushObjectAsArgument = !expression.Method.IsStatic;
+
+                methodName = methodName switch
                 {
-                    "Contains" => "CONTAINS",
-                    "IndexOf" => "CONTAINS",
-                    "Concat" => "CONCAT",
-                    "Trim" => "TRIM",
-                    "TrimStart" => "LTRIM",
-                    "TrimEnd" => "RTRIM",
-                    "Length" => "LENGTH", //We need to check if an object property can be translated as a method.
+                    nameof(string.Concat) => "CONCAT",
+                    nameof(string.Contains) => "CONTAINS",
+                    nameof(string.StartsWith) => "STARTS_WITH",
+                    //nameof(string.EndsWith) => "Substring ?",
+                    nameof(string.Substring) => "SUBSTRING",
+                    nameof(string.Trim) => "TRIM",
+                    nameof(string.TrimStart) => "LTRIM",
+                    nameof(string.TrimEnd) => "RTRIM",
+                    nameof(string.ToUpper) => "UPPER",
+                    nameof(string.ToUpperInvariant) => "UPPER",
+                    nameof(string.ToLower) => "LOWER",
+                    nameof(string.ToLowerInvariant) => "LOWER",
+                    nameof(string.Join) => "CONCAT_SEPARATOR",
+                    //nameof(string.Equals) => "==", // TODO: push inbetween / tolower for case ignore?
+                    nameof(string.Split) => "SPLIT",
+                    nameof(string.IndexOf) => "FIND_FIRST",
+                    nameof(string.LastIndexOf) => "FIND_LAST",
+                    nameof(string.Replace) => "SUBSTITUTE",
                     "Count" => "LENGTH",
-                    "Split" => "SPLIT",
-                    "Replace" => "SUBSTITUTE",
-                    "Substring" => "SUBSTRING",
-                    "ToLower" => "LOWER",
-                    "ToUpper" => "UPPER",
-                    "" => expression.Method.Name // TODO : this should probably throw like in the 'else' case (so first check on 'AqlFunctionAttribute'?)
+                    _ => throw new InvalidOperationException($"Method {expression.Method.Name} is not supported in ArangoLinqProvider")
                 };
-
-                pushObjectAsArgument = true;
-            }
-            else if (expression.Method.DeclaringType == typeof(DateTime))
-            {
-                methodName = expression.Method.Name switch
-                {
-                    "AddYears" => "DATE_ADD", //TODO: We can also use the contains method for the String.IndexOf()
-                    "" => expression.Method.Name // TODO : this should probably throw like in the 'else' case (so first check on 'AqlFunctionAttribute'?)
-                };
-
-                pushObjectAsArgument = true;
-            }
-            else if (expression.Method.DeclaringType.IsArray)
-            {
-                // TODO: map methods
-                methodName = expression.Method.Name switch
-                {
-                    "Contains" => "POSITION", //TODO: We can also use the contains method for the String.IndexOf()
-                    "" => expression.Method.Name // TODO : this should probably throw like in the 'else' case (so first check on 'AqlFunctionAttribute'?)
-                };
-
-                pushObjectAsArgument = true;
             }
             else
             {
@@ -174,27 +160,7 @@ namespace Core.Arango.Linq.Query
                     ModelVisitor.QueryText.Append(argumentSeprator);
             }
 
-            if(expression.Method.DeclaringType == typeof(DateTime) && methodName == "DATE_ADD")
-            {
-                ModelVisitor.QueryText.Append(argumentSeprator);
-
-                string parameter = null;
-
-                parameter = expression.Method.Name switch
-                {
-                    "AddYears" => " \"y\" ",
-                    "AddMonths" => " \"m\" ",
-                    "AddDays" => " \"d\" ",
-                    "AddHours" => " \"h\" ",
-                    "AddMinutes" => " \"i\" ",
-                    "AddSeconds" => " \"s\" ",
-                    "AddMilliseconds" => " \"f\" ",
-                    "" => expression.Method.Name
-                };
-
-                ModelVisitor.QueryText.Append(parameter);
-            }
-            else if (expression.Method.DeclaringType == typeof(string) && expression.Method.Name == "IndexOf")
+            if (expression.Method.DeclaringType == typeof(string) && expression.Method.Name == "IndexOf")
             {
                 ModelVisitor.QueryText.Append(argumentSeprator);
 
@@ -351,6 +317,18 @@ namespace Core.Arango.Linq.Query
 
                 ModelVisitor.QueryText.AppendFormat(
                     LinqUtility.ResolvePropertyName($"{prefix}_{expression.Member.Name}"));
+            }
+            else if (expression.Type.Name == "Int32" && member.Type.Name == "String")
+            {
+                var lenMember = expression as MemberExpression;
+                var lenMemberName = lenMember.Member.Name;
+                if(lenMemberName == "Length")
+                {
+                    ModelVisitor.QueryText.AppendFormat(" {0}( ", lenMemberName.ToUpper());
+                    Visit(member);
+                    ModelVisitor.QueryText.Append(" ) ");
+                }
+
             }
             else
             {

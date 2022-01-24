@@ -10,6 +10,7 @@ using Core.Arango.Tests.Core;
 using Newtonsoft.Json;
 using Xunit;
 using Xunit.Abstractions;
+using System.Linq.Expressions;
 
 namespace Core.Arango.Tests
 {
@@ -233,6 +234,24 @@ namespace Core.Arango.Tests
                     ClientKey = "CB"
                 }
             });
+        }
+
+        [Fact]
+        public async Task StringContains()
+        {
+            var q = Arango.Query<Project>("test").Where(x => x.Name.Contains("abc"));
+            var aql = q.ToAql().aql.Trim();
+
+            Assert.Equal("FOR `x` IN `Project`  FILTER  CONTAINS(  `x`.`Name`  ,  @P1  )  RETURN   `x`", aql);
+        }
+
+        [Fact]
+        public async Task StringConcat()
+        {
+            var q = Arango.Query<Project>("test").Where(x => string.Concat(x.Name, "Suffix") == "TestSuffix");
+            var aql = q.ToAql().aql.Trim();
+
+            Assert.Equal("FOR `x` IN `Project`  FILTER  (  CONCAT(  `x`.`Name`  ,  @P1  )  ==  @P2  )  RETURN   `x`", aql);
         }
     }
 }
