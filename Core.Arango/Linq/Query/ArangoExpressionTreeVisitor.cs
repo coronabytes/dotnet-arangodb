@@ -83,25 +83,32 @@ namespace Core.Arango.Linq.Query
             }
             else if (expression.Method.DeclaringType == typeof(string))
             {
-                methodName = expression.Method.Name switch
+
+                pushObjectAsArgument = !expression.Method.IsStatic;
+
+                methodName = methodName switch
                 {
-                    "Contains" => "CONTAINS",
-                    "IndexOf" => "CONTAINS",
-                    "Concat" => "CONCAT",
-                    "Trim" => "TRIM",
-                    "TrimStart" => "LTRIM",
-                    "TrimEnd" => "RTRIM",
-                    "Length" => "LENGTH", //We need to check if an object property can be translated as a method.
+                    nameof(string.Concat) => "CONCAT",
+                    nameof(string.Contains) => "CONTAINS",
+                    nameof(string.StartsWith) => "STARTS_WITH",
+                    //nameof(string.EndsWith) => "Substring ?",
+                    nameof(string.Substring) => "SUBSTRING",
+                    nameof(string.Trim) => "TRIM",
+                    nameof(string.TrimStart) => "LTRIM",
+                    nameof(string.TrimEnd) => "RTRIM",
+                    nameof(string.ToUpper) => "UPPER",
+                    nameof(string.ToUpperInvariant) => "UPPER",
+                    nameof(string.ToLower) => "LOWER",
+                    nameof(string.ToLowerInvariant) => "LOWER",
+                    nameof(string.Join) => "CONCAT_SEPARATOR",
+                    //nameof(string.Equals) => "==", // TODO: push inbetween / tolower for case ignore?
+                    nameof(string.Split) => "SPLIT",
+                    nameof(string.IndexOf) => "FIND_FIRST",
+                    nameof(string.LastIndexOf) => "FIND_LAST",
+                    nameof(string.Replace) => "SUBSTITUTE",
                     "Count" => "LENGTH",
-                    "Split" => "SPLIT",
-                    "Replace" => "SUBSTITUTE",
-                    "Substring" => "SUBSTRING",
-                    "ToLower" => "LOWER",
-                    "ToUpper" => "UPPER",
-                    "" => expression.Method.Name // TODO : this should probably throw like in the 'else' case (so first check on 'AqlFunctionAttribute'?)
+                    _ => throw new InvalidOperationException($"Method {expression.Method.Name} is not supported in ArangoLinqProvider")
                 };
-                if(methodName != "CONCAT")
-                    pushObjectAsArgument = true;
             }
             else
             {
