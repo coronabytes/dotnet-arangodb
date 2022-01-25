@@ -268,9 +268,23 @@ namespace Core.Arango.Tests
         {
             var list = await Arango.Query<Activity>("test").Take(1).ToListAsync();
 
-            var p = await Arango.Query<Activity>("test").Intersect(list).ToListAsync();
+            var q = Arango.Query<Activity>("test").Intersect(list);
 
-            Assert.Single(p);
+            _output.WriteLine(q.ToAql().aql);
+
+            var p = await q.ToListAsync();
+
+            Assert.Single(p); // TODO : This fails but should pass. Another instance of object not serialized correctly so arango can't compare?
+        }
+
+        [Fact]
+        public async Task Intersect_With_Count()
+        {
+            var list = await Arango.Query<Activity>("test").Take(1).ToListAsync();
+
+            var q = Arango.Query<Activity>("test").Intersect(list).Count(); // TODO : Result operators are called in the wrong order
+
+            Assert.Equal(1, q);
         }
 
         [Fact]
