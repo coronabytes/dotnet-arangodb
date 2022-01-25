@@ -415,6 +415,51 @@ namespace Core.Arango.Tests
             var c = await q.FirstOrDefaultAsync();
         }
 
+        [Fact]
+        public async Task Cast()
+        {
+            Person per1 = new Person { Name = "Person1" };
+            Person per2 = new Person { Name = "Person1" };
+            Person per3 = new Person { Name = "Person2" };
+
+            List<Person> people = new List<Person> { per1, per2, per3 };
+
+            await Arango.Collection.CreateAsync(D, nameof(Person), ArangoCollectionType.Document);
+            await Arango.Document.CreateManyAsync(D, nameof(Person), people);
+
+            IEnumerable<int> q = Arango.Query<Activity>("test").Select(x => x.Revenue).Cast<int>();
+            _output.WriteLine("");
+        }
+
+        [Fact]
+        public async Task Last()
+        {
+            var a = Arango.Query<Activity>("test").LastOrDefault();
+            Assert.Equal("AE", a.Key);
+        }
+
+        [Fact]
+        public async Task Reverse()
+        {
+            var a = await Arango.Query<Activity>("test").Reverse().FirstOrDefaultAsync();
+            Assert.Equal("AE", a.Key);
+        }
+
+        [Fact]
+        public async Task Single()
+        {
+            var a = await Arango.Query<Activity>("test").Where(x => x.Key == "AA").SingleOrDefaultAsync();
+            Assert.Equal("AA", a.Key);
+        }
+
+        [Fact]
+        public async Task Take()
+        {
+            var a = await Arango.Query<Activity>("test").Take(2).ToListAsync();
+            Assert.Equal("AA", a[0].Key);
+            Assert.Equal("AB", a[1].Key);
+        }
+
         public override async Task InitializeAsync()
         {
             Arango = new ArangoContext(UniqueTestRealm());
