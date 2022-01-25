@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using Core.Arango.Linq.Attributes;
@@ -519,6 +520,12 @@ namespace Core.Arango.Linq.Query
             if (HandleLet)
                 visitor.DefaultAssociatedIdentifier = QueryModel.MainFromClause.ItemName;
 
+            var hasAggregateFunction = expression.QueryModel.ResultOperators.Any();
+
+            // do not need to apply distinct since it has a single result
+            if (hasAggregateFunction)
+                ModelVisitor.QueryText.AppendFormat(" FIRST ( ");
+
             visitor.QueryText = ModelVisitor.QueryText;
             visitor.ParnetModelVisitor = ModelVisitor;
             visitor.IgnoreFromClause = HandleLet;
@@ -526,6 +533,9 @@ namespace Core.Arango.Linq.Query
             visitor.VisitQueryModel(expression.QueryModel);
 
             if (!HandleJoin && !HandleLet)
+                ModelVisitor.QueryText.Append(" ) ");
+
+            if (hasAggregateFunction)
                 ModelVisitor.QueryText.Append(" ) ");
 
             return expression;

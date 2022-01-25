@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using Newtonsoft.Json;
 
@@ -51,5 +52,12 @@ namespace Core.Arango.Tests.Core
         public DateTime End { get; set; }
         public decimal Revenue { get; set; }
         public Guid ProjectKey { get; set; }
+        public List<Note> Notes { get; set; }
+    }
+
+    public class Note
+    {
+        public DateTime CreatedOn { get; set; }
+        public string Text { get; set; }
     }
 }

@@ -17,7 +17,7 @@ namespace Core.Arango.Linq.Query
 {
     internal class ArangoModelVisitor : QueryModelVisitorBase
     {
-        private static readonly Dictionary<Type, string> aggregateResultOperatorFunctions;
+        public static readonly Dictionary<Type, string> aggregateResultOperatorFunctions;
 
         public IArangoLinq Db;
 
@@ -82,17 +82,20 @@ namespace Core.Arango.Linq.Query
                     break;
                 }
 
-            if (queryModel.ResultOperators.Count(x => x is FirstResultOperator) != 0)
+            if (queryModel.ResultOperators.Any(x => x is FirstResultOperator))
                 queryModel.BodyClauses.Add(new SkipTakeClause(Expression.Constant(0), Expression.Constant(1)));
 
-            if (queryModel.ResultOperators.Count(x => x is DistinctResultOperator) != 0)
+            if (queryModel.ResultOperators.Any(x => x is DistinctResultOperator))
                 DistinctResult = true;
 
             if (queryModel.ResultOperators.Any(x => x is ContainsResultOperator))
-                QueryText.AppendFormat(" RETURN {0} (( ", "POSITION");
+                QueryText.Append(" RETURN POSITION (( ");
+
+            if (queryModel.ResultOperators.Any(x => x is ExceptResultOperator))
+                QueryText.Append(" RETURN MINUS ((");
 
             if (queryModel.ResultOperators.Any(x => x is AnyResultOperator))
-                QueryText.AppendFormat(" RETURN LENGTH (");
+                QueryText.Append(" RETURN LENGTH (");
 
             // do not need to apply distinct since it has a single result
             if (string.IsNullOrEmpty(aggregateFunction) == false)
@@ -117,7 +120,15 @@ namespace Core.Arango.Linq.Query
             if (queryModel.ResultOperators.Any(x => x is ContainsResultOperator))
             {
                 QueryText.Append(" ), ");
-                var op = queryModel.ResultOperators.First(x => x is ContainsResultOperator) as ContainsResultOperator;
+                var op = queryModel.ResultOperators.First(x => x is ContainsResultOperator);
+                op.Accept(this, queryModel, 0); // TODO : Index ??
+                QueryText.Append(") ");
+            }
+
+            if (queryModel.ResultOperators.Any(x => x is ExceptResultOperator))
+            {
+                QueryText.Append(" ), ");
+                var op = queryModel.ResultOperators.First(x => x is ExceptResultOperator);
                 op.Accept(this, queryModel, 0); // TODO : Index ??
                 QueryText.Append(") ");
             }
@@ -135,11 +146,10 @@ namespace Core.Arango.Linq.Query
                 throw new NotSupportedException("TakeResultOperator");
 
             if (resultOperator is ContainsResultOperator contains)
-            {
-                // Do something
-                var expr = contains.Item;
-                GetAqlExpression(expr, queryModel);
-            }
+                GetAqlExpression(contains.Item, queryModel);
+
+            if (resultOperator is ExceptResultOperator except)
+                GetAqlExpression(except.Source2, queryModel);
 
             base.VisitResultOperator(resultOperator, queryModel, index);
         }

@@ -237,6 +237,33 @@ namespace Core.Arango.Tests
         }
 
         [Fact]
+        public async Task Count_SubQuery()
+        {
+            var q = Arango.Query<Client>("test")
+                .Select(c => Arango.Query<Project>().Where(p => p.ClientKey == c.Key).Count());
+
+            _output.WriteLine(q.ToAql().aql);
+
+            var clientWithProjects = await q.ToListAsync();
+
+            Assert.Equal(new List<int> { 1, 1 }, clientWithProjects);
+        }
+
+        [Fact]
+        public async Task Except_SubQuery()
+        {
+            var list = await Arango.Query<Project>("test")
+                .Take(1)
+                .ToListAsync();
+
+            var p = await Arango.Query<Client>("test")
+                .Select(c => Arango.Query<Project>().Except(list).Count())
+                .ToListAsync();
+
+            Assert.Equal(new List<int> { 0, 1 }, p);
+        }
+
+        [Fact]
         public async Task StringContains()
         {
             var q = Arango.Query<Project>("test").Where(x => x.Name.Contains("abc"));

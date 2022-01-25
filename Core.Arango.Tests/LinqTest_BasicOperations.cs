@@ -162,15 +162,48 @@ namespace Core.Arango.Tests
             _output.WriteLine(q.ToAql().aql);
         }
 
-        public void Count()
+        [Fact]
+        public void LongCount()
         {
-            var count = Arango.Query<Activity>("test")
-                .Count();
             var longCount = Arango.Query<Activity>("test")
                 .LongCount();
 
-            Assert.Equal(5, count);
             Assert.Equal(5L, longCount);
+        }
+
+        [Fact]
+        public void Count_Result()
+        {
+            var count = Arango.Query<Activity>("test")
+                .Count();
+
+            Assert.Equal(5, count);
+        }
+
+        [Fact]
+        public async Task Count_In_Filter()
+        {
+            var q = Arango.Query<Activity>("test")
+                .Where(x => x.Notes.Count() == 3);
+
+            _output.WriteLine(q.ToAql().aql);
+
+            var activities = await q.ToListAsync();
+
+            Assert.Single(activities);
+        }
+
+        [Fact]
+        public async Task Count_In_Select()
+        {
+            var q = Arango.Query<Activity>("test")
+                .Select(x => x.Notes.Count());
+
+            _output.WriteLine(q.ToAql().aql);
+
+            var activitiesNotesCount = await q.ToListAsync();
+
+            Assert.Equal(new List<int> { 1, 2, 3, 0, 0 }, activitiesNotesCount);
         }
 
         [Fact]
@@ -186,7 +219,9 @@ namespace Core.Arango.Tests
         {
             var p = await Arango.Query<Activity>("test").FirstOrDefaultAsync();
 
-            var boolean = Arango.Query<Activity>("test").Contains(p);
+            _output.WriteLine(JsonConvert.SerializeObject(p));
+
+            var boolean = Arango.Query<Activity>("test").Contains(p); // This should work: does `p` not get serialized the same way is it gets de-serialized? This operations should be inverse of each other.
 
             Assert.True(boolean);
         }
@@ -203,19 +238,26 @@ namespace Core.Arango.Tests
             await Arango.Collection.CreateAsync(D, nameof(Person), ArangoCollectionType.Document);
             await Arango.Document.CreateManyAsync(D, nameof(Person), people);
             
-            var p = await Arango.Query<Person>("test").Distinct().ToListAsync();
+            var p = await Arango.Query<Person>("test")
+                .Select(x => x.Name)
+                .Distinct()
+                .ToListAsync();
 
-            Assert.Equal(2, p.Count());
+            Assert.Equal(2, p.Count);
         }
 
         [Fact]
         public async Task Except()
         {
-            var list = await Arango.Query<Activity>("test").Take(2).ToListAsync();
+            var list = await Arango.Query<Activity>("test")
+                .Take(2)
+                .ToListAsync();
 
-            var p = await Arango.Query<Activity>("test").Except(list).ToListAsync();
+            var p = await Arango.Query<Activity>("test")
+                .Except(list)
+                .ToListAsync();
 
-            Assert.Equal(2, p.Count());
+            Assert.Equal(2, p.Count);
         }
 
         [Fact]
@@ -350,35 +392,52 @@ namespace Core.Arango.Tests
                     Key = "AA",
                     Start = new DateTime(2021, 1, 30),
                     End = new DateTime(2022, 2, 10),
-                    Revenue = 3.4m
+                    Revenue = 3.4m,
+                    Notes = new List<Note>
+                    {
+                        new Note { CreatedOn = new DateTime(2021, 1, 30), Text = "Note 1 (AA)" },
+                    }
                 },
                 new()
                 {
                     Key = "AB",
                     Start = new DateTime(2022, 5, 15),
                     End = new DateTime(2050, 10, 3),
-                    Revenue = 4.4m
+                    Revenue = 4.4m,
+                    Notes = new List<Note>
+                    {
+                        new Note { CreatedOn = new DateTime(2022, 5, 15), Text = "Note 1 (AB)" },
+                        new Note { CreatedOn = new DateTime(2022, 5, 16), Text = "Note 2 (AB)" },
+                    }
                 },
                 new()
                 {
                     Key = "AC",
                     Start = new DateTime(2022, 5, 15),
                     End = new DateTime(2050, 10, 3),
-                    Revenue = 4.4m
+                    Revenue = 4.4m,
+                    Notes = new List<Note>
+                    {
+                        new Note { CreatedOn = new DateTime(2022, 5, 15), Text = "Note 1 (AC)" },
+                        new Note { CreatedOn = new DateTime(2022, 5, 16), Text = "Note 2 (AC)" },
+                        new Note { CreatedOn = new DateTime(2022, 5, 17), Text = "Note 3 (AC)" },
+                    }
                 },
                 new()
                 {
                     Key = "AD",
                     Start = new DateTime(2022, 5, 15),
                     End = new DateTime(2050, 10, 3),
-                    Revenue = 4.4m
+                    Revenue = 4.4m,
+                    Notes = new List<Note>()
                 },
                 new()
                 {
                     Key = "AE",
                     Start = new DateTime(2026, 3, 15),
                     End = new DateTime(2058, 2, 3),
-                    Revenue = 4.4m
+                    Revenue = 4.4m,
+                    Notes = new List<Note>()
                 }
             });
         }
