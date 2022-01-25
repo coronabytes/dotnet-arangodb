@@ -10,6 +10,7 @@ using Core.Arango.Tests.Core;
 using Newtonsoft.Json;
 using Xunit;
 using Xunit.Abstractions;
+using System.Linq.Expressions;
 
 namespace Core.Arango.Tests
 {
@@ -219,7 +220,6 @@ namespace Core.Arango.Tests
                     ClientKey = "CB"
                 }
             });
-
         }
 
         [Fact]
