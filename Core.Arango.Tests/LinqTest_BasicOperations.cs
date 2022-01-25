@@ -253,11 +253,14 @@ namespace Core.Arango.Tests
                 .Take(2)
                 .ToListAsync();
 
-            var p = await Arango.Query<Activity>("test")
-                .Except(list)
-                .ToListAsync();
+            var q = Arango.Query<Activity>("test")
+                .Except(list);
 
-            Assert.Equal(2, p.Count);
+            _output.WriteLine(q.ToAql().aql);
+
+            var p = await q.ToListAsync();
+
+            Assert.Equal(2, p.Count); // TODO : This fails but should pass. Another instance of object not serialized correctly so arango can't compare?
         }
 
         [Fact]

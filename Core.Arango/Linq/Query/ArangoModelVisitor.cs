@@ -91,8 +91,10 @@ namespace Core.Arango.Linq.Query
             if (queryModel.ResultOperators.Any(x => x is ContainsResultOperator))
                 QueryText.Append(" RETURN POSITION (( ");
 
+            // TODO : (unwinding) Is this the desired behavior in all cases?
+            // TODO : (unwinding) Should we use a generated var?
             if (queryModel.ResultOperators.Any(x => x is ExceptResultOperator))
-                QueryText.Append(" RETURN MINUS ((");
+                QueryText.Append(" FOR x IN MINUS (("); // We need to unwind the array
 
             if (queryModel.ResultOperators.Any(x => x is AnyResultOperator))
                 QueryText.Append(" RETURN LENGTH (");
@@ -130,7 +132,7 @@ namespace Core.Arango.Linq.Query
                 QueryText.Append(" ), ");
                 var op = queryModel.ResultOperators.First(x => x is ExceptResultOperator);
                 op.Accept(this, queryModel, 0); // TODO : Index ??
-                QueryText.Append(") ");
+                QueryText.Append(") RETURN x ");
             }
 
             if (queryModel.ResultOperators.Any(x => x is AnyResultOperator))
