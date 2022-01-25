@@ -123,17 +123,17 @@ namespace Core.Arango.Tests
         [Fact]
         public async Task Join()
         {
-            Person magnus = new Person { Name = "Hedlund, Magnus" };
-            Person terry = new Person { Name = "Adams, Terry" };
-            Person charlotte = new Person { Name = "Weiss, Charlotte" };
+            var magnus = new Person { Name = "Hedlund, Magnus" };
+            var terry = new Person { Name = "Adams, Terry" };
+            var charlotte = new Person { Name = "Weiss, Charlotte" };
 
-            Pet barley = new Pet { Name = "Barley", Owner = terry };
-            Pet boots = new Pet { Name = "Boots", Owner = terry };
-            Pet whiskers = new Pet { Name = "Whiskers", Owner = charlotte };
-            Pet daisy = new Pet { Name = "Daisy", Owner = magnus };
+            var barley = new Pet { Name = "Barley", Owner = terry };
+            var boots = new Pet { Name = "Boots", Owner = terry };
+            var whiskers = new Pet { Name = "Whiskers", Owner = charlotte };
+            var daisy = new Pet { Name = "Daisy", Owner = magnus };
 
-            List<Person> people = new List<Person> { magnus, terry, charlotte };
-            List<Pet> pets = new List<Pet> { barley, boots, whiskers, daisy };
+            var people = new List<Person> { magnus, terry, charlotte };
+            var pets = new List<Pet> { barley, boots, whiskers, daisy };
 
             await Arango.Collection.CreateAsync(D, nameof(Person), ArangoCollectionType.Document);
             await Arango.Collection.CreateAsync(D, nameof(Pet), ArangoCollectionType.Document);
