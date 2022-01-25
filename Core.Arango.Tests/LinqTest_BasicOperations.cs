@@ -143,8 +143,8 @@ namespace Core.Arango.Tests
 
             var q = Arango.Query<Person>("test")
                 .Join(pets,
-                    person => person,
-                    pet => pet.Owner,
+                    person => person.Name,
+                    pet => pet.Owner.Name,
                     (person, Pet) => //petColletion should be a parameter (@P1). So this will throw an error unless this collection is in the db
                         new          //and it has the same name as said collection. Unless this is intended to work this way.
                         {
@@ -209,9 +209,11 @@ namespace Core.Arango.Tests
         [Fact]
         public void All()
         {
-            var boolean = Arango.Query<Activity>("test").All(x => x.Key.Contains("A"));
+            var shouldBeTrue = Arango.Query<Activity>("test").All(x => x.Key.Contains("A"));
+            var shouldBeFalse = Arango.Query<Activity>("test").All(x => x.Key.Contains("X"));
 
-            Assert.True(boolean);
+            Assert.True(shouldBeTrue);
+            Assert.False(shouldBeFalse);
         }
 
         [Fact]

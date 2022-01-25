@@ -93,6 +93,9 @@ namespace Core.Arango.Linq.Query
             if (queryModel.ResultOperators.Any(x => x is ContainsResultOperator))
                 QueryText.Append(" RETURN POSITION (( ");
 
+            if (queryModel.ResultOperators.Any(x => x is AllResultOperator))
+                QueryText.Append(" RETURN length (FOR x IN ( ");
+
             // TODO : (unwinding) Is this the desired behavior in all cases?
             // TODO : (unwinding) Should we use a generated var?
             if (queryModel.ResultOperators.Any(x => x is ExceptResultOperator))
@@ -133,6 +136,14 @@ namespace Core.Arango.Linq.Query
                 var op = queryModel.ResultOperators.First(x => x is ContainsResultOperator);
                 op.Accept(this, queryModel, 0); // TODO : Index ??
                 QueryText.Append(") ");
+            }
+
+            if (queryModel.ResultOperators.Any(x => x is AllResultOperator))
+            {
+                QueryText.Append(") FILTER ");
+                var op = queryModel.ResultOperators.First(x => x is AllResultOperator);
+                op.Accept(this, queryModel, 0); // TODO : Index ??
+                QueryText.Append(" RETURN x) > 0 ");
             }
 
             if (queryModel.ResultOperators.Any(x => x is ExceptResultOperator))
@@ -182,6 +193,10 @@ namespace Core.Arango.Linq.Query
 
             if (resultOperator is UnionResultOperator union)
                 GetAqlExpression(union.Source2, queryModel);
+
+            if (resultOperator is AllResultOperator all)
+                GetAqlExpression(all.Predicate, queryModel);
+
 
             base.VisitResultOperator(resultOperator, queryModel, index);
         }
@@ -472,6 +487,7 @@ namespace Core.Arango.Linq.Query
 
         public override void VisitJoinClause(JoinClause joinClause, QueryModel queryModel, int index)
         {
+            // TODO : Implement join clause
             base.VisitJoinClause(joinClause, queryModel, index);
         }
 
