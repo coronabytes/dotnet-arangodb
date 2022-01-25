@@ -16,18 +16,27 @@ namespace Core.Arango.Tests
     class Person
     {
         public string Name { get; set; }
+        public string Id { get; set; }
+        public string Key { get; set; }
+        public string Revision { get; set; }
     }
 
     class Pet
     {
         public string Name { get; set; }
         public Person Owner { get; set; }
+        public string Id { get; set; }
+        public string Key { get; set; }
+        public string Revision { get; set; }
     }
 
     class OutterChain
     {
         public string Name { get; set; }
         public List<InnerChain> innerChains { get; set; }
+        public string Id { get; set; }
+        public string Key { get; set; }
+        public string Revision { get; set; }
     }
 
     class InnerChain
@@ -38,6 +47,9 @@ namespace Core.Arango.Tests
         public string D { get; set; }
         public string E { get; set; }
         public string F { get; set; }
+        public string Id { get; set; }
+        public string Key { get; set; }
+        public string Revision { get; set; }
     }
 
     public class LinqTest_BasicOperations : TestBase

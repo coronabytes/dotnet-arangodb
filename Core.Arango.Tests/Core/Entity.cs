@@ -28,7 +28,9 @@ namespace Core.Arango.Tests.Core
     {
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
         [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Id { get; set; }
         public string Key { get; set; }
+        public string Revision { get; set; }
         public string Name { get; set; }
     }
 
@@ -36,7 +38,9 @@ namespace Core.Arango.Tests.Core
     {
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
         [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Id { get; set; }
         public string Key { get; set; }
+        public string Revision { get; set; }
         public string Name { get; set; }
         public string ClientKey { get; set; }
         public string ParentKey { get; set; }
