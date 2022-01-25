@@ -72,9 +72,11 @@ namespace Core.Arango.Linq.Query
 
             QueryModel = queryModel;
 
+            // TODO : Call result operators in the correct order, sometimes there are multiple!
+
             string aggregateFunction = null;
 
-            // get the first aggregateResultOperatorFunction, because only one of them can be used at a time
+            // get the first aggregateResultOperatorFunction, because only one of them can be used at a time <-- this is wrong! E.g. source.Intersect(list).Count()
             foreach (var r in queryModel.ResultOperators)
                 if (aggregateResultOperatorFunctions.ContainsKey(r.GetType()))
                 {
@@ -91,8 +93,19 @@ namespace Core.Arango.Linq.Query
             if (queryModel.ResultOperators.Any(x => x is ContainsResultOperator))
                 QueryText.Append(" RETURN POSITION (( ");
 
+            if (queryModel.ResultOperators.Any(x => x is AllResultOperator))
+                QueryText.Append(" RETURN length (FOR x IN ( ");
+
+            // TODO : (unwinding) Is this the desired behavior in all cases?
+            // TODO : (unwinding) Should we use a generated var?
             if (queryModel.ResultOperators.Any(x => x is ExceptResultOperator))
-                QueryText.Append(" RETURN MINUS ((");
+                QueryText.Append(" FOR x IN MINUS (("); // We need to unwind the array
+
+            if (queryModel.ResultOperators.Any(x => x is IntersectResultOperator))
+                QueryText.Append(" FOR x IN INTERSECTION (("); // We need to unwind the array
+
+            if (queryModel.ResultOperators.Any(x => x is UnionResultOperator))
+                QueryText.Append(" FOR x IN UNION_DISTINCT (("); // We need to unwind the array
 
             if (queryModel.ResultOperators.Any(x => x is AnyResultOperator))
                 QueryText.Append(" RETURN LENGTH (");
@@ -125,12 +138,36 @@ namespace Core.Arango.Linq.Query
                 QueryText.Append(") ");
             }
 
+            if (queryModel.ResultOperators.Any(x => x is AllResultOperator))
+            {
+                QueryText.Append(") FILTER ");
+                var op = queryModel.ResultOperators.First(x => x is AllResultOperator);
+                op.Accept(this, queryModel, 0); // TODO : Index ??
+                QueryText.Append(" RETURN x) > 0 ");
+            }
+
             if (queryModel.ResultOperators.Any(x => x is ExceptResultOperator))
             {
                 QueryText.Append(" ), ");
                 var op = queryModel.ResultOperators.First(x => x is ExceptResultOperator);
                 op.Accept(this, queryModel, 0); // TODO : Index ??
-                QueryText.Append(") ");
+                QueryText.Append(") RETURN x ");
+            }
+
+            if (queryModel.ResultOperators.Any(x => x is IntersectResultOperator))
+            {
+                QueryText.Append(" ), ");
+                var op = queryModel.ResultOperators.First(x => x is IntersectResultOperator);
+                op.Accept(this, queryModel, 0); // TODO : Index ??
+                QueryText.Append(") RETURN x ");
+            }
+
+            if (queryModel.ResultOperators.Any(x => x is UnionResultOperator))
+            {
+                QueryText.Append(" ), ");
+                var op = queryModel.ResultOperators.First(x => x is UnionResultOperator);
+                op.Accept(this, queryModel, 0); // TODO : Index ??
+                QueryText.Append(") RETURN x ");
             }
 
             if (queryModel.ResultOperators.Any(x => x is AnyResultOperator))
@@ -150,6 +187,16 @@ namespace Core.Arango.Linq.Query
 
             if (resultOperator is ExceptResultOperator except)
                 GetAqlExpression(except.Source2, queryModel);
+
+            if (resultOperator is IntersectResultOperator intersect)
+                GetAqlExpression(intersect.Source2, queryModel);
+
+            if (resultOperator is UnionResultOperator union)
+                GetAqlExpression(union.Source2, queryModel);
+
+            if (resultOperator is AllResultOperator all)
+                GetAqlExpression(all.Predicate, queryModel);
+
 
             base.VisitResultOperator(resultOperator, queryModel, index);
         }
@@ -440,6 +487,7 @@ namespace Core.Arango.Linq.Query
 
         public override void VisitJoinClause(JoinClause joinClause, QueryModel queryModel, int index)
         {
+            // TODO : Implement join clause
             base.VisitJoinClause(joinClause, queryModel, index);
         }
 

@@ -135,17 +135,17 @@ namespace Core.Arango.Tests
         [Fact]
         public async Task Join()
         {
-            Person magnus = new Person { Name = "Hedlund, Magnus" };
-            Person terry = new Person { Name = "Adams, Terry" };
-            Person charlotte = new Person { Name = "Weiss, Charlotte" };
+            var magnus = new Person { Name = "Hedlund, Magnus" };
+            var terry = new Person { Name = "Adams, Terry" };
+            var charlotte = new Person { Name = "Weiss, Charlotte" };
 
-            Pet barley = new Pet { Name = "Barley", Owner = terry };
-            Pet boots = new Pet { Name = "Boots", Owner = terry };
-            Pet whiskers = new Pet { Name = "Whiskers", Owner = charlotte };
-            Pet daisy = new Pet { Name = "Daisy", Owner = magnus };
+            var barley = new Pet { Name = "Barley", Owner = terry };
+            var boots = new Pet { Name = "Boots", Owner = terry };
+            var whiskers = new Pet { Name = "Whiskers", Owner = charlotte };
+            var daisy = new Pet { Name = "Daisy", Owner = magnus };
 
-            List<Person> people = new List<Person> { magnus, terry, charlotte };
-            List<Pet> pets = new List<Pet> { barley, boots, whiskers, daisy };
+            var people = new List<Person> { magnus, terry, charlotte };
+            var pets = new List<Pet> { barley, boots, whiskers, daisy };
 
             await Arango.Collection.CreateAsync(D, nameof(Person), ArangoCollectionType.Document);
             await Arango.Collection.CreateAsync(D, nameof(Pet), ArangoCollectionType.Document);
@@ -155,14 +155,14 @@ namespace Core.Arango.Tests
 
             var q = Arango.Query<Person>("test")
                 .Join(pets,
-                           person => person,
-                           pet => pet.Owner,
-                           (person, Pet) => //petColletion should be a parameter (@P1). So this will throw an error unless this collection is in the db
-                               new          //and it has the same name as said collection. Unless this is intended to work this way.
-                               {
-                                   OwnerName = person.Name,
-                                   Pet = Pet.Name
-                               });
+                    person => person.Name,
+                    pet => pet.Owner.Name,
+                    (person, Pet) => //petColletion should be a parameter (@P1). So this will throw an error unless this collection is in the db
+                        new          //and it has the same name as said collection. Unless this is intended to work this way.
+                        {
+                            OwnerName = person.Name,
+                            Pet = Pet.Name
+                        });
 
             var result = await q.ToListAsync();
 
@@ -221,9 +221,11 @@ namespace Core.Arango.Tests
         [Fact]
         public void All()
         {
-            var boolean = Arango.Query<Activity>("test").All(x => x.Key.Contains("A"));
+            var shouldBeTrue = Arango.Query<Activity>("test").All(x => x.Key.Contains("A"));
+            var shouldBeFalse = Arango.Query<Activity>("test").All(x => x.Key.Contains("X"));
 
-            Assert.True(boolean);
+            Assert.True(shouldBeTrue);
+            Assert.False(shouldBeFalse);
         }
 
         [Fact]
@@ -265,11 +267,14 @@ namespace Core.Arango.Tests
                 .Take(2)
                 .ToListAsync();
 
-            var p = await Arango.Query<Activity>("test")
-                .Except(list)
-                .ToListAsync();
+            var q = Arango.Query<Activity>("test")
+                .Except(list);
 
-            Assert.Equal(2, p.Count);
+            _output.WriteLine(q.ToAql().aql);
+
+            var p = await q.ToListAsync();
+
+            Assert.Equal(2, p.Count); // TODO : This fails but should pass. Another instance of object not serialized correctly so arango can't compare?
         }
 
         [Fact]
@@ -277,9 +282,23 @@ namespace Core.Arango.Tests
         {
             var list = await Arango.Query<Activity>("test").Take(1).ToListAsync();
 
-            var p = await Arango.Query<Activity>("test").Intersect(list).ToListAsync();
+            var q = Arango.Query<Activity>("test").Intersect(list);
 
-            Assert.Single(p);
+            _output.WriteLine(q.ToAql().aql);
+
+            var p = await q.ToListAsync();
+
+            Assert.Single(p); // TODO : This fails but should pass. Another instance of object not serialized correctly so arango can't compare?
+        }
+
+        [Fact]
+        public async Task Intersect_With_Count()
+        {
+            var list = await Arango.Query<Activity>("test").Take(1).ToListAsync();
+
+            var q = Arango.Query<Activity>("test").Intersect(list).Count(); // TODO : Result operators are called in the wrong order
+
+            Assert.Equal(1, q);
         }
 
         [Fact]
@@ -304,9 +323,18 @@ namespace Core.Arango.Tests
 
             await Arango.Document.CreateManyAsync(D, nameof(Person), personList1);
 
-            var p = await Arango.Query<Person>("test").Union(personList2).ToListAsync();
+            var q = Arango.Query<Person>("test")
+                .Select(x => x.Name)
+                .Union(personList2.Select(x => x.Name));
 
-            Assert.Equal(6, p.Count());
+            var aql = q.ToAql();
+
+            _output.WriteLine(aql.aql);
+            _output.WriteLine(JsonConvert.SerializeObject(aql.bindVars));
+
+            var p = await q.ToListAsync();
+
+            Assert.Equal(6, p.Count);
         }
 
         //This test has precision issues.
@@ -356,28 +384,19 @@ namespace Core.Arango.Tests
                     {
                         A = "A",
                         B = "B",
-                        C = "C",
-                        D = "D",
-                        E = "E",
-                        F = "F"
+                        C = "C"
                     },
                     new InnerChain()
                     {
                         A = "A",
                         B = "B",
-                        C = "C",
-                        D = "D",
-                        E = "E",
-                        F = "F"
+                        C = "C"
                     },
                     new InnerChain()
                     {
                         A = "A",
                         B = "B",
-                        C = "C",
-                        D = "D",
-                        E = "E",
-                        F = "F"
+                        C = "C"
                     }
                 }
             };
@@ -385,10 +404,15 @@ namespace Core.Arango.Tests
             await Arango.Collection.CreateAsync("test", nameof(OutterChain), ArangoCollectionType.Document);
             await Arango.Document.CreateAsync("test", nameof(OutterChain), chainTest);
 
-            var q = Arango.Query<OutterChain>("test").SelectMany(x => x.innerChains).Where(x => x.A == "A").Where(x => x.B == "B").Where(x => x.C == "C").Where(x => x.D == "D").Where(x => x.E == "E").Where(x => x.F == "F");
-            var c = await q.FirstOrDefaultAsync();
+            var q = Arango.Query<OutterChain>("test")
+                .SelectMany(x => x.innerChains)
+                .Where(x => x.A == "A")
+                .Where(x => x.B == "B")
+                .Where(x => x.C == "C");
 
             _output.WriteLine(q.ToAql().aql);
+
+            var c = await q.FirstOrDefaultAsync();
         }
 
         public override async Task InitializeAsync()
