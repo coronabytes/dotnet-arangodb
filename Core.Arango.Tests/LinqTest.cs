@@ -257,7 +257,12 @@ namespace Core.Arango.Tests
                 .ToListAsync();
 
             var p = await Arango.Query<Client>("test")
-                .Select(c => Arango.Query<Project>().Except(list).Count())
+                .Select(c => Arango
+                    .Query<Project>()
+                    .Where(p => p.ClientKey == c.Key)
+                    .Except(list) // TODO : Arango comparison not working due to serialization issues?
+                    .Count()
+                )
                 .ToListAsync();
 
             Assert.Equal(new List<int> { 0, 1 }, p);
