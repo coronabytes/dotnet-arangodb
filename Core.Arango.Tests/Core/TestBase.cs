@@ -1,8 +1,12 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
+using Core.Arango.Linq;
 using Core.Arango.Serialization.Json;
 using Core.Arango.Serialization.Newtonsoft;
+using Newtonsoft.Json;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Core.Arango.Tests.Core
 {
@@ -54,6 +58,15 @@ namespace Core.Arango.Tests.Core
                 cs = "Server=http://localhost:8529;Realm=CI-{UUID};User=root;Password=;";
 
             return cs.Replace("{UUID}", Guid.NewGuid().ToString("D"));
+        }
+
+        protected void PrintQuery<T>(IQueryable<T> query, ITestOutputHelper output)
+        {
+            var aql = query.ToAql();
+            output.WriteLine("QUERY:");
+            output.WriteLine(aql.aql);
+            output.WriteLine("VARS:");
+            output.WriteLine(JsonConvert.SerializeObject(aql.bindVars));
         }
     }
 }

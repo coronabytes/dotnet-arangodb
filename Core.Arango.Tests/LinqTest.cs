@@ -256,14 +256,17 @@ namespace Core.Arango.Tests
                 .Take(1)
                 .ToListAsync();
 
-            var p = await Arango.Query<Client>("test")
+            var q = Arango.Query<Client>("test")
                 .Select(c => Arango
                     .Query<Project>()
                     .Where(p => p.ClientKey == c.Key)
-                    .Except(list) // TODO : Arango comparison not working due to serialization issues?
+                    .Except(list) // TODO : Order of operations is not working correctly ('length' is being called before 'minus')
                     .Count()
-                )
-                .ToListAsync();
+                );
+
+            PrintQuery(q, _output);
+
+            var p = await q.ToListAsync();
 
             Assert.Equal(new List<int> { 0, 1 }, p);
         }

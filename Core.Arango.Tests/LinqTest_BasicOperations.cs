@@ -261,7 +261,7 @@ namespace Core.Arango.Tests
         }
 
         [Fact]
-        public async Task Except()
+        public async Task Except_Compare_Objects()
         {
             var list = await Arango.Query<Activity>("test")
                 .Take(2)
@@ -270,11 +270,45 @@ namespace Core.Arango.Tests
             var q = Arango.Query<Activity>("test")
                 .Except(list);
 
-            _output.WriteLine(q.ToAql().aql);
+            PrintQuery(q, _output);
 
             var p = await q.ToListAsync();
 
-            Assert.Equal(2, p.Count); // TODO : This fails but should pass. Another instance of object not serialized correctly so arango can't compare?
+            Assert.Equal(3, p.Count); // TODO
+        }
+
+        [Fact]
+        public async Task Except_Compare_Keys()
+        {
+            var list = await Arango.Query<Activity>("test")
+                .Take(2)
+                .Select(x => x.Key)
+                .ToListAsync();
+
+            var q = Arango.Query<Activity>("test")
+                .Select(x => x.Key)
+                .Except(list);
+
+            PrintQuery(q, _output);
+
+            var p = await q.ToListAsync();
+
+            Assert.Equal(3, p.Count);
+        }
+
+        [Fact]
+        public async Task Combine_Skip_Take()
+        {
+            var q = Arango.Query<Activity>("test")
+                .Skip(1)
+                .Take(1)
+                .Select(x => x.Key);
+
+            PrintQuery(q, _output);
+
+            var p = await q.ToListAsync();
+
+            Assert.Equal(new List<string> { "AB" }, p); // TODO : This fails but should pass. Another instance of object not serialized correctly so arango can't compare?
         }
 
         [Fact]
