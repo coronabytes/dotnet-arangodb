@@ -18,6 +18,9 @@ namespace Core.Arango.Linq.Query
     internal class ArangoModelVisitor : QueryModelVisitorBase
     {
         public static readonly Dictionary<Type, string> aggregateResultOperatorFunctions;
+        public static readonly List<Type> additionalResultOperatorFunctions;
+
+        public static IEnumerable<Type> SupportedResultOperatorFunctions => aggregateResultOperatorFunctions.Keys.Concat(additionalResultOperatorFunctions);
 
         public IArangoLinq Db;
 
@@ -33,6 +36,17 @@ namespace Core.Arango.Linq.Query
                 {typeof(MinResultOperator), "min"},
                 {typeof(MaxResultOperator), "max"},
                 {typeof(AverageResultOperator), "average"}
+            };
+
+            additionalResultOperatorFunctions = new List<Type>
+            {
+                typeof(FirstResultOperator),
+                typeof(ContainsResultOperator),
+                typeof(AllResultOperator),
+                typeof(ExceptResultOperator),
+                typeof(IntersectResultOperator),
+                typeof(UnionResultOperator),
+                typeof(AnyResultOperator)
             };
         }
 
@@ -78,11 +92,16 @@ namespace Core.Arango.Linq.Query
 
             // get the first aggregateResultOperatorFunction, because only one of them can be used at a time <-- this is wrong! E.g. source.Intersect(list).Count()
             foreach (var r in queryModel.ResultOperators)
+            {
+                if (!SupportedResultOperatorFunctions.Any(supportedType => supportedType == r.GetType()))
+                    throw new NotImplementedException($"The result operator {r.GetType()} is not supported by the current LINQ implementation. You can add support for this result operator by creating a pull request, or you can circumvent this issue by manually constructing your AQL (see : https://github.com/coronabytes/dotnet-arangodb#query-with-bind-vars-through-string-interpolation).");
+
                 if (aggregateResultOperatorFunctions.ContainsKey(r.GetType()))
                 {
                     aggregateFunction = aggregateResultOperatorFunctions[r.GetType()];
                     break;
                 }
+            }
 
             if (queryModel.ResultOperators.Any(x => x is FirstResultOperator))
                 queryModel.BodyClauses.Add(new SkipTakeClause(Expression.Constant(0), Expression.Constant(1)));

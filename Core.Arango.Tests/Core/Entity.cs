@@ -51,7 +51,9 @@ namespace Core.Arango.Tests.Core
     {
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
         [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Id { get; set; }
         public string Key { get; set; }
+        public string Revision { get; set; }
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
         public decimal Revenue { get; set; }
