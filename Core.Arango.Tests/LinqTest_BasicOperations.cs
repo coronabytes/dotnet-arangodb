@@ -94,17 +94,17 @@ namespace Core.Arango.Tests
         [Fact]
         public async Task GroupJoin()
         {
-            Person magnus = new Person { Name = "Hedlund, Magnus" };
-            Person terry = new Person { Name = "Adams, Terry" };
-            Person charlotte = new Person { Name = "Weiss, Charlotte" };
+            var magnus = new Person { Name = "Hedlund, Magnus", Key = "Per1" };
+            var terry = new Person { Name = "Adams, Terry", Key = "Per2" };
+            var charlotte = new Person { Name = "Weiss, Charlotte", Key = "Per3" };
 
-            Pet barley = new Pet { Name = "Barley", Owner = terry };
-            Pet boots = new Pet { Name = "Boots", Owner = terry };
-            Pet whiskers = new Pet { Name = "Whiskers", Owner = charlotte };
-            Pet daisy = new Pet { Name = "Daisy", Owner = magnus };
+            var barley = new Pet { Name = "Barley", Owner = terry, Key= "Pet1" };
+            var boots = new Pet { Name = "Boots", Owner = terry, Key = "Pet2" };
+            var whiskers = new Pet { Name = "Whiskers", Owner = charlotte, Key = "Pet3" };
+            var daisy = new Pet { Name = "Daisy", Owner = magnus, Key = "Pet4" };
 
-            List<Person> people = new List<Person> { magnus, terry, charlotte };
-            List<Pet> pets = new List<Pet> { barley, boots, whiskers, daisy };
+            var people = new List<Person> { magnus, terry, charlotte };
+            var pets = new List<Pet> { barley, boots, whiskers, daisy };
 
             await Arango.Collection.CreateAsync(D, nameof(Person), ArangoCollectionType.Document);
             await Arango.Collection.CreateAsync(D, nameof(Pet), ArangoCollectionType.Document);
@@ -136,14 +136,14 @@ namespace Core.Arango.Tests
         [Fact]
         public async Task Join()
         {
-            var magnus = new Person { Name = "Hedlund, Magnus" };
-            var terry = new Person { Name = "Adams, Terry" };
-            var charlotte = new Person { Name = "Weiss, Charlotte" };
+            var magnus = new Person { Name = "Hedlund, Magnus", Key = "Per1" };
+            var terry = new Person { Name = "Adams, Terry", Key = "Per2" };
+            var charlotte = new Person { Name = "Weiss, Charlotte", Key = "Per3" };
 
-            var barley = new Pet { Name = "Barley", Owner = terry };
-            var boots = new Pet { Name = "Boots", Owner = terry };
-            var whiskers = new Pet { Name = "Whiskers", Owner = charlotte };
-            var daisy = new Pet { Name = "Daisy", Owner = magnus };
+            var barley = new Pet { Name = "Barley", Owner = terry, Key = "Pet1" };
+            var boots = new Pet { Name = "Boots", Owner = terry, Key = "Pet2" };
+            var whiskers = new Pet { Name = "Whiskers", Owner = charlotte, Key = "Pet3" };
+            var daisy = new Pet { Name = "Daisy", Owner = magnus, Key = "Pet4" };
 
             var people = new List<Person> { magnus, terry, charlotte };
             var pets = new List<Pet> { barley, boots, whiskers, daisy };
@@ -244,9 +244,9 @@ namespace Core.Arango.Tests
         [Fact]
         public async Task Distinct()
         {
-            Person per1 = new Person { Name = "Person1" };
-            Person per2 = new Person { Name = "Person1" };
-            Person per3 = new Person { Name = "Person2" };
+            Person per1 = new Person { Name = "Person1", Key = "Per1" };
+            Person per2 = new Person { Name = "Person1", Key = "Per2" };
+            Person per3 = new Person { Name = "Person2", Key = "Per3" };
 
             List<Person> people = new List<Person> { per1, per2, per3 };
 
@@ -307,17 +307,17 @@ namespace Core.Arango.Tests
         {
             var personList1 = new List<Person>
             {
-                new Person { Name = "Person1" },
-                new Person { Name = "Person2" },
-                new Person { Name = "Person3" },
-                new Person { Name = "Person4" }
+                new Person { Name = "Person1", Key = "Per1" },
+                new Person { Name = "Person2", Key = "Per2" },
+                new Person { Name = "Person3", Key = "Per3" },
+                new Person { Name = "Person4", Key = "Per4" }
             };
             var personList2 = new List<Person>
             {
-                new Person { Name = "Person3" },
-                new Person { Name = "Person4" },
-                new Person { Name = "Person5" },
-                new Person { Name = "Person6" }
+                new Person { Name = "Person3", Key = "Per3" },
+                new Person { Name = "Person4", Key = "Per4" },
+                new Person { Name = "Person5", Key = "Per5" },
+                new Person { Name = "Person6", Key = "Per6" }
             };
 
             await Arango.Collection.CreateAsync(D, nameof(Person), ArangoCollectionType.Document);
@@ -379,25 +379,29 @@ namespace Core.Arango.Tests
             var chainTest = new OutterChain()
             {
                 Name = "OutterChain_1",
+                Key = "Outter1",
                 innerChains = new List<InnerChain>()
                 {
                     new InnerChain()
                     {
                         A = "A",
                         B = "B",
-                        C = "C"
+                        C = "C",
+                        Key = "Inner1"
                     },
                     new InnerChain()
                     {
                         A = "A",
                         B = "B",
-                        C = "C"
+                        C = "C",
+                        Key = "Inner2"
                     },
                     new InnerChain()
                     {
                         A = "A",
                         B = "B",
-                        C = "C"
+                        C = "C",
+                        Key = "Inner3"
                     }
                 }
             };
@@ -419,16 +423,18 @@ namespace Core.Arango.Tests
         [Fact]
         public async Task Cast()
         {
-            Person per1 = new Person { Name = "Person1" };
-            Person per2 = new Person { Name = "Person1" };
-            Person per3 = new Person { Name = "Person2" };
+            Person per1 = new Person { Name = "Person1", Key = "Per1" };
+            Person per2 = new Person { Name = "Person1", Key = "Per2" };
+            Person per3 = new Person { Name = "Person2", Key = "Per3" };
 
             List<Person> people = new List<Person> { per1, per2, per3 };
 
             await Arango.Collection.CreateAsync(D, nameof(Person), ArangoCollectionType.Document);
             await Arango.Document.CreateManyAsync(D, nameof(Person), people);
 
-            IEnumerable<int> q = Arango.Query<Activity>("test").Select(x => x.Revenue).Cast<int>();
+            IEnumerable<int> i = Arango.Query<Activity>("test").Select(x => x.Revenue).Cast<int>();
+
+            Assert.IsType<int>(i.First());
             _output.WriteLine("");
         }
 
