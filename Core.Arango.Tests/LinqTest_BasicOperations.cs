@@ -34,9 +34,6 @@ namespace Core.Arango.Tests
     {
         public string Name { get; set; }
         public List<InnerChain> innerChains { get; set; }
-        public string Id { get; set; }
-        public string Key { get; set; }
-        public string Revision { get; set; }
     }
 
     class InnerChain
@@ -47,9 +44,6 @@ namespace Core.Arango.Tests
         public string D { get; set; }
         public string E { get; set; }
         public string F { get; set; }
-        public string Id { get; set; }
-        public string Key { get; set; }
-        public string Revision { get; set; }
     }
 
     public class LinqTest_BasicOperations : TestBase
@@ -440,10 +434,10 @@ namespace Core.Arango.Tests
             await Arango.Document.CreateAsync("test", nameof(OutterChain), chainTest);
 
             var q = Arango.Query<OutterChain>("test")
-                .SelectMany(x => x.innerChains)
-                .Where(x => x.A == "A")
-                .Where(x => x.B == "B")
-                .Where(x => x.C == "C");
+                .SelectMany(y => y.innerChains)
+                .Where(y => y.A == "A")
+                .Where(y => y.B == "B")
+                .Where(y => y.C == "C");
 
             _output.WriteLine(q.ToAql().aql);
 
