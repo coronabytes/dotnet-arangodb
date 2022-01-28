@@ -407,29 +407,25 @@ namespace Core.Arango.Tests
             var chainTest = new OutterChain()
             {
                 Name = "OutterChain_1",
-                Key = "Outter1",
                 innerChains = new List<InnerChain>()
                 {
                     new InnerChain()
                     {
                         A = "A",
                         B = "B",
-                        C = "C",
-                        Key = "Inner1"
+                        C = "C"
                     },
                     new InnerChain()
                     {
                         A = "A",
                         B = "B",
-                        C = "C",
-                        Key = "Inner2"
+                        C = "C"
                     },
                     new InnerChain()
                     {
                         A = "A",
                         B = "B",
-                        C = "C",
-                        Key = "Inner3"
+                        C = "C"
                     }
                 }
             };
