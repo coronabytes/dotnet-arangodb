@@ -319,17 +319,12 @@ namespace Core.Arango.Linq.Query
                 ModelVisitor.QueryText.AppendFormat(
                     LinqUtility.ResolvePropertyName($"{prefix}_{expression.Member.Name}"));
             }
-            else if (expression.Type.Name == "Int32" && member.Type.Name == "String")
+            else if (expression.Type.Name == "Int32" && member != null && member.Type.Name == "String" && (expression as MemberExpression).Member.Name == "Length")
             {
-                var lenMember = expression as MemberExpression;
-                var lenMemberName = lenMember.Member.Name;
-                if(lenMemberName == "Length")
-                {
-                    ModelVisitor.QueryText.AppendFormat(" {0}( ", lenMemberName.ToUpper());
-                    Visit(member);
-                    ModelVisitor.QueryText.Append(" ) ");
-                }
-
+                var lenMemberName = (expression as MemberExpression).Member.Name;
+                ModelVisitor.QueryText.AppendFormat(" {0}( ", lenMemberName.ToUpper());
+                Visit(member);
+                ModelVisitor.QueryText.Append(" ) ");
             }
             else
             {
