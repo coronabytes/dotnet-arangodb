@@ -73,6 +73,8 @@ namespace Core.Arango.Tests
         public async Task GroupBy()
         {
             var q = Arango.Query<Activity>("test")
+            .Where(x => x.Key.Contains("A"))
+            .OrderBy(x => x.Key)
             .GroupBy(x => new
             {
                 x.Start.Year,
@@ -81,8 +83,7 @@ namespace Core.Arango.Tests
             })
             .Select(g => new
             {
-                Day = g.Min(x => x.Revenue) //The error is here. The query on the database generates an array with a single item
-                                            //and its trying to parse it as a decimal.
+                Day = g.Min(x => x.Revenue)
             });
 
             var result = await q.ToListAsync();
