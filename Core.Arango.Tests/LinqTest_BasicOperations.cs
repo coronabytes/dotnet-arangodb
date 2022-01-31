@@ -67,11 +67,6 @@ namespace Core.Arango.Tests
         public async Task GroupBy()
         {
             var q = Arango.Query<Activity>("test")
-<<<<<<< HEAD
-            .Where(x => x.Key.Contains("A"))
-            .OrderBy(x => x.Key)
-=======
->>>>>>> b2f2fc43f912e8c3d234401d697a160d57c2bfa8
             .GroupBy(x => new
             {
                 x.Start.Year,
@@ -80,12 +75,8 @@ namespace Core.Arango.Tests
             })
             .Select(g => new
             {
-<<<<<<< HEAD
-                Day = g.Min(x => x.Revenue)
-=======
                 Day = g.Min(x => x.Revenue) //The error is here. The query on the database generates an array with a single item
                                             //and its trying to parse it as a decimal.
->>>>>>> b2f2fc43f912e8c3d234401d697a160d57c2bfa8
             });
 
             var result = await q.ToListAsync();
@@ -96,7 +87,6 @@ namespace Core.Arango.Tests
         [Fact]
         public async Task GroupJoin()
         {
-<<<<<<< HEAD
             var magnus = new Person { Name = "Hedlund, Magnus", Key = "Per1" };
             var terry = new Person { Name = "Adams, Terry", Key = "Per2" };
             var charlotte = new Person { Name = "Weiss, Charlotte", Key = "Per3" };
@@ -108,19 +98,6 @@ namespace Core.Arango.Tests
 
             var people = new List<Person> { magnus, terry, charlotte };
             var pets = new List<Pet> { barley, boots, whiskers, daisy };
-=======
-            Person magnus = new Person { Name = "Hedlund, Magnus" };
-            Person terry = new Person { Name = "Adams, Terry" };
-            Person charlotte = new Person { Name = "Weiss, Charlotte" };
-
-            Pet barley = new Pet { Name = "Barley", Owner = terry };
-            Pet boots = new Pet { Name = "Boots", Owner = terry };
-            Pet whiskers = new Pet { Name = "Whiskers", Owner = charlotte };
-            Pet daisy = new Pet { Name = "Daisy", Owner = magnus };
-
-            List<Person> people = new List<Person> { magnus, terry, charlotte };
-            List<Pet> pets = new List<Pet> { barley, boots, whiskers, daisy };
->>>>>>> b2f2fc43f912e8c3d234401d697a160d57c2bfa8
 
             await Arango.Collection.CreateAsync(D, nameof(Person), ArangoCollectionType.Document);
             await Arango.Collection.CreateAsync(D, nameof(Pet), ArangoCollectionType.Document);
@@ -152,7 +129,6 @@ namespace Core.Arango.Tests
         [Fact]
         public async Task Join()
         {
-<<<<<<< HEAD
             var magnus = new Person { Name = "Hedlund, Magnus", Key = "Per1" };
             var terry = new Person { Name = "Adams, Terry", Key = "Per2" };
             var charlotte = new Person { Name = "Weiss, Charlotte", Key = "Per3" };
@@ -164,19 +140,6 @@ namespace Core.Arango.Tests
 
             var people = new List<Person> { magnus, terry, charlotte };
             var pets = new List<Pet> { barley, boots, whiskers, daisy };
-=======
-            Person magnus = new Person { Name = "Hedlund, Magnus" };
-            Person terry = new Person { Name = "Adams, Terry" };
-            Person charlotte = new Person { Name = "Weiss, Charlotte" };
-
-            Pet barley = new Pet { Name = "Barley", Owner = terry };
-            Pet boots = new Pet { Name = "Boots", Owner = terry };
-            Pet whiskers = new Pet { Name = "Whiskers", Owner = charlotte };
-            Pet daisy = new Pet { Name = "Daisy", Owner = magnus };
-
-            List<Person> people = new List<Person> { magnus, terry, charlotte };
-            List<Pet> pets = new List<Pet> { barley, boots, whiskers, daisy };
->>>>>>> b2f2fc43f912e8c3d234401d697a160d57c2bfa8
 
             await Arango.Collection.CreateAsync(D, nameof(Person), ArangoCollectionType.Document);
             await Arango.Collection.CreateAsync(D, nameof(Pet), ArangoCollectionType.Document);
@@ -186,7 +149,6 @@ namespace Core.Arango.Tests
 
             var q = Arango.Query<Person>("test")
                 .Join(pets,
-<<<<<<< HEAD
                     person => person.Name,
                     pet => pet.Owner.Name,
                     (person, Pet) => //petColletion should be a parameter (@P1). So this will throw an error unless this collection is in the db
@@ -195,16 +157,6 @@ namespace Core.Arango.Tests
                             OwnerName = person.Name,
                             Pet = Pet.Name
                         });
-=======
-                           person => person,
-                           pet => pet.Owner,
-                           (person, Pet) => //petColletion should be a parameter (@P1). So this will throw an error unless this collection is in the db
-                               new          //and it has the same name as said collection. Unless this is intended to work this way.
-                               {
-                                   OwnerName = person.Name,
-                                   Pet = Pet.Name
-                               });
->>>>>>> b2f2fc43f912e8c3d234401d697a160d57c2bfa8
 
             var result = await q.ToListAsync();
 
@@ -216,7 +168,6 @@ namespace Core.Arango.Tests
             _output.WriteLine(q.ToAql().aql);
         }
 
-<<<<<<< HEAD
         [Fact]
         public void LongCount()
         {
@@ -259,33 +210,16 @@ namespace Core.Arango.Tests
             var activitiesNotesCount = await q.ToListAsync();
 
             Assert.Equal(new List<int> { 1, 2, 3, 0, 0 }, activitiesNotesCount);
-=======
-        public void Count()
-        {
-            var count = Arango.Query<Activity>("test")
-                .Count();
-            var longCount = Arango.Query<Activity>("test")
-                .LongCount();
-
-            Assert.Equal(5, count);
-            Assert.Equal(5L, longCount);
->>>>>>> b2f2fc43f912e8c3d234401d697a160d57c2bfa8
         }
 
         [Fact]
         public void All()
         {
-<<<<<<< HEAD
             var shouldBeTrue = Arango.Query<Activity>("test").All(x => x.Key.Contains("A"));
             var shouldBeFalse = Arango.Query<Activity>("test").All(x => x.Key.Contains("X"));
 
             Assert.True(shouldBeTrue);
             Assert.False(shouldBeFalse);
-=======
-            var boolean = Arango.Query<Activity>("test").All(x => x.Key.Contains("A"));
-
-            Assert.True(boolean);
->>>>>>> b2f2fc43f912e8c3d234401d697a160d57c2bfa8
         }
 
         [Fact]
@@ -293,13 +227,9 @@ namespace Core.Arango.Tests
         {
             var p = await Arango.Query<Activity>("test").FirstOrDefaultAsync();
 
-<<<<<<< HEAD
             _output.WriteLine(JsonConvert.SerializeObject(p));
 
             var boolean = Arango.Query<Activity>("test").Contains(p); // This should work: does `p` not get serialized the same way is it gets de-serialized? This operations should be inverse of each other.
-=======
-            var boolean = Arango.Query<Activity>("test").Contains(p);
->>>>>>> b2f2fc43f912e8c3d234401d697a160d57c2bfa8
 
             Assert.True(boolean);
         }
@@ -307,22 +237,15 @@ namespace Core.Arango.Tests
         [Fact]
         public async Task Distinct()
         {
-<<<<<<< HEAD
-            Person per1 = new Person { Name = "Person1", Key = "Per1" };
-            Person per2 = new Person { Name = "Person1", Key = "Per2" };
-            Person per3 = new Person { Name = "Person2", Key = "Per3" };
-=======
-            Person per1 = new Person { Name = "Person1" };
-            Person per2 = new Person { Name = "Person1" };
-            Person per3 = new Person { Name = "Person2" };
->>>>>>> b2f2fc43f912e8c3d234401d697a160d57c2bfa8
+            var per1 = new Person { Name = "Person1", Key = "Per1" };
+            var per2 = new Person { Name = "Person1", Key = "Per2" };
+            var per3 = new Person { Name = "Person2", Key = "Per3" };
 
-            List<Person> people = new List<Person> { per1, per2, per3 };
+            var people = new List<Person> { per1, per2, per3 };
 
             await Arango.Collection.CreateAsync(D, nameof(Person), ArangoCollectionType.Document);
             await Arango.Document.CreateManyAsync(D, nameof(Person), people);
             
-<<<<<<< HEAD
             var p = await Arango.Query<Person>("test")
                 .Select(x => x.Name)
                 .Distinct()
@@ -380,21 +303,6 @@ namespace Core.Arango.Tests
             var p = await q.ToListAsync();
 
             Assert.Equal(new List<string> { "AB" }, p); // TODO : This fails but should pass. Another instance of object not serialized correctly so arango can't compare?
-=======
-            var p = await Arango.Query<Person>("test").Distinct().ToListAsync();
-
-            Assert.Equal(2, p.Count());
-        }
-
-        [Fact]
-        public async Task Except()
-        {
-            var list = await Arango.Query<Activity>("test").Take(2).ToListAsync();
-
-            var p = await Arango.Query<Activity>("test").Except(list).ToListAsync();
-
-            Assert.Equal(2, p.Count());
->>>>>>> b2f2fc43f912e8c3d234401d697a160d57c2bfa8
         }
 
         [Fact]
@@ -402,7 +310,6 @@ namespace Core.Arango.Tests
         {
             var list = await Arango.Query<Activity>("test").Take(1).ToListAsync();
 
-<<<<<<< HEAD
             var q = Arango.Query<Activity>("test").Intersect(list);
 
             _output.WriteLine(q.ToAql().aql);
@@ -420,11 +327,6 @@ namespace Core.Arango.Tests
             var q = Arango.Query<Activity>("test").Intersect(list).Count(); // TODO : Result operators are called in the wrong order
 
             Assert.Equal(1, q);
-=======
-            var p = await Arango.Query<Activity>("test").Intersect(list).ToListAsync();
-
-            Assert.Single(p);
->>>>>>> b2f2fc43f912e8c3d234401d697a160d57c2bfa8
         }
 
         [Fact]
@@ -432,7 +334,6 @@ namespace Core.Arango.Tests
         {
             var personList1 = new List<Person>
             {
-<<<<<<< HEAD
                 new Person { Name = "Person1", Key = "Per1" },
                 new Person { Name = "Person2", Key = "Per2" },
                 new Person { Name = "Person3", Key = "Per3" },
@@ -444,26 +345,12 @@ namespace Core.Arango.Tests
                 new Person { Name = "Person4", Key = "Per4" },
                 new Person { Name = "Person5", Key = "Per5" },
                 new Person { Name = "Person6", Key = "Per6" }
-=======
-                new Person { Name = "Person1" },
-                new Person { Name = "Person2" },
-                new Person { Name = "Person3" },
-                new Person { Name = "Person4" }
-            };
-            var personList2 = new List<Person>
-            {
-                new Person { Name = "Person3" },
-                new Person { Name = "Person4" },
-                new Person { Name = "Person5" },
-                new Person { Name = "Person6" }
->>>>>>> b2f2fc43f912e8c3d234401d697a160d57c2bfa8
             };
 
             await Arango.Collection.CreateAsync(D, nameof(Person), ArangoCollectionType.Document);
 
             await Arango.Document.CreateManyAsync(D, nameof(Person), personList1);
 
-<<<<<<< HEAD
             var q = Arango.Query<Person>("test")
                 .Select(x => x.Name)
                 .Union(personList2.Select(x => x.Name));
@@ -476,11 +363,6 @@ namespace Core.Arango.Tests
             var p = await q.ToListAsync();
 
             Assert.Equal(6, p.Count);
-=======
-            var p = await Arango.Query<Person>("test").Union(personList2).ToListAsync();
-
-            Assert.Equal(6, p.Count());
->>>>>>> b2f2fc43f912e8c3d234401d697a160d57c2bfa8
         }
 
         //This test has precision issues.
@@ -530,40 +412,19 @@ namespace Core.Arango.Tests
                     {
                         A = "A",
                         B = "B",
-<<<<<<< HEAD
                         C = "C"
-=======
-                        C = "C",
-                        D = "D",
-                        E = "E",
-                        F = "F"
->>>>>>> b2f2fc43f912e8c3d234401d697a160d57c2bfa8
                     },
                     new InnerChain()
                     {
                         A = "A",
                         B = "B",
-<<<<<<< HEAD
                         C = "C"
-=======
-                        C = "C",
-                        D = "D",
-                        E = "E",
-                        F = "F"
->>>>>>> b2f2fc43f912e8c3d234401d697a160d57c2bfa8
                     },
                     new InnerChain()
                     {
                         A = "A",
                         B = "B",
-<<<<<<< HEAD
                         C = "C"
-=======
-                        C = "C",
-                        D = "D",
-                        E = "E",
-                        F = "F"
->>>>>>> b2f2fc43f912e8c3d234401d697a160d57c2bfa8
                     }
                 }
             };
@@ -571,7 +432,6 @@ namespace Core.Arango.Tests
             await Arango.Collection.CreateAsync("test", nameof(OutterChain), ArangoCollectionType.Document);
             await Arango.Document.CreateAsync("test", nameof(OutterChain), chainTest);
 
-<<<<<<< HEAD
             var q = Arango.Query<OutterChain>("test")
                 .SelectMany(y => y.innerChains)
                 .Where(y => y.A == "A")
@@ -628,12 +488,6 @@ namespace Core.Arango.Tests
             var a = await Arango.Query<Activity>("test").Take(2).ToListAsync();
             Assert.Equal("AA", a[0].Key);
             Assert.Equal("AB", a[1].Key);
-=======
-            var q = Arango.Query<OutterChain>("test").SelectMany(x => x.innerChains).Where(x => x.A == "A").Where(x => x.B == "B").Where(x => x.C == "C").Where(x => x.D == "D").Where(x => x.E == "E").Where(x => x.F == "F");
-            var c = await q.FirstOrDefaultAsync();
-
-            _output.WriteLine(q.ToAql().aql);
->>>>>>> b2f2fc43f912e8c3d234401d697a160d57c2bfa8
         }
 
         public override async Task InitializeAsync()
@@ -649,38 +503,29 @@ namespace Core.Arango.Tests
                     Key = "AA",
                     Start = new DateTime(2021, 1, 30),
                     End = new DateTime(2022, 2, 10),
-<<<<<<< HEAD
                     Revenue = 3.4m,
                     Notes = new List<Note>
                     {
                         new Note { CreatedOn = new DateTime(2021, 1, 30), Text = "Note 1 (AA)" },
                     }
-=======
-                    Revenue = 3.4m
->>>>>>> b2f2fc43f912e8c3d234401d697a160d57c2bfa8
                 },
                 new()
                 {
                     Key = "AB",
                     Start = new DateTime(2022, 5, 15),
                     End = new DateTime(2050, 10, 3),
-<<<<<<< HEAD
                     Revenue = 4.4m,
                     Notes = new List<Note>
                     {
                         new Note { CreatedOn = new DateTime(2022, 5, 15), Text = "Note 1 (AB)" },
                         new Note { CreatedOn = new DateTime(2022, 5, 16), Text = "Note 2 (AB)" },
                     }
-=======
-                    Revenue = 4.4m
->>>>>>> b2f2fc43f912e8c3d234401d697a160d57c2bfa8
                 },
                 new()
                 {
                     Key = "AC",
                     Start = new DateTime(2022, 5, 15),
                     End = new DateTime(2050, 10, 3),
-<<<<<<< HEAD
                     Revenue = 4.4m,
                     Notes = new List<Note>
                     {
@@ -688,33 +533,22 @@ namespace Core.Arango.Tests
                         new Note { CreatedOn = new DateTime(2022, 5, 16), Text = "Note 2 (AC)" },
                         new Note { CreatedOn = new DateTime(2022, 5, 17), Text = "Note 3 (AC)" },
                     }
-=======
-                    Revenue = 4.4m
->>>>>>> b2f2fc43f912e8c3d234401d697a160d57c2bfa8
                 },
                 new()
                 {
                     Key = "AD",
                     Start = new DateTime(2022, 5, 15),
                     End = new DateTime(2050, 10, 3),
-<<<<<<< HEAD
                     Revenue = 4.4m,
                     Notes = new List<Note>()
-=======
-                    Revenue = 4.4m
->>>>>>> b2f2fc43f912e8c3d234401d697a160d57c2bfa8
                 },
                 new()
                 {
                     Key = "AE",
                     Start = new DateTime(2026, 3, 15),
                     End = new DateTime(2058, 2, 3),
-<<<<<<< HEAD
                     Revenue = 4.4m,
                     Notes = new List<Note>()
-=======
-                    Revenue = 4.4m
->>>>>>> b2f2fc43f912e8c3d234401d697a160d57c2bfa8
                 }
             });
         }
