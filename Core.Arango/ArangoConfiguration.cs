@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
 using System.Net.Http;
+using System.Reflection;
+using Core.Arango.Linq.Attributes;
 using Core.Arango.Protocol;
 using Core.Arango.Serialization;
 using Core.Arango.Serialization.Newtonsoft;
@@ -24,7 +26,15 @@ namespace Core.Arango
             BatchSize = 500;
             Serializer = new ArangoNewtonsoftSerializer(new ArangoNewtonsoftDefaultContractResolver());
             Transport = new ArangoHttpTransport(this);
-            ResolveCollection = type => type.Name;
+            ResolveCollection = type =>
+            {
+                var attr = type.GetCustomAttribute<CollectionPropertyAttribute>();
+
+                if (attr != null)
+                    return attr.CollectionName;
+
+                return type.Name;
+            };
             ResolveProperty = (type, name) =>
             {
                 switch (name)
