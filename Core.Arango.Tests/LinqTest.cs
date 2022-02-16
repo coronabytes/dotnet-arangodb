@@ -10,6 +10,7 @@ using Core.Arango.Tests.Core;
 using Newtonsoft.Json;
 using Xunit;
 using Xunit.Abstractions;
+using System.Linq.Expressions;
 
 namespace Core.Arango.Tests
 {
@@ -169,17 +170,31 @@ namespace Core.Arango.Tests
         [Fact]
         public async Task ListContains()
         {
-            var list = new List<string> { "CA", "CB" }.ToArray();
-
-            //var q = Arango.Query<Project>("test")
-            //    .Where(x => list.Contains(x.ClientKey));
+            var list = new List<string> { "CB" }.ToArray();
 
             var q = Arango.Query<Project>("test")
-                .Where(x => Aql.Position(list, x.ClientKey));
+                .Where(x => list.Contains(x.ClientKey));
+
+            //var q = Arango.Query<Project>("test")
+            //    .Where(x => Aql.Position(list, x.ClientKey));
 
             _output.WriteLine(q.ToAql().aql);
             _output.WriteLine("");
-            _output.WriteLine(JsonConvert.SerializeObject(await q.ToListAsync(), Formatting.Indented));
+
+            var output = await q.ToListAsync();
+            _output.WriteLine(JsonConvert.SerializeObject(output, Formatting.Indented));
+
+            Assert.Single(output);
+        }
+
+        [Fact]
+        public async Task QueryableContains()
+        {
+            var q = Arango.Query<Project>("test")
+                .Select(x => x.ClientKey)
+                .Contains("CB");
+
+            Assert.True(q);
         }
 
         public override async Task InitializeAsync()
@@ -219,7 +234,59 @@ namespace Core.Arango.Tests
                     ClientKey = "CB"
                 }
             });
+        }
 
+        [Fact]
+        public async Task Count_SubQuery()
+        {
+            var q = Arango.Query<Client>("test")
+                .Select(c => Arango.Query<Project>().Where(p => p.ClientKey == c.Key).Count());
+
+            _output.WriteLine(q.ToAql().aql);
+
+            var clientWithProjects = await q.ToListAsync();
+
+            Assert.Equal(new List<int> { 1, 1 }, clientWithProjects);
+        }
+
+        [Fact]
+        public async Task Except_SubQuery()
+        {
+            var list = await Arango.Query<Project>("test")
+                .Take(1)
+                .ToListAsync();
+
+            var q = Arango.Query<Client>("test")
+                .Select(c => Arango
+                    .Query<Project>()
+                    .Where(p => p.ClientKey == c.Key)
+                    .Except(list) // TODO : Order of operations is not working correctly ('length' is being called before 'minus')
+                    .Count()
+                );
+
+            PrintQuery(q, _output);
+
+            var p = await q.ToListAsync();
+
+            Assert.Equal(new List<int> { 0, 1 }, p);
+        }
+
+        [Fact]
+        public async Task StringContains()
+        {
+            var q = Arango.Query<Project>("test").Where(x => x.Name.Contains("abc"));
+            var aql = q.ToAql().aql.Trim();
+
+            Assert.Equal("FOR `x` IN `Project`  FILTER  CONTAINS(  `x`.`Name`  ,  @P1  )  RETURN   `x`", aql);
+        }
+
+        [Fact]
+        public async Task StringConcat()
+        {
+            var q = Arango.Query<Project>("test").Where(x => string.Concat(x.Name, "Suffix") == "TestSuffix");
+            var aql = q.ToAql().aql.Trim();
+
+            Assert.Equal("FOR `x` IN `Project`  FILTER  (  CONCAT(  `x`.`Name`  ,  @P1  )  ==  @P2  )  RETURN   `x`", aql);
         }
     }
 }

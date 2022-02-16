@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using Core.Arango.Linq.Attributes;
@@ -49,6 +50,7 @@ namespace Core.Arango.Linq.Query
 
             string methodName = expression.Method.Name;
             bool prop = false;
+            bool pushObjectAsArgument = false;
 
             if (expression.Method.DeclaringType == typeof(Math))
             {
@@ -56,6 +58,58 @@ namespace Core.Arango.Linq.Query
                     methodName = m;
                 else
                     throw new InvalidOperationException($"Method {expression.Method.Name} is not supported in ArangoLinqProvider");
+            }
+            else if(expression.Method.Name == "Equals")
+            {
+                ModelVisitor.QueryText.Append(" ( ");
+
+                Visit(expression.Object);
+
+                string argumentSeprator1 = "== ";
+
+                if (expression.Arguments.Count >= 1)
+                    ModelVisitor.QueryText.Append(argumentSeprator1);
+
+                for (var i = 0; i < expression.Arguments.Count; i++)
+                {
+                    Visit(expression.Arguments[i]);
+
+                    if (i != expression.Arguments.Count - 1)
+                        ModelVisitor.QueryText.Append(argumentSeprator1);
+                }
+
+                ModelVisitor.QueryText.Append(" ) ");
+
+                return expression;
+            }
+            else if (expression.Method.DeclaringType == typeof(string))
+            {
+
+                pushObjectAsArgument = !expression.Method.IsStatic;
+
+                methodName = methodName switch
+                {
+                    nameof(string.Concat) => "CONCAT",
+                    nameof(string.Contains) => "CONTAINS",
+                    nameof(string.StartsWith) => "STARTS_WITH",
+                    //nameof(string.EndsWith) => "Substring ?",
+                    nameof(string.Substring) => "SUBSTRING",
+                    nameof(string.Trim) => "TRIM",
+                    nameof(string.TrimStart) => "LTRIM",
+                    nameof(string.TrimEnd) => "RTRIM",
+                    nameof(string.ToUpper) => "UPPER",
+                    nameof(string.ToUpperInvariant) => "UPPER",
+                    nameof(string.ToLower) => "LOWER",
+                    nameof(string.ToLowerInvariant) => "LOWER",
+                    nameof(string.Join) => "CONCAT_SEPARATOR",
+                    //nameof(string.Equals) => "==", // TODO: push inbetween / tolower for case ignore?
+                    nameof(string.Split) => "SPLIT",
+                    nameof(string.IndexOf) => "FIND_FIRST",
+                    nameof(string.LastIndexOf) => "FIND_LAST",
+                    nameof(string.Replace) => "SUBSTITUTE",
+                    "Count" => "LENGTH",
+                    _ => throw new InvalidOperationException($"Method {expression.Method.Name} is not supported in ArangoLinqProvider")
+                };
             }
             else
             {
@@ -91,12 +145,29 @@ namespace Core.Arango.Linq.Query
                 ModelVisitor.QueryText.AppendFormat(" {0}{1}", collection, argumentSeprator);
             }
 
+            if (pushObjectAsArgument)
+            {
+                Visit(expression.Object);
+
+                if (expression.Arguments.Count >= 1)
+                    ModelVisitor.QueryText.Append(argumentSeprator);
+            }
+
             for (var i = 0; i < expression.Arguments.Count; i++)
             {
                 Visit(expression.Arguments[i]);
 
                 if (i != expression.Arguments.Count - 1)
                     ModelVisitor.QueryText.Append(argumentSeprator);
+            }
+
+            if (expression.Method.DeclaringType == typeof(string) && expression.Method.Name == "IndexOf")
+            {
+                ModelVisitor.QueryText.Append(argumentSeprator);
+
+                string parameter = " true ";
+
+                ModelVisitor.QueryText.Append(parameter);
             }
 
             if (!noParenthesis)
@@ -247,6 +318,13 @@ namespace Core.Arango.Linq.Query
 
                 ModelVisitor.QueryText.AppendFormat(
                     LinqUtility.ResolvePropertyName($"{prefix}_{expression.Member.Name}"));
+            }
+            else if (expression.Type.Name == "Int32" && member != null && member.Type.Name == "String" && (expression as MemberExpression).Member.Name == "Length")
+            {
+                var lenMemberName = (expression as MemberExpression).Member.Name;
+                ModelVisitor.QueryText.AppendFormat(" {0}( ", lenMemberName.ToUpper());
+                Visit(member);
+                ModelVisitor.QueryText.Append(" ) ");
             }
             else
             {
@@ -437,6 +515,12 @@ namespace Core.Arango.Linq.Query
             if (HandleLet)
                 visitor.DefaultAssociatedIdentifier = QueryModel.MainFromClause.ItemName;
 
+            var hasAggregateFunction = expression.QueryModel.ResultOperators.Any();
+
+            // do not need to apply distinct since it has a single result
+            if (hasAggregateFunction)
+                ModelVisitor.QueryText.AppendFormat(" FIRST ( ");
+
             visitor.QueryText = ModelVisitor.QueryText;
             visitor.ParnetModelVisitor = ModelVisitor;
             visitor.IgnoreFromClause = HandleLet;
@@ -444,6 +528,9 @@ namespace Core.Arango.Linq.Query
             visitor.VisitQueryModel(expression.QueryModel);
 
             if (!HandleJoin && !HandleLet)
+                ModelVisitor.QueryText.Append(" ) ");
+
+            if (hasAggregateFunction)
                 ModelVisitor.QueryText.Append(" ) ");
 
             return expression;

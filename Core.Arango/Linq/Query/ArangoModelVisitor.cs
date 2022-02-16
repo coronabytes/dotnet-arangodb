@@ -17,7 +17,10 @@ namespace Core.Arango.Linq.Query
 {
     internal class ArangoModelVisitor : QueryModelVisitorBase
     {
-        private static readonly Dictionary<Type, string> aggregateResultOperatorFunctions;
+        public static readonly Dictionary<Type, string> aggregateResultOperatorFunctions;
+        public static readonly List<Type> additionalResultOperatorFunctions;
+
+        public static IEnumerable<Type> SupportedResultOperatorFunctions => aggregateResultOperatorFunctions.Keys.Concat(additionalResultOperatorFunctions);
 
         public IArangoLinq Db;
 
@@ -33,6 +36,17 @@ namespace Core.Arango.Linq.Query
                 {typeof(MinResultOperator), "min"},
                 {typeof(MaxResultOperator), "max"},
                 {typeof(AverageResultOperator), "average"}
+            };
+
+            additionalResultOperatorFunctions = new List<Type>
+            {
+                typeof(FirstResultOperator),
+                typeof(ContainsResultOperator),
+                typeof(AllResultOperator),
+                typeof(ExceptResultOperator),
+                typeof(IntersectResultOperator),
+                typeof(UnionResultOperator),
+                typeof(AnyResultOperator)
             };
         }
 
@@ -72,21 +86,48 @@ namespace Core.Arango.Linq.Query
 
             QueryModel = queryModel;
 
+            // TODO : Call result operators in the correct order, sometimes there are multiple!
+
             string aggregateFunction = null;
 
-            // get the first aggregateResultOperatorFunction, because only one of them can be used at a time
+            // get the first aggregateResultOperatorFunction, because only one of them can be used at a time <-- this is wrong! E.g. source.Intersect(list).Count()
             foreach (var r in queryModel.ResultOperators)
+            {
+                if (!SupportedResultOperatorFunctions.Any(supportedType => supportedType == r.GetType()))
+                    throw new NotImplementedException($"The result operator {r.GetType()} is not supported by the current LINQ implementation. You can add support for this result operator by creating a pull request, or you can circumvent this issue by manually constructing your AQL (see : https://github.com/coronabytes/dotnet-arangodb#query-with-bind-vars-through-string-interpolation).");
+
                 if (aggregateResultOperatorFunctions.ContainsKey(r.GetType()))
                 {
                     aggregateFunction = aggregateResultOperatorFunctions[r.GetType()];
                     break;
                 }
+            }
 
-            if (queryModel.ResultOperators.Count(x => x is FirstResultOperator) != 0)
+            if (queryModel.ResultOperators.Any(x => x is FirstResultOperator))
                 queryModel.BodyClauses.Add(new SkipTakeClause(Expression.Constant(0), Expression.Constant(1)));
 
-            if (queryModel.ResultOperators.Count(x => x is DistinctResultOperator) != 0)
+            if (queryModel.ResultOperators.Any(x => x is DistinctResultOperator))
                 DistinctResult = true;
+
+            if (queryModel.ResultOperators.Any(x => x is ContainsResultOperator))
+                QueryText.Append(" RETURN POSITION (( ");
+
+            if (queryModel.ResultOperators.Any(x => x is AllResultOperator))
+                QueryText.Append(" RETURN length (FOR x IN ( ");
+
+            // TODO : (unwinding) Is this the desired behavior in all cases?
+            // TODO : (unwinding) Should we use a generated var?
+            if (queryModel.ResultOperators.Any(x => x is ExceptResultOperator))
+                QueryText.Append(" FOR x IN MINUS (("); // We need to unwind the array
+
+            if (queryModel.ResultOperators.Any(x => x is IntersectResultOperator))
+                QueryText.Append(" FOR x IN INTERSECTION (("); // We need to unwind the array
+
+            if (queryModel.ResultOperators.Any(x => x is UnionResultOperator))
+                QueryText.Append(" FOR x IN UNION_DISTINCT (("); // We need to unwind the array
+
+            if (queryModel.ResultOperators.Any(x => x is AnyResultOperator))
+                QueryText.Append(" RETURN LENGTH (");
 
             // do not need to apply distinct since it has a single result
             if (string.IsNullOrEmpty(aggregateFunction) == false)
@@ -107,6 +148,49 @@ namespace Core.Arango.Linq.Query
 
             if (aggregateFunction != null)
                 QueryText.Append(" )) ");
+
+            if (queryModel.ResultOperators.Any(x => x is ContainsResultOperator))
+            {
+                QueryText.Append(" ), ");
+                var op = queryModel.ResultOperators.First(x => x is ContainsResultOperator);
+                op.Accept(this, queryModel, 0); // TODO : Index ??
+                QueryText.Append(") ");
+            }
+
+            if (queryModel.ResultOperators.Any(x => x is AllResultOperator))
+            {
+                QueryText.Append(") FILTER ");
+                var op = queryModel.ResultOperators.First(x => x is AllResultOperator);
+                op.Accept(this, queryModel, 0); // TODO : Index ??
+                QueryText.Append(" RETURN x) > 0 ");
+            }
+
+            if (queryModel.ResultOperators.Any(x => x is ExceptResultOperator))
+            {
+                QueryText.Append(" ), ");
+                var op = queryModel.ResultOperators.First(x => x is ExceptResultOperator);
+                op.Accept(this, queryModel, 0); // TODO : Index ??
+                QueryText.Append(") RETURN x ");
+            }
+
+            if (queryModel.ResultOperators.Any(x => x is IntersectResultOperator))
+            {
+                QueryText.Append(" ), ");
+                var op = queryModel.ResultOperators.First(x => x is IntersectResultOperator);
+                op.Accept(this, queryModel, 0); // TODO : Index ??
+                QueryText.Append(") RETURN x ");
+            }
+
+            if (queryModel.ResultOperators.Any(x => x is UnionResultOperator))
+            {
+                QueryText.Append(" ), ");
+                var op = queryModel.ResultOperators.First(x => x is UnionResultOperator);
+                op.Accept(this, queryModel, 0); // TODO : Index ??
+                QueryText.Append(") RETURN x ");
+            }
+
+            if (queryModel.ResultOperators.Any(x => x is AnyResultOperator))
+                QueryText.AppendFormat(") > 0");
         }
 
         public override void VisitResultOperator(ResultOperatorBase resultOperator, QueryModel queryModel, int index)
@@ -116,6 +200,22 @@ namespace Core.Arango.Linq.Query
 
             if (resultOperator as TakeResultOperator != null)
                 throw new NotSupportedException("TakeResultOperator");
+
+            if (resultOperator is ContainsResultOperator contains)
+                GetAqlExpression(contains.Item, queryModel);
+
+            if (resultOperator is ExceptResultOperator except)
+                GetAqlExpression(except.Source2, queryModel);
+
+            if (resultOperator is IntersectResultOperator intersect)
+                GetAqlExpression(intersect.Source2, queryModel);
+
+            if (resultOperator is UnionResultOperator union)
+                GetAqlExpression(union.Source2, queryModel);
+
+            if (resultOperator is AllResultOperator all)
+                GetAqlExpression(all.Predicate, queryModel);
+
 
             base.VisitResultOperator(resultOperator, queryModel, index);
         }
@@ -406,6 +506,7 @@ namespace Core.Arango.Linq.Query
 
         public override void VisitJoinClause(JoinClause joinClause, QueryModel queryModel, int index)
         {
+            // TODO : Implement join clause
             base.VisitJoinClause(joinClause, queryModel, index);
         }
 

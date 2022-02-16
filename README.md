@@ -202,9 +202,24 @@ await foreach (var x in Arango.Query.ExecuteStreamAsync<string>("database", $"FO
 # Linq
 - LINQ support has been adapted from https://github.com/ra0o0f/arangoclient.net
   - Internalized re-motion relinq since their nuget is quite outdated
-- work in progress as some things are deprecated or need to be modernized
-- there is also development done on a driver without relinq and aggregate support
-- configurable property / collection / group naming for camelCase support
+- Work in progress as some things are deprecated or need to be modernized
+  - Basic queries generally work
+  - Some more complex queries (chaining multiple operators, complex subqueries, etc.) are not supported yet
+  - All these issues are solvable and pull requests are accepted
+  - NOTE : Some queries will blow up at run time and you will get an exception, but some queries will actually generate valid AQL with the wrong semantics.
+  - Combining multiple result operators is not recommended with the current implementation (e.g. `.Intersect(list).Count()` will generate valid AQL but will apply the operators in the wrong order)
+  - The following operators are not yet supported:
+    - `.Average`
+    - `.Cast`
+    - `.Distinct`
+    - `.GroupJoin`
+    - `.Intersect`
+    - `.Join`
+    - `.Last`
+    - `.Reverse`
+- All other operators should be supported. If you find any queries that fail or generate incorrect AQL, open an issue so we can at least document it. A PR with a (failing) unit test would be even better!
+- There is also development done on a driver without relinq and aggregate support
+- Configurable property / collection / group naming for camelCase support
 
 ## Simple query with DOCUMENT() lookup
 ```csharp
