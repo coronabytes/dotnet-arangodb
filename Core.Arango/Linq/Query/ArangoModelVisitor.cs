@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using System.Text.Json;
 using Core.Arango.Linq.Collection;
 using Core.Arango.Linq.Data;
 using Core.Arango.Linq.Interface;
@@ -456,8 +457,9 @@ namespace Core.Arango.Linq.Query
 
             if (traversalClause.Options != null)
             {
-                // TODO: corona options
                 //QueryText.AppendFormat(" options {0} ", new DocumentSerializer(Db).SerializeWithoutReader(traversalClause.Options.Value));
+                // TODO: maybe this works / case-sensitivity?
+                QueryText.AppendFormat(" options {0} ", JsonSerializer.Serialize(traversalClause.Options.Value));
             }
         }
 
