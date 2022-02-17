@@ -16,7 +16,7 @@ namespace Core.Arango.Modules.Internal
             CancellationToken cancellationToken = default)
         {
             var res = await SendAsync<ArangoVertexResponse<TR>>(database, HttpMethod.Get,
-                ApiPath(database, $"gharial/{UrlEncode(graph)}/vertex/{UrlEncode(collection)}"),
+                ApiPath(database, $"gharial/{UrlEncode(graph)}/vertex/{UrlEncode(collection)}/{UrlEncode(key)}"),
                 cancellationToken: cancellationToken);
 
             return res.Vertex;
