@@ -249,7 +249,7 @@ namespace Core.Arango.Tests
             Assert.Equal(new List<int> { 1, 1 }, clientWithProjects);
         }
 
-        [Fact]
+        /*[Fact]
         public async Task Except_SubQuery()
         {
             var list = await Arango.Query<Project>("test")
@@ -269,7 +269,7 @@ namespace Core.Arango.Tests
             var p = await q.ToListAsync();
 
             Assert.Equal(new List<int> { 0, 1 }, p);
-        }
+        }*/
 
         [Fact]
         public async Task StringContains()

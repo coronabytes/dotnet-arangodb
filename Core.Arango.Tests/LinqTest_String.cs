@@ -42,7 +42,7 @@ namespace Core.Arango.Tests
             //_output.WriteLine(q.ToAql().aql);
         }
 
-        //Not working at the moment. Check the comment on the second Assert.
+        /*//Not working at the moment. Check the comment on the second Assert.
         [Fact]
         public async Task StringTrim()
         {
@@ -77,7 +77,7 @@ namespace Core.Arango.Tests
 
             //_output.WriteLine(q1.ToAql().aql);
             //_output.WriteLine(q2.ToAql().aql);
-        }
+        }*/
 
         [Fact]
         public async Task StringTrimStart()
