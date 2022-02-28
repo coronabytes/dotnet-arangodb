@@ -168,7 +168,7 @@ namespace Core.Arango.Transport
             if (string.IsNullOrWhiteSpace(_configuration.User))
                 return;
 
-            if (auth && (_auth == null || _authValidUntil < DateTime.UtcNow.AddMinutes(-10)))
+            if (auth && (_auth == null || _authValidUntil < DateTime.UtcNow))
             {
                 var authResponse = await SendAsync<AuthResponse>(HttpMethod.Post,
                     "/_open/auth",
@@ -181,7 +181,7 @@ namespace Core.Arango.Transport
                 var jwt = authResponse.Jwt;
                 var token = new JwtSecurityToken(jwt.Replace("=", ""));
                 _auth = $"Bearer {jwt}";
-                _authValidUntil = token.ValidTo;
+                _authValidUntil = token.ValidTo.AddMinutes(-5);
             }
         }
 
