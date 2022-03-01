@@ -18,14 +18,14 @@ namespace Core.Arango.Linq.Query
 {
     internal class ArangoModelVisitor : QueryModelVisitorBase
     {
-        public static readonly Dictionary<Type, string> aggregateResultOperatorFunctions;
-        public static readonly List<Type> additionalResultOperatorFunctions;
+        private static readonly Dictionary<Type, string> aggregateResultOperatorFunctions;
+        private static readonly List<Type> additionalResultOperatorFunctions;
 
-        public static IEnumerable<Type> SupportedResultOperatorFunctions => aggregateResultOperatorFunctions.Keys.Concat(additionalResultOperatorFunctions);
+        private static IEnumerable<Type> SupportedResultOperatorFunctions => aggregateResultOperatorFunctions.Keys.Concat(additionalResultOperatorFunctions);
 
-        public IArangoLinq Db;
+        public readonly IArangoLinq Db;
 
-        public Dictionary<string, string> MemberNamesMapping = new();
+        public readonly Dictionary<string, string> MemberNamesMapping = new();
 
         static ArangoModelVisitor()
         {
