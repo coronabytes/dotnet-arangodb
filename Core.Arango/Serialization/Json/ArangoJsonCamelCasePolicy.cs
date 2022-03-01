@@ -22,16 +22,26 @@ namespace Core.Arango.Serialization.Json
             };
         }
 
+        /// <summary>
+        /// Convert a string to PascalCase unless it is empty or already starts with UpperCase
+        /// </summary>
         private static string Fix(string name)
         {
             if (string.IsNullOrEmpty(name) || !char.IsUpper(name[0]))
                 return name;
 
+#if NETSTANDARD2_0
+            var newString = new Span<char>();
+            name.AsSpan().CopyTo(newString);
+            FixCasing(newString);
+            return newString.ToString();
+#else
             return string.Create(name.Length, name, (chars, n) =>
             {
                 n.AsSpan().CopyTo(chars);
                 FixCasing(chars);
             });
+#endif
         }
 
         private static void FixCasing(Span<char> chars)

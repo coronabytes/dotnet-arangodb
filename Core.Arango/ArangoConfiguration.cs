@@ -88,7 +88,7 @@ namespace Core.Arango
                 User = user;
                 Password = password;
 
-                Endpoints = endpoints?.Split(',', StringSplitOptions.RemoveEmptyEntries).ToList();
+                Endpoints = endpoints?.SplitAndRemoveEmptyEntries(',').ToList();
 
                 if (allowDirtyRead?.Equals("true", StringComparison.InvariantCultureIgnoreCase) == true)
                     AllowDirtyRead = true;
