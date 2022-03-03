@@ -97,7 +97,7 @@ namespace Core.Arango.Modules.Internal
             if (force.HasValue)
                 parameter.Add("force", force.Value.ToString().ToLowerInvariant());
 
-            var res = await Context.Configuration.Transport.SendContentAsync(HttpMethod.Patch,
+            var res = await Context.Configuration.Transport.SendContentAsync(PolyfillHelper.Patch,
                 ApiPath(database, "foxx/service", parameter), PackService(service),
                 cancellationToken: cancellationToken);
 
@@ -134,7 +134,7 @@ namespace Core.Arango.Modules.Internal
         {
             var parameter = new Dictionary<string, string> {{"mount", mount}};
 
-            return await SendAsync<ArangoVoid>(database, HttpMethod.Patch,
+            return await SendAsync<ArangoVoid>(database, PolyfillHelper.Patch,
                 ApiPath(database, "foxx/configuration", parameter), configuration,
                 cancellationToken: cancellationToken);
         }
@@ -166,7 +166,7 @@ namespace Core.Arango.Modules.Internal
         {
             var parameter = new Dictionary<string, string> {{"mount", mount}};
 
-            return await SendAsync<ArangoVoid>(database, HttpMethod.Patch,
+            return await SendAsync<ArangoVoid>(database, PolyfillHelper.Patch,
                 ApiPath(database, "foxx/dependencies", parameter), dependencies,
                 cancellationToken: cancellationToken);
         }

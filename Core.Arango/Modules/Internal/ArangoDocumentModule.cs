@@ -249,7 +249,7 @@ namespace Core.Arango.Modules.Internal
             var query = AddQueryString(
                 ApiPath(database, $"document/{UrlEncode(collection)}"), parameter);
 
-            return await SendAsync<List<ArangoUpdateResult<TR>>>(database, HttpMethod.Patch, query,
+            return await SendAsync<List<ArangoUpdateResult<TR>>>(database, PolyfillHelper.Patch, query,
                 docs, cancellationToken: cancellationToken);
         }
 

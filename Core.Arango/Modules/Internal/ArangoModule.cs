@@ -150,8 +150,13 @@ namespace Core.Arango.Modules.Internal
 
             private int _counter;
 
+#if NETSTANDARD2_0
+            public IDictionary<string, object> Parameters =>
+                _paramsMap.ToDictionary(x => x.Value.Substring(1), x => x.Key.value);
+#else
             public IDictionary<string, object> Parameters =>
                 _paramsMap.ToDictionary(x => x.Value[1..], x => x.Key.value);
+#endif
 
             public string Register(QueryParameterType type, object value)
             {

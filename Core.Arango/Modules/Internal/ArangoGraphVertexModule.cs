@@ -77,7 +77,7 @@ namespace Core.Arango.Modules.Internal
             if (returnOld.HasValue)
                 parameter.Add("returnOld", returnOld.Value.ToString().ToLowerInvariant());
 
-            return await SendAsync<ArangoVertexResponse<TR>>(database, HttpMethod.Patch,
+            return await SendAsync<ArangoVertexResponse<TR>>(database, PolyfillHelper.Patch,
                 ApiPath(database, $"gharial/{UrlEncode(graph)}/vertex/{UrlEncode(collection)}/{key}", parameter),
                 doc, cancellationToken: cancellationToken);
         }
