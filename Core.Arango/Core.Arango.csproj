@@ -61,11 +61,7 @@
     <PackageReference Include="System.Text.Encodings.Web" Version="6.0.0" />
   </ItemGroup>
 
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0'">
-	<DefineConstants>NETSTANDARD2_0</DefineConstants>
-  </PropertyGroup>
-
-  <ItemGroup>
+	<ItemGroup>
     <None Include="ArangoDB.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
