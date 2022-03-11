@@ -10,6 +10,7 @@ using Xunit;
 
 namespace Core.Arango.Tests
 {
+#if !NETSTANDARD2_0
     public class FoxxTest : TestBase
     {
         [Fact]
@@ -134,4 +135,5 @@ router.get('/hello-world', function (req, res) {{
             Assert.Empty(services);
         }
     }
+#endif
 }
