@@ -155,6 +155,16 @@ namespace Core.Arango.Tests
         }
 
         [Fact]
+        public async Task Remove()
+        {
+            var q = Arango.Query<Project>("test")
+                .Where(x => x.Name == "Project A")
+                .Remove().In<Project>().Select(x=>x.Key);
+
+            _output.WriteLine(q.ToAql().aql);
+        }
+
+        [Fact]
         public async Task Let()
         {
             var q =
