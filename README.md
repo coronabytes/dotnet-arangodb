@@ -261,6 +261,13 @@ var q = Arango.Query<Project>("test")
 await q.ToListAsync();
 ```
 
+## Remove
+```csharp
+await Arango.Query<Project>("test")
+.Where(x => x.Name == "Project A")
+.Remove().In<Project>().Select(x => x.Key).ToListAsync();
+```
+
 # Snippets for Advanced Use Cases
 
 ## Create index
