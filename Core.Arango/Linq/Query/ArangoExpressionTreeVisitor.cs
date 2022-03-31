@@ -39,7 +39,8 @@ namespace Core.Arango.Linq.Query
                 return expression;
             }
 
-            if (expression.Method.Name == "get_Item" && expression.Method.DeclaringType.Name == "IList`1")
+            if (expression.Method.Name == "get_Item" &&
+                (expression.Method.DeclaringType.Name == "IList`1" || expression.Method.DeclaringType.Name == "Dictionary`2"))
             {
                 Visit(expression.Object);
                 ModelVisitor.QueryText.Append(" [ ");
