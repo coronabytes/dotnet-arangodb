@@ -408,5 +408,14 @@ namespace Core.Arango.Linq
                     source.Expression,
                     Expression.Quote(predicate)));
         }
+
+        [ExtentionIdentifier("Options")]
+        public static IQueryable<TSource> Options<TSource>(this IQueryable<TSource> source,Expression<Func<object>> options)
+        {
+            return source.Provider.CreateQuery<TSource>(Expression.Call(
+                    FindExtention("Options", typeof(TSource)),
+                    source.Expression,
+                    Expression.Quote(options))) as IAqlModifiable<TSource>;
+        }
     }
 }
