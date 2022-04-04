@@ -399,6 +399,13 @@ namespace Core.Arango.Linq.Query
             GetAqlExpression(skipTakeClause.TakeCount, queryModel);
         }
 
+        public void VisitOptionsClause(OptionsClause optionsClause, QueryModel queryModel)
+        {
+            QueryText.AppendFormat("  OPTIONS ");
+
+            GetAqlExpression(optionsClause.Options, queryModel);
+        }
+
         public void VisitTraversalClause(ITraversalClause traversalClause, QueryModel queryModel, int index)
         {
             var prefix = LinqUtility.MemberNameFromMap(traversalClause.Identifier, "graph", this);
