@@ -88,6 +88,8 @@ namespace Core.Arango.Linq.Query
                 typeof(TraversalOptionsExpressionNode));
             customNodeTypeRegistry.Register(ShortestPathExpressionNode.SupportedMethods,
                 typeof(ShortestPathExpressionNode));
+            customNodeTypeRegistry.Register(OptionsExpressionNode.SupportedMethods,
+                typeof(OptionsExpressionNode));
 
             var nodeTypeProvider = ExpressionTreeParser.CreateDefaultNodeTypeProvider();
             nodeTypeProvider.InnerProviders.Insert(0, customNodeTypeRegistry);
