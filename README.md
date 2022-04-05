@@ -268,6 +268,17 @@ await Arango.Query<Project>("test")
 .Remove().In<Project>().Select(x => x.Key).ToListAsync();
 ```
 
+
+## OPTIONS
+"Option" is the query option that exists in ArangoDb.
+Some operations like  FOR / Graph Traversal / SEARCH / COLLECT / INSERT / UPDATE / REPLACE / UPSERT / REMOVE would support "Options".
+
+```csharp
+await Arango.Query<Project>("test")
+.Where(x => x.Name == "Project A")
+.Options(() => new { indexHint = "byName" }).ToListAsync();
+```
+
 # Snippets for Advanced Use Cases
 
 ## Create index
