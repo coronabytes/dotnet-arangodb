@@ -45,7 +45,7 @@ namespace Core.Arango.Tests
         public async Task FirstOrDefault()
         {
             var p = await Arango.Query<Project>("test")
-                .FirstOrDefaultAsync(x=>x.Name == "Project A");
+                .FirstOrDefaultAsync(x => x.Name == "Project A");
 
             Assert.Equal("Project A", p.Name);
         }
@@ -93,6 +93,18 @@ namespace Core.Arango.Tests
         }
 
         [Fact]
+        public Task Options()
+        {
+            var q = Arango.Query<Project>("test")
+                .Where(x => x.Name == "Project A")
+                .Options(() => new { indexHint = "byName" });
+
+            Assert.Equal("FOR `x` IN `Project`  FILTER  (  `x`.`Name`  ==  @P1  )   OPTIONS  {  `indexHint` :   @P2  }  RETURN   `x`", q.ToAql().aql.Trim());
+
+            return Task.CompletedTask;
+        }
+
+        [Fact]
         public async Task GroupBy()
         {
             var q = Arango.Query<Project>("test")
@@ -100,7 +112,7 @@ namespace Core.Arango.Tests
                 .Select(x => new
                 {
                     Parent = x.Key,
-                    Max = x.Max(y=>y.Budget)
+                    Max = x.Max(y => y.Budget)
                 });
 
             _output.WriteLine(q.ToAql().aql);
@@ -147,7 +159,7 @@ namespace Core.Arango.Tests
                 {
                     x.Key,
                     Name = Aql.Concat(x.Name, "2")
-                }, x=>x.Key);
+                }, x => x.Key);
 
             _output.WriteLine(q.ToAql().aql);
             _output.WriteLine("");
@@ -159,7 +171,7 @@ namespace Core.Arango.Tests
         {
             var q = Arango.Query<Project>("test")
                 .Where(x => x.Name == "Project A")
-                .Remove().In<Project>().Select(x=>x.Key);
+                .Remove().In<Project>().Select(x => x.Key);
 
             _output.WriteLine(q.ToAql().aql);
         }
@@ -170,7 +182,7 @@ namespace Core.Arango.Tests
             var q =
                 from p in Arango.Query<Project>("test")
                 let clients = (from c in Arango.Query<Client>() select c.Key)
-                select new {p.Name, Clients = Aql.As<string[]>(clients) };
+                select new { p.Name, Clients = Aql.As<string[]>(clients) };
 
             _output.WriteLine(q.ToAql().aql);
             _output.WriteLine("");
