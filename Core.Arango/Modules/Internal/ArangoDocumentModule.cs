@@ -38,7 +38,7 @@ namespace Core.Arango.Modules.Internal
             bool? ignoreRevs = null,
             CancellationToken cancellationToken = default)
         {
-            var parameter = new Dictionary<string, string> {{"getonly", "true"}};
+            var parameter = new Dictionary<string, string> {{"onlyget", "true"}};
 
             if (ignoreRevs.HasValue)
                 parameter.Add("ignoreRevs", ignoreRevs.Value.ToString().ToLowerInvariant());
