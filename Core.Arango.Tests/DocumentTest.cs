@@ -351,6 +351,53 @@ namespace Core.Arango.Tests
             await Arango.Document.UpdateManyAsync("test", "test", list, ignoreRevs: true);
         }
 
+        [Theory]
+        [ClassData(typeof(PascalCaseData))]
+        public async Task GetManyTest(string serializer)
+        {
+            await SetupAsync(serializer);
+            await Arango.Collection.CreateAsync("test", "test", ArangoCollectionType.Document);
+
+            await Arango.Document.CreateManyAsync("test", "test", new List<RevEntity>
+            {
+                new()
+                {
+                    Key = "1",
+                    Name = "A"
+                },
+                new()
+                {
+                    Key = "2",
+                    Name = "B"
+                },
+                new()
+                {
+                    Key = "3",
+                    Name = "C"
+                }
+            });
+
+            var list1 = await Arango.Document.GetManyAsync<RevEntity>("test", "test", new List<string> {
+                "1", "2"
+            });
+
+            Assert.Equal(2, list1.Count);
+
+            var list2 = await Arango.Document.GetManyAsync<RevEntity>("test", "test", new List<object>
+            {
+                new
+                {
+                    Key = "1"
+                },
+                new
+                {
+                    Key = "2"
+                }
+            });
+
+            Assert.Equal(2, list2.Count);
+        }
+
         private class RevEntity
         {
             public string Key { get; set; }
