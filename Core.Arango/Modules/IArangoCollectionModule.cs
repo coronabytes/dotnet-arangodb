@@ -25,7 +25,8 @@ namespace Core.Arango.Modules
         /// <summary>
         ///     Returns all collections
         /// </summary>
-        Task<IReadOnlyCollection<ArangoCollection>> ListAsync(ArangoHandle database, CancellationToken cancellationToken = default);
+        Task<IReadOnlyCollection<ArangoCollection>> ListAsync(ArangoHandle database,
+            CancellationToken cancellationToken = default);
 
         /// <summary>
         ///     Renames a collection (not in cluster)
@@ -61,6 +62,18 @@ namespace Core.Arango.Modules
         ///     Checks of collection exists (calls ListAsync internally)
         /// </summary>
         Task<bool> ExistAsync(ArangoHandle database, string collection,
+            CancellationToken cancellationToken = default);
+
+        /// <summary>
+        ///     Compacts the data of a collection in order to reclaim disk space
+        /// </summary>
+        Task CompactAsync(ArangoHandle database, string collection,
+            CancellationToken cancellationToken = default);
+
+        /// <summary>
+        ///     Recalculates the document count of a collection, if it ever becomes inconsistent.
+        /// </summary>
+        Task RecalculateCountAsync(ArangoHandle database, string collection,
             CancellationToken cancellationToken = default);
     }
 }

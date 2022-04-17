@@ -28,15 +28,17 @@ namespace Core.Arango.Modules
         /// <summary>
         ///     Returns all Views
         /// </summary>
-        Task<IReadOnlyCollection<ArangoViewInformation>> ListAsync(ArangoHandle database, CancellationToken cancellationToken = default);
+        Task<IReadOnlyCollection<ArangoViewInformation>> ListAsync(ArangoHandle database,
+            CancellationToken cancellationToken = default);
 
         /// <summary>
-        ///  Get properties of view
+        ///     Get properties of view
         /// </summary>
         /// <param name="database"></param>
         /// <param name="view"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<ArangoView> GetPropertiesAsync(ArangoHandle database, string view, CancellationToken cancellationToken = default);
+        Task<ArangoView> GetPropertiesAsync(ArangoHandle database, string view,
+            CancellationToken cancellationToken = default);
     }
 }

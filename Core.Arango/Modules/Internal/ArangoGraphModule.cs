@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Text.Json.Serialization;
 using System.Threading;
@@ -26,10 +25,12 @@ namespace Core.Arango.Modules.Internal
             return res.Graphs;
         }
 
-        public async Task<ArangoGraph> GetAsync(ArangoHandle database, string graph, CancellationToken cancellationToken = default)
+        public async Task<ArangoGraph> GetAsync(ArangoHandle database, string graph,
+            CancellationToken cancellationToken = default)
         {
             var res = await SendAsync<GraphResponse<ArangoGraph>>(database, HttpMethod.Get,
-                ApiPath(database, $"gharial/{UrlEncode(graph)}"), cancellationToken: cancellationToken).ConfigureAwait(false);
+                    ApiPath(database, $"gharial/{UrlEncode(graph)}"), cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
             return res.Graph;
         }
 
@@ -41,7 +42,7 @@ namespace Core.Arango.Modules.Internal
         {
             await SendAsync<ArangoVoid>(database, HttpMethod.Post,
                 ApiPath(database, "gharial"),
-                request, cancellationToken: cancellationToken);
+                request, cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
         public async Task AddVertexCollectionAsync(ArangoHandle database, string graph,
@@ -50,7 +51,7 @@ namespace Core.Arango.Modules.Internal
         {
             await SendAsync<ArangoVoid>(database, HttpMethod.Post,
                 ApiPath(database, $"gharial/{UrlEncode(graph)}/vertex"),
-                vertexCollection, cancellationToken: cancellationToken);
+                vertexCollection, cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
         public async Task RemoveVertexCollectionAsync(ArangoHandle database, string graph, string vertexCollection,
@@ -64,7 +65,7 @@ namespace Core.Arango.Modules.Internal
 
             await SendAsync<ArangoVoid>(database, HttpMethod.Delete,
                 ApiPath(database, $"gharial/{UrlEncode(graph)}/vertex/{UrlEncode(vertexCollection)}", parameter),
-                cancellationToken: cancellationToken);
+                cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
         public async Task AddEdgeDefinitionAsync(ArangoHandle database, string graph,
@@ -73,7 +74,7 @@ namespace Core.Arango.Modules.Internal
         {
             await SendAsync<ArangoVoid>(database, HttpMethod.Post,
                 ApiPath(database, $"gharial/{UrlEncode(graph)}/edge"),
-                edgeDefinition, cancellationToken: cancellationToken);
+                edgeDefinition, cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
         public async Task ReplaceEdgeDefinitionAsync(ArangoHandle database, string graph,
@@ -88,7 +89,7 @@ namespace Core.Arango.Modules.Internal
 
             await SendAsync<ArangoVoid>(database, HttpMethod.Put,
                 ApiPath(database, $"gharial/{UrlEncode(graph)}/edge/{UrlEncode(edgeDefinition.Collection)}", parameter),
-                edgeDefinition, cancellationToken: cancellationToken);
+                edgeDefinition, cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
         public async Task RemoveEdgeDefinitionAsync(ArangoHandle database, string graph, string edgeDefinition,
@@ -102,7 +103,7 @@ namespace Core.Arango.Modules.Internal
 
             await SendAsync<ArangoVoid>(database, HttpMethod.Delete,
                 ApiPath(database, $"gharial/{UrlEncode(graph)}/edge/{UrlEncode(edgeDefinition)}", parameter),
-                cancellationToken: cancellationToken);
+                cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
         public async Task DropAsync(ArangoHandle database, string name,
@@ -110,7 +111,7 @@ namespace Core.Arango.Modules.Internal
         {
             await SendAsync<ArangoVoid>(database, HttpMethod.Delete,
                 ApiPath(database, $"gharial/{UrlEncode(name)}"),
-                cancellationToken: cancellationToken);
+                cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
         private class GraphRes

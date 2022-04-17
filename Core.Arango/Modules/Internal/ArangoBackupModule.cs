@@ -46,7 +46,7 @@ namespace Core.Arango.Modules.Internal
             object req = null;
 
             if (id != null)
-                req = new {id};
+                req = new { id };
 
             var res = await SendAsync<SingleResult<BackupList>>(null, HttpMethod.Post, "/_admin/backup/list",
                 req, cancellationToken: cancellationToken);

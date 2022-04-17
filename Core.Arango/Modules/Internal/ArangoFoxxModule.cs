@@ -34,7 +34,7 @@ namespace Core.Arango.Modules.Internal
             bool? development = null, bool? setup = null, bool? legacy = null,
             CancellationToken cancellationToken = default)
         {
-            var parameter = new Dictionary<string, string> {{"mount", mount}};
+            var parameter = new Dictionary<string, string> { { "mount", mount } };
 
             if (development.HasValue)
                 parameter.Add("development", development.Value.ToString().ToLowerInvariant());
@@ -57,7 +57,7 @@ namespace Core.Arango.Modules.Internal
             bool? teardown = null, bool? setup = null, bool? legacy = null, bool? force = null,
             CancellationToken cancellationToken = default)
         {
-            var parameter = new Dictionary<string, string> {{"mount", mount}};
+            var parameter = new Dictionary<string, string> { { "mount", mount } };
 
             if (teardown.HasValue)
                 parameter.Add("teardown", teardown.Value.ToString().ToLowerInvariant());
@@ -83,7 +83,7 @@ namespace Core.Arango.Modules.Internal
             bool? teardown = null, bool? setup = null, bool? legacy = null, bool? force = null,
             CancellationToken cancellationToken = default)
         {
-            var parameter = new Dictionary<string, string> {{"mount", mount}};
+            var parameter = new Dictionary<string, string> { { "mount", mount } };
 
             if (teardown.HasValue)
                 parameter.Add("teardown", teardown.Value.ToString().ToLowerInvariant());
@@ -108,7 +108,7 @@ namespace Core.Arango.Modules.Internal
             bool? teardown = null,
             CancellationToken cancellationToken = default)
         {
-            var parameter = new Dictionary<string, string> {{"mount", mount}};
+            var parameter = new Dictionary<string, string> { { "mount", mount } };
 
             if (teardown.HasValue)
                 parameter.Add("teardown", teardown.Value.ToString().ToLowerInvariant());
@@ -121,7 +121,7 @@ namespace Core.Arango.Modules.Internal
         public async Task<T> GetConfigurationAsync<T>(ArangoHandle database, string mount,
             CancellationToken cancellationToken = default)
         {
-            var parameter = new Dictionary<string, string> {{"mount", mount}};
+            var parameter = new Dictionary<string, string> { { "mount", mount } };
 
             return await SendAsync<T>(database, HttpMethod.Get,
                 ApiPath(database, "foxx/configuration", parameter),
@@ -132,7 +132,7 @@ namespace Core.Arango.Modules.Internal
             object configuration,
             CancellationToken cancellationToken = default)
         {
-            var parameter = new Dictionary<string, string> {{"mount", mount}};
+            var parameter = new Dictionary<string, string> { { "mount", mount } };
 
             return await SendAsync<ArangoVoid>(database, PolyfillHelper.Patch,
                 ApiPath(database, "foxx/configuration", parameter), configuration,
@@ -143,7 +143,7 @@ namespace Core.Arango.Modules.Internal
             object configuration,
             CancellationToken cancellationToken = default)
         {
-            var parameter = new Dictionary<string, string> {{"mount", mount}};
+            var parameter = new Dictionary<string, string> { { "mount", mount } };
 
             return await SendAsync<ArangoVoid>(database, HttpMethod.Put,
                 ApiPath(database, "foxx/configuration", parameter), configuration,
@@ -153,7 +153,7 @@ namespace Core.Arango.Modules.Internal
         public async Task<T> GetDependenciesAsync<T>(ArangoHandle database, string mount,
             CancellationToken cancellationToken = default)
         {
-            var parameter = new Dictionary<string, string> {{"mount", mount}};
+            var parameter = new Dictionary<string, string> { { "mount", mount } };
 
             return await SendAsync<T>(database, HttpMethod.Get,
                 ApiPath(database, "foxx/dependencies", parameter),
@@ -164,7 +164,7 @@ namespace Core.Arango.Modules.Internal
             object dependencies,
             CancellationToken cancellationToken = default)
         {
-            var parameter = new Dictionary<string, string> {{"mount", mount}};
+            var parameter = new Dictionary<string, string> { { "mount", mount } };
 
             return await SendAsync<ArangoVoid>(database, PolyfillHelper.Patch,
                 ApiPath(database, "foxx/dependencies", parameter), dependencies,
@@ -175,7 +175,7 @@ namespace Core.Arango.Modules.Internal
             object dependencies,
             CancellationToken cancellationToken = default)
         {
-            var parameter = new Dictionary<string, string> {{"mount", mount}};
+            var parameter = new Dictionary<string, string> { { "mount", mount } };
 
             return await SendAsync<ArangoVoid>(database, HttpMethod.Put,
                 ApiPath(database, "foxx/dependencies", parameter), dependencies,
@@ -185,7 +185,7 @@ namespace Core.Arango.Modules.Internal
         public async Task EnableDevelopmentModeAsync(ArangoHandle database, string mount,
             CancellationToken cancellationToken = default)
         {
-            var parameter = new Dictionary<string, string> {{"mount", mount}};
+            var parameter = new Dictionary<string, string> { { "mount", mount } };
 
             await SendAsync<ArangoVoid>(database, HttpMethod.Post,
                 ApiPath(database, "foxx/development", parameter),
@@ -195,7 +195,7 @@ namespace Core.Arango.Modules.Internal
         public async Task DisableDevelopmentModeAsync(ArangoHandle database, string mount,
             CancellationToken cancellationToken = default)
         {
-            var parameter = new Dictionary<string, string> {{"mount", mount}};
+            var parameter = new Dictionary<string, string> { { "mount", mount } };
 
             await SendAsync<ArangoVoid>(database, HttpMethod.Delete,
                 ApiPath(database, "foxx/development", parameter),
@@ -250,7 +250,7 @@ namespace Core.Arango.Modules.Internal
         public async Task<Stream> DownloadServiceAsync<T>(ArangoHandle database, string mount,
             CancellationToken cancellationToken = default)
         {
-            var parameter = new Dictionary<string, string> {{"mount", mount}};
+            var parameter = new Dictionary<string, string> { { "mount", mount } };
 
             var res = await Context.Configuration.Transport.SendContentAsync(HttpMethod.Post,
                 ApiPath(database, "foxx/download", parameter),
@@ -263,7 +263,7 @@ namespace Core.Arango.Modules.Internal
             object body = null,
             CancellationToken cancellationToken = default)
         {
-            var parameter = new Dictionary<string, string> {{"mount", mount}};
+            var parameter = new Dictionary<string, string> { { "mount", mount } };
 
             return await SendAsync<T>(database, HttpMethod.Post,
                 ApiPath(database, $"foxx/scripts/{UrlEncode(name)}", parameter), body,

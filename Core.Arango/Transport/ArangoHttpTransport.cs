@@ -40,7 +40,7 @@ namespace Core.Arango.Transport
             IDictionary<string, string> headers = null,
             CancellationToken cancellationToken = default)
         {
-            await Authenticate(auth, cancellationToken);
+            await Authenticate(auth, cancellationToken).ConfigureAwait(false);
 
             var msg = new HttpRequestMessage(m, _configuration.Server + url);
             ApplyHeaders(transaction, auth, msg, headers);
@@ -56,12 +56,12 @@ namespace Core.Arango.Transport
                 msg.Headers.Add(HttpRequestHeader.ContentLength.ToString(), "0");
             }
 
-            var res = await _httpClient.SendAsync(msg, cancellationToken);
+            var res = await _httpClient.SendAsync(msg, cancellationToken).ConfigureAwait(false);
 
             if (!res.IsSuccessStatusCode)
                 if (throwOnError)
                 {
-                    var errorContent = await res.Content.ReadAsStringAsync();
+                    var errorContent = await res.Content.ReadAsStringAsync().ConfigureAwait(false);
                     var error = _configuration.Serializer.Deserialize<ErrorResponse>(errorContent);
                     throw new ArangoException(errorContent, error.ErrorMessage,
                         (HttpStatusCode) error.Code, (ArangoErrorCode) error.ErrorNum);
@@ -71,7 +71,7 @@ namespace Core.Arango.Transport
                     return default;
                 }
 
-            var content = await res.Content.ReadAsStringAsync();
+            var content = await res.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             if (res.Headers.Contains("X-Arango-Error-Codes"))
             {
@@ -118,7 +118,7 @@ namespace Core.Arango.Transport
             IDictionary<string, string> headers = null,
             CancellationToken cancellationToken = default)
         {
-            await Authenticate(auth, cancellationToken);
+            await Authenticate(auth, cancellationToken).ConfigureAwait(false);
 
             var msg = new HttpRequestMessage(m, _configuration.Server + url);
             ApplyHeaders(transaction, auth, msg, headers);
@@ -129,14 +129,14 @@ namespace Core.Arango.Transport
             else
                 msg.Headers.Add(HttpRequestHeader.ContentLength.ToString(), "0");
 
-            var res = await _httpClient.SendAsync(msg, cancellationToken);
+            var res = await _httpClient.SendAsync(msg, cancellationToken).ConfigureAwait(false);
 
             if (!res.IsSuccessStatusCode)
                 if (throwOnError)
-                    throw new ArangoException(await res.Content.ReadAsStringAsync());
+                    throw new ArangoException(await res.Content.ReadAsStringAsync().ConfigureAwait(false));
                 else return default;
 
-            var content = await res.Content.ReadAsStringAsync();
+            var content = await res.Content.ReadAsStringAsync().ConfigureAwait(false);
 
             if (content == "{}" || string.IsNullOrWhiteSpace(content))
                 return default;
@@ -176,7 +176,7 @@ namespace Core.Arango.Transport
                     {
                         Username = _configuration.User,
                         Password = _configuration.Password ?? string.Empty
-                    }, auth: false, cancellationToken: cancellationToken);
+                    }, auth: false, cancellationToken: cancellationToken).ConfigureAwait(false);
 
                 var jwt = authResponse.Jwt;
                 var token = new JwtSecurityToken(jwt.Replace("=", ""));

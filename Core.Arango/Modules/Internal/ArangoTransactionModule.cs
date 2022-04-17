@@ -17,7 +17,7 @@ namespace Core.Arango.Modules.Internal
         {
             return await SendAsync<T>(null, HttpMethod.Post,
                 ApiPath(database, "transaction"),
-                request, cancellationToken: cancellationToken);
+                request, cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
         public async Task<ArangoHandle> BeginAsync(ArangoHandle database, ArangoTransaction request,
@@ -25,7 +25,7 @@ namespace Core.Arango.Modules.Internal
         {
             var res = await SendAsync<SingleResult<TransactionResponse>>(null, HttpMethod.Post,
                 ApiPath(database, "transaction/begin"),
-                request, cancellationToken: cancellationToken);
+                request, cancellationToken: cancellationToken).ConfigureAwait(false);
 
             var transaction = res.Result.Id;
             return new ArangoHandle(database, transaction);
@@ -39,7 +39,7 @@ namespace Core.Arango.Modules.Internal
 
             await SendAsync<ArangoVoid>(null, HttpMethod.Put,
                 ApiPath(database, $"transaction/{database.Transaction}"),
-                cancellationToken: cancellationToken);
+                cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
         public async Task AbortAsync(ArangoHandle database, CancellationToken cancellationToken = default)
@@ -49,7 +49,7 @@ namespace Core.Arango.Modules.Internal
 
             await SendAsync<ArangoVoid>(null, HttpMethod.Delete,
                 ApiPath(database, $"transaction/{database.Transaction}"),
-                cancellationToken: cancellationToken);
+                cancellationToken: cancellationToken).ConfigureAwait(false);
         }
     }
 }

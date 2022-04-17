@@ -21,7 +21,7 @@ namespace Core.Arango.Modules.Internal
                 new ArangoDatabase
                 {
                     Name = RealmPrefix(name)
-                }, false, cancellationToken: cancellationToken);
+                }, false, cancellationToken: cancellationToken).ConfigureAwait(false);
 
             return res != null;
         }
@@ -32,15 +32,17 @@ namespace Core.Arango.Modules.Internal
 
             var res = await SendAsync<ArangoVoid>(null, HttpMethod.Post,
                 ApiPath("_system", "database"),
-                database, false, cancellationToken: cancellationToken);
+                database, false, cancellationToken: cancellationToken).ConfigureAwait(false);
 
             return res != null;
         }
 
-        public async Task<ArangoDatabaseInfo> GetAsync(ArangoHandle handle, CancellationToken cancellationToken = default)
+        public async Task<ArangoDatabaseInfo> GetAsync(ArangoHandle handle,
+            CancellationToken cancellationToken = default)
         {
             var res = await SendAsync<SingleResult<ArangoDatabaseInfo>>(null, HttpMethod.Get,
-                ApiPath(handle, "database/current"), null, false, cancellationToken: cancellationToken);
+                    ApiPath(handle, "database/current"), null, false, cancellationToken: cancellationToken)
+                .ConfigureAwait(false);
 
             return res?.Result;
         }

@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
-using Newtonsoft.Json;
 
 namespace Core.Arango.Modules
 {
@@ -82,25 +80,24 @@ namespace Core.Arango.Modules
 
 
         /// <summary>
-        ///   explain an AQL query and return information about it
+        ///     explain an AQL query and return information about it
         /// </summary>
-        Task<ArangoExplainResult> ExplainAsync(ArangoHandle database, string query, IDictionary<string, object> bindVars,
+        Task<ArangoExplainResult> ExplainAsync(ArangoHandle database, string query,
+            IDictionary<string, object> bindVars,
             bool allPlans = false,
             CancellationToken cancellationToken = default);
 
         /// <summary>
-        ///   explain an AQL query and return information about it
+        ///     explain an AQL query and return information about it
         /// </summary>
         Task<ArangoExplainResult> ExplainAsync(ArangoHandle database, FormattableString query,
             bool allPlans = false,
             CancellationToken cancellationToken = default);
 
         /// <summary>
-        ///   parse an AQL query and return information about it
+        ///     parse an AQL query and return information about it
         /// </summary>
-        Task<ArangoParseResult> ParseAsync(ArangoHandle database, string query, 
+        Task<ArangoParseResult> ParseAsync(ArangoHandle database, string query,
             CancellationToken cancellationToken = default);
     }
-
-
 }

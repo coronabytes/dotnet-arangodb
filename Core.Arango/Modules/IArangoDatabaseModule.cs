@@ -21,7 +21,7 @@ namespace Core.Arango.Modules
         Task<bool> CreateAsync(ArangoDatabase database, CancellationToken cancellationToken = default);
 
         /// <summary>
-        ///   Retrieves information about the current database
+        ///     Retrieves information about the current database
         /// </summary>
         Task<ArangoDatabaseInfo> GetAsync(ArangoHandle handle, CancellationToken cancellationToken = default);
 

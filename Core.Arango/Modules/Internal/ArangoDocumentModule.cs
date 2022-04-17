@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
@@ -31,14 +30,14 @@ namespace Core.Arango.Modules.Internal
 
             return await SendAsync<T>(database, HttpMethod.Get,
                 ApiPath(database, $"document/{UrlEncode(collection)}/{key}"),
-                null, throwOnError, headers: headers, cancellationToken: cancellationToken);
+                null, throwOnError, headers: headers, cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
         public async Task<List<T>> GetManyAsync<T>(ArangoHandle database, string collection, IEnumerable<object> docs,
             bool? ignoreRevs = null,
             CancellationToken cancellationToken = default)
         {
-            var parameter = new Dictionary<string, string> {{"onlyget", "true"}};
+            var parameter = new Dictionary<string, string> { { "onlyget", "true" } };
 
             if (ignoreRevs.HasValue)
                 parameter.Add("ignoreRevs", ignoreRevs.Value.ToString().ToLowerInvariant());
@@ -46,7 +45,7 @@ namespace Core.Arango.Modules.Internal
             var query = AddQueryString(ApiPath(database, $"document/{UrlEncode(collection)}"), parameter);
 
             return await SendAsync<List<T>>(database, HttpMethod.Put, query, docs,
-                cancellationToken: cancellationToken);
+                cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
         public async Task<List<ArangoUpdateResult<TR>>> CreateManyAsync<T, TR>(ArangoHandle database,
@@ -81,7 +80,7 @@ namespace Core.Arango.Modules.Internal
             var query = AddQueryString(ApiPath(database, $"document/{UrlEncode(collection)}"), parameter);
 
             return await SendAsync<List<ArangoUpdateResult<TR>>>(database, HttpMethod.Post, query,
-                docs, cancellationToken: cancellationToken);
+                docs, cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
         public async Task<List<ArangoUpdateResult<ArangoVoid>>> CreateManyAsync<T>(ArangoHandle database,
@@ -92,7 +91,7 @@ namespace Core.Arango.Modules.Internal
         {
             return await CreateManyAsync<T, ArangoVoid>(database, collection, docs, waitForSync, keepNull,
                 mergeObjects,
-                returnOld, returnNew, silent, overwriteMode, cancellationToken);
+                returnOld, returnNew, silent, overwriteMode, cancellationToken).ConfigureAwait(false);
         }
 
         public async Task<ArangoUpdateResult<TR>> CreateAsync<T, TR>(ArangoHandle database, string collection, T doc,
@@ -101,9 +100,9 @@ namespace Core.Arango.Modules.Internal
             bool? silent = null, ArangoOverwriteMode? overwriteMode = null,
             CancellationToken cancellationToken = default)
         {
-            var res = await CreateManyAsync<T, TR>(database, collection, new List<T> {doc}, waitForSync, keepNull,
+            var res = await CreateManyAsync<T, TR>(database, collection, new List<T> { doc }, waitForSync, keepNull,
                 mergeObjects,
-                returnOld, returnNew, silent, overwriteMode, cancellationToken);
+                returnOld, returnNew, silent, overwriteMode, cancellationToken).ConfigureAwait(false);
 
             return res?.SingleOrDefault();
         }
@@ -114,7 +113,7 @@ namespace Core.Arango.Modules.Internal
             bool? mergeObjects = null, bool? returnOld = null, bool? returnNew = null, bool? silent = null,
             ArangoOverwriteMode? overwriteMode = null, CancellationToken cancellationToken = default)
         {
-            var res = await CreateManyAsync<T, ArangoVoid>(database, collection, new List<T> {doc}, waitForSync,
+            var res = await CreateManyAsync<T, ArangoVoid>(database, collection, new List<T> { doc }, waitForSync,
                 keepNull, mergeObjects,
                 returnOld, returnNew, silent, overwriteMode, cancellationToken);
 
@@ -128,9 +127,9 @@ namespace Core.Arango.Modules.Internal
             var query = AddQueryString(ApiPath(database, "import"),
                 new Dictionary<string, string>
                 {
-                    {"type", "array"},
-                    {"complete", complete.ToString().ToLowerInvariant()},
-                    {"collection", collection}
+                    { "type", "array" },
+                    { "complete", complete.ToString().ToLowerInvariant() },
+                    { "collection", collection }
                 });
 
             await SendAsync<ArangoVoid>(database, HttpMethod.Post, query,
@@ -209,7 +208,7 @@ namespace Core.Arango.Modules.Internal
         {
             return await UpdateManyAsync<T, ArangoVoid>(database, collection, docs, waitForSync, keepNull,
                 mergeObjects,
-                returnOld, returnNew, silent, ignoreRevs, cancellationToken);
+                returnOld, returnNew, silent, ignoreRevs, cancellationToken).ConfigureAwait(false);
         }
 
         public async Task<List<ArangoUpdateResult<TR>>> UpdateManyAsync<T, TR>(ArangoHandle database,
@@ -250,7 +249,7 @@ namespace Core.Arango.Modules.Internal
                 ApiPath(database, $"document/{UrlEncode(collection)}"), parameter);
 
             return await SendAsync<List<ArangoUpdateResult<TR>>>(database, PolyfillHelper.Patch, query,
-                docs, cancellationToken: cancellationToken);
+                docs, cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
         public async Task<ArangoUpdateResult<ArangoVoid>> UpdateAsync<T>(ArangoHandle database, string collection,
@@ -265,8 +264,8 @@ namespace Core.Arango.Modules.Internal
             CancellationToken cancellationToken = default)
         {
             var res = await UpdateManyAsync<T, ArangoVoid>(database, collection,
-                new List<T> {doc}, waitForSync, keepNull, mergeObjects,
-                returnOld, returnNew, silent, ignoreRevs, cancellationToken);
+                new List<T> { doc }, waitForSync, keepNull, mergeObjects,
+                returnOld, returnNew, silent, ignoreRevs, cancellationToken).ConfigureAwait(false);
 
             return res.SingleOrDefault();
         }
@@ -283,8 +282,8 @@ namespace Core.Arango.Modules.Internal
             CancellationToken cancellationToken = default)
         {
             var res = await UpdateManyAsync<T, TR>(database, collection,
-                new List<T> {doc}, waitForSync, keepNull, mergeObjects,
-                returnOld, returnNew, silent, ignoreRevs, cancellationToken);
+                new List<T> { doc }, waitForSync, keepNull, mergeObjects,
+                returnOld, returnNew, silent, ignoreRevs, cancellationToken).ConfigureAwait(false);
 
             return res?.SingleOrDefault();
         }
@@ -315,7 +314,7 @@ namespace Core.Arango.Modules.Internal
                 ApiPath(database, $"document/{UrlEncode(collection)}"), parameter);
 
             return await SendAsync<List<ArangoUpdateResult<TR>>>(database, HttpMethod.Put, query,
-                docs, cancellationToken: cancellationToken);
+                docs, cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
         public async Task<List<ArangoUpdateResult<ArangoVoid>>> ReplaceManyAsync<T>(ArangoHandle database,
@@ -327,7 +326,7 @@ namespace Core.Arango.Modules.Internal
             CancellationToken cancellationToken = default)
         {
             return await ReplaceManyAsync<T, ArangoVoid>(database, collection, docs,
-                waitForSync, returnOld, returnNew, ignoreRevs, cancellationToken);
+                waitForSync, returnOld, returnNew, ignoreRevs, cancellationToken).ConfigureAwait(false);
         }
 
         public async Task<ArangoUpdateResult<TR>> ReplaceAsync<T, TR>(ArangoHandle database, string collection,
@@ -338,8 +337,8 @@ namespace Core.Arango.Modules.Internal
             bool? ignoreRevs = null,
             CancellationToken cancellationToken = default)
         {
-            var res = await ReplaceManyAsync<T, TR>(database, collection, new List<T> {doc},
-                waitForSync, returnOld, returnNew, ignoreRevs, cancellationToken);
+            var res = await ReplaceManyAsync<T, TR>(database, collection, new List<T> { doc },
+                waitForSync, returnOld, returnNew, ignoreRevs, cancellationToken).ConfigureAwait(false);
 
             return res?.SingleOrDefault();
         }
@@ -352,8 +351,8 @@ namespace Core.Arango.Modules.Internal
             bool? ignoreRevs = null,
             CancellationToken cancellationToken = default)
         {
-            var res = await ReplaceManyAsync<T, ArangoVoid>(database, collection, new List<T> {doc},
-                waitForSync, returnOld, returnNew, ignoreRevs, cancellationToken);
+            var res = await ReplaceManyAsync<T, ArangoVoid>(database, collection, new List<T> { doc },
+                waitForSync, returnOld, returnNew, ignoreRevs, cancellationToken).ConfigureAwait(false);
 
             return res?.SingleOrDefault();
         }
@@ -372,7 +371,7 @@ namespace Core.Arango.Modules.Internal
                     BindVars = new Dictionary<string, object>(),
                     BatchSize = batchSize ?? Context.Configuration.BatchSize,
                     Cache = false
-                }, cancellationToken: cancellationToken);
+                }, cancellationToken: cancellationToken).ConfigureAwait(false);
 
             yield return firstResult.Result;
 
@@ -383,7 +382,7 @@ namespace Core.Arango.Modules.Internal
             {
                 var res = await SendAsync<QueryResponse<T>>(database, HttpMethod.Put,
                     ApiPath(database, $"/cursor/{firstResult.Id}"),
-                    cancellationToken: cancellationToken);
+                    cancellationToken: cancellationToken).ConfigureAwait(false);
 
                 if (res.Result?.Any() == true)
                     yield return res.Result;

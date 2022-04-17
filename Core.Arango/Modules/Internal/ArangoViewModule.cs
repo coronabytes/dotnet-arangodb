@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -32,7 +31,8 @@ namespace Core.Arango.Modules.Internal
             return res.Result;
         }
 
-        public async Task<ArangoView> GetPropertiesAsync(ArangoHandle database, string view, CancellationToken cancellationToken = default)
+        public async Task<ArangoView> GetPropertiesAsync(ArangoHandle database, string view,
+            CancellationToken cancellationToken = default)
         {
             var res = await SendAsync<ArangoView>(database, HttpMethod.Get,
                 ApiPath(database, $"view/{UrlEncode(view)}/properties"),

@@ -23,13 +23,14 @@ namespace Core.Arango.Modules.Internal
 
             return await ExecuteAsync<T>(database,
                 $"FOR x IN {collection} FILTER {filterExp} LIMIT {limit} RETURN {projection ?? "x"}",
-                parameter, cancellationToken: cancellationToken);
+                parameter, cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
         public async Task<T> SingleOrDefaultAsync<T>(ArangoHandle database, string collection, FormattableString filter,
             string projection = null, CancellationToken cancellationToken = default)
         {
-            var results = await FindAsync<T>(database, collection, filter, projection, 2, cancellationToken);
+            var results = await FindAsync<T>(database, collection, filter, projection, 2, cancellationToken)
+                .ConfigureAwait(false);
 
             if (results.Count == 0)
                 return default;
@@ -41,7 +42,8 @@ namespace Core.Arango.Modules.Internal
         {
             var queryExp = Parameterize(query, out var parameter);
 
-            return await ExecuteAsync<T>(database, queryExp, parameter, cache, fullCount, cancellationToken);
+            return await ExecuteAsync<T>(database, queryExp, parameter, cache, fullCount, cancellationToken)
+                .ConfigureAwait(false);
         }
 
         public async Task<ArangoList<T>> ExecuteAsync<T>(ArangoHandle database, string query,
@@ -65,7 +67,7 @@ namespace Core.Arango.Modules.Internal
                         {
                             FullCount = fullCount
                         }
-                    }, cancellationToken: cancellationToken);
+                    }, cancellationToken: cancellationToken).ConfigureAwait(false);
 
                 final.AddRange(firstResult.Result);
 
@@ -81,7 +83,7 @@ namespace Core.Arango.Modules.Internal
                 {
                     var res = await SendAsync<QueryResponse<T>>(database, HttpMethod.Post,
                         ApiPath(database, $"/cursor/{firstResult.Id}"),
-                        cancellationToken: cancellationToken);
+                        cancellationToken: cancellationToken).ConfigureAwait(false);
 
                     if (res.Result?.Any() == true)
                         final.AddRange(res.Result);
@@ -122,8 +124,8 @@ namespace Core.Arango.Modules.Internal
             };
 
             var res = await SendAsync(constructedResponseType, HttpMethod.Post,
-                ApiPath(database, "cursor"), body, database.Transaction
-                , cancellationToken: cancellationToken);
+                ApiPath(database, "cursor"), body, database.Transaction,
+                cancellationToken: cancellationToken).ConfigureAwait(false);
 
             var listResult = constructedResponseType.GetProperty("Result").GetValue(res);
 
@@ -137,19 +139,22 @@ namespace Core.Arango.Modules.Internal
             if (count is long l && l == 0)
                 return Activator.CreateInstance(type);
 
-            return listResult.GetType().GetProperty("Item").GetValue(listResult, new object[] {0});
+            return listResult.GetType().GetProperty("Item").GetValue(listResult, new object[] { 0 });
         }
 
-        public IAsyncEnumerable<T> ExecuteStreamAsync<T>(ArangoHandle database, FormattableString query, bool? cache = null,
+        public IAsyncEnumerable<T> ExecuteStreamAsync<T>(ArangoHandle database, FormattableString query,
+            bool? cache = null,
             int? batchSize = null,
-            bool? lazy = null, bool? fillBlockCache = null, long? memoryLimit = null, CancellationToken cancellationToken = default)
+            bool? lazy = null, bool? fillBlockCache = null, long? memoryLimit = null,
+            CancellationToken cancellationToken = default)
         {
             var queryExp = Parameterize(query, out var parameter);
-            return ExecuteStreamAsync<T>(database, queryExp, parameter, cache, batchSize, null, memoryLimit, new ArangoQueryOptions
-            {
-                Stream = lazy,
-                FillBlockCache = fillBlockCache
-            }, cancellationToken);
+            return ExecuteStreamAsync<T>(database, queryExp, parameter, cache, batchSize, null, memoryLimit,
+                new ArangoQueryOptions
+                {
+                    Stream = lazy,
+                    FillBlockCache = fillBlockCache
+                }, cancellationToken);
         }
 
         public IAsyncEnumerable<T> ExecuteStreamAsync<T>(ArangoHandle database, string query,
@@ -176,7 +181,7 @@ namespace Core.Arango.Modules.Internal
         {
             var firstResult = await SendAsync<QueryResponse<T>>(database, HttpMethod.Post,
                 ApiPath(database, "cursor"),
-                cursor, cancellationToken: cancellationToken);
+                cursor, cancellationToken: cancellationToken).ConfigureAwait(false);
 
             Context.Configuration.QueryProfile?.Invoke(cursor.Query, cursor.BindVars, firstResult.Extra.Statistic);
 
@@ -190,7 +195,7 @@ namespace Core.Arango.Modules.Internal
             {
                 var res = await SendAsync<QueryResponse<T>>(database, HttpMethod.Post,
                     ApiPath(database, $"/cursor/{firstResult.Id}"),
-                    cancellationToken: cancellationToken);
+                    cancellationToken: cancellationToken).ConfigureAwait(false);
 
                 if (res.Result?.Any() == true)
                     foreach (var result in firstResult.Result)
@@ -201,7 +206,7 @@ namespace Core.Arango.Modules.Internal
             }
         }
 
-        public Task<ArangoExplainResult> ExplainAsync(ArangoHandle database, string query, 
+        public Task<ArangoExplainResult> ExplainAsync(ArangoHandle database, string query,
             IDictionary<string, object> bindVars,
             bool allPlans = false,
             CancellationToken cancellationToken = default)
@@ -227,7 +232,8 @@ namespace Core.Arango.Modules.Internal
             return ExplainAsync(database, queryExp, parameter, allPlans, cancellationToken);
         }
 
-        public Task<ArangoParseResult> ParseAsync(ArangoHandle database, string query, CancellationToken cancellationToken = default)
+        public Task<ArangoParseResult> ParseAsync(ArangoHandle database, string query,
+            CancellationToken cancellationToken = default)
         {
             return SendAsync<ArangoParseResult>(database, HttpMethod.Post, ApiPath(database, "query"),
                 new

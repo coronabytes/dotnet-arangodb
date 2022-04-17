@@ -21,7 +21,8 @@ namespace Core.Arango.Modules.Internal
                 cancellationToken: cancellationToken)).Result;
         }
 
-        public async Task<ArangoAnalyzer> GetDefinitionAsync(ArangoHandle database, string analyzer, CancellationToken cancellationToken = default)
+        public async Task<ArangoAnalyzer> GetDefinitionAsync(ArangoHandle database, string analyzer,
+            CancellationToken cancellationToken = default)
         {
             return await SendAsync<ArangoAnalyzer>(database, HttpMethod.Get,
                 ApiPath(database, $"analyzer/{UrlEncode(analyzer)}"),

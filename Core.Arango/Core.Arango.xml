@@ -2525,7 +2525,7 @@
         </member>
         <member name="M:Core.Arango.Modules.IArangoAnalyzerModule.GetDefinitionAsync(Core.Arango.ArangoHandle,System.String,System.Threading.CancellationToken)">
             <summary>
-             returns an Analyzer definition
+                returns an Analyzer definition
             </summary>
         </member>
         <member name="T:Core.Arango.Modules.IArangoBackupModule">
@@ -2604,6 +2604,16 @@
                 Checks of collection exists (calls ListAsync internally)
             </summary>
         </member>
+        <member name="M:Core.Arango.Modules.IArangoCollectionModule.CompactAsync(Core.Arango.ArangoHandle,System.String,System.Threading.CancellationToken)">
+            <summary>
+                Compacts the data of a collection in order to reclaim disk space
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoCollectionModule.RecalculateCountAsync(Core.Arango.ArangoHandle,System.String,System.Threading.CancellationToken)">
+            <summary>
+                Recalculates the document count of a collection, if it ever becomes inconsistent.
+            </summary>
+        </member>
         <member name="T:Core.Arango.Modules.IArangoDatabaseModule">
             <summary>
                 Database management
@@ -2621,7 +2631,7 @@
         </member>
         <member name="M:Core.Arango.Modules.IArangoDatabaseModule.GetAsync(Core.Arango.ArangoHandle,System.Threading.CancellationToken)">
             <summary>
-              Retrieves information about the current database
+                Retrieves information about the current database
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.IArangoDatabaseModule.DropAsync(Core.Arango.ArangoHandle,System.Threading.CancellationToken)">
@@ -2707,7 +2717,7 @@
         </member>
         <member name="M:Core.Arango.Modules.IArangoDocumentModule.ExportAsync``1(Core.Arango.ArangoHandle,System.String,System.Nullable{System.Boolean},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
             <summary>
-               Export all documents in batches from a collection (Query.ExecuteStreamAsync)
+                Export all documents in batches from a collection (Query.ExecuteStreamAsync)
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.IArangoDocumentModule.ImportAsync``1(Core.Arango.ArangoHandle,System.String,System.Collections.Generic.IEnumerable{``0},System.Boolean,System.Threading.CancellationToken)">
@@ -3207,17 +3217,17 @@
         </member>
         <member name="M:Core.Arango.Modules.IArangoQueryModule.ExplainAsync(Core.Arango.ArangoHandle,System.String,System.Collections.Generic.IDictionary{System.String,System.Object},System.Boolean,System.Threading.CancellationToken)">
             <summary>
-              explain an AQL query and return information about it
+                explain an AQL query and return information about it
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.IArangoQueryModule.ExplainAsync(Core.Arango.ArangoHandle,System.FormattableString,System.Boolean,System.Threading.CancellationToken)">
             <summary>
-              explain an AQL query and return information about it
+                explain an AQL query and return information about it
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.IArangoQueryModule.ParseAsync(Core.Arango.ArangoHandle,System.String,System.Threading.CancellationToken)">
             <summary>
-              parse an AQL query and return information about it
+                parse an AQL query and return information about it
             </summary>
         </member>
         <member name="T:Core.Arango.Modules.IArangoTransactionModule">
@@ -3307,7 +3317,7 @@
         </member>
         <member name="M:Core.Arango.Modules.IArangoViewModule.GetPropertiesAsync(Core.Arango.ArangoHandle,System.String,System.Threading.CancellationToken)">
             <summary>
-             Get properties of view
+                Get properties of view
             </summary>
             <param name="database"></param>
             <param name="view"></param>

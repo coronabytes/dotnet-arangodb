@@ -16,7 +16,7 @@ namespace Core.Arango.Modules.Internal
         {
             return await SendAsync<string>(database, HttpMethod.Post,
                 ApiPath(database, "control_pregel"),
-                job, cancellationToken: cancellationToken);
+                job, cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
         public async Task<ArangoPregelStatus> GetJobStatusAsync(ArangoHandle database, string id,
@@ -24,14 +24,15 @@ namespace Core.Arango.Modules.Internal
         {
             return await SendAsync<ArangoPregelStatus>(database, HttpMethod.Get,
                 ApiPath(database, $"control_pregel/{id}"),
-                cancellationToken: cancellationToken);
+                cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task DeleteJobAsync(ArangoHandle database, string id, CancellationToken cancellationToken = default)
+        public async Task DeleteJobAsync(ArangoHandle database, string id,
+            CancellationToken cancellationToken = default)
         {
             await SendAsync<ArangoVoid>(database, HttpMethod.Delete,
                 ApiPath(database, $"control_pregel/{id}"),
-                cancellationToken: cancellationToken);
+                cancellationToken: cancellationToken).ConfigureAwait(false);
         }
     }
 }
