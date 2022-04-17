@@ -3205,6 +3205,21 @@
                 Execute query (IAsyncEnumerable)
             </summary>
         </member>
+        <member name="M:Core.Arango.Modules.IArangoQueryModule.ExplainAsync(Core.Arango.ArangoHandle,System.String,System.Collections.Generic.IDictionary{System.String,System.Object},System.Boolean,System.Threading.CancellationToken)">
+            <summary>
+              explain an AQL query and return information about it
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoQueryModule.ExplainAsync(Core.Arango.ArangoHandle,System.FormattableString,System.Boolean,System.Threading.CancellationToken)">
+            <summary>
+              explain an AQL query and return information about it
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoQueryModule.ParseAsync(Core.Arango.ArangoHandle,System.String,System.Threading.CancellationToken)">
+            <summary>
+              parse an AQL query and return information about it
+            </summary>
+        </member>
         <member name="T:Core.Arango.Modules.IArangoTransactionModule">
             <summary>
                 Stream and JavaScript transactions
@@ -3725,6 +3740,36 @@
                 usage with ArangoSearch Geo functions.
             </summary>
         </member>
+        <member name="T:Core.Arango.Protocol.ArangoAstNode">
+            <summary>
+              
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoAstNode.Type">
+            <summary>
+              
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoAstNode.SubNodes">
+            <summary>
+              
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoAstNode.Name">
+            <summary>
+              
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoAstNode.Id">
+            <summary>
+              
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoAstNode.Value">
+            <summary>
+              
+            </summary>
+        </member>
         <member name="T:Core.Arango.Protocol.ArangoBackup">
             <summary>
                 Arango HotBackup
@@ -4184,6 +4229,21 @@
                 Code
             </summary>
         </member>
+        <member name="T:Core.Arango.Protocol.ArangoExplainResult">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoExplainResult.Plan">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoExplainResult.AllPlans">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="T:Core.Arango.Protocol.ArangoFoxxService">
             <summary>
                 Foxx Service Description
@@ -4629,6 +4689,21 @@
                 insert operation fails.
                 This is also the default behavior in case the overwrite mode is not set, and the overwrite flag is false or not set
                 either.
+            </summary>
+        </member>
+        <member name="T:Core.Arango.Protocol.ArangoParseResult">
+            <summary>
+              
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoParseResult.Parsed">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoParseResult.Ast">
+            <summary>
+              Abstract Syntax Tree
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoPregel">

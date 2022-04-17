@@ -200,5 +200,40 @@ namespace Core.Arango.Modules.Internal
                     break;
             }
         }
+
+        public Task<ArangoExplainResult> ExplainAsync(ArangoHandle database, string query, 
+            IDictionary<string, object> bindVars,
+            bool allPlans = false,
+            CancellationToken cancellationToken = default)
+        {
+            return SendAsync<ArangoExplainResult>(database, HttpMethod.Post, ApiPath(database, "explain"),
+                new
+                {
+                    query,
+                    bindVars,
+                    options = new
+                    {
+                        allPlans
+                    }
+                }, cancellationToken: cancellationToken);
+        }
+
+        public Task<ArangoExplainResult> ExplainAsync(ArangoHandle database, FormattableString query,
+            bool allPlans = false,
+            CancellationToken cancellationToken = default)
+        {
+            var queryExp = Parameterize(query, out var parameter);
+
+            return ExplainAsync(database, queryExp, parameter, allPlans, cancellationToken);
+        }
+
+        public Task<ArangoParseResult> ParseAsync(ArangoHandle database, string query, CancellationToken cancellationToken = default)
+        {
+            return SendAsync<ArangoParseResult>(database, HttpMethod.Post, ApiPath(database, "query"),
+                new
+                {
+                    query
+                }, cancellationToken: cancellationToken);
+        }
     }
 }

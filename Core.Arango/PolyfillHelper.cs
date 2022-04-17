@@ -8,7 +8,7 @@ namespace Core.Arango
     /// <summary>
     /// Helper class to group all code that is used to facilitate backwards compatibility for dotnet Standard v2.0
     /// </summary>
-    public static class PolyfillHelper
+    internal static class PolyfillHelper
     {
         /// <summary>
         ///   For compatibility with netstandard 2.0 which does not have a HttpMethod.Patch method

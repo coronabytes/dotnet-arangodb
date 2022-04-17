@@ -4,12 +4,21 @@ using System.Linq;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
 using Core.Arango.Tests.Core;
+using Newtonsoft.Json;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Core.Arango.Tests
 {
     public class QueryTest : TestBase
     {
+        private readonly ITestOutputHelper _output;
+
+        public QueryTest(ITestOutputHelper output)
+        {
+            _output = output;
+        }
+
         [Theory]
         [ClassData(typeof(PascalCaseData))]
         public async Task NullParameter(string serializer)
@@ -135,6 +144,40 @@ namespace Core.Arango.Tests
                 ++i;
 
             Assert.Equal(100000, i);
+        }
+
+        [Theory]
+        [ClassData(typeof(PascalCaseData))]
+        public async Task Explain(string serializer)
+        {
+            await SetupAsync(serializer);
+            await Arango.Collection.CreateAsync("test", "test", ArangoCollectionType.Document);
+            await Arango.Document.CreateManyAsync("test", "test", new List<Entity>
+            {
+                new() {Value = 1},
+                new() {Value = 2},
+                new() {Value = 3}
+            });
+
+            var select = new List<int> {1, 2};
+
+            var res = await Arango.Query.ExplainAsync("test",
+                $"FOR e IN test FILTER e.Value IN {select} RETURN e");
+
+            _output.WriteLine(JsonConvert.SerializeObject(res, Formatting.Indented));
+        }
+
+        [Theory]
+        [ClassData(typeof(PascalCaseData))]
+        public async Task Parse(string serializer)
+        {
+            await SetupAsync(serializer);
+            await Arango.Collection.CreateAsync("test", "test", ArangoCollectionType.Document);
+
+            var res = await Arango.Query.ParseAsync("test",
+                "FOR e IN test FILTER e.Value IN [1,2,3] RETURN e");
+
+            _output.WriteLine(JsonConvert.SerializeObject(res, Formatting.Indented));
         }
     }
 }
