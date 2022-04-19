@@ -199,6 +199,26 @@ await foreach (var x in Arango.Query.ExecuteStreamAsync<string>("database", $"FO
 }
 ```
 
+## Get documents
+Get (many) documents by providing a list of keys or objects with "Key" and optional "Revision" property
+```csharp
+var list1 = await Arango.Document.GetManyAsync<Entity>("database", "collection", new List<string> {
+  "1", "2"
+});
+
+var list2 = await Arango.Document.GetManyAsync<Entity>("database", "collection", new List<object>
+{
+  new
+  {
+    Key = "1"
+  },
+  new
+  {
+    Key = "2"
+  }
+});
+```
+
 # Linq
 - LINQ support has been adapted from https://github.com/ra0o0f/arangoclient.net
   - Internalized re-motion relinq since their nuget is quite outdated
