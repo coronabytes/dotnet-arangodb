@@ -3300,6 +3300,16 @@
                 creates an ArangoSearch View
             </summary>
         </member>
+        <member name="M:Core.Arango.Modules.IArangoViewModule.UpdateAsync(Core.Arango.ArangoHandle,Core.Arango.Protocol.ArangoViewUpdate,System.Threading.CancellationToken)">
+            <summary>
+                changes all properties of an ArangoSearch View
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoViewModule.PatchAsync(Core.Arango.ArangoHandle,Core.Arango.Protocol.ArangoViewPatch,System.Threading.CancellationToken)">
+            <summary>
+                partially changes properties of an ArangoSearch View
+            </summary>
+        </member>
         <member name="M:Core.Arango.Modules.IArangoViewModule.DropAllAsync(Core.Arango.ArangoHandle,System.Threading.CancellationToken)">
             <summary>
                 Drops all Views in database
@@ -5223,25 +5233,48 @@
                 When Removed
             </summary>
         </member>
+        <member name="P:Core.Arango.Protocol.ArangoViewMutation.Name">
+            <summary>
+                The name of the View.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoViewMutation.Links">
+            <summary>
+                Expects an object with the attribute keys being names of to be linked collections, and the link properties as
+                attribute values.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoViewMutation.CleanupIntervalStep">
+            <summary>
+                Wait at least this many commits between removing unused files in the ArangoSearch data directory (default: 2, to
+                disable use: 0).
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoViewMutation.CommitIntervalMsec">
+            <summary>
+                Wait at least this many milliseconds between committing View data store changes and making documents visible to
+                queries (default: 1000, to disable use: 0)
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoViewMutation.ConsolidationPolicy">
+            <summary>
+                The consolidation policy to apply for selecting which segments should be merged
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoViewMutation.ConsolidationIntervalMsec">
+            <summary>
+                Wait at least this many milliseconds between applying ‘consolidationPolicy’ to consolidate View data store and
+                possibly release space on the filesystem (default: 10000, to disable use: 0).
+            </summary>
+        </member>
         <member name="T:Core.Arango.Protocol.ArangoView">
             <summary>
                 ArangoSearch View
             </summary>
         </member>
-        <member name="P:Core.Arango.Protocol.ArangoView.Name">
-            <summary>
-                The name of the View.
-            </summary>
-        </member>
         <member name="P:Core.Arango.Protocol.ArangoView.Type">
             <summary>
                 The type of the View. Must be equal to “arangosearch”. This option is immutable.
-            </summary>
-        </member>
-        <member name="P:Core.Arango.Protocol.ArangoView.Links">
-            <summary>
-                Expects an object with the attribute keys being names of to be linked collections, and the link properties as
-                attribute values.
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoView.PrimarySort">
@@ -5267,29 +5300,6 @@
                 storage engine can be avoided.
             </summary>
         </member>
-        <member name="P:Core.Arango.Protocol.ArangoView.CleanupIntervalStep">
-            <summary>
-                Wait at least this many commits between removing unused files in the ArangoSearch data directory (default: 2, to
-                disable use: 0).
-            </summary>
-        </member>
-        <member name="P:Core.Arango.Protocol.ArangoView.CommitIntervalMsec">
-            <summary>
-                Wait at least this many milliseconds between committing View data store changes and making documents visible to
-                queries (default: 1000, to disable use: 0)
-            </summary>
-        </member>
-        <member name="P:Core.Arango.Protocol.ArangoView.ConsolidationPolicy">
-            <summary>
-                The consolidation policy to apply for selecting which segments should be merged
-            </summary>
-        </member>
-        <member name="P:Core.Arango.Protocol.ArangoView.ConsolidationIntervalMsec">
-            <summary>
-                Wait at least this many milliseconds between applying ‘consolidationPolicy’ to consolidate View data store and
-                possibly release space on the filesystem (default: 10000, to disable use: 0).
-            </summary>
-        </member>
         <member name="P:Core.Arango.Protocol.ArangoView.WritebufferIdle">
             <summary>
                 Maximum number of writers (segments) cached in the pool (default: 64, use 0 to disable, immutable)
@@ -5312,7 +5322,7 @@
         </member>
         <member name="P:Core.Arango.Protocol.ArangoView.ExtensionData">
             <summary>
-             Overflow properties
+                Overflow properties
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoViewCompressionType">
