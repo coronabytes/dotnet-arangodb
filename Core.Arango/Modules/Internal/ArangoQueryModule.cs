@@ -172,7 +172,8 @@ namespace Core.Arango.Modules.Internal
                 BatchSize = batchSize ?? Context.Configuration.BatchSize,
                 TTL = ttl,
                 MemoryLimit = memoryLimit,
-                Cache = cache
+                Cache = cache,
+                Options = options
             }, cancellationToken);
         }
 
