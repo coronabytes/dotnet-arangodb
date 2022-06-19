@@ -345,6 +345,41 @@ namespace Core.Arango.Linq.Query
                 LinqUtility.ResolveCollectionName(Db, updateReplaceClause.CollectionType));
         }
 
+        public void VisitPartialUpdateClause(PartialUpdateClause PartialUpdateClause, QueryModel queryModel)
+        {
+            if (PartialUpdateClause.KeySelector != null)
+            {
+                QueryText.AppendFormat(" UPDATE ");
+
+                GetAqlExpression(PartialUpdateClause.KeySelector, queryModel);
+
+                QueryText.AppendFormat(" WITH ");
+            }
+            else
+            {
+                QueryText.AppendFormat(" UPDATE {0} WITH ",
+                    LinqUtility.ResolvePropertyName(PartialUpdateClause.ItemName));
+            }
+
+            QueryText.Append(" { ");
+
+            QueryText.AppendFormat(" {0}: ", LinqUtility.ResolveMemberName(Db, ((MemberExpression)PartialUpdateClause.UpdateFieldSelector).Member));
+
+            QueryText.Append(" PUSH( ");
+
+            GetAqlExpression(PartialUpdateClause.UpdateFieldSelector, queryModel);
+
+            QueryText.Append(" , ");
+
+            GetAqlExpression(PartialUpdateClause.WithSelector, queryModel);
+
+            QueryText.Append(" ) } ");
+
+
+            QueryText.AppendFormat(" IN {0} ",
+                LinqUtility.ResolveCollectionName(Db, PartialUpdateClause.CollectionType));
+        }
+
         public void VisitInsertClause(InsertClause insertClause, QueryModel queryModel)
         {
             if (insertClause.WithSelector != null)
