@@ -281,6 +281,27 @@ var q = Arango.Query<Project>("test")
 await q.ToListAsync();
 ```
 
+## Parital Update
+- Note: To push an object to inner collection.
+
+```csharp
+var q = Arango.Query<Project>("test")
+  .PartialUpdate(p=>p.hobbies, x => new
+  {
+    "val1"=1,"val2"=2
+  }, x => x.Key);
+		
+await q.ToListAsync();
+```
+
+will be converted to:
+```sql
+FOR doc IN Project
+UPDATE doc WITH {
+  hobbies: PUSH(doc.hobbies, {"val1": 1, "val2":2})
+} IN users
+```
+
 ## Remove
 ```csharp
 await Arango.Query<Project>("test")
