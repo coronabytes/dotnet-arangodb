@@ -66,8 +66,8 @@ namespace Core.Arango.Linq.Query
             customNodeTypeRegistry.Register(SelectManySupportedMethods, typeof(SelectManyExpressionNode));
             customNodeTypeRegistry.Register(RemoveExpressionNode.SupportedMethods, typeof(RemoveExpressionNode));
             customNodeTypeRegistry.Register(InsertExpressionNode.SupportedMethods, typeof(InsertExpressionNode));
-            customNodeTypeRegistry.Register(UpdateReplaceExpressionNode.SupportedMethods,
-                typeof(UpdateReplaceExpressionNode));
+            customNodeTypeRegistry.Register(UpdateReplaceExpressionNode.SupportedMethods, typeof(UpdateReplaceExpressionNode));
+            customNodeTypeRegistry.Register(PartialUpdateExpressionNode.SupportedMethods, typeof(PartialUpdateExpressionNode));
             customNodeTypeRegistry.Register(UpsertExpressionNode.SupportedMethods, typeof(UpsertExpressionNode));
             customNodeTypeRegistry.Register(SelectModificationExpressionNode.SupportedMethods,
                 typeof(SelectModificationExpressionNode));

@@ -24,7 +24,7 @@ namespace Core.Arango.Linq
                 .Union(typeof(ArangoShortestPathExtensions).GetRuntimeMethods())
                 .Where(x => x.GetCustomAttribute<ExtentionIdentifierAttribute>() != null)
                 .GroupBy(x => x.GetCustomAttribute<ExtentionIdentifierAttribute>().Identifier)
-                .Select(g => new {g.Key, Count = g.Count()})
+                .Select(g => new { g.Key, Count = g.Count() })
                 .Where(x => x.Count > 1)
                 .FirstOrDefault();
 
@@ -115,7 +115,7 @@ namespace Core.Arango.Linq
 
             source = source.Take(2);
 
-            return returnDefaultWhenEmpty ? source.AsArangoQueryable().SingleOrDefaultAsync(cancellationToken) 
+            return returnDefaultWhenEmpty ? source.AsArangoQueryable().SingleOrDefaultAsync(cancellationToken)
                 : source.AsArangoQueryable().SingleAsync(cancellationToken);
         }
 
@@ -222,6 +222,25 @@ namespace Core.Arango.Linq
                     Expression.Quote(withSelector),
                     Expression.Quote(keySelector),
                     Expression.Constant(command)
+                )) as IAqlModifiable<TSource>;
+        }
+
+        [ExtentionIdentifier("PartialUpdate")]
+        public static IAqlModifiable<TSource> PartialUpdate<TSource>(this IQueryable<TSource> source
+            , Expression<Func<TSource, System.Collections.ICollection>> updateFieldSelector
+            , Expression<Func<TSource, object>> withSelector
+            , Expression<Func<TSource, object>> keySelector)
+        {
+            if (keySelector == null)
+                keySelector = x => null;
+
+            return source.Provider.CreateQuery<TSource>(
+                Expression.Call(
+                    FindExtention("PartialUpdate", typeof(TSource)),
+                    source.Expression,
+                    Expression.Quote(updateFieldSelector),
+                    Expression.Quote(withSelector),
+                    Expression.Quote(keySelector)
                 )) as IAqlModifiable<TSource>;
         }
 
@@ -361,7 +380,7 @@ namespace Core.Arango.Linq
         public static IOrderedQueryable<TSource> Sort<TSource, TKey>(this IQueryable<TSource> source,
             Expression<Func<TSource, TKey>> keySelector)
         {
-            return (IOrderedQueryable<TSource>) source.Provider.CreateQuery<TSource>(
+            return (IOrderedQueryable<TSource>)source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     FindExtention("Sort", typeof(TSource), typeof(TKey)),
                     source.Expression,
@@ -378,7 +397,7 @@ namespace Core.Arango.Linq
         public static IOrderedQueryable<TSource> SortDescending<TSource, TKey>(this IQueryable<TSource> source,
             Expression<Func<TSource, TKey>> keySelector)
         {
-            return (IOrderedQueryable<TSource>) source.Provider.CreateQuery<TSource>(
+            return (IOrderedQueryable<TSource>)source.Provider.CreateQuery<TSource>(
                 Expression.Call(
                     FindExtention("SortDescending", typeof(TSource), typeof(TKey)),
                     source.Expression,
@@ -410,7 +429,7 @@ namespace Core.Arango.Linq
         }
 
         [ExtentionIdentifier("Options")]
-        public static IQueryable<TSource> Options<TSource>(this IQueryable<TSource> source,Expression<Func<object>> options)
+        public static IQueryable<TSource> Options<TSource>(this IQueryable<TSource> source, Expression<Func<object>> options)
         {
             return source.Provider.CreateQuery<TSource>(Expression.Call(
                     FindExtention("Options", typeof(TSource)),
