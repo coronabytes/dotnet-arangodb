@@ -199,7 +199,7 @@ namespace Core.Arango.Modules.Internal
                     cancellationToken: cancellationToken).ConfigureAwait(false);
 
                 if (res.Result?.Any() == true)
-                    foreach (var result in firstResult.Result)
+                    foreach (var result in res.Result)
                         yield return result;
 
                 if (!res.HasMore)
