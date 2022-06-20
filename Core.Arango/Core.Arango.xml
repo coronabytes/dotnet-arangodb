@@ -1634,6 +1634,52 @@
                 Return whether search is contained in array. Optionally return the position.
             </summary>
         </member>
+        <member name="M:Core.Arango.Linq.Aql.Push``1(System.Collections.Generic.IEnumerable{``0},``0)">
+            <summary>
+                Append value to anyArray (right side).
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Push``1(System.Collections.Generic.IEnumerable{``0},``0,System.Boolean)">
+            <summary>
+                Append value to anyArray (right side).
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Pop``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+                Remove the last element of array.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Shift``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+                Remove the first element of anyArray.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Unshift``1(System.Collections.Generic.IEnumerable{``0},``0)">
+            <summary>
+                Prepend value to anyArray (left side).
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Unshift``1(System.Collections.Generic.IEnumerable{``0},``0,System.Boolean)">
+            <summary>
+                Prepend value to anyArray (left side).
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Unique``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+                Return all unique elements in anyArray.
+                To determine uniqueness, the function will use the comparison order.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Reverse``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+                Return an array with its elements reversed.
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Linq.Aql.Jaccard(System.Object,System.Object)">
+            <summary>
+                Calculate the Jaccard index of two arrays.
+            </summary>
+        </member>
         <member name="M:Core.Arango.Linq.Aql.As``1(System.Object)">
             <summary>
                 Force return type (not an actual function)
