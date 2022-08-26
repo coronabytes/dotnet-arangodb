@@ -155,7 +155,7 @@ await arango.Document.UpdateAsync("database", "collection", new ComplexEntity {
 });
 ```
 
-## Query with bind vars through string interpolation
+## Query with bindable parameters through string interpolation
 ```csharp
 var col = "collection";
 var list = new List<int> {1, 2, 3};
@@ -185,6 +185,12 @@ FormattableString returnPart = $"RETURN c";
 
 var result = await arango.Query.ExecuteAsync<JObject>("database",
   $"{forPart} {filterPart} {returnPart}");
+```
+
+**Notice**  
+If using multiple `FormattableString` variables, every single injected string variable needs to be of type `FormattableString` or Arango will return an error stating:  
+```exception
+AQL: syntax error, unexpected bind parameter near @P3
 ```
 
 ## Query with async enumerator
