@@ -39,7 +39,7 @@ var arango = new ArangoContext("Server=http://localhost:8529;");
 var arango = new ArangoContext("Server=http://localhost:8529;Realm=myproject;User=root;Password=;",
 new ArangoConfiguration
 {
-    Serializer = new ArangoNewtonsoftSerializer(new ArangoNewtonsoftCamelCaseContractResolver())
+    Serializer = new ArangoJsonSerializer(new ArangoJsonDefaultPolicy())
 });
 ```
 - For AspNetCore DI extension is available:
@@ -160,7 +160,7 @@ await arango.Document.UpdateAsync("database", "collection", new ComplexEntity {
 var col = "collection";
 var list = new List<int> {1, 2, 3};
 
-var result = await arango.Query.ExecuteAsync<JObject>("database",
+var result = await arango.Query.ExecuteAsync<JsonObject>("database",
   $"FOR c IN {col:@} FILTER c.SomeValue IN {list} RETURN c");
 ```
 results in AQL injection save syntax:
@@ -183,7 +183,7 @@ FormattableString forPart = $"FOR c IN {collectionName:@}";
 FormattableString filterPart = $"FILTER c.SomeValue IN {list}";
 FormattableString returnPart = $"RETURN c";
 
-var result = await arango.Query.ExecuteAsync<JObject>("database",
+var result = await arango.Query.ExecuteAsync<JsonObject>("database",
   $"{forPart} {filterPart} {returnPart}");
 ```
 
