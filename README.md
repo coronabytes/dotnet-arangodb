@@ -9,7 +9,7 @@ dotnet add package Core.Arango
 # .NET driver for ArangoDB
 - .NET Standard 2.0, 2.1, .NET 5.0 and .NET 6.0 driver for ArangoDB 3.8+
 - LINQ support (WIP)
-- Newtonsoft and System.Text.Json serialization support with PascalCase and camelCase options
+- Newtonsoft.Json and System.Text.Json serialization support with PascalCase and camelCase options
 - Updates from anonymous types supported as (Id, Key, Revision, From, To) properties are translated to (_id, _key, _rev, _from, _to)
   - This means these property names are reserved and cannot be used for something else (e.g. "To" property in email collection) 
 
@@ -35,7 +35,7 @@ var arango = new ArangoContext("Server=http://localhost:8529;Realm=myproject;Use
 // from connection string - NO_AUTH
 var arango = new ArangoContext("Server=http://localhost:8529;");
 
-// from connection string with camelCase serialization
+// from connection string with PascalCase serialization
 var arango = new ArangoContext("Server=http://localhost:8529;Realm=myproject;User=root;Password=;",
 new ArangoConfiguration
 {
@@ -49,7 +49,7 @@ public void ConfigureServices(IServiceCollection services)
     // add with connection string
     services.AddArango(Configuration.GetConnectionString("Arango"));
     
-    // or add with configuration set to System.Json.Text serialization
+    // or add with custom configuration
     services.AddArango((sp, config) =>
     {
         config.ConnectionString = Configuration.GetConnectionString("Arango");
@@ -84,6 +84,32 @@ public class DemoController : Controller
     }
 }
 ```
+### Serialzer definition
+The specific serializer can be configured on setting the Arango configuration when creating the context. 
+
+Supported serializer:
+
+- **Microsoft System.Text.Json**
+  ```csharp
+  using Core.Arango.Serialization.Json;
+
+  // Specify with PascalCase
+  Serializer = new ArangoJsonSerializer(new ArangoJsonDefaultPolicy());
+
+  // Specify with camelCase
+  Serializer = new ArangoJsonSerializer(new ArangoJsonCamelCasePolicy());
+  ```
+
+- **Newtonsoft.Json**
+  ```csharp
+  using Core.Arango.Serialization.Newtonsoft;
+
+  // Specify with PascalCase
+  Serializer = new ArangoNewtonsoftSerializer(new ArangoNewtonsoftDefaultContractResolver()) 
+
+  // Specify with CamelCase
+  Serializer = new ArangoNewtonsoftSerializer(new ArangoNewtonsoftCamelCaseContractResolver())
+  ```
 
 ## Create database
 ```csharp
@@ -160,10 +186,16 @@ await arango.Document.UpdateAsync("database", "collection", new ComplexEntity {
 var col = "collection";
 var list = new List<int> {1, 2, 3};
 
+// System.Text.Json
 var result = await arango.Query.ExecuteAsync<JsonObject>("database",
   $"FOR c IN {col:@} FILTER c.SomeValue IN {list} RETURN c");
+
+// Newtonsoft.Json
+var result = await arango.Query.ExecuteAsync<JObject>("database",
+  $"FOR c IN {col:@} FILTER c.SomeValue IN {list} RETURN c");
 ```
-results in AQL injection save syntax:
+
+Results in AQL injection save syntax:
 ```js
 'FOR c IN @@C1 FILTER c.SomeValue IN @P2 RETURN c'
 
@@ -183,7 +215,12 @@ FormattableString forPart = $"FOR c IN {collectionName:@}";
 FormattableString filterPart = $"FILTER c.SomeValue IN {list}";
 FormattableString returnPart = $"RETURN c";
 
+// System.Text.Json
 var result = await arango.Query.ExecuteAsync<JsonObject>("database",
+  $"{forPart} {filterPart} {returnPart}");
+
+// Newtonsoft.Json
+var result = await arango.Query.ExecuteAsync<JObject>("database",
   $"{forPart} {filterPart} {returnPart}");
 ```
 
