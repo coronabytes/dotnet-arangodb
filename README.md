@@ -23,68 +23,69 @@ This driver has various [extensions](https://github.com/coronabytes/dotnet-arang
 | [Core.Arango.DevExtreme](https://www.nuget.org/packages/Core.Arango.DevExtreme) | ![Nuget](https://img.shields.io/nuget/v/Core.Arango.DevExtreme) ![Nuget](https://img.shields.io/nuget/dt/Core.Arango.DevExtreme) | dotnet add package Core.Arango.DevExtreme |
 | [Core.Arango.Serilog](https://www.nuget.org/packages/Core.Arango.Serilog) | ![Nuget](https://img.shields.io/nuget/v/Core.Arango.Serilog) ![Nuget](https://img.shields.io/nuget/dt/Core.Arango.Serilog) | dotnet add package Core.Arango.Serilog |
 
-# Common Snippets
-
+# Examples
 ## Initialize context
 - Realm optionally prefixes all further database handles (e.g. "myproject-database")
 - Context is completely thread-safe and can be shared for your whole application
-```csharp
-// from connection string
-var arango = new ArangoContext("Server=http://localhost:8529;Realm=myproject;User=root;Password=;");
+  ```csharp
+  // from connection string
+  var arango = new ArangoContext("Server=http://localhost:8529;Realm=myproject;User=root;Password=;");
 
-// from connection string - NO_AUTH
-var arango = new ArangoContext("Server=http://localhost:8529;");
+  // from connection string - NO_AUTH
+  var arango = new ArangoContext("Server=http://localhost:8529;");
 
-// from connection string with PascalCase serialization
-var arango = new ArangoContext("Server=http://localhost:8529;Realm=myproject;User=root;Password=;",
-new ArangoConfiguration
-{
-    Serializer = new ArangoJsonSerializer(new ArangoJsonDefaultPolicy())
-});
-```
+  // from connection string with PascalCase serialization
+  var arango = new ArangoContext("Server=http://localhost:8529;Realm=myproject;User=root;Password=;",
+  new ArangoConfiguration
+  {
+      Serializer = new ArangoJsonSerializer(new ArangoJsonDefaultPolicy())
+  });
+  ```
+
 - For AspNetCore DI extension is available:
-```csharp
-public void ConfigureServices(IServiceCollection services)
-{
-    // add with connection string
-    services.AddArango(Configuration.GetConnectionString("Arango"));
+  ```csharp
+  public void ConfigureServices(IServiceCollection services)
+  {
+      // add with connection string
+      services.AddArango(Configuration.GetConnectionString("Arango"));
     
-    // or add with custom configuration
-    services.AddArango((sp, config) =>
-    {
-        config.ConnectionString = Configuration.GetConnectionString("Arango");
-        config.Serializer = new ArangoJsonSerializer(new ArangoJsonDefaultPolicy());
+      // or add with custom configuration
+      services.AddArango((sp, config) =>
+      {
+          config.ConnectionString = Configuration.GetConnectionString("Arango");
+          config.Serializer = new ArangoJsonSerializer(new ArangoJsonDefaultPolicy());
         
-        var logger = sp.GetRequiredService<ILogger<Startup>>();
+          var logger = sp.GetRequiredService<ILogger<Startup>>();
  
-        config.QueryProfile = (query, bindVars, stats) =>
-        {
-            var boundQuery = query;
+          config.QueryProfile = (query, bindVars, stats) =>
+          {
+              var boundQuery = query;
 
-            // replace parameters with bound values
-            foreach (var p in bindVars.OrderByDescending(x => x.Key.Length))
-                boundQuery = boundQuery.Replace("@" + p.Key, JsonConvert.SerializeObject(p.Value));
+              // replace parameters with bound values
+              foreach (var p in bindVars.OrderByDescending(x => x.Key.Length))
+                  boundQuery = boundQuery.Replace("@" + p.Key, JsonConvert.SerializeObject(p.Value));
 
-            logger.LogInformation(boundQuery);
-        }
-    });
-}
-```
+              logger.LogInformation(boundQuery);
+          }
+      });
+  }
+  ```
 
-```csharp
-[ApiController]
-[Route("api/demo")]
-public class DemoController : Controller 
-{
-    private readonly IArangoContext _arango;
+  ```csharp
+  [ApiController]
+  [Route("api/demo")]
+  public class DemoController : Controller 
+  {
+      private readonly IArangoContext _arango;
 
-    public DemoController(IArangoContext arango)
-    {
-        _arango = arango;
-    }
-}
-```
-### Serialzer definition
+      public DemoController(IArangoContext arango)
+      {
+          _arango = arango;
+      }
+  }
+  ```
+
+### Serializer definition
 The specific serializer can be configured on setting the Arango configuration when creating the context. 
 
 Supported serializer:
@@ -121,7 +122,7 @@ await arango.Database.CreateAsync("database");
 await arango.Collection.CreateAsync("database", "collection", ArangoCollectionType.Document);
 ```
 
-- collection with keys in ascending lexicographical sort order (ideal for log/audit collections)
+### Collection with keys in ascending lexicographical sort order (ideal for log/audit collections)
 ```csharp
 await arango.Collection.CreateAsync("database", new ArangoCollection
 {
@@ -144,6 +145,31 @@ await arango.Document.CreateAsync("database", "collection", new
 });
 ```
 
+## Get documents
+Retrieve documents from a single collection based on a LinQ statement. See LinQ help for more information.
+```csharp
+var list1 = await Arango.Query<Entity>("database").Where(p => p.Id == "myid").ToListAsync();
+```
+
+Get (many) documents by providing a list of keys or objects with "Key" and optional "Revision" property
+```csharp
+var list1 = await Arango.Document.GetManyAsync<Entity>("database", "collection", new List<string> {
+  "1", "2"
+});
+
+var list2 = await Arango.Document.GetManyAsync<Entity>("database", "collection", new List<object>
+{
+  new
+  {
+    Key = "1"
+  },
+  new
+  {
+    Key = "2"
+  }
+});
+```
+
 ## Update document
 ```csharp
 await arango.Document.UpdateAsync("database", "collection", new
@@ -152,9 +178,9 @@ await arango.Document.UpdateAsync("database", "collection", new
     SomeValue = 2
 });
 ```
-## Update ignore some properties
-```csharp
 
+### Ignore specific properties
+```csharp
 // depending on serializer
 using System.Text.Json.Serialization;
 // or
@@ -225,7 +251,7 @@ var result = await arango.Query.ExecuteAsync<JObject>("database",
   $"{forPart} {filterPart} {returnPart}");
 ```
 
-**Notice**  
+**Note**  
 If using multiple `FormattableString` variables, every single injected string variable needs to be of type `FormattableString` or Arango will return an error stating:  
 ```exception
 AQL: syntax error, unexpected bind parameter near @P3
@@ -253,7 +279,6 @@ var result = await arango.Query.ExecuteAsync<MyClass2>("database",
   $"{forPart} {filterPart} {letDistance} {returnPart}");
 ```
 
-
 ## Query with async enumerator
 ```csharp
 // insert 100.000 entities 
@@ -266,30 +291,10 @@ await foreach (var x in Arango.Query.ExecuteStreamAsync<string>("database", $"FO
 }
 ```
 
-## Get documents
-Get (many) documents by providing a list of keys or objects with "Key" and optional "Revision" property
-```csharp
-var list1 = await Arango.Document.GetManyAsync<Entity>("database", "collection", new List<string> {
-  "1", "2"
-});
+## Linq
+LINQ support has been adapted from https://github.com/ra0o0f/arangoclient.net. Internalized re-motion relinq since their nuget is quite outdated
 
-var list2 = await Arango.Document.GetManyAsync<Entity>("database", "collection", new List<object>
-{
-  new
-  {
-    Key = "1"
-  },
-  new
-  {
-    Key = "2"
-  }
-});
-```
-
-# Linq
-- LINQ support has been adapted from https://github.com/ra0o0f/arangoclient.net
-  - Internalized re-motion relinq since their nuget is quite outdated
-- Work in progress as some things are deprecated or need to be modernized
+Work in progress as some things are deprecated or need to be modernized
   - Basic queries generally work
   - Some more complex queries (chaining multiple operators, complex subqueries, etc.) are not supported yet
   - All these issues are solvable and pull requests are accepted
@@ -308,7 +313,23 @@ var list2 = await Arango.Document.GetManyAsync<Entity>("database", "collection",
 - There is also development done on a driver without relinq and aggregate support
 - Configurable property / collection / group naming for camelCase support
 
-## Simple query with DOCUMENT() lookup
+### Simple query
+```csharp
+var list1 = await Arango.Query<Project>("database").Where(p => p.Id == "myid").ToListAsync();
+```
+
+### AQL debug
+```csharp
+var q = Arango.Query<Project>("database").Where(p => p.Id == "myid");
+
+// Execute
+await q.ToListAsync();
+
+// Debug
+var (aql, bindVars) = q.ToAql();
+```
+
+### DOCUMENT() lookup
 ```csharp
 var q = Arango.Query<Project>("test")
 .Where(x => x.Name == "Project A")
@@ -326,8 +347,8 @@ await q.ToListAsync();
 var (aql, bindVars) = q.ToAql();
 ```
 
-## Let clauses for subqueries
-- Note: database/transaction is only specified on the root expression, not on the inner one
+### Let clauses for subqueries
+Note: database/transaction is only specified on the root expression, not on the inner one
 ```csharp
 var q = from p in Arango.Query<Project>("test")
 let clients = (from c in Arango.Query<Client>() select c.Key)
@@ -336,7 +357,7 @@ select new {p.Name, Clients = Aql.As<string[]>(clients) };
 await q.ToListAsync();
 ```
 
-## Update
+### Update
 ```csharp
 var q = Arango.Query<Project>("test")
   .Where(x => x.Name == "Project A")
@@ -348,7 +369,7 @@ var q = Arango.Query<Project>("test")
 await q.ToListAsync();
 ```
 
-## Parital Update
+### Partial Update
 - Note: To push an object to inner collection.
 
 ```csharp
@@ -369,15 +390,14 @@ UPDATE doc WITH {
 } IN users
 ```
 
-## Remove
+### Remove
 ```csharp
 await Arango.Query<Project>("test")
 .Where(x => x.Name == "Project A")
 .Remove().In<Project>().Select(x => x.Key).ToListAsync();
 ```
 
-
-## OPTIONS
+### OPTIONS
 "Option" is the query option that exists in ArangoDb.
 Some operations like  FOR / Graph Traversal / SEARCH / COLLECT / INSERT / UPDATE / REPLACE / UPSERT / REMOVE would support "Options".
 
@@ -386,8 +406,6 @@ await Arango.Query<Project>("test")
 .Where(x => x.Name == "Project A")
 .Options(() => new { indexHint = "byName" }).ToListAsync();
 ```
-
-# Snippets for Advanced Use Cases
 
 ## Create index
 ```csharp
