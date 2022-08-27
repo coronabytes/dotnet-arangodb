@@ -181,7 +181,8 @@ await arango.Document.UpdateAsync("database", "collection", new ComplexEntity {
 });
 ```
 
-## Query with bindable parameters through string interpolation
+## Custom Query
+### Bindable parameters
 ```csharp
 var col = "collection";
 var list = new List<int> {1, 2, 3};
@@ -206,7 +207,7 @@ Results in AQL injection save syntax:
 ```
 for collections parameters, formats `'@'`, `'C'` and `'c'` are supported. They all mean the same format.
 
-- Complex queries can be built from parts:
+### Split queries into parts
 ```csharp
 var collectionName = "collection";
 var list = new List<int> {1, 2, 3};
@@ -229,6 +230,29 @@ If using multiple `FormattableString` variables, every single injected string va
 ```exception
 AQL: syntax error, unexpected bind parameter near @P3
 ```
+
+### Inject data into Arango return
+```csharp
+public class MyClass2
+{
+    public MyClass Data { get; set; }
+    public double CustomData { get; set; }
+}
+
+var collectionName = "collection";
+var list = new List<int> {1, 2, 3};
+var pointA = "[48.157741, 11.503159]";
+var pointB = "[48.155739, 11.491601]";
+
+FormattableString forPart = $"FOR c IN {collectionName:@}";
+FormattableString filterPart = $"FILTER c.SomeValue IN {list}";
+FormattableString letDistance = $"LET distance = GEO_DISTANCE({pointA}, {pointB})";
+FormattableString returnPart = $"RETURN {{Data: c, Distance: distance}}";
+
+var result = await arango.Query.ExecuteAsync<MyClass2>("database",
+  $"{forPart} {filterPart} {letDistance} {returnPart}");
+```
+
 
 ## Query with async enumerator
 ```csharp
