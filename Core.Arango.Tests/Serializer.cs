@@ -79,28 +79,54 @@ namespace Core.Arango.Tests
             _output.WriteLine($"{name}: {sw.Elapsed.TotalMilliseconds}");
         }
 
-        private class DateEntity
+        private class DateTimeEntity
         {
             public DateTime A { get; set; }
             public DateTime B { get; set; }
 
         }
 
+        private class DateTimeOffsetEntity
+        {
+            public DateTimeOffset A { get; set; }
+            public DateTimeOffset B { get; set; }
+
+        }
+
         [Fact]
-        public void UnixTimeStamps()
+        public void UnixTimeStampsDateTime()
         {
             var s1 = new ArangoJsonSerializer(new ArangoJsonDefaultPolicy())
             {
                 UseTimestamps = true
             };
 
-            var x = s1.Serialize(new DateEntity
+            var x = s1.Serialize(new DateTimeEntity
             {
                 A = DateTime.UtcNow,
                 B = DateTime.Now
             });
 
-            var y = s1.Deserialize<DateEntity>(x);
+            var y = s1.Deserialize<DateTimeEntity>(x);
+
+            y.ToString();
+        }
+
+        [Fact]
+        public void UnixTimeStampsDateTimeOffset()
+        {
+            var s1 = new ArangoJsonSerializer(new ArangoJsonDefaultPolicy())
+            {
+                UseTimestamps = true
+            };
+
+            var x = s1.Serialize(new DateTimeOffsetEntity
+            {
+                A = DateTimeOffset.UtcNow,
+                B = DateTimeOffset.Now
+            });
+
+            var y = s1.Deserialize<DateTimeOffsetEntity>(x);
 
             y.ToString();
         }

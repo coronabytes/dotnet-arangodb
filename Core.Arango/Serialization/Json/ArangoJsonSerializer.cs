@@ -26,6 +26,27 @@ namespace Core.Arango.Serialization.Json
         }
     }
 
+    internal class ArangoJsonNullableUnixTimeDateTimeOffsetConverter : JsonConverter<DateTimeOffset?>
+    {
+        public override bool HandleNull => true;
+
+        public override DateTimeOffset? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            if (reader.TryGetInt64(out var time))
+                return DateTimeOffset.FromUnixTimeMilliseconds(time).UtcDateTime;
+
+            return null;
+        }
+
+        public override void Write(Utf8JsonWriter writer, DateTimeOffset? value, JsonSerializerOptions options)
+        {
+            if (value.HasValue)
+                writer.WriteNumberValue(value.Value.ToUnixTimeMilliseconds());
+            else
+                writer.WriteNullValue();
+        }
+    }
+
     internal class ArangoJsonUnixTimeConverter : JsonConverter<DateTime>
     {
         public override bool HandleNull => false;
@@ -44,13 +65,31 @@ namespace Core.Arango.Serialization.Json
         }
     }
 
+    internal class ArangoJsonUnixTimeDateTimeOffsetConverter : JsonConverter<DateTimeOffset>
+    {
+        public override bool HandleNull => false;
+
+        public override DateTimeOffset Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            if (reader.TryGetInt64(out var time))
+                return DateTimeOffset.FromUnixTimeMilliseconds(time).UtcDateTime;
+
+            return DateTimeOffset.MinValue;
+        }
+
+        public override void Write(Utf8JsonWriter writer, DateTimeOffset value, JsonSerializerOptions options)
+        {
+            writer.WriteNumberValue(value.ToUnixTimeMilliseconds());
+        }
+    }
+
     /// <summary>
     ///     Arango Json Serializer with System.Json.Text
     /// </summary>
     public class ArangoJsonSerializer : IArangoSerializer
     {
         /// <summary>
-        ///  Use unix timestamps for DateTime
+        ///  Use unix timestamps for DateTime and DateTimeOffset
         /// </summary>
         public bool UseTimestamps
         {
@@ -62,6 +101,8 @@ namespace Core.Arango.Serialization.Json
                 {
                     _options.Converters.Add(new ArangoJsonUnixTimeConverter());
                     _options.Converters.Add(new ArangoJsonNullableUnixTimeConverter());
+                    _options.Converters.Add(new ArangoJsonUnixTimeDateTimeOffsetConverter());
+                    _options.Converters.Add(new ArangoJsonNullableUnixTimeDateTimeOffsetConverter());
                 }
             }
         }

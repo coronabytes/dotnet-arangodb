@@ -111,7 +111,35 @@ Supported serializer:
   // Specify with CamelCase
   Serializer = new ArangoNewtonsoftSerializer(new ArangoNewtonsoftCamelCaseContractResolver())
   ```
+  
+### Serialize DateTime / DateTimeOffset to Unix Timestamp
+- **Microsoft System.Text.Json**
+  ```csharp
+  using Core.Arango.Serialization.Json;
 
+  // Model example: uses DateTimeOffset
+  private class DateTimeOffsetEntity
+  {
+      public DateTimeOffset A { get; set; }
+      public DateTimeOffset B { get; set; }
+
+  }
+
+  // Define serializer on Arango context
+  Serializer = new ArangoJsonSerializer(new ArangoJsonDefaultPolicy())
+  {
+      UseTimestamps = true // Serialize DateTime / DateTimeOffset to Unix Timestamp (in milliseconds)
+  };
+
+  // Use
+  await arango.Document.CreateAsync("database", "collection", instanceOfDateTimeOffsetEntity); // Converts between Unix Timestamp in DB and C# data type
+  ```
+
+- **Newtonsoft.Json**
+  ```csharp
+  // not supported
+  ```
+  
 ## Create database
 ```csharp
 await arango.Database.CreateAsync("database");
