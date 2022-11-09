@@ -28,7 +28,7 @@ jobs:
 #          - cluster
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     
     - name: chmod
       run: find ./docker -name '*.sh' | xargs chmod +x
@@ -39,7 +39,7 @@ jobs:
         ARANGO_LICENSE_KEY: ${{ secrets.ARANGO_LICENSE_KEY }}
     
     - name: dotnet
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v3
       with:
         dotnet-version: ${{ matrix.dotnet }}
     
