@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
 using Core.Arango.Serialization.Json;
 using Newtonsoft.Json.Converters;
@@ -15,11 +16,13 @@ namespace Core.Arango.Protocol
         /// <summary>
         ///     A hash index is an unsorted index that can be used to find individual documents by equality lookups.
         /// </summary>
+        [Obsolete("use Persistent")]
         [EnumMember(Value = "hash")] Hash,
 
         /// <summary>
         ///     A skiplist is a sorted index that can be used to find individual documents or ranges of documents.
         /// </summary>
+        [Obsolete("use Persistent")]
         [EnumMember(Value = "skiplist")] Skiplist,
 
         /// <summary>
@@ -55,6 +58,11 @@ namespace Core.Arango.Protocol
         /// 
         /// </summary>
         [EnumMember(Value = "zkd")] MultiDimensional,
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [EnumMember(Value = "inverted")] Inverted,
 
         /// <summary>
         ///     An edge index is automatically created for edge collections.

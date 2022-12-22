@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
+using JetBrains.Annotations;
 using Newtonsoft.Json;
 
 namespace Core.Arango.Protocol
@@ -33,7 +34,7 @@ namespace Core.Arango.Protocol
         public ArangoIndexType Type { get; set; }
 
         /// <summary>
-        ///     (Hash | Skiplist | MultiDimensional) An array of attribute paths.
+        ///     (Persistent | Inverted | MultiDimensional) An array of attribute paths.
         ///     (TTL | Fulltext) An array with exactly one attribute path.
         ///     (Geo) An array with one or two attribute paths.
         ///     If it is an array with one attribute path location, then a geo-spatial index on all documents is created using
@@ -72,7 +73,7 @@ namespace Core.Arango.Protocol
         public bool? GeoJson { get; set; }
 
         /// <summary>
-        ///     (Hash | SkipList)
+        ///     (Persistent)
         /// </summary>
         [JsonPropertyName("sparse")]
         [JsonProperty(PropertyName = "sparse", NullValueHandling = NullValueHandling.Ignore)]
@@ -80,12 +81,23 @@ namespace Core.Arango.Protocol
         public bool? Sparse { get; set; }
 
         /// <summary>
-        ///     (Hash | SkipList | MultiDimensional) Note: Unique indexes on non-shard keys are not supported in a cluster.
+        ///     (Persistent | MultiDimensional) Note: Unique indexes on non-shard keys are not supported in a cluster.
         /// </summary>
         [JsonPropertyName("unique")]
         [JsonProperty(PropertyName = "unique", NullValueHandling = NullValueHandling.Ignore)]
         [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? Unique { get; set; }
+
+        /// <summary>
+        ///     (Persistent) this attribute controls whether an extra in-memory hash cache is created for the index.
+        ///     The hash cache can be used to speed up index lookups.
+        ///     The cache can only be used for queries that look up all index attributes via an equality lookup (==).
+        ///     The hash cache cannot be used for range scans, partial lookups or sorting.
+        /// </summary>
+        [JsonPropertyName("cacheEnabled")]
+        [JsonProperty(PropertyName = "cacheEnabled", NullValueHandling = NullValueHandling.Ignore)]
+        [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public bool? CacheEnabled { get; set; }
 
         /// <summary>
         ///     Indexes can also be created in “background”, not using an exclusive lock during the entire index creation.
@@ -97,7 +109,7 @@ namespace Core.Arango.Protocol
         public bool? InBackground { get; set; }
 
         /// <summary>
-        ///     (Hash | SkipList) Controls whether inserting duplicate index values from the same document into a unique array
+        ///     (Persistent) Controls whether inserting duplicate index values from the same document into a unique array
         ///     index will lead to a unique constraint error or not.
         ///     The default value is true, so only a single instance of each non-unique index value will be inserted into the index
         ///     per document.
@@ -110,12 +122,24 @@ namespace Core.Arango.Protocol
         public bool? Deduplicate { get; set; }
 
         /// <summary>
-        ///     (Hash | SkipList) Doc?
+        ///     (Persistent) This attribute controls whether index selectivity estimates are maintained for the index.
+        ///     Not maintaining index selectivity estimates can have a slightly positive impact on write performance.
         /// </summary>
-        [JsonPropertyName("estimate")]
-        [JsonProperty(PropertyName = "estimate", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("estimates")]
+        [JsonProperty(PropertyName = "estimates", NullValueHandling = NullValueHandling.Ignore)]
         [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public bool? Estimate { get; set; }
+
+        /// <summary>
+        ///     (Persistent) The optional storedValues attribute can contain an array of paths to additional attributes to store in the index.
+        ///     These additional attributes cannot be used for index lookups or for sorting, but they can be used for projections.
+        ///     This allows an index to fully cover more queries and avoid extra document lookups.
+        ///     The maximum number of attributes in storedValues is 32.
+        /// </summary>
+        [JsonPropertyName("storedValues")]
+        [JsonProperty(PropertyName = "storedValues", NullValueHandling = NullValueHandling.Ignore)]
+        [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] 
+        public List<string> StoredValues { get; set; }
 
         /// <summary>
         ///     (TTL) The time (in seconds) after a document’s creation after which the documents count as “expired”.

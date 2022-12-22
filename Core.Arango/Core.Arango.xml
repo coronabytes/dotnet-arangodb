@@ -4476,7 +4476,7 @@
         </member>
         <member name="P:Core.Arango.Protocol.ArangoIndex.Fields">
             <summary>
-                (Hash | Skiplist | MultiDimensional) An array of attribute paths.
+                (Persistent | Inverted | MultiDimensional) An array of attribute paths.
                 (TTL | Fulltext) An array with exactly one attribute path.
                 (Geo) An array with one or two attribute paths.
                 If it is an array with one attribute path location, then a geo-spatial index on all documents is created using
@@ -4506,12 +4506,20 @@
         </member>
         <member name="P:Core.Arango.Protocol.ArangoIndex.Sparse">
             <summary>
-                (Hash | SkipList)
+                (Persistent)
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoIndex.Unique">
             <summary>
-                (Hash | SkipList | MultiDimensional) Note: Unique indexes on non-shard keys are not supported in a cluster.
+                (Persistent | MultiDimensional) Note: Unique indexes on non-shard keys are not supported in a cluster.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoIndex.CacheEnabled">
+            <summary>
+                (Persistent) this attribute controls whether an extra in-memory hash cache is created for the index.
+                The hash cache can be used to speed up index lookups.
+                The cache can only be used for queries that look up all index attributes via an equality lookup (==).
+                The hash cache cannot be used for range scans, partial lookups or sorting.
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoIndex.InBackground">
@@ -4522,7 +4530,7 @@
         </member>
         <member name="P:Core.Arango.Protocol.ArangoIndex.Deduplicate">
             <summary>
-                (Hash | SkipList) Controls whether inserting duplicate index values from the same document into a unique array
+                (Persistent) Controls whether inserting duplicate index values from the same document into a unique array
                 index will lead to a unique constraint error or not.
                 The default value is true, so only a single instance of each non-unique index value will be inserted into the index
                 per document.
@@ -4532,7 +4540,16 @@
         </member>
         <member name="P:Core.Arango.Protocol.ArangoIndex.Estimate">
             <summary>
-                (Hash | SkipList) Doc?
+                (Persistent) This attribute controls whether index selectivity estimates are maintained for the index.
+                Not maintaining index selectivity estimates can have a slightly positive impact on write performance.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoIndex.StoredValues">
+            <summary>
+                (Persistent) The optional storedValues attribute can contain an array of paths to additional attributes to store in the index.
+                These additional attributes cannot be used for index lookups or for sorting, but they can be used for projections.
+                This allows an index to fully cover more queries and avoid extra document lookups.
+                The maximum number of attributes in storedValues is 32.
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoIndex.ExpireAfter">
@@ -4590,6 +4607,11 @@
             </summary>
         </member>
         <member name="F:Core.Arango.Protocol.ArangoIndexType.MultiDimensional">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoIndexType.Inverted">
             <summary>
             
             </summary>
