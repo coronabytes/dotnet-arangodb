@@ -83,18 +83,7 @@ namespace Core.Arango.Protocol
         [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public List<string> ShardKeys { get; set; }
 
-        /// <summary>
-        ///     (The default is 1): in a cluster, this attribute determines how many copies of each shard are kept on different
-        ///     DB-Servers.
-        ///     The value 1 means that only one copy (no synchronous replication) is kept.
-        ///     A value of k means that k-1 replicas are kept.
-        ///     It can also be the string "satellite" for a SatelliteCollection, where the replication factor is matched to the
-        ///     number of DB-Servers (Enterprise Edition only).
-        /// </summary>
-        [JsonPropertyName("replicationFactor")]
-        [JsonProperty(PropertyName = "replicationFactor", NullValueHandling = NullValueHandling.Ignore)]
-        [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public object ReplicationFactor { get; set; }
+
 
         /// <summary>
         ///     This attribute specifies the name of the sharding strategy to use for the collection.
@@ -122,17 +111,7 @@ namespace Core.Arango.Protocol
         [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string DistributeShardsLike { get; set; }
 
-        /// <summary>
-        ///     Write concern for this collection (default: 1).
-        ///     It determines how many copies of each shard are required to be in sync on the different DB-Servers.
-        ///     If there are less then these many copies in the cluster a shard will refuse to write.
-        ///     Writes to shards with enough up-to-date copies will succeed at the same time however.
-        ///     The value of writeConcern can not be larger than replicationFactor. (cluster only)
-        /// </summary>
-        [JsonPropertyName("writeConcern")]
-        [JsonProperty(PropertyName = "writeConcern", NullValueHandling = NullValueHandling.Ignore)]
-        [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public int? WriteConcern { get; set; }
+
 
         /// <summary>
         ///     In an Enterprise Edition cluster, this attribute determines an attribute of the collection that must contain the

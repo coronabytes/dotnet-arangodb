@@ -3969,16 +3969,6 @@
                 This option is meaningless in a single server setup.
             </summary>
         </member>
-        <member name="P:Core.Arango.Protocol.ArangoCollection.ReplicationFactor">
-            <summary>
-                (The default is 1): in a cluster, this attribute determines how many copies of each shard are kept on different
-                DB-Servers.
-                The value 1 means that only one copy (no synchronous replication) is kept.
-                A value of k means that k-1 replicas are kept.
-                It can also be the string "satellite" for a SatelliteCollection, where the replication factor is matched to the
-                number of DB-Servers (Enterprise Edition only).
-            </summary>
-        </member>
         <member name="P:Core.Arango.Protocol.ArangoCollection.ShardingStrategy">
             <summary>
                 This attribute specifies the name of the sharding strategy to use for the collection.
@@ -3997,15 +3987,6 @@
                 It can no longer be dropped, before the sharding-imitating collections are dropped.
                 Equally, backups and restores of imitating collections alone will generate warnings (which can be overridden) about
                 missing sharding prototype.
-            </summary>
-        </member>
-        <member name="P:Core.Arango.Protocol.ArangoCollection.WriteConcern">
-            <summary>
-                Write concern for this collection (default: 1).
-                It determines how many copies of each shard are required to be in sync on the different DB-Servers.
-                If there are less then these many copies in the cluster a shard will refuse to write.
-                Writes to shards with enough up-to-date copies will succeed at the same time however.
-                The value of writeConcern can not be larger than replicationFactor. (cluster only)
             </summary>
         </member>
         <member name="P:Core.Arango.Protocol.ArangoCollection.SmartJoinAttribute">
@@ -4046,6 +4027,90 @@
             <summary>
                 Optional object that specifies the collection level schema for documents.
                 When updating collection this needs to contain existing schema or schema will be removed
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoCollectionUpdate.CacheEnabled">
+            <summary>
+                Whether the in-memory hash cache for documents should be enabled for this collection (default: false).
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoCollectionUpdate.ReplicationFactor">
+            <summary>
+                (The default is 1): in a cluster, this attribute determines how many copies of each shard are kept on different
+                DB-Servers.
+                The value 1 means that only one copy (no synchronous replication) is kept.
+                A value of k means that k-1 replicas are kept.
+                It can also be the string "satellite" for a SatelliteCollection, where the replication factor is matched to the
+                number of DB-Servers (Enterprise Edition only).
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoCollectionUpdate.WriteConcern">
+            <summary>
+                Write concern for this collection (default: 1).
+                It determines how many copies of each shard are required to be in sync on the different DB-Servers.
+                If there are less then these many copies in the cluster a shard will refuse to write.
+                Writes to shards with enough up-to-date copies will succeed at the same time however.
+                The value of writeConcern can not be larger than replicationFactor. (cluster only)
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoCollectionUpdate.ComputedValues">
+            <summary>
+                An optional list of objects, each representing a computed value.
+            </summary>
+        </member>
+        <member name="T:Core.Arango.Protocol.ArangoComputedValue">
+            <summary>
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoComputedValue.Name">
+            <summary>
+                The name of the target attribute. Can only be a top-level attribute, but you may return a nested object. Cannot be
+                _key, _id, _rev, _from, _to, or a shard key attribute.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoComputedValue.Expression">
+            <summary>
+                An AQL RETURN operation with an expression that computes the desired value.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoComputedValue.Overwrite">
+            <summary>
+                Whether the computed value shall take precedence over a user-provided or existing attribute.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoComputedValue.ComputeOn">
+            <summary>
+                An array of strings to define on which write operations the value shall be computed.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoComputedValue.KeepNull">
+            <summary>
+                Whether the target attribute shall be set if the expression evaluates to null. You can set the option to false to
+                not set (or unset) the target attribute if the expression returns null. The default is true.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.Protocol.ArangoComputedValue.FailOnWarning">
+            <summary>
+                Whether to let the write operation fail if the expression produces a warning. The default is false.
+            </summary>
+        </member>
+        <member name="T:Core.Arango.Protocol.ArangoComputeOn">
+            <summary>
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoComputeOn.Insert">
+            <summary>
+                Insert
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoComputeOn.Update">
+            <summary>
+                Update
+            </summary>
+        </member>
+        <member name="F:Core.Arango.Protocol.ArangoComputeOn.Replace">
+            <summary>
+                Replace
             </summary>
         </member>
         <member name="T:Core.Arango.Protocol.ArangoCursor">
