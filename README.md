@@ -7,7 +7,7 @@ dotnet add package Core.Arango
 ```
 
 # .NET driver for ArangoDB
-- .NET Standard 2.0, 2.1, .NET 5.0 and .NET 6.0 driver for ArangoDB 3.8+
+- .NET Standard 2.0, 2.1 and .NET 6 / 7 / 8 driver for ArangoDB 3.10+
 - LINQ support (WIP)
 - Newtonsoft.Json and System.Text.Json serialization support with PascalCase and camelCase options
 - Updates from anonymous types supported as (Id, Key, Revision, From, To) properties are translated to (_id, _key, _rev, _from, _to)
