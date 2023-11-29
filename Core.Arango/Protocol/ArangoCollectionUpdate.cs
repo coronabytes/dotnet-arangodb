@@ -72,6 +72,6 @@ namespace Core.Arango.Protocol
         [JsonPropertyName("computedValues")]
         [JsonProperty(PropertyName = "computedValues", NullValueHandling = NullValueHandling.Ignore)]
         [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public IList<ArangoComputedValue> ComputedValues { get; set; }
+        public List<ArangoComputedValue> ComputedValues { get; set; }
     }
 }

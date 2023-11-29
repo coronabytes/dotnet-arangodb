@@ -90,7 +90,7 @@ namespace Core.Arango.Protocol
         [JsonPropertyName("primarySort")]
         [JsonProperty(PropertyName = "primarySort", NullValueHandling = NullValueHandling.Ignore)]
         [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public IList<ArangoSort> PrimarySort { get; set; }
+        public List<ArangoSort> PrimarySort { get; set; }
 
         /// <summary>
         ///     Defines how to compress the primary sort data (introduced in v3.7.1). ArangoDB v3.5 and v3.6 always compress the
@@ -110,7 +110,7 @@ namespace Core.Arango.Protocol
         [JsonPropertyName("storedValues")]
         [JsonProperty(PropertyName = "storedValues", NullValueHandling = NullValueHandling.Ignore)]
         [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public IList<ArangoViewStoredValue> StoredValues { get; set; }
+        public List<ArangoViewStoredValue> StoredValues { get; set; }
 
         /// <summary>
         ///     Maximum number of writers (segments) cached in the pool (default: 64, use 0 to disable, immutable)

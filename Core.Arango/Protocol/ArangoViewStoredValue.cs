@@ -13,7 +13,7 @@ namespace Core.Arango.Protocol
         /// </summary>
         [JsonPropertyName("fields")]
         [JsonProperty(PropertyName = "fields")]
-        public IList<string> Fields { get; set; }
+        public List<string> Fields { get; set; }
 
         /// <summary>
         ///     Compression

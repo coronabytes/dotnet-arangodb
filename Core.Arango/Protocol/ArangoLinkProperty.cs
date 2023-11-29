@@ -17,7 +17,7 @@ namespace Core.Arango.Protocol
         [JsonPropertyName("analyzers")]
         [JsonProperty(PropertyName = "analyzers", NullValueHandling = NullValueHandling.Ignore)]
         [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public IList<string> Analyzers { get; set; }
+        public List<string> Analyzers { get; set; }
 
         /// <summary>
         ///     If set to true, then process all document attributes. Otherwise, only consider attributes mentioned in fields.

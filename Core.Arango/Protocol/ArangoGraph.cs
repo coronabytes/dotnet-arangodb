@@ -22,7 +22,7 @@ namespace Core.Arango.Protocol
         /// </summary>
         [JsonPropertyName("edgeDefinitions")]
         [JsonProperty(PropertyName = "edgeDefinitions")]
-        public IList<ArangoEdgeDefinition> EdgeDefinitions { get; set; }
+        public List<ArangoEdgeDefinition> EdgeDefinitions { get; set; }
 
         /// <summary>
         ///     An array of additional vertex collections. Documents within these collections do not have edges within this graph.
@@ -30,7 +30,7 @@ namespace Core.Arango.Protocol
         [JsonPropertyName("orphanCollections")]
         [JsonProperty(PropertyName = "orphanCollections", DefaultValueHandling = DefaultValueHandling.Ignore)]
         [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        public IList<string> OrphanCollections { get; set; }
+        public List<string> OrphanCollections { get; set; }
 
         /// <summary>
         ///     Define if the created graph should be smart (Enterprise Edition only).

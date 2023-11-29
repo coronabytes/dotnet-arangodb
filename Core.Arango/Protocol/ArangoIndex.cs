@@ -50,7 +50,7 @@ namespace Core.Arango.Protocol
         [JsonPropertyName("fields")]
         [JsonProperty(PropertyName = "fields", NullValueHandling = NullValueHandling.Ignore)]
         [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public IList<string> Fields { get; set; }
+        public List<string> Fields { get; set; }
 
         /// <summary>
         ///     (Fulltext)  Minimum character length of words to index.

@@ -21,13 +21,13 @@ namespace Core.Arango.Protocol
         /// </summary>
         [JsonPropertyName("from")]
         [JsonProperty(PropertyName = "from")]
-        public IList<string> From { get; set; }
+        public List<string> From { get; set; }
 
         /// <summary>
         ///     One or many vertex collections that can contain target vertices.
         /// </summary>
         [JsonPropertyName("to")]
         [JsonProperty(PropertyName = "to")]
-        public IList<string> To { get; set; }
+        public List<string> To { get; set; }
     }
 }

@@ -38,7 +38,7 @@ namespace Core.Arango.Protocol
         [JsonPropertyName("stopwords")]
         [JsonProperty(PropertyName = "stopwords", DefaultValueHandling = DefaultValueHandling.Ignore)]
         [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public IList<string> Stopwords { get; set; }
+        public List<string> Stopwords { get; set; }
 
         /// <summary>
         ///     (Text)
@@ -136,7 +136,7 @@ namespace Core.Arango.Protocol
         [JsonPropertyName("pipeline")]
         [JsonProperty(PropertyName = "pipeline", DefaultValueHandling = DefaultValueHandling.Ignore)]
         [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public IList<ArangoAnalyzer> Pipeline { get; set; }
+        public List<ArangoAnalyzer> Pipeline { get; set; }
 
 
         /// <summary>
@@ -146,7 +146,7 @@ namespace Core.Arango.Protocol
         [JsonPropertyName("latitude ")]
         [JsonProperty(PropertyName = "latitude", DefaultValueHandling = DefaultValueHandling.Ignore)]
         [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public IList<string> Latitude { get; set; }
+        public List<string> Latitude { get; set; }
 
         /// <summary>
         ///     (GeoPoint) array of strings that describes the attribute path of the longitude value relative to the field for
@@ -155,7 +155,7 @@ namespace Core.Arango.Protocol
         [JsonPropertyName("longitude")]
         [JsonProperty(PropertyName = "longitude", DefaultValueHandling = DefaultValueHandling.Ignore)]
         [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public IList<string> Longitude { get; set; }
+        public List<string> Longitude { get; set; }
 
         /// <summary>
         ///     (GeoJson)  (default): index all GeoJSON geometry types (Point, Polygon etc.)

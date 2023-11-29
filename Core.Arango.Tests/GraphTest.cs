@@ -130,7 +130,7 @@ namespace Core.Arango.Tests
 
             var transaction0 = await Arango.Transaction.BeginAsync("test",
                 new ArangoTransaction()
-                { Collections = new ArangoTransactionScope { Write = new[] { "vertices", "edges" } } });
+                { Collections = new ArangoTransactionScope { Write = [ "vertices", "edges" ] }});
 
             await Arango.Graph.Vertex.CreateAsync(transaction0, "graph", "vertices", new
             {
@@ -166,7 +166,7 @@ namespace Core.Arango.Tests
 
             var transaction1 = await Arango.Transaction.BeginAsync("test",
                 new ArangoTransaction()
-                { Collections = new ArangoTransactionScope { Write = new[] { "vertices", "edges" } } });
+                { Collections = new ArangoTransactionScope { Write = ["vertices", "edges" ] } });
 
             await Arango.Graph.Edge.CreateAsync(transaction1, "graph", "edges", new
             {
@@ -178,7 +178,7 @@ namespace Core.Arango.Tests
 
             var transaction2 = await Arango.Transaction.BeginAsync("test",
                 new ArangoTransaction()
-                { Collections = new ArangoTransactionScope { Write = new[] { "vertices", "edges" } } });
+                { Collections = new ArangoTransactionScope { Write = [ "vertices", "edges" ] } });
 
             await Arango.Graph.Edge.CreateAsync(transaction2, "graph", "edges", new
             {

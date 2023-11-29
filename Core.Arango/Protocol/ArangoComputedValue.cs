@@ -36,7 +36,7 @@ namespace Core.Arango.Protocol
         [JsonPropertyName("computeOn")]
         [JsonProperty(PropertyName = "computeOn", NullValueHandling = NullValueHandling.Ignore)]
         [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public IList<ArangoComputeOn> ComputeOn { get; set; }
+        public List<ArangoComputeOn> ComputeOn { get; set; }
 
         /// <summary>
         ///     Whether the target attribute shall be set if the expression evaluates to null. You can set the option to false to
