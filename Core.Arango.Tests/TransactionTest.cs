@@ -112,7 +112,7 @@ namespace Core.Arango.Tests
 
             Assert.NotNull(exception.ErrorNumber);
             Assert.NotNull(exception.Code);
-            Assert.Equal(ArangoErrorCode.ErrorTransactionNotFound, exception.ErrorNumber);
+            Assert.Equal(ArangoErrorCode.ErrorTransactionAborted, exception.ErrorNumber);
             Assert.Equal(HttpStatusCode.NotFound, exception.Code);
         }
 
@@ -175,7 +175,7 @@ namespace Core.Arango.Tests
 
             Assert.NotNull(exception.ErrorNumber);
             Assert.NotNull(exception.Code);
-            Assert.Equal(ArangoErrorCode.ErrorTransactionNotFound, exception.ErrorNumber);
+            Assert.Equal(ArangoErrorCode.ErrorTransactionAborted, exception.ErrorNumber);
             Assert.Equal(HttpStatusCode.NotFound, exception.Code);
         }
     }
