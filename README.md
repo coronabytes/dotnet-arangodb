@@ -1,4 +1,4 @@
-![Build](https://github.com/coronabytes/dotnet-arangodb/workflows/Build/badge.svg)
+[![Build](https://github.com/coronabytes/dotnet-arangodb/actions/workflows/build.yml/badge.svg)](https://github.com/coronabytes/dotnet-arangodb/actions/workflows/build.yml)
 [![Nuget](https://img.shields.io/nuget/v/Core.Arango)](https://www.nuget.org/packages/Core.Arango)
 [![Nuget](https://img.shields.io/nuget/dt/Core.Arango)](https://www.nuget.org/packages/Core.Arango)
 
