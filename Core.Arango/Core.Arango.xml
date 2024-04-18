@@ -2731,32 +2731,32 @@
             </param>
             <param name="cancellationToken"></param>
         </member>
-        <member name="M:Core.Arango.Modules.IArangoDocumentModule.CreateManyAsync``2(Core.Arango.ArangoHandle,System.String,System.Collections.Generic.IEnumerable{``0},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{Core.Arango.Protocol.ArangoOverwriteMode},System.Threading.CancellationToken)">
+        <member name="M:Core.Arango.Modules.IArangoDocumentModule.CreateManyAsync``2(Core.Arango.ArangoHandle,System.String,System.Collections.Generic.IEnumerable{``0},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{Core.Arango.Protocol.ArangoOverwriteMode},System.Threading.CancellationToken)">
             <summary>
                 Creates multiple documents
             </summary>
         </member>
-        <member name="M:Core.Arango.Modules.IArangoDocumentModule.CreateManyAsync``1(Core.Arango.ArangoHandle,System.String,System.Collections.Generic.IEnumerable{``0},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{Core.Arango.Protocol.ArangoOverwriteMode},System.Threading.CancellationToken)">
+        <member name="M:Core.Arango.Modules.IArangoDocumentModule.CreateManyAsync``1(Core.Arango.ArangoHandle,System.String,System.Collections.Generic.IEnumerable{``0},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{Core.Arango.Protocol.ArangoOverwriteMode},System.Threading.CancellationToken)">
             <summary>
                 Creates multiple documents
             </summary>
         </member>
-        <member name="M:Core.Arango.Modules.IArangoDocumentModule.CreateAsync``2(Core.Arango.ArangoHandle,System.String,``0,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{Core.Arango.Protocol.ArangoOverwriteMode},System.Threading.CancellationToken)">
+        <member name="M:Core.Arango.Modules.IArangoDocumentModule.CreateAsync``2(Core.Arango.ArangoHandle,System.String,``0,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{Core.Arango.Protocol.ArangoOverwriteMode},System.Threading.CancellationToken)">
             <summary>
                 Create document
             </summary>
         </member>
-        <member name="M:Core.Arango.Modules.IArangoDocumentModule.CreateAsync``1(Core.Arango.ArangoHandle,System.String,``0,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{Core.Arango.Protocol.ArangoOverwriteMode},System.Threading.CancellationToken)">
+        <member name="M:Core.Arango.Modules.IArangoDocumentModule.CreateAsync``1(Core.Arango.ArangoHandle,System.String,``0,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{Core.Arango.Protocol.ArangoOverwriteMode},System.Threading.CancellationToken)">
             <summary>
                 Create document
             </summary>
         </member>
-        <member name="M:Core.Arango.Modules.IArangoDocumentModule.DeleteManyAsync``2(Core.Arango.ArangoHandle,System.String,System.Collections.Generic.IEnumerable{``0},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
+        <member name="M:Core.Arango.Modules.IArangoDocumentModule.DeleteManyAsync``2(Core.Arango.ArangoHandle,System.String,System.Collections.Generic.IEnumerable{``0},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
             <summary>
                 Removes multiple documents
             </summary>
         </member>
-        <member name="M:Core.Arango.Modules.IArangoDocumentModule.DeleteAsync``1(Core.Arango.ArangoHandle,System.String,System.String,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.String,System.Threading.CancellationToken)">
+        <member name="M:Core.Arango.Modules.IArangoDocumentModule.DeleteAsync``1(Core.Arango.ArangoHandle,System.String,System.String,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.String,System.Threading.CancellationToken)">
             <summary>
                 Removes single document by key
             </summary>
@@ -2771,42 +2771,42 @@
                 Bulk import
             </summary>
         </member>
-        <member name="M:Core.Arango.Modules.IArangoDocumentModule.ReplaceManyAsync``2(Core.Arango.ArangoHandle,System.String,System.Collections.Generic.IEnumerable{``0},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
+        <member name="M:Core.Arango.Modules.IArangoDocumentModule.ReplaceManyAsync``2(Core.Arango.ArangoHandle,System.String,System.Collections.Generic.IEnumerable{``0},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
             <summary>
                 Replaces multiple documents
             </summary>
         </member>
-        <member name="M:Core.Arango.Modules.IArangoDocumentModule.ReplaceManyAsync``1(Core.Arango.ArangoHandle,System.String,System.Collections.Generic.IEnumerable{``0},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
+        <member name="M:Core.Arango.Modules.IArangoDocumentModule.ReplaceManyAsync``1(Core.Arango.ArangoHandle,System.String,System.Collections.Generic.IEnumerable{``0},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
             <summary>
                 Replaces multiple documents
             </summary>
         </member>
-        <member name="M:Core.Arango.Modules.IArangoDocumentModule.ReplaceAsync``2(Core.Arango.ArangoHandle,System.String,``0,System.Boolean,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
+        <member name="M:Core.Arango.Modules.IArangoDocumentModule.ReplaceAsync``2(Core.Arango.ArangoHandle,System.String,``0,System.Boolean,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
             <summary>
                 Replace single document
             </summary>
         </member>
-        <member name="M:Core.Arango.Modules.IArangoDocumentModule.ReplaceAsync``1(Core.Arango.ArangoHandle,System.String,``0,System.Boolean,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
+        <member name="M:Core.Arango.Modules.IArangoDocumentModule.ReplaceAsync``1(Core.Arango.ArangoHandle,System.String,``0,System.Boolean,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
             <summary>
                 Replace single document
             </summary>
         </member>
-        <member name="M:Core.Arango.Modules.IArangoDocumentModule.UpdateManyAsync``1(Core.Arango.ArangoHandle,System.String,System.Collections.Generic.IEnumerable{``0},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
+        <member name="M:Core.Arango.Modules.IArangoDocumentModule.UpdateManyAsync``1(Core.Arango.ArangoHandle,System.String,System.Collections.Generic.IEnumerable{``0},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
             <summary>
                 Updates multiple documents
             </summary>
         </member>
-        <member name="M:Core.Arango.Modules.IArangoDocumentModule.UpdateManyAsync``2(Core.Arango.ArangoHandle,System.String,System.Collections.Generic.IEnumerable{``0},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
+        <member name="M:Core.Arango.Modules.IArangoDocumentModule.UpdateManyAsync``2(Core.Arango.ArangoHandle,System.String,System.Collections.Generic.IEnumerable{``0},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
             <summary>
                 Updates multiple documents
             </summary>
         </member>
-        <member name="M:Core.Arango.Modules.IArangoDocumentModule.UpdateAsync``1(Core.Arango.ArangoHandle,System.String,``0,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
+        <member name="M:Core.Arango.Modules.IArangoDocumentModule.UpdateAsync``1(Core.Arango.ArangoHandle,System.String,``0,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
             <summary>
                 Updates single document
             </summary>
         </member>
-        <member name="M:Core.Arango.Modules.IArangoDocumentModule.UpdateAsync``2(Core.Arango.ArangoHandle,System.String,``0,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
+        <member name="M:Core.Arango.Modules.IArangoDocumentModule.UpdateAsync``2(Core.Arango.ArangoHandle,System.String,``0,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
             <summary>
                 Updates single document
             </summary>

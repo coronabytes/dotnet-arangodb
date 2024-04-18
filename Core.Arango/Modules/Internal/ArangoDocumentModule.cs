@@ -51,7 +51,7 @@ namespace Core.Arango.Modules.Internal
         public async Task<List<ArangoUpdateResult<TR>>> CreateManyAsync<T, TR>(ArangoHandle database,
             string collection, IEnumerable<T> docs, bool? waitForSync = null,
             bool? keepNull = null, bool? mergeObjects = null, bool? returnOld = null, bool? returnNew = null,
-            bool? silent = null, ArangoOverwriteMode? overwriteMode = null,
+            bool? silent = null, bool? exclusive = null, ArangoOverwriteMode? overwriteMode = null,
             CancellationToken cancellationToken = default)
         {
             var parameter = new Dictionary<string, string>();
@@ -64,6 +64,9 @@ namespace Core.Arango.Modules.Internal
 
             if (mergeObjects.HasValue)
                 parameter.Add("mergeObjects", mergeObjects.Value.ToString().ToLowerInvariant());
+
+            if (exclusive.HasValue)
+                parameter.Add("exclusive", mergeObjects.Value.ToString().ToLowerInvariant());
 
             if (returnOld.HasValue)
                 parameter.Add("returnOld", returnOld.Value.ToString().ToLowerInvariant());
@@ -86,23 +89,23 @@ namespace Core.Arango.Modules.Internal
         public async Task<List<ArangoUpdateResult<ArangoVoid>>> CreateManyAsync<T>(ArangoHandle database,
             string collection, IEnumerable<T> docs, bool? waitForSync = null,
             bool? keepNull = null, bool? mergeObjects = null, bool? returnOld = null, bool? returnNew = null,
-            bool? silent = null, ArangoOverwriteMode? overwriteMode = null,
+            bool? silent = null, bool? exclusive = null, ArangoOverwriteMode? overwriteMode = null,
             CancellationToken cancellationToken = default)
         {
             return await CreateManyAsync<T, ArangoVoid>(database, collection, docs, waitForSync, keepNull,
                 mergeObjects,
-                returnOld, returnNew, silent, overwriteMode, cancellationToken).ConfigureAwait(false);
+                returnOld, returnNew, silent, exclusive, overwriteMode, cancellationToken).ConfigureAwait(false);
         }
 
         public async Task<ArangoUpdateResult<TR>> CreateAsync<T, TR>(ArangoHandle database, string collection, T doc,
             bool? waitForSync = null,
             bool? keepNull = null, bool? mergeObjects = null, bool? returnOld = null, bool? returnNew = null,
-            bool? silent = null, ArangoOverwriteMode? overwriteMode = null,
+            bool? silent = null, bool? exclusive = null, ArangoOverwriteMode? overwriteMode = null,
             CancellationToken cancellationToken = default)
         {
             var res = await CreateManyAsync<T, TR>(database, collection, new List<T> { doc }, waitForSync, keepNull,
                 mergeObjects,
-                returnOld, returnNew, silent, overwriteMode, cancellationToken).ConfigureAwait(false);
+                returnOld, returnNew, silent, exclusive, overwriteMode, cancellationToken).ConfigureAwait(false);
 
             return res?.SingleOrDefault();
         }
@@ -111,11 +114,11 @@ namespace Core.Arango.Modules.Internal
             T doc,
             bool? waitForSync = null, bool? keepNull = null,
             bool? mergeObjects = null, bool? returnOld = null, bool? returnNew = null, bool? silent = null,
-            ArangoOverwriteMode? overwriteMode = null, CancellationToken cancellationToken = default)
+            bool? exclusive = null, ArangoOverwriteMode? overwriteMode = null, CancellationToken cancellationToken = default)
         {
             var res = await CreateManyAsync<T, ArangoVoid>(database, collection, new List<T> { doc }, waitForSync,
                 keepNull, mergeObjects,
-                returnOld, returnNew, silent, overwriteMode, cancellationToken);
+                returnOld, returnNew, silent, exclusive, overwriteMode, cancellationToken);
 
             return res?.SingleOrDefault();
         }
@@ -142,6 +145,7 @@ namespace Core.Arango.Modules.Internal
             bool? waitForSync = null,
             bool? returnOld = null,
             bool? silent = null,
+            bool? exclusive = null,
             string ifMatch = null,
             CancellationToken cancellationToken = default)
         {
@@ -152,6 +156,9 @@ namespace Core.Arango.Modules.Internal
 
             if (returnOld.HasValue)
                 parameter.Add("returnOld", returnOld.Value.ToString().ToLowerInvariant());
+
+            if (exclusive.HasValue)
+                parameter.Add("exclusive", exclusive.Value.ToString().ToLowerInvariant());
 
             if (silent.HasValue)
                 parameter.Add("silent", silent.Value.ToString().ToLowerInvariant());
@@ -174,6 +181,7 @@ namespace Core.Arango.Modules.Internal
             bool? waitForSync = null,
             bool? returnOld = null,
             bool? ignoreRevs = null,
+            bool? exclusive = null,
             CancellationToken cancellationToken = default)
         {
             var parameter = new Dictionary<string, string>();
@@ -204,11 +212,12 @@ namespace Core.Arango.Modules.Internal
             bool? returnNew = null,
             bool? silent = null,
             bool? ignoreRevs = null,
+            bool? exclusive = null,
             CancellationToken cancellationToken = default)
         {
             return await UpdateManyAsync<T, ArangoVoid>(database, collection, docs, waitForSync, keepNull,
                 mergeObjects,
-                returnOld, returnNew, silent, ignoreRevs, cancellationToken).ConfigureAwait(false);
+                returnOld, returnNew, silent, ignoreRevs, exclusive, cancellationToken).ConfigureAwait(false);
         }
 
         public async Task<List<ArangoUpdateResult<TR>>> UpdateManyAsync<T, TR>(ArangoHandle database,
@@ -220,6 +229,7 @@ namespace Core.Arango.Modules.Internal
             bool? returnNew = null,
             bool? silent = null,
             bool? ignoreRevs = null,
+            bool? exclusive = null,
             CancellationToken cancellationToken = default)
         {
             var parameter = new Dictionary<string, string>();
@@ -245,6 +255,9 @@ namespace Core.Arango.Modules.Internal
             if (ignoreRevs.HasValue)
                 parameter.Add("ignoreRevs", ignoreRevs.Value.ToString().ToLowerInvariant());
 
+            if (exclusive.HasValue)
+                parameter.Add("exclusive", ignoreRevs.Value.ToString().ToLowerInvariant());
+
             var query = AddQueryString(
                 ApiPath(database, $"document/{UrlEncode(collection)}"), parameter);
 
@@ -261,11 +274,12 @@ namespace Core.Arango.Modules.Internal
             bool? returnNew = null,
             bool? silent = null,
             bool? ignoreRevs = null,
+            bool? exclusive = null,
             CancellationToken cancellationToken = default)
         {
             var res = await UpdateManyAsync<T, ArangoVoid>(database, collection,
                 new List<T> { doc }, waitForSync, keepNull, mergeObjects,
-                returnOld, returnNew, silent, ignoreRevs, cancellationToken).ConfigureAwait(false);
+                returnOld, returnNew, silent, ignoreRevs, exclusive, cancellationToken).ConfigureAwait(false);
 
             return res.SingleOrDefault();
         }
@@ -279,11 +293,12 @@ namespace Core.Arango.Modules.Internal
             bool? returnNew = null,
             bool? silent = null,
             bool? ignoreRevs = null,
+            bool? exclusive = null,
             CancellationToken cancellationToken = default)
         {
             var res = await UpdateManyAsync<T, TR>(database, collection,
                 new List<T> { doc }, waitForSync, keepNull, mergeObjects,
-                returnOld, returnNew, silent, ignoreRevs, cancellationToken).ConfigureAwait(false);
+                returnOld, returnNew, silent, ignoreRevs, exclusive, cancellationToken).ConfigureAwait(false);
 
             return res?.SingleOrDefault();
         }
@@ -294,6 +309,7 @@ namespace Core.Arango.Modules.Internal
             bool? returnOld = null,
             bool? returnNew = null,
             bool? ignoreRevs = null,
+            bool? exclusive = null,
             CancellationToken cancellationToken = default)
         {
             var parameter = new Dictionary<string, string>();
@@ -306,6 +322,9 @@ namespace Core.Arango.Modules.Internal
 
             if (returnNew.HasValue)
                 parameter.Add("returnNew", returnNew.Value.ToString().ToLowerInvariant());
+
+            if (exclusive.HasValue)
+                parameter.Add("exclusive", returnNew.Value.ToString().ToLowerInvariant());
 
             if (ignoreRevs.HasValue)
                 parameter.Add("ignoreRevs", ignoreRevs.Value.ToString().ToLowerInvariant());
@@ -323,10 +342,11 @@ namespace Core.Arango.Modules.Internal
             bool? returnOld = null,
             bool? returnNew = null,
             bool? ignoreRevs = null,
+            bool? exclusive = null,
             CancellationToken cancellationToken = default)
         {
             return await ReplaceManyAsync<T, ArangoVoid>(database, collection, docs,
-                waitForSync, returnOld, returnNew, ignoreRevs, cancellationToken).ConfigureAwait(false);
+                waitForSync, returnOld, returnNew, ignoreRevs, exclusive, cancellationToken).ConfigureAwait(false);
         }
 
         public async Task<ArangoUpdateResult<TR>> ReplaceAsync<T, TR>(ArangoHandle database, string collection,
@@ -335,10 +355,11 @@ namespace Core.Arango.Modules.Internal
             bool? returnOld = null,
             bool? returnNew = null,
             bool? ignoreRevs = null,
+            bool? exclusive = null,
             CancellationToken cancellationToken = default)
         {
             var res = await ReplaceManyAsync<T, TR>(database, collection, new List<T> { doc },
-                waitForSync, returnOld, returnNew, ignoreRevs, cancellationToken).ConfigureAwait(false);
+                waitForSync, returnOld, returnNew, ignoreRevs, exclusive, cancellationToken).ConfigureAwait(false);
 
             return res?.SingleOrDefault();
         }
@@ -349,10 +370,11 @@ namespace Core.Arango.Modules.Internal
             bool? returnOld = null,
             bool? returnNew = null,
             bool? ignoreRevs = null,
+            bool? exclusive = null,
             CancellationToken cancellationToken = default)
         {
             var res = await ReplaceManyAsync<T, ArangoVoid>(database, collection, new List<T> { doc },
-                waitForSync, returnOld, returnNew, ignoreRevs, cancellationToken).ConfigureAwait(false);
+                waitForSync, returnOld, returnNew, ignoreRevs, exclusive, cancellationToken).ConfigureAwait(false);
 
             return res?.SingleOrDefault();
         }
