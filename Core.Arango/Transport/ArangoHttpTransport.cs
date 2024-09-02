@@ -147,6 +147,13 @@ namespace Core.Arango.Transport
         private void ApplyHeaders(string transaction, bool auth, HttpRequestMessage msg,
             IDictionary<string, string> headers)
         {
+#if NET8_0_OR_GREATER
+
+            msg.Version = _httpClient.DefaultRequestVersion;
+            msg.VersionPolicy = _httpClient.DefaultVersionPolicy;
+
+#endif
+
             msg.Headers.Add(HttpRequestHeader.KeepAlive.ToString(), "true");
 
             if (auth && !string.IsNullOrWhiteSpace(_auth))
