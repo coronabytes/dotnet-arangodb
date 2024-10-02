@@ -66,7 +66,7 @@ namespace Core.Arango.Modules.Internal
                 parameter.Add("mergeObjects", mergeObjects.Value.ToString().ToLowerInvariant());
 
             if (exclusive.HasValue)
-                parameter.Add("exclusive", mergeObjects.Value.ToString().ToLowerInvariant());
+                parameter.Add("exclusive", exclusive.Value.ToString().ToLowerInvariant());
 
             if (returnOld.HasValue)
                 parameter.Add("returnOld", returnOld.Value.ToString().ToLowerInvariant());
@@ -324,7 +324,7 @@ namespace Core.Arango.Modules.Internal
                 parameter.Add("returnNew", returnNew.Value.ToString().ToLowerInvariant());
 
             if (exclusive.HasValue)
-                parameter.Add("exclusive", returnNew.Value.ToString().ToLowerInvariant());
+                parameter.Add("exclusive", exclusive.Value.ToString().ToLowerInvariant());
 
             if (ignoreRevs.HasValue)
                 parameter.Add("ignoreRevs", ignoreRevs.Value.ToString().ToLowerInvariant());
