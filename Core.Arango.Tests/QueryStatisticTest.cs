@@ -16,10 +16,12 @@ namespace Core.Arango.Tests
         public QueryStatisticTest(ITestOutputHelper output)
         {
             _output = output;
+            InitializeAsync().ConfigureAwait(false).GetAwaiter().GetResult();
         }
 
         public override async Task InitializeAsync()
         {
+            await base.InitializeAsync();
             Arango =
                 new ArangoContext(UniqueTestRealm(),
                     new ArangoConfiguration

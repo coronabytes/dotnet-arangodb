@@ -48,11 +48,13 @@ namespace Core.Arango.Tests
 
     public class LinqTest_BasicOperations : TestBase
     {
+
         private const string D = "test";
         private readonly ITestOutputHelper _output;
         public LinqTest_BasicOperations(ITestOutputHelper output)
         {
             _output = output;
+            InitializeAsync().ConfigureAwait(false).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -381,6 +383,7 @@ namespace Core.Arango.Tests
             var min = Arango.Query<Activity>("test").Select(x => x.Revenue).Min();
 
             Assert.Equal(3.4m, min);
+            await Task.CompletedTask;
         }
 
         [Fact]
@@ -389,6 +392,7 @@ namespace Core.Arango.Tests
             var max = Arango.Query<Activity>("test").Select(x => x.Revenue).Max();
 
             Assert.Equal(4.4m, max);
+            await Task.CompletedTask;
         }
 
         [Fact]
@@ -398,6 +402,7 @@ namespace Core.Arango.Tests
             var sum = Arango.Query<Activity>("test").Select(x => x.Revenue).Sum();
 
             Assert.Equal(expectedSum, sum);
+            await Task.CompletedTask;
         }
 
         /*[Fact]
@@ -492,6 +497,7 @@ namespace Core.Arango.Tests
 
         public override async Task InitializeAsync()
         {
+            await base.InitializeAsync();
             Arango = new ArangoContext(UniqueTestRealm());
             await Arango.Database.CreateAsync(D);
             await Arango.Collection.CreateAsync(D, nameof(Activity), ArangoCollectionType.Document);

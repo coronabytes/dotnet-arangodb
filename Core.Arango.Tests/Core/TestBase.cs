@@ -7,29 +7,37 @@ using Core.Arango.Serialization.Newtonsoft;
 using Newtonsoft.Json;
 using Xunit;
 using Xunit.Abstractions;
+using Testcontainers.ArangoDb;
 
 namespace Core.Arango.Tests.Core
 {
     public abstract class TestBase : IAsyncLifetime
     {
-        public IArangoContext Arango { get; protected set; }
+        private const string Image = "arangodb:latest";
+        private const string DefaultImagePassword = "password";
+        public const string DefaultImageUser = "root";
 
-        public virtual Task InitializeAsync()
+        public IArangoContext Arango { get; protected set; }
+        public ArangoDbContainer Container { get; protected set; }
+
+        public virtual async Task InitializeAsync()
         {
-            return Task.CompletedTask;
+            Container = new ArangoDbBuilder()
+                .WithImage(Image)
+                .WithPassword(DefaultImagePassword)
+                .Build();
+
+            await Container.StartAsync()
+                .ConfigureAwait(false);
         }
 
         public async Task DisposeAsync()
         {
             try
             {
-                foreach (var db in await Arango.Database.ListAsync())
-                    await Arango.Database.DropAsync(db);
+                await (Container?.DisposeAsync().AsTask() ?? Task.CompletedTask);
             }
-            catch
-            {
-                //
-            }
+            catch { }
         }
 
         public async Task SetupAsync(string serializer, string createDatabase = "test")
@@ -47,18 +55,17 @@ namespace Core.Arango.Tests.Core
             });
 
             if (!string.IsNullOrEmpty(createDatabase))
-                await Arango.Database.CreateAsync("test");
+            {
+                var databaseCreateSuccessful = await Arango.Database.CreateAsync("test");
+                if(databaseCreateSuccessful == false)
+                {
+                    throw new Exception("Database creation failed");
+                }
+            }
         }
 
         protected string UniqueTestRealm()
-        {
-            var cs = Environment.GetEnvironmentVariable("ARANGODB_CONNECTION");
-
-            if (string.IsNullOrWhiteSpace(cs))
-                cs = "Server=http://localhost:8529;Realm=CI-{UUID};User=root;Password=;";
-
-            return cs.Replace("{UUID}", Guid.NewGuid().ToString("D"));
-        }
+            => $"Server={Container.GetTransportAddress()};User={DefaultImageUser};Realm=CI-{Guid.NewGuid():D};Password={DefaultImagePassword};";
 
         protected void PrintQuery<T>(IQueryable<T> query, ITestOutputHelper output)
         {

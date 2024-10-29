@@ -13,6 +13,11 @@ namespace Core.Arango.Tests
 #if !NETSTANDARD2_0
     public class FoxxTest : TestBase
     {
+        public FoxxTest()
+        {
+            InitializeAsync().ConfigureAwait(false).GetAwaiter().GetResult();
+        }
+
         [Fact]
         public async Task InstallScript()
         {

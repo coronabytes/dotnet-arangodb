@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
@@ -10,7 +8,6 @@ using Core.Arango.Tests.Core;
 using Newtonsoft.Json;
 using Xunit;
 using Xunit.Abstractions;
-using System.Linq.Expressions;
 
 namespace Core.Arango.Tests
 {
@@ -22,6 +19,7 @@ namespace Core.Arango.Tests
         public LinqTest(ITestOutputHelper output)
         {
             _output = output;
+            InitializeAsync().ConfigureAwait(false).GetAwaiter().GetResult();
         }
 
         [Fact]
@@ -70,7 +68,7 @@ namespace Core.Arango.Tests
         }
 
         [Fact]
-        public async Task MultiFilter()
+        public Task MultiFilter()
         {
             var q = Arango.Query<Project>("test")
                 .Where(x => x.Name == "Project A")
@@ -80,16 +78,20 @@ namespace Core.Arango.Tests
                 .Skip(0).Take(1);
 
             Assert.Equal("FOR `x` IN `Project`  FILTER  (  `x`.`Name`  ==  @P1  )  SORT  `x`.`Name`  ASC   FILTER  (  `x`.`Name`  ==  @P2  )  SORT  `x`.`Name`  DESC    LIMIT  @P3   ,  @P4  RETURN   `x`", q.ToAql().aql.Trim());
+
+            return Task.CompletedTask;
         }
 
 
         [Fact]
-        public async Task FilterOrder()
+        public Task FilterOrder()
         {
             var q = Arango.Query<Project>("test")
                 .Where(x => (x.Name == "Project A" || x.Name == "Project B") && x.Budget <= 0);
 
             Assert.Equal("FOR `x` IN `Project`  FILTER  (  (  (  `x`.`Name`  ==  @P1  )  OR  (  `x`.`Name`  ==  @P2  )  )  AND  (  `x`.`Budget`  <=  @P3  )  )  RETURN   `x`", q.ToAql().aql.Trim());
+
+            return Task.CompletedTask;
         }
 
         [Fact]
@@ -117,6 +119,7 @@ namespace Core.Arango.Tests
 
             _output.WriteLine(q.ToAql().aql);
             _output.WriteLine("");
+            await Task.CompletedTask;
             //_output.WriteLine(JsonConvert.SerializeObject(await q.ToListAsync(), Formatting.Indented));
         }
 
@@ -132,6 +135,7 @@ namespace Core.Arango.Tests
 
             _output.WriteLine(q.ToAql().aql);
             _output.WriteLine("");
+            await Task.CompletedTask;
             //_output.WriteLine(JsonConvert.SerializeObject(await q.ToListAsync(), Formatting.Indented));
         }
 
@@ -147,6 +151,7 @@ namespace Core.Arango.Tests
 
             _output.WriteLine(q.ToAql().aql);
             _output.WriteLine("");
+            await Task.CompletedTask;
             //_output.WriteLine(JsonConvert.SerializeObject(await q.ToListAsync(), Formatting.Indented));
         }
 
@@ -174,6 +179,7 @@ namespace Core.Arango.Tests
                 .Remove().In<Project>().Select(x => x.Key);
 
             _output.WriteLine(q.ToAql().aql);
+            await Task.CompletedTask;
         }
 
         [Fact]
@@ -217,10 +223,13 @@ namespace Core.Arango.Tests
                 .Contains("CB");
 
             Assert.True(q);
+            await Task.CompletedTask;
         }
 
         public override async Task InitializeAsync()
         {
+            await base.InitializeAsync();
+
             Arango = new ArangoContext(UniqueTestRealm());
             await Arango.Database.CreateAsync(D);
             await Arango.Collection.CreateAsync(D, nameof(Client), ArangoCollectionType.Document);
@@ -300,6 +309,7 @@ namespace Core.Arango.Tests
             var aql = q.ToAql().aql.Trim();
 
             Assert.Equal("FOR `x` IN `Project`  FILTER  CONTAINS(  `x`.`Name`  ,  @P1  )  RETURN   `x`", aql);
+            await Task.CompletedTask;
         }
 
         [Fact]
@@ -309,6 +319,7 @@ namespace Core.Arango.Tests
             var aql = q.ToAql().aql.Trim();
 
             Assert.Equal("FOR `x` IN `Project`  FILTER  (  CONCAT(  `x`.`Name`  ,  @P1  )  ==  @P2  )  RETURN   `x`", aql);
+            await Task.CompletedTask;
         }
     }
 }

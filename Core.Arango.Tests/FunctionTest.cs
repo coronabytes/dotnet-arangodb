@@ -12,6 +12,11 @@ namespace Core.Arango.Tests
     {
         private readonly IEqualityComparer<ArangoFunctionDefinition> _functionsComparer = new FunctionsComparer();
 
+        public FunctionTest()
+        {
+            InitializeAsync().ConfigureAwait(false).GetAwaiter().GetResult();
+        }
+
         [Theory]
         [ClassData(typeof(PascalCaseData))]
         public async Task Run(string serializer)

@@ -8,6 +8,11 @@ namespace Core.Arango.Tests
 {
     public class IndexTest : TestBase
     {
+        public IndexTest()
+        {
+            InitializeAsync().ConfigureAwait(false).GetAwaiter().GetResult();
+        }
+
         [Theory]
         [ClassData(typeof(PascalCaseData))]
         public async Task DropAll(string serializer)
