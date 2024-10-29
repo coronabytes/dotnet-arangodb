@@ -13,7 +13,7 @@ namespace Core.Arango.Tests.Core
 {
     public abstract class TestBase : IAsyncLifetime
     {
-        private const string Image = "arangodb:latest";
+        private const string DefaultImage = "arangodb:latest";
         private const string DefaultImagePassword = "password";
         public const string DefaultImageUser = "root";
 
@@ -22,8 +22,9 @@ namespace Core.Arango.Tests.Core
 
         public virtual async Task InitializeAsync()
         {
+            var version = Environment.GetEnvironmentVariable("ARANGODB_VERSION");
             Container = new ArangoDbBuilder()
-                .WithImage(Image)
+                .WithImage(string.IsNullOrWhiteSpace(version) ? DefaultImage : version)
                 .WithPassword(DefaultImagePassword)
                 .Build();
 
