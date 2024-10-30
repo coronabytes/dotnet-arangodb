@@ -25,7 +25,7 @@ namespace Core.Arango.Tests.Core
         private const string ClusterValue = "cluster";
 
         public IArangoContext Arango { get; protected set; }
-        public static Lazy<Task<IEnumerable<ArangoDbContainer>>> Containers = new(async () => 
+        private readonly static Lazy<Task<IEnumerable<ArangoDbContainer>>> Containers = new(async () => 
         Environment.GetEnvironmentVariable(ARANGODB_TOPOLOGY_ENVAR) == ClusterValue
             ? await SetupClusterServer()
             : await SetupSingleServer());
@@ -175,11 +175,11 @@ namespace Core.Arango.Tests.Core
             }
         }
 
-        protected string UniqueTestRealm()
+        protected static string UniqueTestRealm()
             // Last to get the Coordinators for clusters, or the only existing one for a single server.
             => $"Server={Containers.Value.Result.Last().GetTransportAddress()};User={DefaultImageUser};Realm=CI-{Guid.NewGuid():D};Password={DefaultImagePassword};";
 
-        protected void PrintQuery<T>(IQueryable<T> query, ITestOutputHelper output)
+        protected static void PrintQuery<T>(IQueryable<T> query, ITestOutputHelper output)
         {
             var aql = query.ToAql();
             output.WriteLine("QUERY:");
