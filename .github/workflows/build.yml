@@ -20,7 +20,7 @@ jobs:
         dotnet:
           - 8.x
         arango: 
-#          - "arangodb:3.11"
+          - "arangodb:3.11"
           - "arangodb:latest"
 #          - "arangodb/enterprise:3.9"
         topology:

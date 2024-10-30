@@ -18,12 +18,17 @@ namespace Core.Arango.Tests.Core
     {
         private const string ARANGO_LICENSE_KEY_ENVAR = "ARANGO_LICENSE_KEY";
         private const string ARANGODB_VERSION_ENVAR = "ARANGODB_VERSION";
+        private const string ARANGODB_TOPOLOGY_ENVAR = "ARANGODB_TOPOLOGY";
         private const string DefaultImage = "arangodb:latest";
         private const string DefaultImagePassword = "password";
         private const string DefaultImageUser = "root";
+        private const string ClusterValue = "cluster";
 
         public IArangoContext Arango { get; protected set; }
-        public static Lazy<Task<IEnumerable<ArangoDbContainer>>> Containers = new(async () => await SetupSingleServer());
+        public static Lazy<Task<IEnumerable<ArangoDbContainer>>> Containers = new(async () => 
+        Environment.GetEnvironmentVariable(ARANGODB_TOPOLOGY_ENVAR) == ClusterValue
+            ? await SetupClusterServer()
+            : await SetupSingleServer());
 
         public virtual async Task InitializeAsync()
         {
