@@ -23,9 +23,18 @@ namespace Core.Arango.Tests.Core
         private const string DefaultImageUser = "root";
 
         public IArangoContext Arango { get; protected set; }
-        public IEnumerable<ArangoDbContainer> Containers { get; protected set; }
+        public static Lazy<Task<IEnumerable<ArangoDbContainer>>> Containers = new(async () => await SetupSingleServer());
 
         public virtual async Task InitializeAsync()
+        {
+            foreach (var container in await Containers.Value)
+            {
+                await container.StartAsync()
+                    .ConfigureAwait(false);
+            }
+        }
+
+        private static (Dictionary<string, string> Environment, string Version) GetVersionAndEnvironment()
         {
             var environment = new Dictionary<string, string>();
 
@@ -38,25 +47,23 @@ namespace Core.Arango.Tests.Core
                 ? DefaultImage
                 : Environment.GetEnvironmentVariable(ARANGODB_VERSION_ENVAR);
 
-            Containers = [SetupSingleServer(environment, version)];
-            // Containers = await SetupClusterServer(environment, version);
-
-            foreach (var container in Containers)
-            {
-                await container.StartAsync()
-                    .ConfigureAwait(false);
-            }
+            return (environment, version);
         }
 
-        private static ArangoDbContainer SetupSingleServer(Dictionary<string, string> environment, string version) 
-            => new ArangoDbBuilder()
-                .WithImage(version)
-                .WithEnvironment(environment)
-                .WithPassword(DefaultImagePassword)
-                .Build();
-
-        private static async Task<List<ArangoDbContainer>> SetupClusterServer(Dictionary<string, string> environment, string version)
+        private static Task<List<ArangoDbContainer>> SetupSingleServer()
         {
+            var (environment, version) = GetVersionAndEnvironment();
+            return Task.FromResult(new List<ArangoDbContainer>{new ArangoDbBuilder()
+                        .WithImage(version)
+                        .WithEnvironment(environment)
+                        .WithPassword(DefaultImagePassword)
+                        .Build() });
+        }
+
+        private static async Task<List<ArangoDbContainer>> SetupClusterServer()
+        {
+            var (environment, version) = GetVersionAndEnvironment();
+            
             // This is not yet tested. But is a largely compatible replication of the start_db_cluster script.
             // 2024-10-29 20:11:32 Error while processing command-line options for arangod:
             // 2024 - 10 - 29 20:11:32   unknown option '--cluster.start-dbserver false'
@@ -136,14 +143,7 @@ namespace Core.Arango.Tests.Core
 
         public async Task DisposeAsync()
         {
-            try
-            {
-                foreach (var container in Containers)
-                {
-                    await container.DisposeAsync().AsTask();
-                }
-            }
-            catch { }
+            await Task.CompletedTask;
         }
 
         public async Task SetupAsync(string serializer, string createDatabase = "test")
@@ -172,7 +172,7 @@ namespace Core.Arango.Tests.Core
 
         protected string UniqueTestRealm()
             // Last to get the Coordinators for clusters, or the only existing one for a single server.
-            => $"Server={Containers.Last().GetTransportAddress()};User={DefaultImageUser};Realm=CI-{Guid.NewGuid():D};Password={DefaultImagePassword};";
+            => $"Server={Containers.Value.Result.Last().GetTransportAddress()};User={DefaultImageUser};Realm=CI-{Guid.NewGuid():D};Password={DefaultImagePassword};";
 
         protected void PrintQuery<T>(IQueryable<T> query, ITestOutputHelper output)
         {
