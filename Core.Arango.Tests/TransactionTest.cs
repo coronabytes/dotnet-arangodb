@@ -11,11 +11,6 @@ namespace Core.Arango.Tests
 {
     public class TransactionTest : TestBase
     {
-        public TransactionTest()
-        {
-            InitializeAsync().ConfigureAwait(false).GetAwaiter().GetResult();
-        }
-
         [Theory]
         [ClassData(typeof(PascalCaseData))]
         public async Task StreamTransaction(string serializer)

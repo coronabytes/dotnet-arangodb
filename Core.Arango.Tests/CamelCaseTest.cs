@@ -8,11 +8,6 @@ namespace Core.Arango.Tests
 {
     public class CamelCaseTest : TestBase
     {
-        public CamelCaseTest()
-        {
-            InitializeAsync().ConfigureAwait(false).GetAwaiter().GetResult();
-        }
-
         [Theory]
         [ClassData(typeof(CamelCaseData))]
         public async Task GetCamelCase(string serializer)

@@ -19,7 +19,6 @@ namespace Core.Arango.Tests
         public LinqTest(ITestOutputHelper output)
         {
             _output = output;
-            InitializeAsync().ConfigureAwait(false).GetAwaiter().GetResult();
         }
 
         [Fact]

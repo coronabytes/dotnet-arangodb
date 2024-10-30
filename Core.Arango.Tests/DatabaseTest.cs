@@ -13,7 +13,6 @@ namespace Core.Arango.Tests
 
         public DatabaseTest(ITestOutputHelper output)
         {
-            InitializeAsync().ConfigureAwait(false).GetAwaiter().GetResult();
             _output = output;
         }
 

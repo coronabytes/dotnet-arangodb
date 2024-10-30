@@ -17,7 +17,6 @@ namespace Core.Arango.Tests
         public QueryTest(ITestOutputHelper output)
         {
             _output = output;
-            InitializeAsync().ConfigureAwait(false).GetAwaiter().GetResult();
         }
 
         [Theory]

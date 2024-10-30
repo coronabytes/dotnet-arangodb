@@ -8,11 +8,6 @@ namespace Core.Arango.Tests
 {
     public class AnalyzerViewTest : TestBase
     {
-        public AnalyzerViewTest()
-        {
-            InitializeAsync().ConfigureAwait(false).GetAwaiter().GetResult();
-        }
-
         [Theory]
         [ClassData(typeof(PascalCaseData))]
         public async Task AnalyzersViews(string serializer)

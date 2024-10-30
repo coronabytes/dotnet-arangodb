@@ -10,11 +10,6 @@ namespace Core.Arango.Tests
 {
     public class DocumentTest : TestBase
     {
-        public DocumentTest()
-        {
-            InitializeAsync().ConfigureAwait(false).GetAwaiter().GetResult();
-        }
-
         [Theory]
         [ClassData(typeof(PascalCaseData))]
         public async Task Get(string serializer)

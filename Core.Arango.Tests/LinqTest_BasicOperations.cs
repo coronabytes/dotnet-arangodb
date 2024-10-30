@@ -54,7 +54,6 @@ namespace Core.Arango.Tests
         public LinqTest_BasicOperations(ITestOutputHelper output)
         {
             _output = output;
-            InitializeAsync().ConfigureAwait(false).GetAwaiter().GetResult();
         }
 
         [Fact]

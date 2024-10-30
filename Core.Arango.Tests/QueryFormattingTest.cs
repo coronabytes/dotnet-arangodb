@@ -9,11 +9,6 @@ namespace Core.Arango.Tests
 {
     public class QueryFormattingTest : TestBase
     {
-        public QueryFormattingTest()
-        {
-            InitializeAsync().ConfigureAwait(false).GetAwaiter().GetResult();
-        }
-
         [Theory]
         [ClassData(typeof(PascalCaseData))]
         public async Task GuidFormat(string serializer)

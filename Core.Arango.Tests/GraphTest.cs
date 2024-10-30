@@ -9,11 +9,6 @@ namespace Core.Arango.Tests
 {
     public class GraphTest : TestBase
     {
-        public GraphTest()
-        {
-            InitializeAsync().ConfigureAwait(false).GetAwaiter().GetResult();
-        }
-
         [Theory]
         [ClassData(typeof(CamelCaseData))]
         public async Task Get(string serializer)

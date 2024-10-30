@@ -6,11 +6,6 @@ namespace Core.Arango.Tests
 {
     public class DependencyInjectionTest : TestBase
     {
-        public DependencyInjectionTest()
-        {
-            InitializeAsync().ConfigureAwait(false).GetAwaiter().GetResult();
-        }
-
         [Fact]
         public void AddArangoConfigurationCallback()
         {
