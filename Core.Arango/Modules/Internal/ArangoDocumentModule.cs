@@ -195,6 +195,9 @@ namespace Core.Arango.Modules.Internal
             if (ignoreRevs.HasValue)
                 parameter.Add("ignoreRevs", ignoreRevs.Value.ToString().ToLowerInvariant());
 
+            if (exclusive.HasValue)
+                parameter.Add("exclusive", exclusive.Value.ToString().ToLowerInvariant());
+
             var query = AddQueryString(
                 ApiPath(database, $"document/{collection}"), parameter);
 
@@ -256,7 +259,7 @@ namespace Core.Arango.Modules.Internal
                 parameter.Add("ignoreRevs", ignoreRevs.Value.ToString().ToLowerInvariant());
 
             if (exclusive.HasValue)
-                parameter.Add("exclusive", ignoreRevs.Value.ToString().ToLowerInvariant());
+                parameter.Add("exclusive", exclusive.Value.ToString().ToLowerInvariant());
 
             var query = AddQueryString(
                 ApiPath(database, $"document/{UrlEncode(collection)}"), parameter);

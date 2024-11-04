@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Core.Arango.Protocol;
 using Core.Arango.Tests.Core;
 using Xunit;
+using Xunit.Sdk;
 
 namespace Core.Arango.Tests
 {
@@ -58,13 +59,13 @@ namespace Core.Arango.Tests
             {
                 Key = "abc",
                 Name = "a"
-            });
+            }, exclusive: true);
 
             var res = await Arango.Document.UpdateAsync("test", "test", new
             {
                 Key = "abc",
                 Name = "c"
-            }, returnNew: true, returnOld: true);
+            }, returnNew: true, returnOld: true, exclusive: true);
 
             Assert.Equal(createRes.Id, res.Id);
             Assert.Equal(createRes.Key, res.Key);
