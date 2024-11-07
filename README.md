@@ -667,3 +667,12 @@ await Arango.Backup.RestoreAsync(backup.Id);
 
 await Arango.Backup.DeleteAsync(backup.Id);
 ```
+
+# Building and Testing
+## Build
+- Clone the repository.
+- Run `dotnet build` to build the solution, or use your preferred IDE to build the solution.
+
+## Testing
+- Install [Docker Desktop](https://www.docker.com/products/docker-desktop/), this is required to run the integration tests via TestContainers.
+- Run `dotnet test` to run the tests, or use your preferred IDE to run the tests.

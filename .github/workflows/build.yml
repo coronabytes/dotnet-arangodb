@@ -21,25 +21,17 @@ jobs:
           - 8.x
         arango: 
           - "arangodb:3.11"
-#          - "arangodb:3.10"
-#         - "arangodb/enterprise:3.9"
+          - "arangodb:latest"
+#          - "arangodb/enterprise:3.9"
         topology:
           - single
 #          - cluster
 
     steps:
-    - uses: actions/checkout@v3
-    
-    - name: chmod
-      run: find ./docker -name '*.sh' | xargs chmod +x
-      
-    - name: arango
-      run: ./docker/start_db_${{ matrix.topology }}_retry_fail.sh ${{ matrix.arango }}
-      env:
-        ARANGO_LICENSE_KEY: ${{ secrets.ARANGO_LICENSE_KEY }}
-    
+    - uses: actions/checkout@v4
+
     - name: dotnet
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v4
       with:
         dotnet-version: ${{ matrix.dotnet }}
     
@@ -49,4 +41,5 @@ jobs:
     - name: test
       run: dotnet test --configuration Release
       env:
-        ARANGODB_CONNECTION: "Server=http://172.28.3.1:8529;Realm=CI-{UUID};User=root;Password=test;"
+        ARANGODB_VERSION: ${{ matrix.arango }}
+        ARANGODB_TOPOLOGY: ${{ matrix.topology }}

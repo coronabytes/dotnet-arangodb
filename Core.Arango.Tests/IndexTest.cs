@@ -17,7 +17,7 @@ namespace Core.Arango.Tests
 
             await Arango.Index.CreateAsync("test", "test", new ArangoIndex
             {
-                Fields = new List<string> {"test"},
+                Fields = ["test"],
                 Type = ArangoIndexType.Hash
             });
 

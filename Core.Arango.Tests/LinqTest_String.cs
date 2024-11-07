@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
 using Core.Arango.Linq;
 using Core.Arango.Tests.Core;
-using Newtonsoft.Json;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -227,6 +224,7 @@ namespace Core.Arango.Tests
 
         public override async Task InitializeAsync()
         {
+            await base.InitializeAsync();
             Arango = new ArangoContext(UniqueTestRealm());
             await Arango.Database.CreateAsync(D);
             await Arango.Collection.CreateAsync(D, nameof(Client), ArangoCollectionType.Document);

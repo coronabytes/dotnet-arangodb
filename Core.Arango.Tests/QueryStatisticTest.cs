@@ -20,6 +20,7 @@ namespace Core.Arango.Tests
 
         public override async Task InitializeAsync()
         {
+            await base.InitializeAsync();
             Arango =
                 new ArangoContext(UniqueTestRealm(),
                     new ArangoConfiguration

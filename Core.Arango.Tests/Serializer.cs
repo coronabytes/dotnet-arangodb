@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using Core.Arango.Serialization;
 using Core.Arango.Serialization.Json;
 using Core.Arango.Serialization.Newtonsoft;
