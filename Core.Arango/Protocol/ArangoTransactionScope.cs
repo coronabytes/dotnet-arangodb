@@ -24,5 +24,14 @@ namespace Core.Arango.Protocol
         [JsonProperty(PropertyName = "write", NullValueHandling = NullValueHandling.Ignore)]
         [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public List<string> Write { get; set; }
+        
+
+        /// <summary>
+        ///     Collections to write to with an exclusive lock
+        /// </summary>
+        [JsonPropertyName("exclusive")]
+        [JsonProperty(PropertyName = "exclusive", NullValueHandling = NullValueHandling.Ignore)]
+        [System.Text.Json.Serialization.JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<string> Exclusive { get; set; }
     }
 }

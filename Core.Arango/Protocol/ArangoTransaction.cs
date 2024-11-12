@@ -55,6 +55,7 @@ namespace Core.Arango.Protocol
         ///     An optional numeric value that can be used to set a timeout for waiting on collection locks.
         ///     If not specified, a default value will be used.
         ///     Setting lockTimeout to 0 will make ArangoDB not time out waiting for a lock.
+        ///     This is only meaningful when using exclusive transaction locks.
         /// </summary>
         [JsonPropertyName("lockTimeout")]
         [JsonProperty(PropertyName = "lockTimeout", NullValueHandling = NullValueHandling.Ignore)]
