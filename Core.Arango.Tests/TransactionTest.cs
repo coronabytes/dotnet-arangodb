@@ -22,8 +22,9 @@ namespace Core.Arango.Tests
             {
                 Collections = new ArangoTransactionScope
                 {
-                    Write = new List<string> {"test"}
-                }
+                    Exclusive = ["test"]
+                },
+                AllowImplicit = false
             });
 
             await Arango.Document.CreateManyAsync(t1, "test", new List<Entity>
@@ -41,8 +42,9 @@ namespace Core.Arango.Tests
             {
                 Collections = new ArangoTransactionScope
                 {
-                    Write = new List<string> {"test"}
-                }
+                    Exclusive = ["test"]
+                },
+                AllowImplicit = false
             });
 
             await Arango.Document.CreateManyAsync(t2, "test", new List<Entity>
