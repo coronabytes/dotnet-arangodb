@@ -29,7 +29,7 @@ namespace Core.Arango.Modules
         /// <summary>
         ///     Returns all indexes of a collection
         /// </summary>
-        Task<IReadOnlyCollection<ArangoIndex>> ListAsync(ArangoHandle database, string collection,
+        ValueTask<IReadOnlyCollection<ArangoIndex>> ListAsync(ArangoHandle database, string collection,
             CancellationToken cancellationToken = default);
     }
 }

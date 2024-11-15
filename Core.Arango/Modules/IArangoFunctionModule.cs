@@ -14,7 +14,7 @@ namespace Core.Arango.Modules
         ///     create a new AQL user function
         /// </summary>
         /// <returns>true if newly created</returns>
-        Task<bool> CreateAsync(ArangoHandle database, ArangoFunctionDefinition request,
+        ValueTask<bool> CreateAsync(ArangoHandle database, ArangoFunctionDefinition request,
             CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace Core.Arango.Modules
         /// </param>
         /// <param name="cancellationToken"></param>
         /// <returns>number of deleted functions</returns>
-        Task<int> RemoveAsync(ArangoHandle database, string name, bool? group = false,
+        ValueTask<int> RemoveAsync(ArangoHandle database, string name, bool? group = false,
             CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace Core.Arango.Modules
         /// <param name="ns">filter user functions from namespace</param>
         /// <param name="cancellationToken"></param>
         /// <returns>list of function definitions</returns>
-        Task<IReadOnlyCollection<ArangoFunctionDefinition>> ListAsync(ArangoHandle database, string ns = null,
+        ValueTask<IReadOnlyCollection<ArangoFunctionDefinition>> ListAsync(ArangoHandle database, string ns = null,
             CancellationToken cancellationToken = default);
     }
 }

@@ -40,7 +40,7 @@ namespace Core.Arango.Modules
         /// <summary>
         ///     Returns all Views
         /// </summary>
-        Task<IReadOnlyCollection<ArangoViewInformation>> ListAsync(ArangoHandle database,
+        ValueTask<IReadOnlyCollection<ArangoViewInformation>> ListAsync(ArangoHandle database,
             CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace Core.Arango.Modules
         /// <param name="view"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<ArangoView> GetPropertiesAsync(ArangoHandle database, string view,
+        ValueTask<ArangoView> GetPropertiesAsync(ArangoHandle database, string view,
             CancellationToken cancellationToken = default);
     }
 }

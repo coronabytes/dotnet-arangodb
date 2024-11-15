@@ -12,7 +12,7 @@ namespace Core.Arango.Modules.Internal
         {
         }
 
-        public async Task<TR> GetAsync<TR>(ArangoHandle database, string graph, string collection, string key,
+        public async ValueTask<TR> GetAsync<TR>(ArangoHandle database, string graph, string collection, string key,
             CancellationToken cancellationToken = default)
         {
             var res = await SendAsync<ArangoEdgeResponse<TR>>(database, HttpMethod.Get,
@@ -22,7 +22,7 @@ namespace Core.Arango.Modules.Internal
             return res.Edge;
         }
 
-        public async Task<ArangoEdgeResponse<ArangoVoid>> CreateAsync<T>(ArangoHandle database, string graph,
+        public async ValueTask<ArangoEdgeResponse<ArangoVoid>> CreateAsync<T>(ArangoHandle database, string graph,
             string collection, T doc,
             bool? waitForSync = null, bool? returnNew = null,
             CancellationToken cancellationToken = default)
@@ -31,7 +31,7 @@ namespace Core.Arango.Modules.Internal
                 cancellationToken);
         }
 
-        public async Task<ArangoEdgeResponse<ArangoVoid>> UpdateAsync<T>(ArangoHandle database, string graph,
+        public async ValueTask<ArangoEdgeResponse<ArangoVoid>> UpdateAsync<T>(ArangoHandle database, string graph,
             string collection, string key, T doc,
             bool? waitForSync = null, bool? keepNull = null, bool? returnNew = null, bool? returnOld = null,
             CancellationToken cancellationToken = default)
@@ -40,7 +40,7 @@ namespace Core.Arango.Modules.Internal
                 returnNew, returnOld, cancellationToken);
         }
 
-        public async Task<ArangoEdgeResponse<ArangoVoid>> ReplaceAsync<T>(ArangoHandle database, string graph,
+        public async ValueTask<ArangoEdgeResponse<ArangoVoid>> ReplaceAsync<T>(ArangoHandle database, string graph,
             string collection, string key, T doc,
             bool? waitForSync = null, bool? keepNull = null, bool? returnNew = null, bool? returnOld = null,
             CancellationToken cancellationToken = default)
@@ -49,7 +49,7 @@ namespace Core.Arango.Modules.Internal
                 returnNew, returnOld, cancellationToken);
         }
 
-        public async Task<ArangoEdgeResponse<ArangoVoid>> RemoveAsync<T>(ArangoHandle database, string graph,
+        public async ValueTask<ArangoEdgeResponse<ArangoVoid>> RemoveAsync<T>(ArangoHandle database, string graph,
             string collection, string key,
             bool? waitForSync = null, bool? returnOld = null,
             CancellationToken cancellationToken = default)
@@ -58,7 +58,7 @@ namespace Core.Arango.Modules.Internal
                 cancellationToken);
         }
 
-        public async Task<ArangoEdgeResponse<TR>> CreateAsync<T, TR>(ArangoHandle database, string graph,
+        public async ValueTask<ArangoEdgeResponse<TR>> CreateAsync<T, TR>(ArangoHandle database, string graph,
             string collection, T doc,
             bool? waitForSync = null, bool? returnNew = null,
             CancellationToken cancellationToken = default)
@@ -76,7 +76,7 @@ namespace Core.Arango.Modules.Internal
                 doc, cancellationToken: cancellationToken);
         }
 
-        public async Task<ArangoEdgeResponse<TR>> UpdateAsync<T, TR>(ArangoHandle database, string graph,
+        public async ValueTask<ArangoEdgeResponse<TR>> UpdateAsync<T, TR>(ArangoHandle database, string graph,
             string collection, string key, T doc,
             bool? waitForSync = null, bool? keepNull = null, bool? returnNew = null, bool? returnOld = null,
             CancellationToken cancellationToken = default)
@@ -100,7 +100,7 @@ namespace Core.Arango.Modules.Internal
                 doc, cancellationToken: cancellationToken);
         }
 
-        public async Task<ArangoEdgeResponse<TR>> ReplaceAsync<T, TR>(ArangoHandle database, string graph,
+        public async ValueTask<ArangoEdgeResponse<TR>> ReplaceAsync<T, TR>(ArangoHandle database, string graph,
             string collection, string key, T doc,
             bool? waitForSync = null, bool? keepNull = null, bool? returnNew = null, bool? returnOld = null,
             CancellationToken cancellationToken = default)
@@ -124,7 +124,7 @@ namespace Core.Arango.Modules.Internal
                 doc, cancellationToken: cancellationToken);
         }
 
-        public async Task<ArangoEdgeResponse<TR>> RemoveAsync<T, TR>(ArangoHandle database, string graph,
+        public async ValueTask<ArangoEdgeResponse<TR>> RemoveAsync<T, TR>(ArangoHandle database, string graph,
             string collection, string key,
             bool? waitForSync = null, bool? returnOld = null,
             CancellationToken cancellationToken = default)

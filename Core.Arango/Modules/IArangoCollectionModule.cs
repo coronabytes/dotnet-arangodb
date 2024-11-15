@@ -25,7 +25,7 @@ namespace Core.Arango.Modules
         /// <summary>
         ///     Returns all collections
         /// </summary>
-        Task<IReadOnlyCollection<ArangoCollection>> ListAsync(ArangoHandle database,
+        ValueTask<IReadOnlyCollection<ArangoCollection>> ListAsync(ArangoHandle database,
             CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -55,13 +55,13 @@ namespace Core.Arango.Modules
         /// <summary>
         ///     Returns a collection
         /// </summary>
-        Task<ArangoCollection> GetAsync(ArangoHandle database, string collection,
+        ValueTask<ArangoCollection> GetAsync(ArangoHandle database, string collection,
             CancellationToken cancellationToken = default);
 
         /// <summary>
         ///     Checks of collection exists (calls ListAsync internally)
         /// </summary>
-        Task<bool> ExistAsync(ArangoHandle database, string collection,
+        ValueTask<bool> ExistAsync(ArangoHandle database, string collection,
             CancellationToken cancellationToken = default);
 
         /// <summary>

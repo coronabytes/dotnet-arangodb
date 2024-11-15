@@ -12,7 +12,7 @@ namespace Core.Arango.Modules
         /// <summary>
         ///     Begin a server-side transaction
         /// </summary>
-        Task<ArangoHandle> BeginAsync(ArangoHandle database, ArangoTransaction request,
+        ValueTask<ArangoHandle> BeginAsync(ArangoHandle database, ArangoTransaction request,
             CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace Core.Arango.Modules
         /// <summary>
         ///     execute a server-side (script) transaction
         /// </summary>
-        Task<T> ExecuteAsync<T>(ArangoHandle database, ArangoTransaction request,
+        ValueTask<T> ExecuteAsync<T>(ArangoHandle database, ArangoTransaction request,
             CancellationToken cancellationToken = default);
     }
 }

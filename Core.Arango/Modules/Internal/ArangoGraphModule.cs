@@ -17,7 +17,7 @@ namespace Core.Arango.Modules.Internal
             Edge = new ArangoGraphEdgeModule(context);
         }
 
-        public async Task<IReadOnlyCollection<ArangoGraph>> ListAsync(ArangoHandle database,
+        public async ValueTask<IReadOnlyCollection<ArangoGraph>> ListAsync(ArangoHandle database,
             CancellationToken cancellationToken = default)
         {
             var res = await SendAsync<GraphsResponse<ArangoGraph>>(database, HttpMethod.Get,
@@ -25,7 +25,7 @@ namespace Core.Arango.Modules.Internal
             return res.Graphs;
         }
 
-        public async Task<ArangoGraph> GetAsync(ArangoHandle database, string graph,
+        public async ValueTask<ArangoGraph> GetAsync(ArangoHandle database, string graph,
             CancellationToken cancellationToken = default)
         {
             var res = await SendAsync<GraphResponse<ArangoGraph>>(database, HttpMethod.Get,

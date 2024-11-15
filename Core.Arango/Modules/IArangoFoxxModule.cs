@@ -18,7 +18,7 @@ namespace Core.Arango.Modules
         /// <param name="excludeSystem">Whether or not system services should be excluded from the result.</param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<ICollection<ArangoFoxxService>> ListServicesAsync(ArangoHandle database, bool? excludeSystem = null,
+        ValueTask<ICollection<ArangoFoxxService>> ListServicesAsync(ArangoHandle database, bool? excludeSystem = null,
             CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace Core.Arango.Modules
         /// <param name="legacy">Set to true to install the service in 2.8 legacy compatibility mode.</param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<ArangoVoid> InstallServiceAsync(ArangoHandle database, string mount, ArangoFoxxSource service,
+        ValueTask<ArangoVoid> InstallServiceAsync(ArangoHandle database, string mount, ArangoFoxxSource service,
             bool? development = null, bool? setup = null, bool? legacy = null,
             CancellationToken cancellationToken = default);
 
@@ -48,7 +48,7 @@ namespace Core.Arango.Modules
         /// <param name="force">Set to true to force service install even if no service is installed under given mount.</param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<ArangoVoid> ReplaceServiceAsync(ArangoHandle database, string mount, ArangoFoxxSource service,
+        ValueTask<ArangoVoid> ReplaceServiceAsync(ArangoHandle database, string mount, ArangoFoxxSource service,
             bool? teardown = null, bool? setup = null, bool? legacy = null, bool? force = null,
             CancellationToken cancellationToken = default);
 
@@ -64,89 +64,89 @@ namespace Core.Arango.Modules
         /// <param name="force">Set to true to force service install even if no service is installed under given mount.</param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<ArangoVoid> UpgradeServiceAsync(ArangoHandle database, string mount, ArangoFoxxSource service,
+        ValueTask<ArangoVoid> UpgradeServiceAsync(ArangoHandle database, string mount, ArangoFoxxSource service,
             bool? teardown = null, bool? setup = null, bool? legacy = null, bool? force = null,
             CancellationToken cancellationToken = default);
 
         /// <summary>
         ///     Uninstall service
         /// </summary>
-        Task<ArangoVoid> UninstallServiceAsync(ArangoHandle database, string mount,
+        ValueTask<ArangoVoid> UninstallServiceAsync(ArangoHandle database, string mount,
             bool? teardown = null,
             CancellationToken cancellationToken = default);
 
         /// <summary>
         ///     Get configuration options
         /// </summary>
-        Task<T> GetConfigurationAsync<T>(ArangoHandle database, string mount,
+        ValueTask<T> GetConfigurationAsync<T>(ArangoHandle database, string mount,
             CancellationToken cancellationToken = default);
 
         /// <summary>
         ///     Update configuration options
         /// </summary>
-        Task<ArangoVoid> UpdateConfigurationAsync(ArangoHandle database, string mount,
+        ValueTask<ArangoVoid> UpdateConfigurationAsync(ArangoHandle database, string mount,
             object configuration = null,
             CancellationToken cancellationToken = default);
 
         /// <summary>
         ///     Replace configuration options
         /// </summary>
-        Task<ArangoVoid> ReplaceConfigurationAsync(ArangoHandle database, string mount,
+        ValueTask<ArangoVoid> ReplaceConfigurationAsync(ArangoHandle database, string mount,
             object configuration = null,
             CancellationToken cancellationToken = default);
 
         /// <summary>
         ///     Get dependency options
         /// </summary>
-        Task<T> GetDependenciesAsync<T>(ArangoHandle database, string mount,
+        ValueTask<T> GetDependenciesAsync<T>(ArangoHandle database, string mount,
             CancellationToken cancellationToken = default);
 
         /// <summary>
         ///     Update dependency options
         /// </summary>
-        Task<ArangoVoid> UpdateDependenciesAsync(ArangoHandle database, string mount,
+        ValueTask<ArangoVoid> UpdateDependenciesAsync(ArangoHandle database, string mount,
             object dependencies = null,
             CancellationToken cancellationToken = default);
 
         /// <summary>
         ///     Replace dependency options
         /// </summary>
-        Task<ArangoVoid> ReplaceDependenciesAsync(ArangoHandle database, string mount,
+        ValueTask<ArangoVoid> ReplaceDependenciesAsync(ArangoHandle database, string mount,
             object dependencies = null,
             CancellationToken cancellationToken = default);
 
         /// <summary>
         ///     HTTP GET request to Foxx service
         /// </summary>
-        Task<T> GetAsync<T>(ArangoHandle database, string path,
+        ValueTask<T> GetAsync<T>(ArangoHandle database, string path,
             IDictionary<string, string> queryParams = null,
             CancellationToken cancellationToken = default);
 
         /// <summary>
         ///     HTTP POST request to Foxx service
         /// </summary>
-        Task<T> PostAsync<T>(ArangoHandle database, string path, object body,
+        ValueTask<T> PostAsync<T>(ArangoHandle database, string path, object body,
             IDictionary<string, string> queryParams = null,
             CancellationToken cancellationToken = default);
 
         /// <summary>
         ///     HTTP PUT request to Foxx service
         /// </summary>
-        Task<T> PutAsync<T>(ArangoHandle database, string path, object body,
+        ValueTask<T> PutAsync<T>(ArangoHandle database, string path, object body,
             IDictionary<string, string> queryParams = null,
             CancellationToken cancellationToken = default);
 
         /// <summary>
         ///     HTTP PATCH request to Foxx service
         /// </summary>
-        Task<T> PatchAsync<T>(ArangoHandle database, string path, object body,
+        ValueTask<T> PatchAsync<T>(ArangoHandle database, string path, object body,
             IDictionary<string, string> queryParams = null,
             CancellationToken cancellationToken = default);
 
         /// <summary>
         ///     HTTP DELETE request to Foxx service
         /// </summary>
-        Task<T> DeleteAsync<T>(ArangoHandle database, string path,
+        ValueTask<T> DeleteAsync<T>(ArangoHandle database, string path,
             IDictionary<string, string> queryParams = null,
             CancellationToken cancellationToken = default);
 
@@ -177,7 +177,7 @@ namespace Core.Arango.Modules
         /// <param name="mount"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<Stream> DownloadServiceAsync<T>(ArangoHandle database, string mount,
+        ValueTask<Stream> DownloadServiceAsync<T>(ArangoHandle database, string mount,
             CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -189,7 +189,7 @@ namespace Core.Arango.Modules
         /// <param name="body"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<T> RunServiceScriptAsync<T>(ArangoHandle database, string mount, string name,
+        ValueTask<T> RunServiceScriptAsync<T>(ArangoHandle database, string mount, string name,
             object body = null,
             CancellationToken cancellationToken = default);
     }

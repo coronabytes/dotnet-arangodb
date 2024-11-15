@@ -38,7 +38,7 @@ router.get('/hello-world', function (req, res) {
             Assert.Equal("/sample/service", services.First().Mount);
         }
 
-        private async Task<Stream> BuildService(string response)
+        private async ValueTask<Stream> BuildService(string response)
         {
             var ms = new MemoryStream();
             using (var zip = new ZipArchive(ms, ZipArchiveMode.Create, true, Encoding.UTF8))
@@ -110,7 +110,7 @@ router.get('/hello-world', function (req, res) {{
 
             await Arango.Foxx.ReplaceConfigurationAsync("test", "/sample/service", new
             {
-                currency = "€",
+                currency = "ï¿½",
                 secretKey = "s3cr3t"
             });
 

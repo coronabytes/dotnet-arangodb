@@ -13,7 +13,7 @@ namespace Core.Arango.Modules
         /// <summary>
         ///     Creates a local backup.
         /// </summary>
-        Task<ArangoBackup> CreateAsync(ArangoBackupRequest request, CancellationToken cancellationToken = default);
+        ValueTask<ArangoBackup> CreateAsync(ArangoBackupRequest request, CancellationToken cancellationToken = default);
 
         /// <summary>
         ///     Restores from a local backup.
@@ -28,6 +28,6 @@ namespace Core.Arango.Modules
         /// <summary>
         ///     List all local backups.
         /// </summary>
-        Task<List<ArangoBackup>> ListAsync(string id = null, CancellationToken cancellationToken = default);
+        ValueTask<List<ArangoBackup>> ListAsync(string id = null, CancellationToken cancellationToken = default);
     }
 }

@@ -42,7 +42,7 @@ namespace Core.Arango.Modules.Internal
         /// <summary>
         ///     Ignores primary and edge indices
         /// </summary>
-        public async Task<IReadOnlyCollection<ArangoIndex>> ListAsync(ArangoHandle database, string collection,
+        public async ValueTask<IReadOnlyCollection<ArangoIndex>> ListAsync(ArangoHandle database, string collection,
             CancellationToken cancellationToken = default)
         {
             var res = await SendAsync<IndexResponse>(database, HttpMethod.Get,

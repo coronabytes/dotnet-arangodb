@@ -12,13 +12,13 @@ namespace Core.Arango.Modules
         /// <summary>
         ///     Start the execution of a Pregel algorithm
         /// </summary>
-        Task<string> StartJobAsync(ArangoHandle database, ArangoPregel job,
+        ValueTask<string> StartJobAsync(ArangoHandle database, ArangoPregel job,
             CancellationToken cancellationToken = default);
 
         /// <summary>
         ///     Get the status of a Pregel execution
         /// </summary>
-        Task<ArangoPregelStatus> GetJobStatusAsync(ArangoHandle database, string id,
+        ValueTask<ArangoPregelStatus> GetJobStatusAsync(ArangoHandle database, string id,
             CancellationToken cancellationToken = default);
 
         /// <summary>

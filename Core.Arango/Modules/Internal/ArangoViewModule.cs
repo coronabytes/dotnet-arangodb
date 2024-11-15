@@ -38,7 +38,7 @@ namespace Core.Arango.Modules.Internal
                 cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<IReadOnlyCollection<ArangoViewInformation>> ListAsync(ArangoHandle database,
+        public async ValueTask<IReadOnlyCollection<ArangoViewInformation>> ListAsync(ArangoHandle database,
             CancellationToken cancellationToken = default)
         {
             var res = await SendAsync<QueryResponse<ArangoViewInformation>>(database, HttpMethod.Get,
@@ -47,7 +47,7 @@ namespace Core.Arango.Modules.Internal
             return res.Result;
         }
 
-        public async Task<ArangoView> GetPropertiesAsync(ArangoHandle database, string view,
+        public async ValueTask<ArangoView> GetPropertiesAsync(ArangoHandle database, string view,
             CancellationToken cancellationToken = default)
         {
             var res = await SendAsync<ArangoView>(database, HttpMethod.Get,

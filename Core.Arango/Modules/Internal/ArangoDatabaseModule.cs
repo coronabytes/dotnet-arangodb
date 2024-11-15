@@ -14,7 +14,7 @@ namespace Core.Arango.Modules.Internal
         {
         }
 
-        public async Task<bool> CreateAsync(ArangoHandle name, CancellationToken cancellationToken = default)
+        public async ValueTask<bool> CreateAsync(ArangoHandle name, CancellationToken cancellationToken = default)
         {
             var res = await SendAsync<ArangoVoid>(null, HttpMethod.Post,
                 ApiPath("_system", "database"),
@@ -26,7 +26,7 @@ namespace Core.Arango.Modules.Internal
             return res != null;
         }
 
-        public async Task<bool> CreateAsync(ArangoDatabase database, CancellationToken cancellationToken = default)
+        public async ValueTask<bool> CreateAsync(ArangoDatabase database, CancellationToken cancellationToken = default)
         {
             database.Name = RealmPrefix(database.Name);
 
@@ -37,7 +37,7 @@ namespace Core.Arango.Modules.Internal
             return res != null;
         }
 
-        public async Task<ArangoDatabaseInfo> GetAsync(ArangoHandle handle,
+        public async ValueTask<ArangoDatabaseInfo> GetAsync(ArangoHandle handle,
             CancellationToken cancellationToken = default)
         {
             var res = await SendAsync<SingleResult<ArangoDatabaseInfo>>(null, HttpMethod.Get,
@@ -47,7 +47,7 @@ namespace Core.Arango.Modules.Internal
             return res?.Result;
         }
 
-        public async Task<List<string>> ListAsync(CancellationToken cancellationToken = default)
+        public async ValueTask<List<string>> ListAsync(CancellationToken cancellationToken = default)
         {
             var res = await SendAsync<QueryResponse<string>>(null, HttpMethod.Get,
                 ApiPath("_system", "database"), cancellationToken: cancellationToken);
@@ -62,7 +62,7 @@ namespace Core.Arango.Modules.Internal
                 .ToList();
         }
 
-        public async Task<bool> ExistAsync(ArangoHandle handle, CancellationToken cancellationToken = default)
+        public async ValueTask<bool> ExistAsync(ArangoHandle handle, CancellationToken cancellationToken = default)
         {
             var db = await GetAsync(handle, cancellationToken);
             return db != null;

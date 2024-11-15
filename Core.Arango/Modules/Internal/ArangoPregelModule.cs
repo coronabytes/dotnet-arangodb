@@ -11,7 +11,7 @@ namespace Core.Arango.Modules.Internal
         {
         }
 
-        public async Task<string> StartJobAsync(ArangoHandle database, ArangoPregel job,
+        public async ValueTask<string> StartJobAsync(ArangoHandle database, ArangoPregel job,
             CancellationToken cancellationToken = default)
         {
             return await SendAsync<string>(database, HttpMethod.Post,
@@ -19,7 +19,7 @@ namespace Core.Arango.Modules.Internal
                 job, cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<ArangoPregelStatus> GetJobStatusAsync(ArangoHandle database, string id,
+        public async ValueTask<ArangoPregelStatus> GetJobStatusAsync(ArangoHandle database, string id,
             CancellationToken cancellationToken = default)
         {
             return await SendAsync<ArangoPregelStatus>(database, HttpMethod.Get,

@@ -43,7 +43,7 @@ namespace Core.Arango.Modules.Internal
                 cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<IReadOnlyCollection<ArangoCollection>> ListAsync(ArangoHandle database,
+        public async ValueTask<IReadOnlyCollection<ArangoCollection>> ListAsync(ArangoHandle database,
             CancellationToken cancellationToken = default)
         {
             var res = await SendAsync<QueryResponse<ArangoCollection>>(database, HttpMethod.Get,
@@ -73,7 +73,7 @@ namespace Core.Arango.Modules.Internal
                 cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<bool> ExistAsync(ArangoHandle database, string collection,
+        public async ValueTask<bool> ExistAsync(ArangoHandle database, string collection,
             CancellationToken cancellationToken = default)
         {
             var collections = await ListAsync(database, cancellationToken).ConfigureAwait(false);
@@ -99,7 +99,7 @@ namespace Core.Arango.Modules.Internal
                 null, cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<ArangoCollection> GetAsync(ArangoHandle database, string collection,
+        public async ValueTask<ArangoCollection> GetAsync(ArangoHandle database, string collection,
             CancellationToken cancellationToken = default)
         {
             return await SendAsync<ArangoCollection>(

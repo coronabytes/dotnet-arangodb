@@ -51,29 +51,29 @@ namespace Core.Arango.Linq
             return (data.Query.Trim(), data.BindVars);
         }
 
-        public static Task<TSource> FirstAsync<TSource>(this IQueryable<TSource> source, CancellationToken cancellationToken = default)
+        public static ValueTask<TSource> FirstAsync<TSource>(this IQueryable<TSource> source, CancellationToken cancellationToken = default)
         {
             return FirstOrDefaultAsync(source, false, null, cancellationToken);
         }
 
-        public static Task<TSource> FirstAsync<TSource>(this IQueryable<TSource> source,
+        public static ValueTask<TSource> FirstAsync<TSource>(this IQueryable<TSource> source,
             Expression<Func<TSource, bool>> predicate, CancellationToken cancellationToken = default)
         {
             return FirstOrDefaultAsync(source, false, predicate, cancellationToken);
         }
 
-        public static Task<TSource> FirstOrDefaultAsync<TSource>(this IQueryable<TSource> source, CancellationToken cancellationToken = default)
+        public static ValueTask<TSource> FirstOrDefaultAsync<TSource>(this IQueryable<TSource> source, CancellationToken cancellationToken = default)
         {
             return FirstOrDefaultAsync(source, true, null, cancellationToken);
         }
 
-        public static Task<TSource> FirstOrDefaultAsync<TSource>(this IQueryable<TSource> source,
+        public static ValueTask<TSource> FirstOrDefaultAsync<TSource>(this IQueryable<TSource> source,
             Expression<Func<TSource, bool>> predicate, CancellationToken cancellationToken = default)
         {
             return FirstOrDefaultAsync(source, true, predicate, cancellationToken);
         }
 
-        private static Task<T> FirstOrDefaultAsync<T>(this IQueryable<T> source, bool returnDefaultWhenEmpty,
+        private static ValueTask<T> FirstOrDefaultAsync<T>(this IQueryable<T> source, bool returnDefaultWhenEmpty,
             Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default)
         {
             if (predicate != null)
@@ -85,29 +85,29 @@ namespace Core.Arango.Linq
                 : source.AsArangoQueryable().FirstAsync(cancellationToken);
         }
 
-        public static Task<TSource> SingleAsync<TSource>(this IQueryable<TSource> source, CancellationToken cancellationToken = default)
+        public static ValueTask<TSource> SingleAsync<TSource>(this IQueryable<TSource> source, CancellationToken cancellationToken = default)
         {
             return SingleOrDefaultAsync(source, false, null, cancellationToken);
         }
 
-        public static Task<TSource> SingleAsync<TSource>(this IQueryable<TSource> source,
+        public static ValueTask<TSource> SingleAsync<TSource>(this IQueryable<TSource> source,
             Expression<Func<TSource, bool>> predicate, CancellationToken cancellationToken = default)
         {
             return SingleOrDefaultAsync(source, false, predicate, cancellationToken);
         }
 
-        public static Task<TSource> SingleOrDefaultAsync<TSource>(this IQueryable<TSource> source, CancellationToken cancellationToken = default)
+        public static ValueTask<TSource> SingleOrDefaultAsync<TSource>(this IQueryable<TSource> source, CancellationToken cancellationToken = default)
         {
             return SingleOrDefaultAsync(source, true, null, cancellationToken);
         }
 
-        public static Task<TSource> SingleOrDefaultAsync<TSource>(this IQueryable<TSource> source,
+        public static ValueTask<TSource> SingleOrDefaultAsync<TSource>(this IQueryable<TSource> source,
             Expression<Func<TSource, bool>> predicate, CancellationToken cancellationToken = default)
         {
             return SingleOrDefaultAsync(source, true, predicate, cancellationToken);
         }
 
-        private static Task<T> SingleOrDefaultAsync<T>(this IQueryable<T> source, bool returnDefaultWhenEmpty,
+        private static ValueTask<T> SingleOrDefaultAsync<T>(this IQueryable<T> source, bool returnDefaultWhenEmpty,
             Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default)
         {
             if (predicate != null)
@@ -119,7 +119,7 @@ namespace Core.Arango.Linq
                 : source.AsArangoQueryable().SingleAsync(cancellationToken);
         }
 
-        public static Task<List<T>> ToListAsync<T>(this IQueryable<T> source, CancellationToken cancellationToken = default)
+        public static ValueTask<List<T>> ToListAsync<T>(this IQueryable<T> source, CancellationToken cancellationToken = default)
         {
             return source.AsArangoQueryable().ToListAsync(cancellationToken);
         }

@@ -16,7 +16,7 @@ namespace Core.Arango.Modules.Internal
         {
         }
 
-        public async Task<bool> CreateAsync(ArangoHandle database, ArangoFunctionDefinition request,
+        public async ValueTask<bool> CreateAsync(ArangoHandle database, ArangoFunctionDefinition request,
             CancellationToken cancellationToken = default)
         {
             if (request == null)
@@ -28,7 +28,7 @@ namespace Core.Arango.Modules.Internal
             return res.IsNewlyCreated;
         }
 
-        public async Task<int> RemoveAsync(ArangoHandle database, string name, bool? group = false,
+        public async ValueTask<int> RemoveAsync(ArangoHandle database, string name, bool? group = false,
             CancellationToken cancellationToken = default)
         {
             var res = await SendAsync<FunctionRemoveResponse>(database, HttpMethod.Delete,
@@ -38,7 +38,7 @@ namespace Core.Arango.Modules.Internal
             return res.DeletedCount;
         }
 
-        public async Task<IReadOnlyCollection<ArangoFunctionDefinition>> ListAsync(ArangoHandle database,
+        public async ValueTask<IReadOnlyCollection<ArangoFunctionDefinition>> ListAsync(ArangoHandle database,
             string ns = null,
             CancellationToken cancellationToken = default)
         {

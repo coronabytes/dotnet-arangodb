@@ -35,7 +35,7 @@ namespace Core.Arango.Transport
         }
 
         /// <inheritdoc />
-        public async Task<T> SendAsync<T>(HttpMethod m, string url, object body = null,
+        public async ValueTask<T> SendAsync<T>(HttpMethod m, string url, object body = null,
             string transaction = null, bool throwOnError = true, bool auth = true,
             IDictionary<string, string> headers = null,
             CancellationToken cancellationToken = default)
@@ -87,7 +87,7 @@ namespace Core.Arango.Transport
         }
 
         /// <inheritdoc />
-        public async Task<HttpContent> SendContentAsync(HttpMethod m, string url, HttpContent body = null,
+        public async ValueTask<HttpContent> SendContentAsync(HttpMethod m, string url, HttpContent body = null,
             string transaction = null,
             bool throwOnError = true, bool auth = true, IDictionary<string, string> headers = null,
             CancellationToken cancellationToken = default)
@@ -113,7 +113,7 @@ namespace Core.Arango.Transport
         }
 
         /// <inheritdoc />
-        public async Task<object> SendAsync(Type type, HttpMethod m, string url, object body = null,
+        public async ValueTask<object> SendAsync(Type type, HttpMethod m, string url, object body = null,
             string transaction = null, bool throwOnError = true, bool auth = true,
             IDictionary<string, string> headers = null,
             CancellationToken cancellationToken = default)

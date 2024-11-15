@@ -14,21 +14,21 @@ namespace Core.Arango.Transport
         /// <summary>
         ///     Send request to ArangoDB
         /// </summary>
-        Task<object> SendAsync(Type type, HttpMethod m, string url, object body = null, string transaction = null,
+        ValueTask<object> SendAsync(Type type, HttpMethod m, string url, object body = null, string transaction = null,
             bool throwOnError = true, bool auth = true, IDictionary<string, string> headers = null,
             CancellationToken cancellationToken = default);
 
         /// <summary>
         ///     Send request to ArangoDB
         /// </summary>
-        Task<T> SendAsync<T>(HttpMethod m, string url, object body = null, string transaction = null,
+        ValueTask<T> SendAsync<T>(HttpMethod m, string url, object body = null, string transaction = null,
             bool throwOnError = true, bool auth = true, IDictionary<string, string> headers = null,
             CancellationToken cancellationToken = default);
 
         /// <summary>
         ///     Send raw HTTP content request to ArangoDB
         /// </summary>
-        Task<HttpContent> SendContentAsync(HttpMethod m, string url, HttpContent body = null, string transaction = null,
+        ValueTask<HttpContent> SendContentAsync(HttpMethod m, string url, HttpContent body = null, string transaction = null,
             bool throwOnError = true, bool auth = true, IDictionary<string, string> headers = null,
             CancellationToken cancellationToken = default);
     }

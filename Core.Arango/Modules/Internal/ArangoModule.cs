@@ -68,7 +68,7 @@ namespace Core.Arango.Modules.Internal
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Task<T> SendAsync<T>(ArangoHandle handle, HttpMethod m,
+        public ValueTask<T> SendAsync<T>(ArangoHandle handle, HttpMethod m,
             string url, object body = null,
             bool throwOnError = true, bool auth = true, IDictionary<string, string> headers = null,
             CancellationToken cancellationToken = default)
@@ -82,7 +82,7 @@ namespace Core.Arango.Modules.Internal
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Task<object> SendAsync(Type type, HttpMethod m, string url, object body = null,
+        public ValueTask<object> SendAsync(Type type, HttpMethod m, string url, object body = null,
             string transaction = null, bool throwOnError = true, bool auth = true,
             IDictionary<string, string> headers = null,
             CancellationToken cancellationToken = default)
