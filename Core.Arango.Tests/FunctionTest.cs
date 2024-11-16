@@ -14,7 +14,7 @@ namespace Core.Arango.Tests
 
         [Theory]
         [ClassData(typeof(PascalCaseData))]
-        public async Task Run(string serializer)
+        public async ValueTask Run(string serializer)
         {
             await SetupAsync(serializer);
             var function = Arango.Function;

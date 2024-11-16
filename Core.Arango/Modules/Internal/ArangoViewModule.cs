@@ -13,7 +13,7 @@ namespace Core.Arango.Modules.Internal
         {
         }
 
-        public async Task CreateAsync(ArangoHandle database, ArangoView view,
+        public async ValueTask CreateAsync(ArangoHandle database, ArangoView view,
             CancellationToken cancellationToken = default)
         {
             await SendAsync<ArangoVoid>(database, HttpMethod.Post,
@@ -22,7 +22,7 @@ namespace Core.Arango.Modules.Internal
                 cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task UpdateAsync(ArangoHandle database, ArangoViewUpdate view, CancellationToken cancellationToken = default)
+        public async ValueTask UpdateAsync(ArangoHandle database, ArangoViewUpdate view, CancellationToken cancellationToken = default)
         {
             await SendAsync<ArangoVoid>(database, HttpMethod.Put,
                 ApiPath(database, $"view/{UrlEncode(view.Name)}/properties"),
@@ -30,7 +30,7 @@ namespace Core.Arango.Modules.Internal
                 cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task PatchAsync(ArangoHandle database, ArangoViewPatch view, CancellationToken cancellationToken = default)
+        public async ValueTask PatchAsync(ArangoHandle database, ArangoViewPatch view, CancellationToken cancellationToken = default)
         {
             await SendAsync<ArangoVoid>(database, PolyfillHelper.Patch,
                 ApiPath(database, $"view/{UrlEncode(view.Name)}/properties"),
@@ -56,7 +56,7 @@ namespace Core.Arango.Modules.Internal
             return res;
         }
 
-        public async Task DropAsync(ArangoHandle database,
+        public async ValueTask DropAsync(ArangoHandle database,
             string name,
             CancellationToken cancellationToken = default)
         {
@@ -65,7 +65,7 @@ namespace Core.Arango.Modules.Internal
                 cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task DropAllAsync(ArangoHandle database, CancellationToken cancellationToken = default)
+        public async ValueTask DropAllAsync(ArangoHandle database, CancellationToken cancellationToken = default)
         {
             var views = await ListAsync(database, cancellationToken).ConfigureAwait(false);
 

@@ -15,7 +15,7 @@ namespace Core.Arango.Modules.Internal
         {
         }
 
-        public async Task CreateAsync(ArangoHandle database, string collection, ArangoIndex request,
+        public async ValueTask CreateAsync(ArangoHandle database, string collection, ArangoIndex request,
             CancellationToken cancellationToken = default)
         {
             await SendAsync<ArangoVoid>(database, HttpMethod.Post,
@@ -26,7 +26,7 @@ namespace Core.Arango.Modules.Internal
         /// <summary>
         ///     Drops all user created indices over all collections in database
         /// </summary>
-        public async Task DropAllAsync(ArangoHandle database, CancellationToken cancellationToken = default)
+        public async ValueTask DropAllAsync(ArangoHandle database, CancellationToken cancellationToken = default)
         {
             var collections = await Context.Collection.ListAsync(database, cancellationToken).ConfigureAwait(false);
 
@@ -57,7 +57,7 @@ namespace Core.Arango.Modules.Internal
                 }).ToList();
         }
 
-        public async Task DropAsync(ArangoHandle database, string index,
+        public async ValueTask DropAsync(ArangoHandle database, string index,
             CancellationToken cancellationToken = default)
         {
             await SendAsync<ArangoVoid>(database, HttpMethod.Delete,

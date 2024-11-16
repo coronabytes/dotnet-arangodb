@@ -170,7 +170,7 @@ namespace Core.Arango.Transport
                     msg.Headers.Add(header.Key, header.Value);
         }
 
-        private async Task Authenticate(bool auth, CancellationToken cancellationToken)
+        private async ValueTask Authenticate(bool auth, CancellationToken cancellationToken)
         {
             if (string.IsNullOrWhiteSpace(_configuration.User))
                 return;

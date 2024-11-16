@@ -25,7 +25,7 @@ namespace Core.Arango.Tests
         }
 
         [Fact]
-        public async Task SelectDocument()
+        public async ValueTask SelectDocument()
         {
             var q = Arango.Query<Project>("test")
                 .Where(x => x.Name == "Project A")
@@ -42,7 +42,7 @@ namespace Core.Arango.Tests
         }
 
         [Fact]
-        public async Task FirstOrDefault()
+        public async ValueTask FirstOrDefault()
         {
             var p = await Arango.Query<Project>("test")
                 .FirstOrDefaultAsync(x => x.Name == "Project A");
@@ -51,7 +51,7 @@ namespace Core.Arango.Tests
         }
 
         [Fact]
-        public async Task SingleOrDefault()
+        public async ValueTask SingleOrDefault()
         {
             var p = await Arango.Query<Project>("test")
                 .SingleOrDefaultAsync(x => x.Name == "Project A");
@@ -60,7 +60,7 @@ namespace Core.Arango.Tests
         }
 
         [Fact]
-        public async Task SingleException()
+        public async ValueTask SingleException()
         {
             await Assert.ThrowsAsync<InvalidOperationException>(async () =>
             {
@@ -70,7 +70,7 @@ namespace Core.Arango.Tests
         }
 
         [Fact]
-        public async Task MultiFilter()
+        public async ValueTask MultiFilter()
         {
             var q = Arango.Query<Project>("test")
                 .Where(x => x.Name == "Project A")
@@ -84,7 +84,7 @@ namespace Core.Arango.Tests
 
 
         [Fact]
-        public async Task FilterOrder()
+        public async ValueTask FilterOrder()
         {
             var q = Arango.Query<Project>("test")
                 .Where(x => (x.Name == "Project A" || x.Name == "Project B") && x.Budget <= 0);
@@ -93,7 +93,7 @@ namespace Core.Arango.Tests
         }
 
         [Fact]
-        public Task Options()
+        public ValueTask Options()
         {
             var q = Arango.Query<Project>("test")
                 .Where(x => x.Name == "Project A")
@@ -105,7 +105,7 @@ namespace Core.Arango.Tests
         }
 
         [Fact]
-        public async Task GroupBy()
+        public async ValueTask GroupBy()
         {
             var q = Arango.Query<Project>("test")
                 .GroupBy(y => y.ParentKey)
@@ -121,7 +121,7 @@ namespace Core.Arango.Tests
         }
 
         [Fact]
-        public async Task MathAbs()
+        public async ValueTask MathAbs()
         {
             var q = Arango.Query<Project>("test")
                 .Select(x => new
@@ -136,7 +136,7 @@ namespace Core.Arango.Tests
         }
 
         [Fact]
-        public async Task Ternary()
+        public async ValueTask Ternary()
         {
             var q = Arango.Query<Project>("test")
                 .Select(x => new
@@ -151,7 +151,7 @@ namespace Core.Arango.Tests
         }
 
         [Fact]
-        public async Task Update()
+        public async ValueTask Update()
         {
             var q = Arango.Query<Project>("test")
                 .Where(x => x.Name == "Project A")
@@ -167,7 +167,7 @@ namespace Core.Arango.Tests
         }
 
         [Fact]
-        public async Task Remove()
+        public async ValueTask Remove()
         {
             var q = Arango.Query<Project>("test")
                 .Where(x => x.Name == "Project A")
@@ -177,7 +177,7 @@ namespace Core.Arango.Tests
         }
 
         [Fact]
-        public async Task Let()
+        public async ValueTask Let()
         {
             var q =
                 from p in Arango.Query<Project>("test")
@@ -190,7 +190,7 @@ namespace Core.Arango.Tests
         }
 
         [Fact]
-        public async Task ListContains()
+        public async ValueTask ListContains()
         {
             var list = new List<string> { "CB" }.ToArray();
 
@@ -210,7 +210,7 @@ namespace Core.Arango.Tests
         }
 
         [Fact]
-        public async Task QueryableContains()
+        public async ValueTask QueryableContains()
         {
             var q = Arango.Query<Project>("test")
                 .Select(x => x.ClientKey)
@@ -219,7 +219,7 @@ namespace Core.Arango.Tests
             Assert.True(q);
         }
 
-        public override async Task InitializeAsync()
+        public override async ValueTask InitializeAsync()
         {
             Arango = new ArangoContext(UniqueTestRealm());
             await Arango.Database.CreateAsync(D);
@@ -259,7 +259,7 @@ namespace Core.Arango.Tests
         }
 
         [Fact]
-        public async Task Count_SubQuery()
+        public async ValueTask Count_SubQuery()
         {
             var q = Arango.Query<Client>("test")
                 .Select(c => Arango.Query<Project>().Where(p => p.ClientKey == c.Key).Count());
@@ -272,7 +272,7 @@ namespace Core.Arango.Tests
         }
 
         /*[Fact]
-        public async Task Except_SubQuery()
+        public async ValueTask Except_SubQuery()
         {
             var list = await Arango.Query<Project>("test")
                 .Take(1)
@@ -294,7 +294,7 @@ namespace Core.Arango.Tests
         }*/
 
         [Fact]
-        public async Task StringContains()
+        public async ValueTask StringContains()
         {
             var q = Arango.Query<Project>("test").Where(x => x.Name.Contains("abc"));
             var aql = q.ToAql().aql.Trim();
@@ -303,7 +303,7 @@ namespace Core.Arango.Tests
         }
 
         [Fact]
-        public async Task StringConcat()
+        public async ValueTask StringConcat()
         {
             var q = Arango.Query<Project>("test").Where(x => string.Concat(x.Name, "Suffix") == "TestSuffix");
             var aql = q.ToAql().aql.Trim();

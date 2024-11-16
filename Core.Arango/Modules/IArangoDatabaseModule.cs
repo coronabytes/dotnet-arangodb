@@ -28,7 +28,7 @@ namespace Core.Arango.Modules
         /// <summary>
         ///     Drop an existing database
         /// </summary>
-        Task DropAsync(ArangoHandle name, CancellationToken cancellationToken = default);
+        ValueTask DropAsync(ArangoHandle name, CancellationToken cancellationToken = default);
 
         /// <summary>
         ///     Checks if database exists

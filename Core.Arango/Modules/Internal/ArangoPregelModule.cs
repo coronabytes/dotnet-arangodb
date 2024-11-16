@@ -27,7 +27,7 @@ namespace Core.Arango.Modules.Internal
                 cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task DeleteJobAsync(ArangoHandle database, string id,
+        public async ValueTask DeleteJobAsync(ArangoHandle database, string id,
             CancellationToken cancellationToken = default)
         {
             await SendAsync<ArangoVoid>(database, HttpMethod.Delete,

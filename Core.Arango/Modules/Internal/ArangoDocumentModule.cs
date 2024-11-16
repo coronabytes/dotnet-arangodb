@@ -123,7 +123,7 @@ namespace Core.Arango.Modules.Internal
             return res?.SingleOrDefault();
         }
 
-        public async Task ImportAsync<T>(ArangoHandle database, string collection, IEnumerable<T> docs,
+        public async ValueTask ImportAsync<T>(ArangoHandle database, string collection, IEnumerable<T> docs,
             bool complete = true,
             CancellationToken cancellationToken = default)
         {

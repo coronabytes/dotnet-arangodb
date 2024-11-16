@@ -10,7 +10,7 @@ namespace Core.Arango.Tests
     {
         [Theory]
         [ClassData(typeof(CamelCaseData))]
-        public async Task GetCamelCase(string serializer)
+        public async ValueTask GetCamelCase(string serializer)
         {
             await SetupAsync(serializer);
             await Arango.Collection.CreateAsync("test", "test", ArangoCollectionType.Document);

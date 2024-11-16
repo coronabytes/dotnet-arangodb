@@ -23,12 +23,12 @@ namespace Core.Arango.Modules
         /// <summary>
         ///     Create a new graph in the graph module.
         /// </summary>
-        Task CreateAsync(ArangoHandle database, ArangoGraph request, CancellationToken cancellationToken = default);
+        ValueTask CreateAsync(ArangoHandle database, ArangoGraph request, CancellationToken cancellationToken = default);
 
         /// <summary>
         ///     Delete an existing graph.
         /// </summary>
-        Task DropAsync(ArangoHandle database, string name, CancellationToken cancellationToken = default);
+        ValueTask DropAsync(ArangoHandle database, string name, CancellationToken cancellationToken = default);
 
         /// <summary>
         ///     Lists all graphs known to the graph module.
@@ -44,19 +44,19 @@ namespace Core.Arango.Modules
         /// <summary>
         ///     Add an additional vertex collection to the graph.
         /// </summary>
-        Task AddVertexCollectionAsync(ArangoHandle database, string graph, ArangoVertexCollection vertexCollection,
+        ValueTask AddVertexCollectionAsync(ArangoHandle database, string graph, ArangoVertexCollection vertexCollection,
             CancellationToken cancellationToken = default);
 
         /// <summary>
         ///     Add a new edge definition to the graph
         /// </summary>
-        Task AddEdgeDefinitionAsync(ArangoHandle database, string graph, ArangoEdgeDefinition edgeDefinition,
+        ValueTask AddEdgeDefinitionAsync(ArangoHandle database, string graph, ArangoEdgeDefinition edgeDefinition,
             CancellationToken cancellationToken = default);
 
         /// <summary>
         ///     Remove a vertex collection form the graph.
         /// </summary>
-        Task RemoveVertexCollectionAsync(ArangoHandle database, string graph, string vertexCollection,
+        ValueTask RemoveVertexCollectionAsync(ArangoHandle database, string graph, string vertexCollection,
             bool? dropCollection = null,
             CancellationToken cancellationToken = default);
 
@@ -64,14 +64,14 @@ namespace Core.Arango.Modules
         ///     Replace an existing edge definition
         /// </summary>
         /// <returns></returns>
-        Task ReplaceEdgeDefinitionAsync(ArangoHandle database, string graph, ArangoEdgeDefinition edgeDefinition,
+        ValueTask ReplaceEdgeDefinitionAsync(ArangoHandle database, string graph, ArangoEdgeDefinition edgeDefinition,
             bool? dropCollections = null,
             CancellationToken cancellationToken = default);
 
         /// <summary>
         ///     Remove an edge definition form the graph
         /// </summary>
-        Task RemoveEdgeDefinitionAsync(ArangoHandle database, string graph, string edgeDefinition,
+        ValueTask RemoveEdgeDefinitionAsync(ArangoHandle database, string graph, string edgeDefinition,
             bool? dropCollections = null,
             CancellationToken cancellationToken = default);
     }

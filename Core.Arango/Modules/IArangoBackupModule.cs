@@ -18,12 +18,12 @@ namespace Core.Arango.Modules
         /// <summary>
         ///     Restores from a local backup.
         /// </summary>
-        Task RestoreAsync(string id, CancellationToken cancellationToken = default);
+        ValueTask RestoreAsync(string id, CancellationToken cancellationToken = default);
 
         /// <summary>
         ///     Delete a specific local backup.
         /// </summary>
-        Task DeleteAsync(string id, CancellationToken cancellationToken = default);
+        ValueTask DeleteAsync(string id, CancellationToken cancellationToken = default);
 
         /// <summary>
         ///     List all local backups.

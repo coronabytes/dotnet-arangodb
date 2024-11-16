@@ -157,7 +157,7 @@ namespace Core.Arango.Modules
         /// <param name="mount">Mount path of the installed service.</param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task EnableDevelopmentModeAsync(ArangoHandle database, string mount,
+        ValueTask EnableDevelopmentModeAsync(ArangoHandle database, string mount,
             CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -167,7 +167,7 @@ namespace Core.Arango.Modules
         /// <param name="mount">Mount path of the installed service.</param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task DisableDevelopmentModeAsync(ArangoHandle database, string mount,
+        ValueTask DisableDevelopmentModeAsync(ArangoHandle database, string mount,
             CancellationToken cancellationToken = default);
 
         /// <summary>

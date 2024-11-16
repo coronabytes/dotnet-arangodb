@@ -13,18 +13,18 @@ namespace Core.Arango.Modules
         /// <summary>
         ///     creates an index
         /// </summary>
-        Task CreateAsync(ArangoHandle database, string collection, ArangoIndex request,
+        ValueTask CreateAsync(ArangoHandle database, string collection, ArangoIndex request,
             CancellationToken cancellationToken = default);
 
         /// <summary>
         ///     Drops all indices of a database
         /// </summary>
-        Task DropAllAsync(ArangoHandle database, CancellationToken cancellationToken = default);
+        ValueTask DropAllAsync(ArangoHandle database, CancellationToken cancellationToken = default);
 
         /// <summary>
         ///     Drops an index
         /// </summary>
-        Task DropAsync(ArangoHandle database, string index, CancellationToken cancellationToken = default);
+        ValueTask DropAsync(ArangoHandle database, string index, CancellationToken cancellationToken = default);
 
         /// <summary>
         ///     Returns all indexes of a collection

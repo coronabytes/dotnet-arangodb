@@ -13,29 +13,29 @@ namespace Core.Arango.Modules
         /// <summary>
         ///     creates an ArangoSearch View
         /// </summary>
-        Task CreateAsync(ArangoHandle database, ArangoView view, CancellationToken cancellationToken = default);
+        ValueTask CreateAsync(ArangoHandle database, ArangoView view, CancellationToken cancellationToken = default);
 
 
         /// <summary>
         ///     changes all properties of an ArangoSearch View
         /// </summary>
-        Task UpdateAsync(ArangoHandle database, ArangoViewUpdate view, CancellationToken cancellationToken = default);
+        ValueTask UpdateAsync(ArangoHandle database, ArangoViewUpdate view, CancellationToken cancellationToken = default);
 
 
         /// <summary>
         ///     partially changes properties of an ArangoSearch View
         /// </summary>
-        Task PatchAsync(ArangoHandle database, ArangoViewPatch view, CancellationToken cancellationToken = default);
+        ValueTask PatchAsync(ArangoHandle database, ArangoViewPatch view, CancellationToken cancellationToken = default);
 
         /// <summary>
         ///     Drops all Views in database
         /// </summary>
-        Task DropAllAsync(ArangoHandle database, CancellationToken cancellationToken = default);
+        ValueTask DropAllAsync(ArangoHandle database, CancellationToken cancellationToken = default);
 
         /// <summary>
         ///     Drops a View
         /// </summary>
-        Task DropAsync(ArangoHandle database, string name, CancellationToken cancellationToken = default);
+        ValueTask DropAsync(ArangoHandle database, string name, CancellationToken cancellationToken = default);
 
         /// <summary>
         ///     Returns all Views

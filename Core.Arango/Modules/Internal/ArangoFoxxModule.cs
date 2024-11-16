@@ -182,7 +182,7 @@ namespace Core.Arango.Modules.Internal
                 cancellationToken: cancellationToken);
         }
 
-        public async Task EnableDevelopmentModeAsync(ArangoHandle database, string mount,
+        public async ValueTask EnableDevelopmentModeAsync(ArangoHandle database, string mount,
             CancellationToken cancellationToken = default)
         {
             var parameter = new Dictionary<string, string> { { "mount", mount } };
@@ -192,7 +192,7 @@ namespace Core.Arango.Modules.Internal
                 cancellationToken: cancellationToken);
         }
 
-        public async Task DisableDevelopmentModeAsync(ArangoHandle database, string mount,
+        public async ValueTask DisableDevelopmentModeAsync(ArangoHandle database, string mount,
             CancellationToken cancellationToken = default)
         {
             var parameter = new Dictionary<string, string> { { "mount", mount } };

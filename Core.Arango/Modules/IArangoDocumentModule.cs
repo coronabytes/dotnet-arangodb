@@ -137,7 +137,7 @@ namespace Core.Arango.Modules
         /// <summary>
         ///     Bulk import
         /// </summary>
-        Task ImportAsync<T>(ArangoHandle database, string collection, IEnumerable<T> docs, bool complete = true,
+        ValueTask ImportAsync<T>(ArangoHandle database, string collection, IEnumerable<T> docs, bool complete = true,
             CancellationToken cancellationToken = default);
 
         /// <summary>

@@ -18,7 +18,7 @@ namespace Core.Arango.Tests
             _output = output;
         }
 
-        public override async Task InitializeAsync()
+        public override async ValueTask InitializeAsync()
         {
             Arango =
                 new ArangoContext(UniqueTestRealm(),
@@ -39,7 +39,7 @@ namespace Core.Arango.Tests
         }
 
         [Fact]
-        public async Task QueryStats()
+        public async ValueTask QueryStats()
         {
             await Arango.Collection.CreateAsync("test", "test", ArangoCollectionType.Document);
 

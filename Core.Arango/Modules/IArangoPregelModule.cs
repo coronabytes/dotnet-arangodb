@@ -24,6 +24,6 @@ namespace Core.Arango.Modules
         /// <summary>
         ///     Cancel an ongoing Pregel execution
         /// </summary>
-        Task DeleteJobAsync(ArangoHandle database, string id, CancellationToken cancellationToken = default);
+        ValueTask DeleteJobAsync(ArangoHandle database, string id, CancellationToken cancellationToken = default);
     }
 }

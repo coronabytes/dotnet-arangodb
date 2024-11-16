@@ -29,7 +29,7 @@ namespace Core.Arango.Modules.Internal
                 cancellationToken: cancellationToken);
         }
 
-        public async Task CreateAsync(ArangoHandle database,
+        public async ValueTask CreateAsync(ArangoHandle database,
             ArangoAnalyzer analyzer,
             CancellationToken cancellationToken = default)
         {
@@ -39,7 +39,7 @@ namespace Core.Arango.Modules.Internal
                 cancellationToken: cancellationToken);
         }
 
-        public async Task DeleteAsync(ArangoHandle database,
+        public async ValueTask DeleteAsync(ArangoHandle database,
             string analyzer, bool force = false,
             CancellationToken cancellationToken = default)
         {

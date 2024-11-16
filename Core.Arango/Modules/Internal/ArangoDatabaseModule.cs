@@ -68,7 +68,7 @@ namespace Core.Arango.Modules.Internal
             return db != null;
         }
 
-        public async Task DropAsync(ArangoHandle name, CancellationToken cancellationToken = default)
+        public async ValueTask DropAsync(ArangoHandle name, CancellationToken cancellationToken = default)
         {
             await SendAsync<ArangoVoid>(name, HttpMethod.Delete,
                 ApiPath("_system", $"database/{RealmPrefix(name)}"), null,

@@ -13,7 +13,7 @@ namespace Core.Arango.Tests
     {
         [Theory]
         [ClassData(typeof(PascalCaseData))]
-        public async Task Get(string serializer)
+        public async ValueTask Get(string serializer)
         {
             await SetupAsync(serializer);
             await Arango.Collection.CreateAsync("test", "test", ArangoCollectionType.Document);
@@ -50,7 +50,7 @@ namespace Core.Arango.Tests
 
         [Theory]
         [ClassData(typeof(PascalCaseData))]
-        public async Task Update(string serializer)
+        public async ValueTask Update(string serializer)
         {
             await SetupAsync(serializer);
             await Arango.Collection.CreateAsync("test", "test", ArangoCollectionType.Document);
@@ -88,7 +88,7 @@ namespace Core.Arango.Tests
 
         [Theory]
         [ClassData(typeof(PascalCaseData))]
-        public async Task CreateUpdateMode(string serializer)
+        public async ValueTask CreateUpdateMode(string serializer)
         {
             await SetupAsync(serializer);
             if ((await Arango.GetVersionAsync()).SemanticVersion < Version.Parse("3.7"))
@@ -124,7 +124,7 @@ namespace Core.Arango.Tests
 
         [Theory]
         [ClassData(typeof(PascalCaseData))]
-        public async Task CreateReplaceMode(string serializer)
+        public async ValueTask CreateReplaceMode(string serializer)
         {
             await SetupAsync(serializer);
             if ((await Arango.GetVersionAsync()).SemanticVersion < Version.Parse("3.7"))
@@ -160,7 +160,7 @@ namespace Core.Arango.Tests
 
         [Theory]
         [ClassData(typeof(PascalCaseData))]
-        public async Task CreateSilent(string serializer)
+        public async ValueTask CreateSilent(string serializer)
         {
             await SetupAsync(serializer);
 
@@ -175,7 +175,7 @@ namespace Core.Arango.Tests
 
         [Theory]
         [ClassData(typeof(PascalCaseData))]
-        public async Task CreateManySilent(string serializer)
+        public async ValueTask CreateManySilent(string serializer)
         {
             await SetupAsync(serializer);
 
@@ -198,7 +198,7 @@ namespace Core.Arango.Tests
 
         [Theory]
         [ClassData(typeof(PascalCaseData))]
-        public async Task DeleteMany(string serializer)
+        public async ValueTask DeleteMany(string serializer)
         {
             await SetupAsync(serializer);
 
@@ -240,7 +240,7 @@ namespace Core.Arango.Tests
 
         [Theory]
         [ClassData(typeof(PascalCaseData))]
-        public async Task CreateConflictMode(string serializer)
+        public async ValueTask CreateConflictMode(string serializer)
         {
             await SetupAsync(serializer);
             if ((await Arango.GetVersionAsync()).SemanticVersion < Version.Parse("3.7"))
@@ -271,7 +271,7 @@ namespace Core.Arango.Tests
 
         [Theory]
         [ClassData(typeof(PascalCaseData))]
-        public async Task OptimisticConcurrency(string serializer)
+        public async ValueTask OptimisticConcurrency(string serializer)
         {
             await SetupAsync(serializer);
             await Arango.Collection.CreateAsync("test", "test", ArangoCollectionType.Document);
@@ -308,7 +308,7 @@ namespace Core.Arango.Tests
 
         [Theory]
         [ClassData(typeof(PascalCaseData))]
-        public async Task OptimisticConcurrencyMulti(string serializer)
+        public async ValueTask OptimisticConcurrencyMulti(string serializer)
         {
             await SetupAsync(serializer);
             await Arango.Collection.CreateAsync("test", "test", ArangoCollectionType.Document);
@@ -354,7 +354,7 @@ namespace Core.Arango.Tests
 
         [Theory]
         [ClassData(typeof(PascalCaseData))]
-        public async Task GetManyTest(string serializer)
+        public async ValueTask GetManyTest(string serializer)
         {
             await SetupAsync(serializer);
             await Arango.Collection.CreateAsync("test", "test", ArangoCollectionType.Document);

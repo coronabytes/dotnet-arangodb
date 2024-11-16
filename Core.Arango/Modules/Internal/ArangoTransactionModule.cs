@@ -31,7 +31,7 @@ namespace Core.Arango.Modules.Internal
             return new ArangoHandle(database, transaction);
         }
 
-        public async Task CommitAsync(ArangoHandle database,
+        public async ValueTask CommitAsync(ArangoHandle database,
             CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(database.Transaction))
@@ -42,7 +42,7 @@ namespace Core.Arango.Modules.Internal
                 cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task AbortAsync(ArangoHandle database, CancellationToken cancellationToken = default)
+        public async ValueTask AbortAsync(ArangoHandle database, CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(database.Transaction))
                 throw new ArangoException("no transaction handle");

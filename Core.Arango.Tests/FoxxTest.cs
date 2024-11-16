@@ -14,7 +14,7 @@ namespace Core.Arango.Tests
     public class FoxxTest : TestBase
     {
         [Fact]
-        public async Task InstallScript()
+        public async ValueTask InstallScript()
         {
             await SetupAsync("system-camel");
 
@@ -101,7 +101,7 @@ router.get('/hello-world', function (req, res) {{
         }
 
         [Fact]
-        public async Task InstallZip()
+        public async ValueTask InstallZip()
         {
             await SetupAsync("system-camel");
 

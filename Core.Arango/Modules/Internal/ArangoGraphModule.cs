@@ -37,7 +37,7 @@ namespace Core.Arango.Modules.Internal
         public IArangoGraphVertexModule Vertex { get; }
         public IArangoGraphEdgeModule Edge { get; }
 
-        public async Task CreateAsync(ArangoHandle database, ArangoGraph request,
+        public async ValueTask CreateAsync(ArangoHandle database, ArangoGraph request,
             CancellationToken cancellationToken = default)
         {
             await SendAsync<ArangoVoid>(database, HttpMethod.Post,
@@ -45,7 +45,7 @@ namespace Core.Arango.Modules.Internal
                 request, cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task AddVertexCollectionAsync(ArangoHandle database, string graph,
+        public async ValueTask AddVertexCollectionAsync(ArangoHandle database, string graph,
             ArangoVertexCollection vertexCollection,
             CancellationToken cancellationToken = default)
         {
@@ -54,7 +54,7 @@ namespace Core.Arango.Modules.Internal
                 vertexCollection, cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task RemoveVertexCollectionAsync(ArangoHandle database, string graph, string vertexCollection,
+        public async ValueTask RemoveVertexCollectionAsync(ArangoHandle database, string graph, string vertexCollection,
             bool? dropCollection = null,
             CancellationToken cancellationToken = default)
         {
@@ -68,7 +68,7 @@ namespace Core.Arango.Modules.Internal
                 cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task AddEdgeDefinitionAsync(ArangoHandle database, string graph,
+        public async ValueTask AddEdgeDefinitionAsync(ArangoHandle database, string graph,
             ArangoEdgeDefinition edgeDefinition,
             CancellationToken cancellationToken = default)
         {
@@ -77,7 +77,7 @@ namespace Core.Arango.Modules.Internal
                 edgeDefinition, cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task ReplaceEdgeDefinitionAsync(ArangoHandle database, string graph,
+        public async ValueTask ReplaceEdgeDefinitionAsync(ArangoHandle database, string graph,
             ArangoEdgeDefinition edgeDefinition,
             bool? dropCollections = null,
             CancellationToken cancellationToken = default)
@@ -92,7 +92,7 @@ namespace Core.Arango.Modules.Internal
                 edgeDefinition, cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task RemoveEdgeDefinitionAsync(ArangoHandle database, string graph, string edgeDefinition,
+        public async ValueTask RemoveEdgeDefinitionAsync(ArangoHandle database, string graph, string edgeDefinition,
             bool? dropCollections = null,
             CancellationToken cancellationToken = default)
         {
@@ -106,7 +106,7 @@ namespace Core.Arango.Modules.Internal
                 cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task DropAsync(ArangoHandle database, string name,
+        public async ValueTask DropAsync(ArangoHandle database, string name,
             CancellationToken cancellationToken = default)
         {
             await SendAsync<ArangoVoid>(database, HttpMethod.Delete,
