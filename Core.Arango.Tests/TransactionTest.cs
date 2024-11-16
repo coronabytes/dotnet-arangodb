@@ -13,7 +13,7 @@ namespace Core.Arango.Tests
     {
         [Theory]
         [ClassData(typeof(PascalCaseData))]
-        public async ValueTask StreamTransaction(string serializer)
+        public async Task StreamTransaction(string serializer)
         {
             await SetupAsync(serializer);
             await Arango.Collection.CreateAsync("test", "test", ArangoCollectionType.Document);
@@ -62,7 +62,7 @@ namespace Core.Arango.Tests
 
         [Theory]
         [ClassData(typeof(PascalCaseData))]
-        public async ValueTask StreamTransactionQuery(string serializer)
+        public async Task StreamTransactionQuery(string serializer)
         {
             var documents = new List<Entity>
             {
@@ -120,9 +120,9 @@ namespace Core.Arango.Tests
 
         [Theory]
         [ClassData(typeof(PascalCaseData))]
-        public async ValueTask StreamTransactionBatchStreamQuery(string serializer)
+        public async Task StreamTransactionBatchStreamQuery(string serializer)
         {
-            async ValueTask AssertStreamQuery(ArangoHandle handle, int expected)
+            async Task AssertStreamQuery(ArangoHandle handle, int expected)
             {
                 var i = 0;
 

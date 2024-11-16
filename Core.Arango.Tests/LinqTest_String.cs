@@ -1,29 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
 using Core.Arango.Linq;
 using Core.Arango.Tests.Core;
-using Newtonsoft.Json;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace Core.Arango.Tests
 {
-    public class LinqTest_String : TestBase
+    public class LinqTest_String(ITestOutputHelper output) : TestBase
     {
         private const string D = "test";
-        private readonly ITestOutputHelper _output;
-        public LinqTest_String(ITestOutputHelper output)
-        {
-            _output = output;
-        }
 
         [Fact]
-        public async ValueTask StringConcat()
+        public async Task StringConcat()
         {
             var q = Arango.Query<Project>("test").Where(x => String.Concat(x.Name, " 10") == "Project A 10");
             var p = await q.FirstOrDefaultAsync();
@@ -33,7 +25,7 @@ namespace Core.Arango.Tests
         }
 
         [Fact]
-        public async ValueTask StringContains()
+        public async Task StringContains()
         {
             var q = Arango.Query<Project>("test").Where(x => x.Name.Contains("A"));
             var p = await q.FirstOrDefaultAsync();
@@ -44,7 +36,7 @@ namespace Core.Arango.Tests
 
         /*//Not working at the moment. Check the comment on the second Assert.
         [Fact]
-        public async ValueTask StringTrim()
+        public async Task StringTrim()
         {
             await Arango.Document.CreateManyAsync(D, nameof(Project), new List<Project>
             {
@@ -80,7 +72,7 @@ namespace Core.Arango.Tests
         }*/
 
         [Fact]
-        public async ValueTask StringTrimStart()
+        public async Task StringTrimStart()
         {
             await Arango.Document.CreateManyAsync(D, nameof(Project), new List<Project>
             {
@@ -114,7 +106,7 @@ namespace Core.Arango.Tests
         }
 
         [Fact]
-        public async ValueTask StringTrimEnd()
+        public async Task StringTrimEnd()
         {
             await Arango.Document.CreateManyAsync(D, nameof(Project), new List<Project>
             {
@@ -148,7 +140,7 @@ namespace Core.Arango.Tests
         }
 
         [Fact]
-        public async ValueTask StringLen()
+        public async Task StringLen()
         {
             var q = Arango.Query<Project>("test").Where(x => x.Name.Length == "Project A".Length);
             var p = await q.FirstOrDefaultAsync();
@@ -158,7 +150,7 @@ namespace Core.Arango.Tests
         }
 
         [Fact]
-        public async ValueTask StringIndexOf()
+        public async Task StringIndexOf()
         {
             var q = Arango.Query<Project>("test").Where(x => x.Name.IndexOf("A") == "Project A".IndexOf("A"));
             var p = await q.FirstOrDefaultAsync();
@@ -168,7 +160,7 @@ namespace Core.Arango.Tests
         }
 
         [Fact]
-        public async ValueTask StringSplit()
+        public async Task StringSplit()
         {
             char[] splitChars = { ' ' };
 
@@ -180,7 +172,7 @@ namespace Core.Arango.Tests
         }
 
         [Fact]
-        public async ValueTask StringReplace()
+        public async Task StringReplace()
         {
             var q = Arango.Query<Project>("test").Where(x => x.Name.Replace('A', 'C') == "Project C");
             var p = await q.FirstOrDefaultAsync();
@@ -190,7 +182,7 @@ namespace Core.Arango.Tests
         }
 
         [Fact]
-        public async ValueTask StringSubstring()
+        public async Task StringSubstring()
         {
             var q1 = Arango.Query<Project>("test").Where(x => x.Name.Substring(8) == "A");
             var q2 = Arango.Query<Project>("test").Where(x => x.Name.Substring(1, 8) == "roject A");
@@ -201,31 +193,31 @@ namespace Core.Arango.Tests
             Assert.Equal("Project A", p1.Name);
             Assert.Equal("Project A", p2.Name);
 
-            _output.WriteLine(q1.ToAql().aql);
-            _output.WriteLine(q2.ToAql().aql);
+            output.WriteLine(q1.ToAql().aql);
+            output.WriteLine(q2.ToAql().aql);
         }
 
         [Fact]
-        public async ValueTask StringToLower()
+        public async Task StringToLower()
         {
             var q = Arango.Query<Project>("test").Where(x => x.Name.ToLower() == "project a");
             var p = await q.FirstOrDefaultAsync();
 
             Assert.Equal("Project A", p.Name);
-            _output.WriteLine(q.ToAql().aql);
+            output.WriteLine(q.ToAql().aql);
         }
 
         [Fact]
-        public async ValueTask StringToUpper()
+        public async Task StringToUpper()
         {
             var q = Arango.Query<Project>("test").Where(x => x.Name.ToUpper() == "PROJECT A");
             var p = await q.FirstOrDefaultAsync();
 
             Assert.Equal("Project A", p.Name);
-            _output.WriteLine(q.ToAql().aql);
+            output.WriteLine(q.ToAql().aql);
         }
 
-        public override async ValueTask InitializeAsync()
+        public override async Task InitializeAsync()
         {
             Arango = new ArangoContext(UniqueTestRealm());
             await Arango.Database.CreateAsync(D);

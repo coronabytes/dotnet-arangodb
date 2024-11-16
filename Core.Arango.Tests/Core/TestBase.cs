@@ -14,12 +14,12 @@ namespace Core.Arango.Tests.Core
     {
         public IArangoContext Arango { get; protected set; }
 
-        public virtual ValueTask InitializeAsync()
+        public virtual Task InitializeAsync()
         {
             return Task.CompletedTask;
         }
 
-        public async ValueTask DisposeAsync()
+        public async Task DisposeAsync()
         {
             try
             {
@@ -32,7 +32,7 @@ namespace Core.Arango.Tests.Core
             }
         }
 
-        public async ValueTask SetupAsync(string serializer, string createDatabase = "test")
+        public async Task SetupAsync(string serializer, string createDatabase = "test")
         {
             Arango = new ArangoContext(UniqueTestRealm(), new ArangoConfiguration
             {

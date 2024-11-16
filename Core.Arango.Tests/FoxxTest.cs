@@ -14,7 +14,7 @@ namespace Core.Arango.Tests
     public class FoxxTest : TestBase
     {
         [Fact]
-        public async ValueTask InstallScript()
+        public async Task InstallScript()
         {
             await SetupAsync("system-camel");
 
@@ -38,7 +38,7 @@ router.get('/hello-world', function (req, res) {
             Assert.Equal("/sample/service", services.First().Mount);
         }
 
-        private async ValueTask<Stream> BuildService(string response)
+        private async Task<Stream> BuildService(string response)
         {
             var ms = new MemoryStream();
             using (var zip = new ZipArchive(ms, ZipArchiveMode.Create, true, Encoding.UTF8))
@@ -101,7 +101,7 @@ router.get('/hello-world', function (req, res) {{
         }
 
         [Fact]
-        public async ValueTask InstallZip()
+        public async Task InstallZip()
         {
             await SetupAsync("system-camel");
 

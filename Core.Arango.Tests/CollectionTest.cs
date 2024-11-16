@@ -18,7 +18,7 @@ namespace Core.Arango.Tests
 
         [Theory]
         [ClassData(typeof(PascalCaseData))]
-        public async ValueTask Create(string serializer)
+        public async Task Create(string serializer)
         {
             await SetupAsync(serializer);
             await Arango.Collection.CreateAsync("test", new ArangoCollection
@@ -40,7 +40,7 @@ namespace Core.Arango.Tests
 
         [Theory]
         [ClassData(typeof(PascalCaseData))]
-        public async ValueTask CreateExistGetDrop(string serializer)
+        public async Task CreateExistGetDrop(string serializer)
         {
             await SetupAsync(serializer);
             await Arango.Collection.CreateAsync("test", new ArangoCollection
@@ -63,7 +63,7 @@ namespace Core.Arango.Tests
 
         [Theory]
         [ClassData(typeof(PascalCaseData))]
-        public async ValueTask Schema(string serializer)
+        public async Task Schema(string serializer)
         {
             await SetupAsync(serializer);
             if ((await Arango.GetVersionAsync()).SemanticVersion < Version.Parse("3.7"))

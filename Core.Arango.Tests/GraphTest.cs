@@ -11,7 +11,7 @@ namespace Core.Arango.Tests
     {
         [Theory]
         [ClassData(typeof(CamelCaseData))]
-        public async ValueTask Get(string serializer)
+        public async Task Get(string serializer)
         {
             await SetupAsync(serializer);
             await Arango.Collection.CreateAsync("test", "vertices", ArangoCollectionType.Document);
@@ -108,7 +108,7 @@ namespace Core.Arango.Tests
 
         [Theory]
         [ClassData(typeof(CamelCaseData))]
-        public async ValueTask TransactionalOperations(string serializer)
+        public async Task TransactionalOperations(string serializer)
         {
             await SetupAsync(serializer);
             await Arango.Collection.CreateAsync("test", "vertices", ArangoCollectionType.Document);
@@ -230,7 +230,7 @@ namespace Core.Arango.Tests
 
         [Theory]
         [ClassData(typeof(CamelCaseData))]
-        public async ValueTask ReplaceEdgeDefinition(string serializer)
+        public async Task ReplaceEdgeDefinition(string serializer)
         {
             await SetupAsync(serializer);
             await Arango.Collection.CreateAsync("test", "vertices1", ArangoCollectionType.Document);

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
@@ -46,14 +44,9 @@ namespace Core.Arango.Tests
         public string F { get; set; }
     }
 
-    public class LinqTest_BasicOperations : TestBase
+    public class LinqTest_BasicOperations(ITestOutputHelper output) : TestBase
     {
         private const string D = "test";
-        private readonly ITestOutputHelper _output;
-        public LinqTest_BasicOperations(ITestOutputHelper output)
-        {
-            _output = output;
-        }
 
         [Fact]
         public void Any()
@@ -64,7 +57,7 @@ namespace Core.Arango.Tests
         }
 
         [Fact]
-        public async ValueTask GroupBy()
+        public async Task GroupBy()
         {
             var q = Arango.Query<Activity>("test")
             .GroupBy(x => new
@@ -81,11 +74,11 @@ namespace Core.Arango.Tests
 
             var result = await q.ToListAsync();
 
-            _output.WriteLine(q.ToAql().aql);
+            output.WriteLine(q.ToAql().aql);
         }
 
         /*[Fact]
-        public async ValueTask GroupJoin()
+        public async Task GroupJoin()
         {
             var magnus = new Person { Name = "Hedlund, Magnus", Key = "Per1" };
             var terry = new Person { Name = "Adams, Terry", Key = "Per2" };
@@ -127,7 +120,7 @@ namespace Core.Arango.Tests
 
         /*//Check the AQL being generated
         [Fact]
-        public async ValueTask Join()
+        public async Task Join()
         {
             var magnus = new Person { Name = "Hedlund, Magnus", Key = "Per1" };
             var terry = new Person { Name = "Adams, Terry", Key = "Per2" };
@@ -187,12 +180,12 @@ namespace Core.Arango.Tests
         }
 
         [Fact]
-        public async ValueTask Count_In_Filter()
+        public async Task Count_In_Filter()
         {
             var q = Arango.Query<Activity>("test")
                 .Where(x => x.Notes.Count() == 3);
 
-            _output.WriteLine(q.ToAql().aql);
+            output.WriteLine(q.ToAql().aql);
 
             var activities = await q.ToListAsync();
 
@@ -200,12 +193,12 @@ namespace Core.Arango.Tests
         }
 
         [Fact]
-        public async ValueTask Count_In_Select()
+        public async Task Count_In_Select()
         {
             var q = Arango.Query<Activity>("test")
                 .Select(x => x.Notes.Count());
 
-            _output.WriteLine(q.ToAql().aql);
+            output.WriteLine(q.ToAql().aql);
 
             var activitiesNotesCount = await q.ToListAsync();
 
@@ -223,11 +216,11 @@ namespace Core.Arango.Tests
         }
 
         [Fact]
-        public async ValueTask Contains()
+        public async Task Contains()
         {
             var p = await Arango.Query<Activity>("test").FirstOrDefaultAsync();
 
-            _output.WriteLine(JsonConvert.SerializeObject(p));
+            output.WriteLine(JsonConvert.SerializeObject(p));
 
             var boolean = Arango.Query<Activity>("test").Contains(p); // This should work: does `p` not get serialized the same way is it gets de-serialized? This operations should be inverse of each other.
 
@@ -235,7 +228,7 @@ namespace Core.Arango.Tests
         }
 
         /*[Fact]
-        public async ValueTask Distinct()
+        public async Task Distinct()
         {
             var per1 = new Person { Name = "Person1", Key = "Per1" };
             var per2 = new Person { Name = "Person1", Key = "Per2" };
@@ -255,7 +248,7 @@ namespace Core.Arango.Tests
         }*/
 
         /*[Fact]
-        public async ValueTask Except_Compare_Objects()
+        public async Task Except_Compare_Objects()
         {
             var list = await Arango.Query<Activity>("test")
                 .Take(2)
@@ -272,7 +265,7 @@ namespace Core.Arango.Tests
         }*/
 
         [Fact]
-        public async ValueTask Except_Compare_Keys()
+        public async Task Except_Compare_Keys()
         {
             var list = await Arango.Query<Activity>("test")
                 .Take(2)
@@ -283,7 +276,7 @@ namespace Core.Arango.Tests
                 .Select(x => x.Key)
                 .Except(list);
 
-            PrintQuery(q, _output);
+            PrintQuery(q, output);
 
             var p = await q.ToListAsync();
 
@@ -291,14 +284,14 @@ namespace Core.Arango.Tests
         }
 
         [Fact]
-        public async ValueTask Combine_Skip_Take()
+        public async Task Combine_Skip_Take()
         {
             var q = Arango.Query<Activity>("test")
                 .Skip(1)
                 .Take(1)
                 .Select(x => x.Key);
 
-            PrintQuery(q, _output);
+            PrintQuery(q, output);
 
             var p = await q.ToListAsync();
 
@@ -306,7 +299,7 @@ namespace Core.Arango.Tests
         }
 
         /*[Fact]
-        public async ValueTask Intersect()
+        public async Task Intersect()
         {
             var list = await Arango.Query<Activity>("test").Take(1).ToListAsync();
 
@@ -320,7 +313,7 @@ namespace Core.Arango.Tests
         }
 
         [Fact]
-        public async ValueTask Intersect_With_Count()
+        public async Task Intersect_With_Count()
         {
             var list = await Arango.Query<Activity>("test").Take(1).ToListAsync();
 
@@ -330,7 +323,7 @@ namespace Core.Arango.Tests
         }*/
 
         [Fact]
-        public async ValueTask Union()
+        public async Task Union()
         {
             var personList1 = new List<Person>
             {
@@ -357,8 +350,8 @@ namespace Core.Arango.Tests
 
             var aql = q.ToAql();
 
-            _output.WriteLine(aql.aql);
-            _output.WriteLine(JsonConvert.SerializeObject(aql.bindVars));
+            output.WriteLine(aql.aql);
+            output.WriteLine(JsonConvert.SerializeObject(aql.bindVars));
 
             var p = await q.ToListAsync();
 
@@ -367,7 +360,7 @@ namespace Core.Arango.Tests
 
         /*//This test has precision issues.
         [Fact]
-        public async ValueTask Average()
+        public async Task Average()
         {
             var expectedAverage = (new List<decimal> { 3.4m, 4.4m }).AsQueryable().Average();
             var average = Arango.Query<Activity>("test").Where(x => x.Key == "AA" || x.Key == "AB").Select(x => x.Revenue).Average();
@@ -376,7 +369,7 @@ namespace Core.Arango.Tests
         }*/
 
         [Fact]
-        public async ValueTask Min()
+        public async Task Min()
         {
             var min = Arango.Query<Activity>("test").Select(x => x.Revenue).Min();
 
@@ -384,7 +377,7 @@ namespace Core.Arango.Tests
         }
 
         [Fact]
-        public async ValueTask Max()
+        public async Task Max()
         {
             var max = Arango.Query<Activity>("test").Select(x => x.Revenue).Max();
 
@@ -392,7 +385,7 @@ namespace Core.Arango.Tests
         }
 
         [Fact]
-        public async ValueTask Sum()
+        public async Task Sum()
         {
             var expectedSum = (4.4m * 4) + 3.4m;
             var sum = Arango.Query<Activity>("test").Select(x => x.Revenue).Sum();
@@ -401,7 +394,7 @@ namespace Core.Arango.Tests
         }
 
         /*[Fact]
-        public async ValueTask SameVariableChained()
+        public async Task SameVariableChained()
         {
             var chainTest = new OutterChain()
             {
@@ -444,7 +437,7 @@ namespace Core.Arango.Tests
         }*/
 
         /*[Fact]
-        public async ValueTask Cast()
+        public async Task Cast()
         {
             Person per1 = new Person { Name = "Person1", Key = "Per1" };
             Person per2 = new Person { Name = "Person1", Key = "Per2" };
@@ -462,35 +455,35 @@ namespace Core.Arango.Tests
         }*/
 
         /*[Fact]
-        public async ValueTask Last()
+        public async Task Last()
         {
             var a = Arango.Query<Activity>("test").LastOrDefault();
             Assert.Equal("AE", a.Key);
         }
 
         [Fact]
-        public async ValueTask Reverse()
+        public async Task Reverse()
         {
             var a = await Arango.Query<Activity>("test").Reverse().FirstOrDefaultAsync();
             Assert.Equal("AE", a.Key);
         }*/
 
         [Fact]
-        public async ValueTask Single()
+        public async Task Single()
         {
             var a = await Arango.Query<Activity>("test").Where(x => x.Key == "AA").SingleOrDefaultAsync();
             Assert.Equal("AA", a.Key);
         }
 
         [Fact]
-        public async ValueTask Take()
+        public async Task Take()
         {
             var a = await Arango.Query<Activity>("test").Take(2).ToListAsync();
             Assert.Equal("AA", a[0].Key);
             Assert.Equal("AB", a[1].Key);
         }
 
-        public override async ValueTask InitializeAsync()
+        public override async Task InitializeAsync()
         {
             Arango = new ArangoContext(UniqueTestRealm());
             await Arango.Database.CreateAsync(D);

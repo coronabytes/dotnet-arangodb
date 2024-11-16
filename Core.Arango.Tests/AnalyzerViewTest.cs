@@ -10,7 +10,7 @@ namespace Core.Arango.Tests
     {
         [Theory]
         [ClassData(typeof(PascalCaseData))]
-        public async ValueTask AnalyzersViews(string serializer)
+        public async Task AnalyzersViews(string serializer)
         {
             await SetupAsync(serializer);
 

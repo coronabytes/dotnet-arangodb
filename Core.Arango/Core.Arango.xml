@@ -935,13 +935,13 @@
             <summary>cant distinguish a valid mode for provided LDAP configuration</summary>
         </member>
         <member name="F:Core.Arango.ArangoErrorCode.ErrorTaskInvalidId">
-            <summary>Will be raised when a ValueTask is created with an invalid id.</summary>
+            <summary>Will be raised when a task is created with an invalid id.</summary>
         </member>
         <member name="F:Core.Arango.ArangoErrorCode.ErrorTaskDuplicateId">
-            <summary>Will be raised when a ValueTask id is created with a duplicate id.</summary>
+            <summary>Will be raised when a task id is created with a duplicate id.</summary>
         </member>
         <member name="F:Core.Arango.ArangoErrorCode.ErrorTaskNotFound">
-            <summary>Will be raised when a ValueTask with the specified id could not be found.</summary>
+            <summary>Will be raised when a task with the specified id could not be found.</summary>
         </member>
         <member name="F:Core.Arango.ArangoErrorCode.ErrorGraphInvalidGraph">
             <summary>Will be raised when an invalid name is passed to the server.</summary>
@@ -5775,7 +5775,7 @@
             </summary>
             <example>
                 <para>
-                    For example, consider the ValueTask of determining the value of a specific query source [s] from an input value
+                    For example, consider the task of determining the value of a specific query source [s] from an input value
                     corresponding to a complex
                     expression. This <see cref="T:Core.Arango.Relinq.Clauses.ExpressionVisitors.AccessorFindingExpressionVisitor" /> will return a <see cref="T:System.Linq.Expressions.LambdaExpression" />
                     able to perform this task.

@@ -11,7 +11,7 @@ namespace Core.Arango.Tests
     {
         [Theory]
         [ClassData(typeof(PascalCaseData))]
-        public async ValueTask GuidFormat(string serializer)
+        public async Task GuidFormat(string serializer)
         {
             await SetupAsync(serializer);
             await Arango.Collection.CreateAsync("test", "test", ArangoCollectionType.Document);
@@ -25,7 +25,7 @@ namespace Core.Arango.Tests
 
         [Theory]
         [ClassData(typeof(PascalCaseData))]
-        public async ValueTask DateTimeFormat(string serializer)
+        public async Task DateTimeFormat(string serializer)
         {
             await SetupAsync(serializer);
             await Arango.Collection.CreateAsync("test", "test", ArangoCollectionType.Document);

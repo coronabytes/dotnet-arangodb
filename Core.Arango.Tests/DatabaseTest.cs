@@ -18,7 +18,7 @@ namespace Core.Arango.Tests
 
         [Theory]
         [ClassData(typeof(PascalCaseData))]
-        public async ValueTask Create(string serializer)
+        public async Task Create(string serializer)
         {
             await SetupAsync(serializer, null);
 
@@ -39,7 +39,7 @@ namespace Core.Arango.Tests
 
         [Theory]
         [ClassData(typeof(PascalCaseData))]
-        public async ValueTask Drop(string serializer)
+        public async Task Drop(string serializer)
         {
             await SetupAsync(serializer, null);
 
