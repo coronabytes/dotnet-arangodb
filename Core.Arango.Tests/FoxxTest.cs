@@ -110,7 +110,7 @@ router.get('/hello-world', function (req, res) {{
 
             await Arango.Foxx.ReplaceConfigurationAsync("test", "/sample/service", new
             {
-                currency = "ï¿½",
+                currency = "€",
                 secretKey = "s3cr3t"
             });
 
