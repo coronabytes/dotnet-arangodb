@@ -61,6 +61,21 @@ namespace Core.Arango
         Action<string, IDictionary<string, object>, ArangoQueryStatistic> QueryProfile { get; set; }
 
         /// <summary>
+        ///     Callback for each query execute with stats and total count of returned items and user-defined state
+        /// </summary>
+        Action<string, IDictionary<string, object>, ArangoQueryStatistic, long, object?> QueryProfileWithState { get; set; }
+
+        /// <summary>
+        ///     Callback for each request that is going to be sent.
+        /// </summary>
+        Action<HttpRequestMessage> BeforeRequest { get; set; }
+
+        /// <summary>
+        ///     Callback for each response that is received.
+        /// </summary>
+        Action<HttpResponseMessage> AfterResponse { get; set; }
+
+        /// <summary>
         ///     Override HttpClient
         /// </summary>
         HttpClient HttpClient { get; set; }

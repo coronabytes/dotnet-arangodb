@@ -40,6 +40,15 @@
         <member name="P:Core.Arango.ArangoConfiguration.QueryProfile">
             <inheritdoc />
         </member>
+        <member name="P:Core.Arango.ArangoConfiguration.QueryProfileWithState">
+            <inheritdoc />
+        </member>
+        <member name="P:Core.Arango.ArangoConfiguration.BeforeRequest">
+            <inheritdoc />
+        </member>
+        <member name="P:Core.Arango.ArangoConfiguration.AfterResponse">
+            <inheritdoc />
+        </member>
         <member name="P:Core.Arango.ArangoConfiguration.HttpClient">
             <inheritdoc />
         </member>
