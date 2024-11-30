@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
@@ -46,14 +44,9 @@ namespace Core.Arango.Tests
         public string F { get; set; }
     }
 
-    public class LinqTest_BasicOperations : TestBase
+    public class LinqTest_BasicOperations(ITestOutputHelper output) : TestBase
     {
         private const string D = "test";
-        private readonly ITestOutputHelper _output;
-        public LinqTest_BasicOperations(ITestOutputHelper output)
-        {
-            _output = output;
-        }
 
         [Fact]
         public void Any()
@@ -81,7 +74,7 @@ namespace Core.Arango.Tests
 
             var result = await q.ToListAsync();
 
-            _output.WriteLine(q.ToAql().aql);
+            output.WriteLine(q.ToAql().aql);
         }
 
         /*[Fact]
@@ -192,7 +185,7 @@ namespace Core.Arango.Tests
             var q = Arango.Query<Activity>("test")
                 .Where(x => x.Notes.Count() == 3);
 
-            _output.WriteLine(q.ToAql().aql);
+            output.WriteLine(q.ToAql().aql);
 
             var activities = await q.ToListAsync();
 
@@ -205,7 +198,7 @@ namespace Core.Arango.Tests
             var q = Arango.Query<Activity>("test")
                 .Select(x => x.Notes.Count());
 
-            _output.WriteLine(q.ToAql().aql);
+            output.WriteLine(q.ToAql().aql);
 
             var activitiesNotesCount = await q.ToListAsync();
 
@@ -227,7 +220,7 @@ namespace Core.Arango.Tests
         {
             var p = await Arango.Query<Activity>("test").FirstOrDefaultAsync();
 
-            _output.WriteLine(JsonConvert.SerializeObject(p));
+            output.WriteLine(JsonConvert.SerializeObject(p));
 
             var boolean = Arango.Query<Activity>("test").Contains(p); // This should work: does `p` not get serialized the same way is it gets de-serialized? This operations should be inverse of each other.
 
@@ -283,7 +276,7 @@ namespace Core.Arango.Tests
                 .Select(x => x.Key)
                 .Except(list);
 
-            PrintQuery(q, _output);
+            PrintQuery(q, output);
 
             var p = await q.ToListAsync();
 
@@ -298,7 +291,7 @@ namespace Core.Arango.Tests
                 .Take(1)
                 .Select(x => x.Key);
 
-            PrintQuery(q, _output);
+            PrintQuery(q, output);
 
             var p = await q.ToListAsync();
 
@@ -357,8 +350,8 @@ namespace Core.Arango.Tests
 
             var aql = q.ToAql();
 
-            _output.WriteLine(aql.aql);
-            _output.WriteLine(JsonConvert.SerializeObject(aql.bindVars));
+            output.WriteLine(aql.aql);
+            output.WriteLine(JsonConvert.SerializeObject(aql.bindVars));
 
             var p = await q.ToListAsync();
 

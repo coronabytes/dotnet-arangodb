@@ -13,31 +13,31 @@ namespace Core.Arango.Modules
         /// <summary>
         ///     Creates a new database
         /// </summary>
-        Task<bool> CreateAsync(ArangoHandle name, CancellationToken cancellationToken = default);
+        ValueTask<bool> CreateAsync(ArangoHandle name, CancellationToken cancellationToken = default);
 
         /// <summary>
         ///     Creates a new database with options
         /// </summary>
-        Task<bool> CreateAsync(ArangoDatabase database, CancellationToken cancellationToken = default);
+        ValueTask<bool> CreateAsync(ArangoDatabase database, CancellationToken cancellationToken = default);
 
         /// <summary>
         ///     Retrieves information about the current database
         /// </summary>
-        Task<ArangoDatabaseInfo> GetAsync(ArangoHandle handle, CancellationToken cancellationToken = default);
+        ValueTask<ArangoDatabaseInfo> GetAsync(ArangoHandle handle, CancellationToken cancellationToken = default);
 
         /// <summary>
         ///     Drop an existing database
         /// </summary>
-        Task DropAsync(ArangoHandle name, CancellationToken cancellationToken = default);
+        ValueTask DropAsync(ArangoHandle name, CancellationToken cancellationToken = default);
 
         /// <summary>
         ///     Checks if database exists
         /// </summary>
-        Task<bool> ExistAsync(ArangoHandle name, CancellationToken cancellationToken = default);
+        ValueTask<bool> ExistAsync(ArangoHandle name, CancellationToken cancellationToken = default);
 
         /// <summary>
         ///     Retrieves a list of all existing databases
         /// </summary>
-        Task<List<string>> ListAsync(CancellationToken cancellationToken = default);
+        ValueTask<List<string>> ListAsync(CancellationToken cancellationToken = default);
     }
 }

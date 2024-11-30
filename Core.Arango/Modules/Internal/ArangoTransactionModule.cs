@@ -12,7 +12,7 @@ namespace Core.Arango.Modules.Internal
         {
         }
 
-        public async Task<T> ExecuteAsync<T>(ArangoHandle database, ArangoTransaction request,
+        public async ValueTask<T> ExecuteAsync<T>(ArangoHandle database, ArangoTransaction request,
             CancellationToken cancellationToken = default)
         {
             return await SendAsync<T>(null, HttpMethod.Post,
@@ -20,7 +20,7 @@ namespace Core.Arango.Modules.Internal
                 request, cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<ArangoHandle> BeginAsync(ArangoHandle database, ArangoTransaction request,
+        public async ValueTask<ArangoHandle> BeginAsync(ArangoHandle database, ArangoTransaction request,
             CancellationToken cancellationToken = default)
         {
             var res = await SendAsync<SingleResult<TransactionResponse>>(null, HttpMethod.Post,
@@ -31,7 +31,7 @@ namespace Core.Arango.Modules.Internal
             return new ArangoHandle(database, transaction);
         }
 
-        public async Task CommitAsync(ArangoHandle database,
+        public async ValueTask CommitAsync(ArangoHandle database,
             CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(database.Transaction))
@@ -42,7 +42,7 @@ namespace Core.Arango.Modules.Internal
                 cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task AbortAsync(ArangoHandle database, CancellationToken cancellationToken = default)
+        public async ValueTask AbortAsync(ArangoHandle database, CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrWhiteSpace(database.Transaction))
                 throw new ArangoException("no transaction handle");

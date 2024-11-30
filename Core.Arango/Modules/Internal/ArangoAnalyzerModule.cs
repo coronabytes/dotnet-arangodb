@@ -13,7 +13,7 @@ namespace Core.Arango.Modules.Internal
         {
         }
 
-        public async Task<IReadOnlyCollection<ArangoAnalyzer>> ListAsync(ArangoHandle database,
+        public async ValueTask<IReadOnlyCollection<ArangoAnalyzer>> ListAsync(ArangoHandle database,
             CancellationToken cancellationToken = default)
         {
             return (await SendAsync<QueryResponse<ArangoAnalyzer>>(database, HttpMethod.Get,
@@ -21,7 +21,7 @@ namespace Core.Arango.Modules.Internal
                 cancellationToken: cancellationToken)).Result;
         }
 
-        public async Task<ArangoAnalyzer> GetDefinitionAsync(ArangoHandle database, string analyzer,
+        public async ValueTask<ArangoAnalyzer> GetDefinitionAsync(ArangoHandle database, string analyzer,
             CancellationToken cancellationToken = default)
         {
             return await SendAsync<ArangoAnalyzer>(database, HttpMethod.Get,
@@ -29,7 +29,7 @@ namespace Core.Arango.Modules.Internal
                 cancellationToken: cancellationToken);
         }
 
-        public async Task CreateAsync(ArangoHandle database,
+        public async ValueTask CreateAsync(ArangoHandle database,
             ArangoAnalyzer analyzer,
             CancellationToken cancellationToken = default)
         {
@@ -39,7 +39,7 @@ namespace Core.Arango.Modules.Internal
                 cancellationToken: cancellationToken);
         }
 
-        public async Task DeleteAsync(ArangoHandle database,
+        public async ValueTask DeleteAsync(ArangoHandle database,
             string analyzer, bool force = false,
             CancellationToken cancellationToken = default)
         {

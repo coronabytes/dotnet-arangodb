@@ -14,7 +14,7 @@ namespace Core.Arango.Modules.Internal
         {
         }
 
-        public async Task<ArangoBackup> CreateAsync(ArangoBackupRequest request,
+        public async ValueTask<ArangoBackup> CreateAsync(ArangoBackupRequest request,
             CancellationToken cancellationToken = default)
         {
             var res = await SendAsync<SingleResult<ArangoBackup>>(null, HttpMethod.Post, "/_admin/backup/create",
@@ -23,7 +23,7 @@ namespace Core.Arango.Modules.Internal
             return res.Result;
         }
 
-        public async Task RestoreAsync(string id, CancellationToken cancellationToken = default)
+        public async ValueTask RestoreAsync(string id, CancellationToken cancellationToken = default)
         {
             await SendAsync<ArangoVoid>(null, HttpMethod.Post, "/_admin/backup/restore",
                 new
@@ -32,7 +32,7 @@ namespace Core.Arango.Modules.Internal
                 }, cancellationToken: cancellationToken);
         }
 
-        public async Task DeleteAsync(string id, CancellationToken cancellationToken = default)
+        public async ValueTask DeleteAsync(string id, CancellationToken cancellationToken = default)
         {
             await SendAsync<ArangoVoid>(null, HttpMethod.Post, "/_admin/backup/delete",
                 new
@@ -41,7 +41,7 @@ namespace Core.Arango.Modules.Internal
                 }, cancellationToken: cancellationToken);
         }
 
-        public async Task<List<ArangoBackup>> ListAsync(string id = null, CancellationToken cancellationToken = default)
+        public async ValueTask<List<ArangoBackup>> ListAsync(string id = null, CancellationToken cancellationToken = default)
         {
             object req = null;
 

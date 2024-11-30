@@ -110,7 +110,7 @@ namespace Core.Arango.Tests
             Assert.Equal(3, (await Arango.Query.FindAsync<Entity>("test", "test", $"true")).Count);
 
             var exception =
-                await Assert.ThrowsAsync<ArangoException>(() => Arango.Query.FindAsync<Entity>(t2, "test", $"true"));
+                await Assert.ThrowsAsync<ArangoException>(() => Arango.Query.FindAsync<Entity>(t2, "test", $"true").AsTask());
 
             Assert.NotNull(exception.ErrorNumber);
             Assert.NotNull(exception.Code);

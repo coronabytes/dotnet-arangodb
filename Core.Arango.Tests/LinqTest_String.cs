@@ -1,26 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Core.Arango.Protocol;
 using Core.Arango.Linq;
 using Core.Arango.Tests.Core;
-using Newtonsoft.Json;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace Core.Arango.Tests
 {
-    public class LinqTest_String : TestBase
+    public class LinqTest_String(ITestOutputHelper output) : TestBase
     {
         private const string D = "test";
-        private readonly ITestOutputHelper _output;
-        public LinqTest_String(ITestOutputHelper output)
-        {
-            _output = output;
-        }
 
         [Fact]
         public async Task StringConcat()
@@ -201,8 +193,8 @@ namespace Core.Arango.Tests
             Assert.Equal("Project A", p1.Name);
             Assert.Equal("Project A", p2.Name);
 
-            _output.WriteLine(q1.ToAql().aql);
-            _output.WriteLine(q2.ToAql().aql);
+            output.WriteLine(q1.ToAql().aql);
+            output.WriteLine(q2.ToAql().aql);
         }
 
         [Fact]
@@ -212,7 +204,7 @@ namespace Core.Arango.Tests
             var p = await q.FirstOrDefaultAsync();
 
             Assert.Equal("Project A", p.Name);
-            _output.WriteLine(q.ToAql().aql);
+            output.WriteLine(q.ToAql().aql);
         }
 
         [Fact]
@@ -222,7 +214,7 @@ namespace Core.Arango.Tests
             var p = await q.FirstOrDefaultAsync();
 
             Assert.Equal("Project A", p.Name);
-            _output.WriteLine(q.ToAql().aql);
+            output.WriteLine(q.ToAql().aql);
         }
 
         public override async Task InitializeAsync()

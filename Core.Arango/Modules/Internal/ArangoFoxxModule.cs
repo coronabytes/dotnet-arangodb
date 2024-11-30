@@ -15,7 +15,7 @@ namespace Core.Arango.Modules.Internal
         {
         }
 
-        public async Task<ICollection<ArangoFoxxService>> ListServicesAsync(ArangoHandle database,
+        public async ValueTask<ICollection<ArangoFoxxService>> ListServicesAsync(ArangoHandle database,
             bool? excludeSystem = null,
             CancellationToken cancellationToken = default)
         {
@@ -29,7 +29,7 @@ namespace Core.Arango.Modules.Internal
                 cancellationToken: cancellationToken);
         }
 
-        public async Task<ArangoVoid> InstallServiceAsync(ArangoHandle database,
+        public async ValueTask<ArangoVoid> InstallServiceAsync(ArangoHandle database,
             string mount, ArangoFoxxSource service,
             bool? development = null, bool? setup = null, bool? legacy = null,
             CancellationToken cancellationToken = default)
@@ -52,7 +52,7 @@ namespace Core.Arango.Modules.Internal
             return new ArangoVoid();
         }
 
-        public async Task<ArangoVoid> ReplaceServiceAsync(ArangoHandle database,
+        public async ValueTask<ArangoVoid> ReplaceServiceAsync(ArangoHandle database,
             string mount, ArangoFoxxSource service,
             bool? teardown = null, bool? setup = null, bool? legacy = null, bool? force = null,
             CancellationToken cancellationToken = default)
@@ -78,7 +78,7 @@ namespace Core.Arango.Modules.Internal
             return new ArangoVoid();
         }
 
-        public async Task<ArangoVoid> UpgradeServiceAsync(ArangoHandle database,
+        public async ValueTask<ArangoVoid> UpgradeServiceAsync(ArangoHandle database,
             string mount, ArangoFoxxSource service,
             bool? teardown = null, bool? setup = null, bool? legacy = null, bool? force = null,
             CancellationToken cancellationToken = default)
@@ -104,7 +104,7 @@ namespace Core.Arango.Modules.Internal
             return new ArangoVoid();
         }
 
-        public async Task<ArangoVoid> UninstallServiceAsync(ArangoHandle database, string mount,
+        public async ValueTask<ArangoVoid> UninstallServiceAsync(ArangoHandle database, string mount,
             bool? teardown = null,
             CancellationToken cancellationToken = default)
         {
@@ -118,7 +118,7 @@ namespace Core.Arango.Modules.Internal
                 cancellationToken: cancellationToken);
         }
 
-        public async Task<T> GetConfigurationAsync<T>(ArangoHandle database, string mount,
+        public async ValueTask<T> GetConfigurationAsync<T>(ArangoHandle database, string mount,
             CancellationToken cancellationToken = default)
         {
             var parameter = new Dictionary<string, string> { { "mount", mount } };
@@ -128,7 +128,7 @@ namespace Core.Arango.Modules.Internal
                 cancellationToken: cancellationToken);
         }
 
-        public async Task<ArangoVoid> UpdateConfigurationAsync(ArangoHandle database, string mount,
+        public async ValueTask<ArangoVoid> UpdateConfigurationAsync(ArangoHandle database, string mount,
             object configuration,
             CancellationToken cancellationToken = default)
         {
@@ -139,7 +139,7 @@ namespace Core.Arango.Modules.Internal
                 cancellationToken: cancellationToken);
         }
 
-        public async Task<ArangoVoid> ReplaceConfigurationAsync(ArangoHandle database, string mount,
+        public async ValueTask<ArangoVoid> ReplaceConfigurationAsync(ArangoHandle database, string mount,
             object configuration,
             CancellationToken cancellationToken = default)
         {
@@ -150,7 +150,7 @@ namespace Core.Arango.Modules.Internal
                 cancellationToken: cancellationToken);
         }
 
-        public async Task<T> GetDependenciesAsync<T>(ArangoHandle database, string mount,
+        public async ValueTask<T> GetDependenciesAsync<T>(ArangoHandle database, string mount,
             CancellationToken cancellationToken = default)
         {
             var parameter = new Dictionary<string, string> { { "mount", mount } };
@@ -160,7 +160,7 @@ namespace Core.Arango.Modules.Internal
                 cancellationToken: cancellationToken);
         }
 
-        public async Task<ArangoVoid> UpdateDependenciesAsync(ArangoHandle database, string mount,
+        public async ValueTask<ArangoVoid> UpdateDependenciesAsync(ArangoHandle database, string mount,
             object dependencies,
             CancellationToken cancellationToken = default)
         {
@@ -171,7 +171,7 @@ namespace Core.Arango.Modules.Internal
                 cancellationToken: cancellationToken);
         }
 
-        public async Task<ArangoVoid> ReplaceDependenciesAsync(ArangoHandle database, string mount,
+        public async ValueTask<ArangoVoid> ReplaceDependenciesAsync(ArangoHandle database, string mount,
             object dependencies,
             CancellationToken cancellationToken = default)
         {
@@ -182,7 +182,7 @@ namespace Core.Arango.Modules.Internal
                 cancellationToken: cancellationToken);
         }
 
-        public async Task EnableDevelopmentModeAsync(ArangoHandle database, string mount,
+        public async ValueTask EnableDevelopmentModeAsync(ArangoHandle database, string mount,
             CancellationToken cancellationToken = default)
         {
             var parameter = new Dictionary<string, string> { { "mount", mount } };
@@ -192,7 +192,7 @@ namespace Core.Arango.Modules.Internal
                 cancellationToken: cancellationToken);
         }
 
-        public async Task DisableDevelopmentModeAsync(ArangoHandle database, string mount,
+        public async ValueTask DisableDevelopmentModeAsync(ArangoHandle database, string mount,
             CancellationToken cancellationToken = default)
         {
             var parameter = new Dictionary<string, string> { { "mount", mount } };
@@ -202,7 +202,7 @@ namespace Core.Arango.Modules.Internal
                 cancellationToken: cancellationToken);
         }
 
-        public async Task<T> GetAsync<T>(ArangoHandle database, string mount,
+        public async ValueTask<T> GetAsync<T>(ArangoHandle database, string mount,
             IDictionary<string, string> queryParams = null,
             CancellationToken cancellationToken = default)
         {
@@ -211,7 +211,7 @@ namespace Core.Arango.Modules.Internal
                 cancellationToken: cancellationToken);
         }
 
-        public async Task<T> PostAsync<T>(ArangoHandle database, string mount, object body,
+        public async ValueTask<T> PostAsync<T>(ArangoHandle database, string mount, object body,
             IDictionary<string, string> queryParams = null,
             CancellationToken cancellationToken = default)
         {
@@ -220,7 +220,7 @@ namespace Core.Arango.Modules.Internal
                 cancellationToken: cancellationToken);
         }
 
-        public async Task<T> PutAsync<T>(ArangoHandle database, string mount, object body,
+        public async ValueTask<T> PutAsync<T>(ArangoHandle database, string mount, object body,
             IDictionary<string, string> queryParams = null,
             CancellationToken cancellationToken = default)
         {
@@ -229,7 +229,7 @@ namespace Core.Arango.Modules.Internal
                 cancellationToken: cancellationToken);
         }
 
-        public async Task<T> PatchAsync<T>(ArangoHandle database, string mount, object body,
+        public async ValueTask<T> PatchAsync<T>(ArangoHandle database, string mount, object body,
             IDictionary<string, string> queryParams = null,
             CancellationToken cancellationToken = default)
         {
@@ -238,7 +238,7 @@ namespace Core.Arango.Modules.Internal
                 cancellationToken: cancellationToken);
         }
 
-        public async Task<T> DeleteAsync<T>(ArangoHandle database, string mount,
+        public async ValueTask<T> DeleteAsync<T>(ArangoHandle database, string mount,
             IDictionary<string, string> queryParams = null,
             CancellationToken cancellationToken = default)
         {
@@ -247,7 +247,7 @@ namespace Core.Arango.Modules.Internal
                 cancellationToken: cancellationToken);
         }
 
-        public async Task<Stream> DownloadServiceAsync<T>(ArangoHandle database, string mount,
+        public async ValueTask<Stream> DownloadServiceAsync<T>(ArangoHandle database, string mount,
             CancellationToken cancellationToken = default)
         {
             var parameter = new Dictionary<string, string> { { "mount", mount } };
@@ -259,7 +259,7 @@ namespace Core.Arango.Modules.Internal
             return await res.ReadAsStreamAsync();
         }
 
-        public async Task<T> RunServiceScriptAsync<T>(ArangoHandle database, string mount, string name,
+        public async ValueTask<T> RunServiceScriptAsync<T>(ArangoHandle database, string mount, string name,
             object body = null,
             CancellationToken cancellationToken = default)
         {

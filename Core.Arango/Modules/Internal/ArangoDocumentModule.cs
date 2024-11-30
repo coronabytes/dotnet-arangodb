@@ -15,7 +15,7 @@ namespace Core.Arango.Modules.Internal
         {
         }
 
-        public async Task<T> GetAsync<T>(ArangoHandle database, string collection, string key,
+        public async ValueTask<T> GetAsync<T>(ArangoHandle database, string collection, string key,
             bool throwOnError = true,
             string ifMatch = null,
             string ifNoneMatch = null,
@@ -33,7 +33,7 @@ namespace Core.Arango.Modules.Internal
                 null, throwOnError, headers: headers, cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<List<T>> GetManyAsync<T>(ArangoHandle database, string collection, IEnumerable<object> docs,
+        public async ValueTask<List<T>> GetManyAsync<T>(ArangoHandle database, string collection, IEnumerable<object> docs,
             bool? ignoreRevs = null,
             CancellationToken cancellationToken = default)
         {
@@ -48,7 +48,7 @@ namespace Core.Arango.Modules.Internal
                 cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<List<ArangoUpdateResult<TR>>> CreateManyAsync<T, TR>(ArangoHandle database,
+        public async ValueTask<List<ArangoUpdateResult<TR>>> CreateManyAsync<T, TR>(ArangoHandle database,
             string collection, IEnumerable<T> docs, bool? waitForSync = null,
             bool? keepNull = null, bool? mergeObjects = null, bool? returnOld = null, bool? returnNew = null,
             bool? silent = null, bool? exclusive = null, ArangoOverwriteMode? overwriteMode = null,
@@ -86,7 +86,7 @@ namespace Core.Arango.Modules.Internal
                 docs, cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<List<ArangoUpdateResult<ArangoVoid>>> CreateManyAsync<T>(ArangoHandle database,
+        public async ValueTask<List<ArangoUpdateResult<ArangoVoid>>> CreateManyAsync<T>(ArangoHandle database,
             string collection, IEnumerable<T> docs, bool? waitForSync = null,
             bool? keepNull = null, bool? mergeObjects = null, bool? returnOld = null, bool? returnNew = null,
             bool? silent = null, bool? exclusive = null, ArangoOverwriteMode? overwriteMode = null,
@@ -97,7 +97,7 @@ namespace Core.Arango.Modules.Internal
                 returnOld, returnNew, silent, exclusive, overwriteMode, cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<ArangoUpdateResult<TR>> CreateAsync<T, TR>(ArangoHandle database, string collection, T doc,
+        public async ValueTask<ArangoUpdateResult<TR>> CreateAsync<T, TR>(ArangoHandle database, string collection, T doc,
             bool? waitForSync = null,
             bool? keepNull = null, bool? mergeObjects = null, bool? returnOld = null, bool? returnNew = null,
             bool? silent = null, bool? exclusive = null, ArangoOverwriteMode? overwriteMode = null,
@@ -110,7 +110,7 @@ namespace Core.Arango.Modules.Internal
             return res?.SingleOrDefault();
         }
 
-        public async Task<ArangoUpdateResult<ArangoVoid>> CreateAsync<T>(ArangoHandle database, string collection,
+        public async ValueTask<ArangoUpdateResult<ArangoVoid>> CreateAsync<T>(ArangoHandle database, string collection,
             T doc,
             bool? waitForSync = null, bool? keepNull = null,
             bool? mergeObjects = null, bool? returnOld = null, bool? returnNew = null, bool? silent = null,
@@ -123,7 +123,7 @@ namespace Core.Arango.Modules.Internal
             return res?.SingleOrDefault();
         }
 
-        public async Task ImportAsync<T>(ArangoHandle database, string collection, IEnumerable<T> docs,
+        public async ValueTask ImportAsync<T>(ArangoHandle database, string collection, IEnumerable<T> docs,
             bool complete = true,
             CancellationToken cancellationToken = default)
         {
@@ -140,7 +140,7 @@ namespace Core.Arango.Modules.Internal
                 cancellationToken: cancellationToken);
         }
 
-        public async Task<ArangoUpdateResult<TR>> DeleteAsync<TR>(ArangoHandle database, string collection,
+        public async ValueTask<ArangoUpdateResult<TR>> DeleteAsync<TR>(ArangoHandle database, string collection,
             string key,
             bool? waitForSync = null,
             bool? returnOld = null,
@@ -176,7 +176,7 @@ namespace Core.Arango.Modules.Internal
                 cancellationToken: cancellationToken);
         }
 
-        public async Task<List<ArangoUpdateResult<TR>>> DeleteManyAsync<T, TR>(ArangoHandle database,
+        public async ValueTask<List<ArangoUpdateResult<TR>>> DeleteManyAsync<T, TR>(ArangoHandle database,
             string collection, IEnumerable<T> docs,
             bool? waitForSync = null,
             bool? returnOld = null,
@@ -206,7 +206,7 @@ namespace Core.Arango.Modules.Internal
                 cancellationToken: cancellationToken);
         }
 
-        public async Task<List<ArangoUpdateResult<ArangoVoid>>> UpdateManyAsync<T>(ArangoHandle database,
+        public async ValueTask<List<ArangoUpdateResult<ArangoVoid>>> UpdateManyAsync<T>(ArangoHandle database,
             string collection, IEnumerable<T> docs,
             bool? waitForSync = null,
             bool? keepNull = null,
@@ -223,7 +223,7 @@ namespace Core.Arango.Modules.Internal
                 returnOld, returnNew, silent, ignoreRevs, exclusive, cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<List<ArangoUpdateResult<TR>>> UpdateManyAsync<T, TR>(ArangoHandle database,
+        public async ValueTask<List<ArangoUpdateResult<TR>>> UpdateManyAsync<T, TR>(ArangoHandle database,
             string collection, IEnumerable<T> docs,
             bool? waitForSync = null,
             bool? keepNull = null,
@@ -268,7 +268,7 @@ namespace Core.Arango.Modules.Internal
                 docs, cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<ArangoUpdateResult<ArangoVoid>> UpdateAsync<T>(ArangoHandle database, string collection,
+        public async ValueTask<ArangoUpdateResult<ArangoVoid>> UpdateAsync<T>(ArangoHandle database, string collection,
             T doc,
             bool? waitForSync = null,
             bool? keepNull = null,
@@ -287,7 +287,7 @@ namespace Core.Arango.Modules.Internal
             return res.SingleOrDefault();
         }
 
-        public async Task<ArangoUpdateResult<TR>> UpdateAsync<T, TR>(ArangoHandle database, string collection,
+        public async ValueTask<ArangoUpdateResult<TR>> UpdateAsync<T, TR>(ArangoHandle database, string collection,
             T doc,
             bool? waitForSync = null,
             bool? keepNull = null,
@@ -306,7 +306,7 @@ namespace Core.Arango.Modules.Internal
             return res?.SingleOrDefault();
         }
 
-        public async Task<List<ArangoUpdateResult<TR>>> ReplaceManyAsync<T, TR>(ArangoHandle database,
+        public async ValueTask<List<ArangoUpdateResult<TR>>> ReplaceManyAsync<T, TR>(ArangoHandle database,
             string collection, IEnumerable<T> docs,
             bool? waitForSync = null,
             bool? returnOld = null,
@@ -339,7 +339,7 @@ namespace Core.Arango.Modules.Internal
                 docs, cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<List<ArangoUpdateResult<ArangoVoid>>> ReplaceManyAsync<T>(ArangoHandle database,
+        public async ValueTask<List<ArangoUpdateResult<ArangoVoid>>> ReplaceManyAsync<T>(ArangoHandle database,
             string collection, IEnumerable<T> docs,
             bool? waitForSync = null,
             bool? returnOld = null,
@@ -352,7 +352,7 @@ namespace Core.Arango.Modules.Internal
                 waitForSync, returnOld, returnNew, ignoreRevs, exclusive, cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<ArangoUpdateResult<TR>> ReplaceAsync<T, TR>(ArangoHandle database, string collection,
+        public async ValueTask<ArangoUpdateResult<TR>> ReplaceAsync<T, TR>(ArangoHandle database, string collection,
             T doc,
             bool waitForSync = false,
             bool? returnOld = null,
@@ -367,7 +367,7 @@ namespace Core.Arango.Modules.Internal
             return res?.SingleOrDefault();
         }
 
-        public async Task<ArangoUpdateResult<ArangoVoid>> ReplaceAsync<T>(ArangoHandle database, string collection,
+        public async ValueTask<ArangoUpdateResult<ArangoVoid>> ReplaceAsync<T>(ArangoHandle database, string collection,
             T doc,
             bool waitForSync = false,
             bool? returnOld = null,

@@ -16,7 +16,7 @@ namespace Core.Arango.Modules.Internal
         {
         }
 
-        public async Task<List<T>> FindAsync<T>(ArangoHandle database, string collection, FormattableString filter,
+        public async ValueTask<List<T>> FindAsync<T>(ArangoHandle database, string collection, FormattableString filter,
             string projection = null, int limit = 1000, CancellationToken cancellationToken = default)
         {
             var filterExp = Parameterize(filter, out var parameter);
@@ -26,7 +26,7 @@ namespace Core.Arango.Modules.Internal
                 parameter, cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<T> SingleOrDefaultAsync<T>(ArangoHandle database, string collection, FormattableString filter,
+        public async ValueTask<T> SingleOrDefaultAsync<T>(ArangoHandle database, string collection, FormattableString filter,
             string projection = null, CancellationToken cancellationToken = default)
         {
             var results = await FindAsync<T>(database, collection, filter, projection, 2, cancellationToken)
@@ -37,7 +37,7 @@ namespace Core.Arango.Modules.Internal
             return results.SingleOrDefault();
         }
 
-        public async Task<ArangoList<T>> ExecuteAsync<T>(ArangoHandle database, FormattableString query,
+        public async ValueTask<ArangoList<T>> ExecuteAsync<T>(ArangoHandle database, FormattableString query,
             bool? cache = null, bool? fullCount = null, CancellationToken cancellationToken = default)
         {
             var queryExp = Parameterize(query, out var parameter);
@@ -46,7 +46,7 @@ namespace Core.Arango.Modules.Internal
                 .ConfigureAwait(false);
         }
 
-        public async Task<ArangoList<T>> ExecuteAsync<T>(ArangoHandle database, string query,
+        public async ValueTask<ArangoList<T>> ExecuteAsync<T>(ArangoHandle database, string query,
             IDictionary<string, object> bindVars, bool? cache = null, bool? fullCount = null,
             CancellationToken cancellationToken = default)
         {
@@ -102,7 +102,7 @@ namespace Core.Arango.Modules.Internal
             }
         }
 
-        public async Task<object> ExecuteAsync(Type type, bool isEnumerable, ArangoHandle database, string query,
+        public async ValueTask<object> ExecuteAsync(Type type, bool isEnumerable, ArangoHandle database, string query,
             IDictionary<string, object> bindVars, bool? cache = null, bool? fullCount = null,
             CancellationToken cancellationToken = default)
         {
@@ -207,7 +207,7 @@ namespace Core.Arango.Modules.Internal
             }
         }
 
-        public Task<ArangoExplainResult> ExplainAsync(ArangoHandle database, string query,
+        public ValueTask<ArangoExplainResult> ExplainAsync(ArangoHandle database, string query,
             IDictionary<string, object> bindVars,
             bool allPlans = false,
             CancellationToken cancellationToken = default)
@@ -224,7 +224,7 @@ namespace Core.Arango.Modules.Internal
                 }, cancellationToken: cancellationToken);
         }
 
-        public Task<ArangoExplainResult> ExplainAsync(ArangoHandle database, FormattableString query,
+        public ValueTask<ArangoExplainResult> ExplainAsync(ArangoHandle database, FormattableString query,
             bool allPlans = false,
             CancellationToken cancellationToken = default)
         {
@@ -233,7 +233,7 @@ namespace Core.Arango.Modules.Internal
             return ExplainAsync(database, queryExp, parameter, allPlans, cancellationToken);
         }
 
-        public Task<ArangoParseResult> ParseAsync(ArangoHandle database, string query,
+        public ValueTask<ArangoParseResult> ParseAsync(ArangoHandle database, string query,
             CancellationToken cancellationToken = default)
         {
             return SendAsync<ArangoParseResult>(database, HttpMethod.Post, ApiPath(database, "query"),

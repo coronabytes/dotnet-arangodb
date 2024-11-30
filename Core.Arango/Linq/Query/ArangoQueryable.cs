@@ -29,34 +29,34 @@ namespace Core.Arango.Linq.Query
             this.db = db;
         }
 
-        public async Task<List<T>> ToListAsync(CancellationToken cancellationToken = default)
+        public async ValueTask<List<T>> ToListAsync(CancellationToken cancellationToken = default)
         {
             var data = GetQueryData();
             return await db.ExecuteAsync<T>(data.Query, data.BindVars, cancellationToken).ConfigureAwait(false);
         }
 
-        public async Task<T> SingleOrDefaultAsync(CancellationToken cancellationToken = default)
+        public async ValueTask<T> SingleOrDefaultAsync(CancellationToken cancellationToken = default)
         {
             var data = GetQueryData();
             var list = await db.ExecuteAsync<T>(data.Query, data.BindVars, cancellationToken).ConfigureAwait(false);
             return list.SingleOrDefault();
         }
 
-        public async Task<T> SingleAsync(CancellationToken cancellationToken = default)
+        public async ValueTask<T> SingleAsync(CancellationToken cancellationToken = default)
         {
             var data = GetQueryData();
             var list = await db.ExecuteAsync<T>(data.Query, data.BindVars, cancellationToken).ConfigureAwait(false);
             return list.Single();
         }
 
-        public async Task<T> FirstOrDefaultAsync(CancellationToken cancellationToken = default)
+        public async ValueTask<T> FirstOrDefaultAsync(CancellationToken cancellationToken = default)
         {
             var data = GetQueryData();
             var list = await db.ExecuteAsync<T>(data.Query, data.BindVars, cancellationToken).ConfigureAwait(false);
             return list.FirstOrDefault();
         }
 
-        public async Task<T> FirstAsync(CancellationToken cancellationToken = default)
+        public async ValueTask<T> FirstAsync(CancellationToken cancellationToken = default)
         {
             var data = GetQueryData();
             var list = await db.ExecuteAsync<T>(data.Query, data.BindVars, cancellationToken).ConfigureAwait(false);

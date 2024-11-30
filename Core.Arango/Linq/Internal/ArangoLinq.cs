@@ -34,7 +34,7 @@ namespace Core.Arango.Linq
             return _context.Query.ExecuteStreamAsync<T>(_handle, query, bindVars, cancellationToken: cancellationToken);
         }
 
-        public async Task<ArangoList<T>> ExecuteAsync<T>(string query, IDictionary<string, object> bindVars, CancellationToken cancellationToken = default)
+        public async ValueTask<ArangoList<T>> ExecuteAsync<T>(string query, IDictionary<string, object> bindVars, CancellationToken cancellationToken = default)
         {
             return await _context.Query.ExecuteAsync<T>(_handle, query, bindVars, cancellationToken: cancellationToken).ConfigureAwait(false);
         }

@@ -90,11 +90,11 @@ namespace Core.Arango
         /// <summary>
         ///     Get Arango server version and license
         /// </summary>
-        Task<ArangoVersion> GetVersionAsync(CancellationToken cancellationToken = default);
+        ValueTask<ArangoVersion> GetVersionAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
         ///     Get Arango cluster endpoints
         /// </summary>
-        Task<IReadOnlyCollection<string>> GetEndpointsAsync(CancellationToken cancellationToken = default);
+        ValueTask<IReadOnlyCollection<string>> GetEndpointsAsync(CancellationToken cancellationToken = default);
     }
 }

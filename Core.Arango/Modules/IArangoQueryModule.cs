@@ -21,7 +21,7 @@ namespace Core.Arango.Modules
         /// <param name="projection">RETURN expression</param>
         /// <param name="limit"></param>
         /// <param name="cancellationToken"></param>
-        Task<List<T>> FindAsync<T>(ArangoHandle database, string collection, FormattableString filter,
+        ValueTask<List<T>> FindAsync<T>(ArangoHandle database, string collection, FormattableString filter,
             string projection = null, int limit = 1000, CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -33,26 +33,26 @@ namespace Core.Arango.Modules
         /// <param name="filter">FILTER expression with "x."</param>
         /// <param name="projection">RETURN expression</param>
         /// <param name="cancellationToken"></param>
-        Task<T> SingleOrDefaultAsync<T>(ArangoHandle database, string collection, FormattableString filter,
+        ValueTask<T> SingleOrDefaultAsync<T>(ArangoHandle database, string collection, FormattableString filter,
             string projection = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         ///     Execute query (Linq provider)
         /// </summary>
-        Task<object> ExecuteAsync(Type type, bool isEnumerable, ArangoHandle database, string query,
+        ValueTask<object> ExecuteAsync(Type type, bool isEnumerable, ArangoHandle database, string query,
             IDictionary<string, object> bindVars, bool? cache = null, bool? fullCount = null,
             CancellationToken cancellationToken = default);
 
         /// <summary>
         ///     Execute query with string interpolated bind parameters
         /// </summary>
-        Task<ArangoList<T>> ExecuteAsync<T>(ArangoHandle database, FormattableString query, bool? cache = null,
+        ValueTask<ArangoList<T>> ExecuteAsync<T>(ArangoHandle database, FormattableString query, bool? cache = null,
             bool? fullCount = null, CancellationToken cancellationToken = default);
 
         /// <summary>
         ///     Execute query with bind parameters in dictionary
         /// </summary>
-        Task<ArangoList<T>> ExecuteAsync<T>(ArangoHandle database, string query, IDictionary<string, object> bindVars,
+        ValueTask<ArangoList<T>> ExecuteAsync<T>(ArangoHandle database, string query, IDictionary<string, object> bindVars,
             bool? cache = null, bool? fullCount = null, CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace Core.Arango.Modules
         /// <summary>
         ///     explain an AQL query and return information about it
         /// </summary>
-        Task<ArangoExplainResult> ExplainAsync(ArangoHandle database, string query,
+        ValueTask<ArangoExplainResult> ExplainAsync(ArangoHandle database, string query,
             IDictionary<string, object> bindVars,
             bool allPlans = false,
             CancellationToken cancellationToken = default);
@@ -90,14 +90,14 @@ namespace Core.Arango.Modules
         /// <summary>
         ///     explain an AQL query and return information about it
         /// </summary>
-        Task<ArangoExplainResult> ExplainAsync(ArangoHandle database, FormattableString query,
+        ValueTask<ArangoExplainResult> ExplainAsync(ArangoHandle database, FormattableString query,
             bool allPlans = false,
             CancellationToken cancellationToken = default);
 
         /// <summary>
         ///     parse an AQL query and return information about it
         /// </summary>
-        Task<ArangoParseResult> ParseAsync(ArangoHandle database, string query,
+        ValueTask<ArangoParseResult> ParseAsync(ArangoHandle database, string query,
             CancellationToken cancellationToken = default);
     }
 }

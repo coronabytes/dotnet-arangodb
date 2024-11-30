@@ -9,15 +9,8 @@ using Xunit.Abstractions;
 
 namespace Core.Arango.Tests
 {
-    public class QueryStatisticTest : TestBase
+    public class QueryStatisticTest(ITestOutputHelper output) : TestBase
     {
-        private readonly ITestOutputHelper _output;
-
-        public QueryStatisticTest(ITestOutputHelper output)
-        {
-            _output = output;
-        }
-
         public override async Task InitializeAsync()
         {
             Arango =
@@ -31,7 +24,7 @@ namespace Core.Arango.Tests
                             foreach (var p in bindVars.OrderByDescending(x => x.Key.Length))
                                 boundQuery = boundQuery.Replace("@" + p.Key, JsonConvert.SerializeObject(p.Value));
 
-                            _output.WriteLine(
+                            output.WriteLine(
                                 $"{boundQuery}\n{JsonConvert.SerializeObject(stats, Formatting.Indented)}");
                         }
                     });

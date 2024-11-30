@@ -110,7 +110,7 @@ namespace Core.Arango
         public IArangoPregelModule Pregel { get; }
 
         /// <inheritdoc />
-        public async Task<ArangoVersion> GetVersionAsync(CancellationToken cancellationToken = default)
+        public async ValueTask<ArangoVersion> GetVersionAsync(CancellationToken cancellationToken = default)
         {
             var res = await Configuration.Transport.SendAsync<ArangoVersion>(HttpMethod.Get,
                 "/_db/_system/_api/version",
@@ -123,7 +123,7 @@ namespace Core.Arango
         }
 
         /// <inheritdoc />
-        public async Task<IReadOnlyCollection<string>> GetEndpointsAsync(CancellationToken cancellationToken = default)
+        public async ValueTask<IReadOnlyCollection<string>> GetEndpointsAsync(CancellationToken cancellationToken = default)
         {
             var res = await Configuration.Transport.SendAsync<EndpointResponse>(HttpMethod.Get,
                 "/_api/cluster/endpoints", cancellationToken: cancellationToken);

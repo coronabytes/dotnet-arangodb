@@ -12,23 +12,23 @@ namespace Core.Arango.Modules
         /// <summary>
         ///     Begin a server-side transaction
         /// </summary>
-        Task<ArangoHandle> BeginAsync(ArangoHandle database, ArangoTransaction request,
+        ValueTask<ArangoHandle> BeginAsync(ArangoHandle database, ArangoTransaction request,
             CancellationToken cancellationToken = default);
 
         /// <summary>
         ///     Abort a server-side transaction
         /// </summary>
-        Task AbortAsync(ArangoHandle database, CancellationToken cancellationToken = default);
+        ValueTask AbortAsync(ArangoHandle database, CancellationToken cancellationToken = default);
 
         /// <summary>
         ///     Commit a server-side transaction
         /// </summary>
-        Task CommitAsync(ArangoHandle database, CancellationToken cancellationToken = default);
+        ValueTask CommitAsync(ArangoHandle database, CancellationToken cancellationToken = default);
 
         /// <summary>
         ///     execute a server-side (script) transaction
         /// </summary>
-        Task<T> ExecuteAsync<T>(ArangoHandle database, ArangoTransaction request,
+        ValueTask<T> ExecuteAsync<T>(ArangoHandle database, ArangoTransaction request,
             CancellationToken cancellationToken = default);
     }
 }

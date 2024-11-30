@@ -11,6 +11,6 @@ namespace Core.Arango.Linq.Interface
         public string ResolvePropertyName(Type t, string s);
         public string ResolveCollectionName(Type t);
         public IAsyncEnumerable<T> StreamAsync<T>(string query, IDictionary<string, object> bindVars, CancellationToken cancellationToken = default);
-        public Task<ArangoList<T>> ExecuteAsync<T>(string query, IDictionary<string, object> bindVars, CancellationToken cancellationToken = default);
+        public ValueTask<ArangoList<T>> ExecuteAsync<T>(string query, IDictionary<string, object> bindVars, CancellationToken cancellationToken = default);
     }
 }
