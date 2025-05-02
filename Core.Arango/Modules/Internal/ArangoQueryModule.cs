@@ -17,17 +17,20 @@ namespace Core.Arango.Modules.Internal
         }
 
         public async ValueTask<List<T>> FindAsync<T>(ArangoHandle database, string collection, FormattableString filter,
-            string projection = null, int limit = 1000, CancellationToken cancellationToken = default)
+            string? projection = null, int limit = 1000, CancellationToken cancellationToken = default)
         {
             var filterExp = Parameterize(filter, out var parameter);
 
             return await ExecuteAsync<T>(database,
                 $"FOR x IN {collection} FILTER {filterExp} LIMIT {limit} RETURN {projection ?? "x"}",
-                parameter, cancellationToken: cancellationToken).ConfigureAwait(false);
+                parameter,
+                null,
+                null,
+                cancellationToken).ConfigureAwait(false);
         }
 
-        public async ValueTask<T> SingleOrDefaultAsync<T>(ArangoHandle database, string collection, FormattableString filter,
-            string projection = null, CancellationToken cancellationToken = default)
+        public async ValueTask<T?> SingleOrDefaultAsync<T>(ArangoHandle database, string collection, FormattableString filter,
+            string? projection = null, CancellationToken cancellationToken = default)
         {
             var results = await FindAsync<T>(database, collection, filter, projection, 2, cancellationToken)
                 .ConfigureAwait(false);
@@ -37,17 +40,53 @@ namespace Core.Arango.Modules.Internal
             return results.SingleOrDefault();
         }
 
+        #region ExecuteWithoutState
+
+        public ValueTask<object> ExecuteAsync(Type type, bool isEnumerable, ArangoHandle database, string query, IDictionary<string, object> bindVars, bool? cache = null, bool? fullCount = null, CancellationToken cancellationToken = default)
+        {
+            return ExecuteAsync(type, isEnumerable, database, query, bindVars, null, cache, fullCount, cancellationToken);
+        }
+
+        public ValueTask<ArangoList<T>> ExecuteAsync<T>(ArangoHandle database, FormattableString query, bool? cache = null, bool? fullCount = null, CancellationToken cancellationToken = default)
+        {
+            return ExecuteAsync<T>(database, query, null, cache, fullCount, cancellationToken);
+        }
+
+        public ValueTask<ArangoList<T>> ExecuteAsync<T>(ArangoHandle database, string query, IDictionary<string, object> bindVars, bool? cache = null, bool? fullCount = null, CancellationToken cancellationToken = default)
+        {
+            return ExecuteAsync<T>(database, query, bindVars, null, cache, fullCount, cancellationToken);
+        }
+
+        public IAsyncEnumerable<T> ExecuteStreamAsync<T>(ArangoHandle database, FormattableString query, bool? cache = null, int? batchSize = null, bool? lazy = null, bool? fillBlockCache = null, long? memoryLimit = null, CancellationToken cancellationToken = default)
+        {
+            return ExecuteStreamAsync<T>(database, query, null, cache, batchSize, lazy, fillBlockCache, memoryLimit, cancellationToken);
+        }
+
+        public IAsyncEnumerable<T> ExecuteStreamAsync<T>(ArangoHandle database, string query, IDictionary<string, object> bindVars, bool? cache = null, int? batchSize = null, double? ttl = null, long? memoryLimit = null, ArangoQueryOptions? options = null, CancellationToken cancellationToken = default)
+        {
+            return ExecuteStreamAsync<T>(database, query, bindVars, null, cache, batchSize, ttl, memoryLimit, options, cancellationToken);
+        }
+
+        public IAsyncEnumerable<T> ExecuteStreamAsync<T>(ArangoHandle database, ArangoCursor cursor, CancellationToken cancellationToken = default)
+        {
+            return ExecuteStreamAsync<T>(database, cursor, null, cancellationToken);
+        }
+
+        #endregion
+
+        #region ExecuteWithoutState
+
         public async ValueTask<ArangoList<T>> ExecuteAsync<T>(ArangoHandle database, FormattableString query,
-            bool? cache = null, bool? fullCount = null, CancellationToken cancellationToken = default)
+            object? state, bool? cache = null, bool? fullCount = null, CancellationToken cancellationToken = default)
         {
             var queryExp = Parameterize(query, out var parameter);
 
-            return await ExecuteAsync<T>(database, queryExp, parameter, cache, fullCount, cancellationToken)
+            return await ExecuteAsync<T>(database, queryExp, parameter, state, cache, fullCount, cancellationToken)
                 .ConfigureAwait(false);
         }
 
         public async ValueTask<ArangoList<T>> ExecuteAsync<T>(ArangoHandle database, string query,
-            IDictionary<string, object> bindVars, bool? cache = null, bool? fullCount = null,
+        IDictionary<string, object> bindVars, object? state, bool? cache = null, bool? fullCount = null,
             CancellationToken cancellationToken = default)
         {
             query = query.Trim();
@@ -71,39 +110,41 @@ namespace Core.Arango.Modules.Internal
 
                 final.AddRange(firstResult.Result);
 
-                Context.Configuration.QueryProfile?.Invoke(query, bindVars, firstResult.Extra.Statistic);
-
                 if (fullCount.HasValue && fullCount.Value)
                     final.FullCount = firstResult.Extra.Statistic.FullCount;
 
-                if (!firstResult.HasMore)
-                    return final;
-
-                while (true)
+                if (firstResult.HasMore)
                 {
-                    var res = await SendAsync<QueryResponse<T>>(database, HttpMethod.Post,
-                        ApiPath(database, $"/cursor/{firstResult.Id}"),
-                        cancellationToken: cancellationToken).ConfigureAwait(false);
+                    QueryResponse<T> lastResponse;
 
-                    if (res.Result?.Any() == true)
-                        final.AddRange(res.Result);
+                    do
+                    {
+                        lastResponse = await SendAsync<QueryResponse<T>>(database, HttpMethod.Post,
+                            ApiPath(database, $"/cursor/{firstResult.Id}"),
+                            cancellationToken: cancellationToken).ConfigureAwait(false);
 
-                    if (!res.HasMore)
-                        break;
+                        if (lastResponse.Result?.Any() == true)
+                            final.AddRange(lastResponse.Result);
+
+                    } while (lastResponse.HasMore);
                 }
 
+                Context.Configuration.QueryProfile?.Invoke(query, bindVars, firstResult.Extra.Statistic);
+                Context.Configuration.QueryProfileWithState?.Invoke(query, bindVars, firstResult.Extra.Statistic, final.Count, state);
 
                 return final;
             }
             catch
             {
                 Context.Configuration.QueryProfile?.Invoke(query, bindVars, null);
+                Context.Configuration.QueryProfileWithState?.Invoke(query, bindVars, null, -1, state);
+
                 throw;
             }
         }
 
         public async ValueTask<object> ExecuteAsync(Type type, bool isEnumerable, ArangoHandle database, string query,
-            IDictionary<string, object> bindVars, bool? cache = null, bool? fullCount = null,
+            IDictionary<string, object> bindVars, object? state = null, bool? cache = null, bool? fullCount = null,
             CancellationToken cancellationToken = default)
         {
             query = query.Trim();
@@ -143,13 +184,12 @@ namespace Core.Arango.Modules.Internal
         }
 
         public IAsyncEnumerable<T> ExecuteStreamAsync<T>(ArangoHandle database, FormattableString query,
-            bool? cache = null,
-            int? batchSize = null,
+            object? state = null, bool? cache = null, int? batchSize = null,
             bool? lazy = null, bool? fillBlockCache = null, long? memoryLimit = null,
             CancellationToken cancellationToken = default)
         {
             var queryExp = Parameterize(query, out var parameter);
-            return ExecuteStreamAsync<T>(database, queryExp, parameter, cache, batchSize, null, memoryLimit,
+            return ExecuteStreamAsync<T>(database, queryExp, parameter, state, cache, batchSize, null, memoryLimit,
                 new ArangoQueryOptions
                 {
                     Stream = lazy,
@@ -158,9 +198,9 @@ namespace Core.Arango.Modules.Internal
         }
 
         public IAsyncEnumerable<T> ExecuteStreamAsync<T>(ArangoHandle database, string query,
-            IDictionary<string, object> bindVars, bool? cache = null, int? batchSize = null,
+            IDictionary<string, object> bindVars, object? state = null, bool? cache = null, int? batchSize = null,
             double? ttl = null, long? memoryLimit = null,
-            ArangoQueryOptions options = null,
+            ArangoQueryOptions? options = null,
             CancellationToken cancellationToken = default)
         {
             query = query.Trim();
@@ -174,17 +214,18 @@ namespace Core.Arango.Modules.Internal
                 MemoryLimit = memoryLimit,
                 Cache = cache,
                 Options = options
-            }, cancellationToken);
+            }, state, cancellationToken);
         }
 
         public async IAsyncEnumerable<T> ExecuteStreamAsync<T>(ArangoHandle database, ArangoCursor cursor,
-            [EnumeratorCancellation] CancellationToken cancellationToken = default)
+            object? state = null, [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
             var firstResult = await SendAsync<QueryResponse<T>>(database, HttpMethod.Post,
                 ApiPath(database, "cursor"),
                 cursor, cancellationToken: cancellationToken).ConfigureAwait(false);
 
             Context.Configuration.QueryProfile?.Invoke(cursor.Query, cursor.BindVars, firstResult.Extra.Statistic);
+            Context.Configuration.QueryProfileWithState?.Invoke(cursor.Query, cursor.BindVars, firstResult.Extra.Statistic, firstResult.Count, state);
 
             foreach (var result in firstResult.Result)
                 yield return result;
@@ -206,6 +247,8 @@ namespace Core.Arango.Modules.Internal
                     break;
             }
         }
+
+        #endregion
 
         public ValueTask<ArangoExplainResult> ExplainAsync(ArangoHandle database, string query,
             IDictionary<string, object> bindVars,
