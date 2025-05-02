@@ -56,7 +56,7 @@
     <PackageReference Include="System.Text.Encodings.Web" Version="8.0.0" />
   </ItemGroup>
 
-	<ItemGroup>
+  <ItemGroup>
     <None Include="ArangoDB.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>

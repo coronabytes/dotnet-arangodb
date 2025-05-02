@@ -215,7 +215,7 @@ public static readonly NameBasedRegistrationInfo[] SupportedMethodNames =
 
             var referenceMethodSignature =
                 new[] {new {Name = "returnValue", Type = referenceMethodDefinition.ReturnType}}
-                    .Concat(referenceMethodDefinition.GetParameters().Select(p => new {p.Name, Type = p.ParameterType}))
+                    .Concat(referenceMethodDefinition.GetParameters().Select(p => new { p.Name, Type = p.ParameterType }))
                     .ToArray();
 
             var candidates = declaringTypeDefinition.GetRuntimeMethods()
