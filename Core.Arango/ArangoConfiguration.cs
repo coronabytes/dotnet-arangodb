@@ -18,6 +18,7 @@ namespace Core.Arango
     public class ArangoConfiguration : IArangoConfiguration
     {
         private string _connectionString;
+        private HttpClient _httpClient;
 
         /// <summary>
         /// </summary>
@@ -120,7 +121,11 @@ namespace Core.Arango
         public Action<string, IDictionary<string, object>, ArangoQueryStatistic> QueryProfile { get; set; }
 
         /// <inheritdoc />
-        public HttpClient HttpClient { get; set; }
+        public HttpClient HttpClient
+        {
+            get => _httpClient;
+            set => _httpClient = value ?? new HttpClient();
+        }
 
         /// <inheritdoc />
         public bool AllowDirtyRead { get; set; }
