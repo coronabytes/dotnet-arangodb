@@ -12,13 +12,19 @@ public class CustomClientTest : TestBase
 
     private class SimpleTransport : DelegatingHandler
     {
-        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        public SimpleTransport()
+        {
+            InnerHandler = new HttpClientHandler();
+        }
+        
+        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
+            CancellationToken cancellationToken)
         {
             _usedTheHttpClient = true;
             return await base.SendAsync(request, cancellationToken);
         }
     }
-    
+
     private readonly HttpClient _client = new HttpClient(new SimpleTransport());
 
     [Fact]
@@ -26,10 +32,10 @@ public class CustomClientTest : TestBase
     {
         var exists = await Arango.Database.ExistAsync("test", CancellationToken.None);
         Assert.False(exists);
-        
+
         Assert.True(_usedTheHttpClient);
     }
-    
+
     public override async Task InitializeAsync()
     {
         Arango = new ArangoContext(UniqueTestRealm(), new ArangoConfiguration
