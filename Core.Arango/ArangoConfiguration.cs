@@ -27,6 +27,7 @@ namespace Core.Arango
             BatchSize = 500;
             Serializer = new ArangoNewtonsoftSerializer(new ArangoNewtonsoftDefaultContractResolver());
             Transport = new ArangoHttpTransport(this);
+            HttpClient = new HttpClient();
             ResolveCollection = type =>
             {
                 var attr = type.GetCustomAttribute<CollectionPropertyAttribute>();
