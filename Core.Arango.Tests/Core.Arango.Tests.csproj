@@ -3,6 +3,7 @@
   <PropertyGroup>
 	  <TargetFramework>net9.0</TargetFramework>
 	  <IsPackable>false</IsPackable>
+	  <LangVersion>latestmajor</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

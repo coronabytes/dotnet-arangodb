@@ -19,9 +19,8 @@ namespace Core.Arango.Transport
     /// </summary>
     public class ArangoHttpTransport : IArangoTransport
     {
-        private static readonly HttpClient DefaultHttpClient = new();
         private readonly IArangoConfiguration _configuration;
-        private readonly HttpClient _httpClient;
+        private HttpClient HttpClient => _configuration.HttpClient;
         private string _auth;
         private DateTime _authValidUntil = DateTime.MinValue;
 
@@ -31,7 +30,6 @@ namespace Core.Arango.Transport
         public ArangoHttpTransport(IArangoConfiguration configuration)
         {
             _configuration = configuration;
-            _httpClient = configuration.HttpClient ?? DefaultHttpClient;
         }
 
         /// <inheritdoc />
@@ -56,7 +54,7 @@ namespace Core.Arango.Transport
                 msg.Headers.Add(HttpRequestHeader.ContentLength.ToString(), "0");
             }
 
-            var res = await _httpClient.SendAsync(msg, cancellationToken).ConfigureAwait(false);
+            var res = await HttpClient.SendAsync(msg, cancellationToken).ConfigureAwait(false);
 
             if (!res.IsSuccessStatusCode)
                 if (throwOnError)
@@ -98,7 +96,7 @@ namespace Core.Arango.Transport
             ApplyHeaders(transaction, auth, msg, headers);
             msg.Content = body;
 
-            var res = await _httpClient.SendAsync(msg, cancellationToken);
+            var res = await HttpClient.SendAsync(msg, cancellationToken);
 
             if (!res.IsSuccessStatusCode)
                 if (throwOnError)
@@ -129,7 +127,7 @@ namespace Core.Arango.Transport
             else
                 msg.Headers.Add(HttpRequestHeader.ContentLength.ToString(), "0");
 
-            var res = await _httpClient.SendAsync(msg, cancellationToken).ConfigureAwait(false);
+            var res = await HttpClient.SendAsync(msg, cancellationToken).ConfigureAwait(false);
 
             if (!res.IsSuccessStatusCode)
                 if (throwOnError)
@@ -149,8 +147,8 @@ namespace Core.Arango.Transport
         {
 #if NET8_0_OR_GREATER
 
-            msg.Version = _httpClient.DefaultRequestVersion;
-            msg.VersionPolicy = _httpClient.DefaultVersionPolicy;
+            msg.Version = HttpClient.DefaultRequestVersion;
+            msg.VersionPolicy = HttpClient.DefaultVersionPolicy;
 
 #endif
 
