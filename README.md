@@ -7,7 +7,8 @@ dotnet add package Core.Arango
 ```
 
 # .NET driver for ArangoDB
-- .NET Standard 2.0, 2.1, .NET 8 and .NET 9 driver for ArangoDB 3.11+
+- .NET Standard 2.0, 2.1, .NET 8 and .NET 10 driver for ArangoDB 3.11+
+  - .NET 10 / C#14 breaks Linq Contains due span usage: fix with cast ((IEnumerable<string>)list).Contains(x. ));
 - LINQ support (WIP)
 - Newtonsoft.Json and System.Text.Json serialization support with PascalCase and camelCase options
 - Updates from anonymous types supported as (Id, Key, Revision, From, To) properties are translated to (_id, _key, _rev, _from, _to)
