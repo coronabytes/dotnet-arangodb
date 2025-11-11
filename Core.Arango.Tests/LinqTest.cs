@@ -195,7 +195,7 @@ namespace Core.Arango.Tests
             var list = new List<string> { "CB" }.ToArray();
 
             var q = Arango.Query<Project>("test")
-                .Where(x => list.Contains(x.ClientKey));
+                .Where(x => ((IEnumerable<string>)list).Contains(x.ClientKey));
 
             //var q = Arango.Query<Project>("test")
             //    .Where(x => Aql.Position(list, x.ClientKey));
