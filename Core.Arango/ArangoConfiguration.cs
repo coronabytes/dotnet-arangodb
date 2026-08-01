@@ -122,9 +122,6 @@ namespace Core.Arango
         public Action<string, IDictionary<string, object>, ArangoQueryStatistic> QueryProfile { get; set; }
 
         /// <inheritdoc />
-        public Action<string, IDictionary<string, object>, ArangoQueryStatistic, long, object?> QueryProfileWithState { get; set; }
-
-        /// <inheritdoc />
         public Action<HttpRequestMessage> BeforeRequest { get; set; }
 
         /// <inheritdoc />
