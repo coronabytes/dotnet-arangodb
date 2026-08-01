@@ -16,7 +16,7 @@ jobs:
     - name: Setup
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 9.x
+        dotnet-version: 10.x
         
     - name: Build Version
       id: vars
