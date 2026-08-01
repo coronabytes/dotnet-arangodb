@@ -68,7 +68,18 @@ This driver has various [extensions](https://github.com/coronabytes/dotnet-arang
                   boundQuery = boundQuery.Replace("@" + p.Key, JsonConvert.SerializeObject(p.Value));
 
               logger.LogInformation(boundQuery);
-          }
+          };
+
+          // optional: HTTP-level tracing for every request/response
+          config.BeforeRequest = request =>
+          {
+              logger.LogDebug("Sending {Method} request to {Uri}", request.Method, request.RequestUri);
+          };
+          config.AfterResponse = response =>
+          {
+              logger.LogDebug("Received {StatusCode} ({Reason}) from {Uri}",
+                  (int)response.StatusCode, response.ReasonPhrase, response.RequestMessage?.RequestUri);
+          };
       });
   }
   ```
