@@ -85,22 +85,22 @@ namespace Core.Arango.Modules
         #region ExecuteWithState
 
         /// <summary>
-        ///     Execute query (Linq provider)
+        ///     Execute query (Linq provider), forwarding user-defined state to QueryProfileWithState
         /// </summary>
         ValueTask<object> ExecuteAsync(Type type, bool isEnumerable, ArangoHandle database, string query, IDictionary<string, object> bindVars, object? state, bool? cache = null, bool? fullCount = null, CancellationToken cancellationToken = default);
 
         /// <summary>
-        ///     Execute query with string interpolated bind parameters
+        ///     Execute query with string interpolated bind parameters, forwarding user-defined state to QueryProfileWithState
         /// </summary>
         ValueTask<ArangoList<T>> ExecuteAsync<T>(ArangoHandle database, FormattableString query, object? state, bool? cache = null, bool? fullCount = null, CancellationToken cancellationToken = default);
 
         /// <summary>
-        ///     Execute query with bind parameters in dictionary
+        ///     Execute query with bind parameters in dictionary, forwarding user-defined state to QueryProfileWithState
         /// </summary>
         ValueTask<ArangoList<T>> ExecuteAsync<T>(ArangoHandle database, string query, IDictionary<string, object> bindVars, object? state, bool? cache = null, bool? fullCount = null, CancellationToken cancellationToken = default);
 
         /// <summary>
-        ///     Execute query with string interpolated bind parameters (IAsyncEnumerable)
+        ///     Execute query with string interpolated bind parameters (IAsyncEnumerable), forwarding user-defined state to QueryProfileWithState
         /// </summary>
         IAsyncEnumerable<T> ExecuteStreamAsync<T>(ArangoHandle database, FormattableString query, object? state, bool? cache = null,
             int? batchSize = null,
@@ -108,7 +108,7 @@ namespace Core.Arango.Modules
             CancellationToken cancellationToken = default);
 
         /// <summary>
-        ///     Execute query with bind parameters in dictionary (IAsyncEnumerable)
+        ///     Execute query with bind parameters in dictionary (IAsyncEnumerable), forwarding user-defined state to QueryProfileWithState
         /// </summary>
         IAsyncEnumerable<T> ExecuteStreamAsync<T>(ArangoHandle database, string query,
             IDictionary<string, object> bindVars, object? state, bool? cache = null, int? batchSize = null,
@@ -117,7 +117,7 @@ namespace Core.Arango.Modules
             CancellationToken cancellationToken = default);
 
         /// <summary>
-        ///     Execute query (IAsyncEnumerable)
+        ///     Execute query (IAsyncEnumerable), forwarding user-defined state to QueryProfileWithState
         /// </summary>
         IAsyncEnumerable<T> ExecuteStreamAsync<T>(ArangoHandle database, ArangoCursor cursor, object? state, CancellationToken cancellationToken = default);
 
