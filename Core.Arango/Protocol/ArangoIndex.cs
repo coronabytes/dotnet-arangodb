@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
-using JetBrains.Annotations;
 using Newtonsoft.Json;
 
 namespace Core.Arango.Protocol

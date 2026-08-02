@@ -50,7 +50,7 @@ namespace Core.Arango.Linq.Query
             this.db = db;
         }
 
-        private IQueryParser CreateQueryParser()
+        private static IQueryParser CreateQueryParser()
         {
             var customNodeTypeRegistry = new MethodInfoBasedNodeTypeRegistry();
 
