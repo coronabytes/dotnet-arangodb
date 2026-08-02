@@ -68,9 +68,27 @@ This driver has various [extensions](https://github.com/coronabytes/dotnet-arang
                   boundQuery = boundQuery.Replace("@" + p.Key, JsonConvert.SerializeObject(p.Value));
 
               logger.LogInformation(boundQuery);
-          }
+          };
+
+          // optional: receive query stats together with per-call state (e.g. a scoped logger)
+          config.QueryProfileWithState = (query, bindVars, stats, returnCount, state) =>
+          {
+              if (state is ILogger scopedLogger)
+                  scopedLogger.LogInformation("Returned {Count} rows in {Time}s: {Query}",
+                      returnCount, stats?.ExecutionTime, query);
+          };
       });
   }
+  ```
+
+  Pass state when executing a query (existing overloads without state remain unchanged):
+
+  ```csharp
+  // e.g. pass the current request logger / correlation context
+  var result = await arango.Query.ExecuteAsync<MyDoc>(
+      "database",
+      $"FOR d IN docs RETURN d",
+      logger);
   ```
 
   ```csharp

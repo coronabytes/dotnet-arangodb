@@ -40,6 +40,9 @@
         <member name="P:Core.Arango.ArangoConfiguration.QueryProfile">
             <inheritdoc />
         </member>
+        <member name="P:Core.Arango.ArangoConfiguration.QueryProfileWithState">
+            <inheritdoc />
+        </member>
         <member name="P:Core.Arango.ArangoConfiguration.HttpClient">
             <inheritdoc />
         </member>
@@ -1452,6 +1455,11 @@
         <member name="P:Core.Arango.IArangoConfiguration.QueryProfile">
             <summary>
                 Callback for each query execute with stats
+            </summary>
+        </member>
+        <member name="P:Core.Arango.IArangoConfiguration.QueryProfileWithState">
+            <summary>
+                Callback for each query execute with stats, total count of returned items, and user-defined state
             </summary>
         </member>
         <member name="P:Core.Arango.IArangoConfiguration.HttpClient">
@@ -3259,6 +3267,36 @@
         <member name="M:Core.Arango.Modules.IArangoQueryModule.ExecuteStreamAsync``1(Core.Arango.ArangoHandle,Core.Arango.Protocol.ArangoCursor,System.Threading.CancellationToken)">
             <summary>
                 Execute query (IAsyncEnumerable)
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoQueryModule.ExecuteAsync(System.Type,System.Boolean,Core.Arango.ArangoHandle,System.String,System.Collections.Generic.IDictionary{System.String,System.Object},System.Object,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+                Execute query (Linq provider), forwarding user-defined state to QueryProfileWithState
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoQueryModule.ExecuteAsync``1(Core.Arango.ArangoHandle,System.FormattableString,System.Object,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+                Execute query with string interpolated bind parameters, forwarding user-defined state to QueryProfileWithState
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoQueryModule.ExecuteAsync``1(Core.Arango.ArangoHandle,System.String,System.Collections.Generic.IDictionary{System.String,System.Object},System.Object,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Threading.CancellationToken)">
+            <summary>
+                Execute query with bind parameters in dictionary, forwarding user-defined state to QueryProfileWithState
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoQueryModule.ExecuteStreamAsync``1(Core.Arango.ArangoHandle,System.FormattableString,System.Object,System.Nullable{System.Boolean},System.Nullable{System.Int32},System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Nullable{System.Int64},System.Threading.CancellationToken)">
+            <summary>
+                Execute query with string interpolated bind parameters (IAsyncEnumerable), forwarding user-defined state to QueryProfileWithState
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoQueryModule.ExecuteStreamAsync``1(Core.Arango.ArangoHandle,System.String,System.Collections.Generic.IDictionary{System.String,System.Object},System.Object,System.Nullable{System.Boolean},System.Nullable{System.Int32},System.Nullable{System.Double},System.Nullable{System.Int64},Core.Arango.Protocol.ArangoQueryOptions,System.Threading.CancellationToken)">
+            <summary>
+                Execute query with bind parameters in dictionary (IAsyncEnumerable), forwarding user-defined state to QueryProfileWithState
+            </summary>
+        </member>
+        <member name="M:Core.Arango.Modules.IArangoQueryModule.ExecuteStreamAsync``1(Core.Arango.ArangoHandle,Core.Arango.Protocol.ArangoCursor,System.Object,System.Threading.CancellationToken)">
+            <summary>
+                Execute query (IAsyncEnumerable), forwarding user-defined state to QueryProfileWithState
             </summary>
         </member>
         <member name="M:Core.Arango.Modules.IArangoQueryModule.ExplainAsync(Core.Arango.ArangoHandle,System.String,System.Collections.Generic.IDictionary{System.String,System.Object},System.Boolean,System.Threading.CancellationToken)">
