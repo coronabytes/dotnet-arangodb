@@ -54,7 +54,11 @@ namespace Core.Arango.Transport
                 msg.Headers.Add(HttpRequestHeader.ContentLength.ToString(), "0");
             }
 
+            OnBeforeRequest(msg);
+
             var res = await HttpClient.SendAsync(msg, cancellationToken).ConfigureAwait(false);
+
+            OnAfterResponse(res);
 
             if (!res.IsSuccessStatusCode)
                 if (throwOnError)
@@ -96,7 +100,11 @@ namespace Core.Arango.Transport
             ApplyHeaders(transaction, auth, msg, headers);
             msg.Content = body;
 
+            OnBeforeRequest(msg);
+
             var res = await HttpClient.SendAsync(msg, cancellationToken);
+
+            OnAfterResponse(res);
 
             if (!res.IsSuccessStatusCode)
                 if (throwOnError)
@@ -127,7 +135,11 @@ namespace Core.Arango.Transport
             else
                 msg.Headers.Add(HttpRequestHeader.ContentLength.ToString(), "0");
 
+            OnBeforeRequest(msg);
+
             var res = await HttpClient.SendAsync(msg, cancellationToken).ConfigureAwait(false);
+
+            OnAfterResponse(res);
 
             if (!res.IsSuccessStatusCode)
                 if (throwOnError)
@@ -140,6 +152,30 @@ namespace Core.Arango.Transport
                 return default;
 
             return _configuration.Serializer.Deserialize(content, type);
+        }
+
+        private void OnBeforeRequest(HttpRequestMessage request)
+        {
+            try
+            {
+                _configuration.BeforeRequest?.Invoke(request);
+            }
+            catch (Exception)
+            {
+                // Swallow exception so observability hooks cannot break requests
+            }
+        }
+
+        private void OnAfterResponse(HttpResponseMessage response)
+        {
+            try
+            {
+                _configuration.AfterResponse?.Invoke(response);
+            }
+            catch (Exception)
+            {
+                // Swallow exception so observability hooks cannot break requests
+            }
         }
 
         private void ApplyHeaders(string transaction, bool auth, HttpRequestMessage msg,

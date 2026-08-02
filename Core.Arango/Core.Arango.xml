@@ -40,6 +40,12 @@
         <member name="P:Core.Arango.ArangoConfiguration.QueryProfile">
             <inheritdoc />
         </member>
+        <member name="P:Core.Arango.ArangoConfiguration.BeforeRequest">
+            <inheritdoc />
+        </member>
+        <member name="P:Core.Arango.ArangoConfiguration.AfterResponse">
+            <inheritdoc />
+        </member>
         <member name="P:Core.Arango.ArangoConfiguration.QueryProfileWithState">
             <inheritdoc />
         </member>
@@ -1455,6 +1461,16 @@
         <member name="P:Core.Arango.IArangoConfiguration.QueryProfile">
             <summary>
                 Callback for each query execute with stats
+            </summary>
+        </member>
+        <member name="P:Core.Arango.IArangoConfiguration.BeforeRequest">
+            <summary>
+                Callback for each request that is going to be sent.
+            </summary>
+        </member>
+        <member name="P:Core.Arango.IArangoConfiguration.AfterResponse">
+            <summary>
+                Callback for each response that is received.
             </summary>
         </member>
         <member name="P:Core.Arango.IArangoConfiguration.QueryProfileWithState">

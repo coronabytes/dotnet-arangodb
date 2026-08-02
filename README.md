@@ -70,6 +70,18 @@ This driver has various [extensions](https://github.com/coronabytes/dotnet-arang
               logger.LogInformation(boundQuery);
           };
 
+          // optional: HTTP-level tracing for every request/response
+          config.BeforeRequest = request =>
+          {
+              logger.LogDebug("Sending {Method} request to {Uri}", request.Method, request.RequestUri);
+          };
+          config.AfterResponse = response =>
+          {
+              logger.LogDebug("Received {StatusCode} ({Reason}) from {Uri}",
+                  (int)response.StatusCode, response.ReasonPhrase, response.RequestMessage?.RequestUri);
+          };
+          };
+
           // optional: receive query stats together with per-call state (e.g. a scoped logger)
           config.QueryProfileWithState = (query, bindVars, stats, returnCount, state) =>
           {
